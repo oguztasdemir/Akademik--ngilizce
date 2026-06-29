@@ -18,7 +18,7 @@ import MistakeInbox from './components/MistakeInbox';
 import ParagraphsSection from './components/ParagraphsSection';
 import AuthModal from './components/AuthModal';
 
-const BACKEND_URL = 'http://127.0.0.1:5000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:5000';
 
 const parseInlineMarkdown = (text) => {
   if (!text) return '';
