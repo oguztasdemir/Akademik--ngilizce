@@ -2228,28 +2228,13 @@ function App() {
                         isFloating={false} 
                       />
                     </div>
-                    {/* Name, Speech & XP progression */}
+                    {/* Name & Speech */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', textAlign: 'left', flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
-                        <span style={{ fontSize: '0.78rem', fontWeight: '900', color: 'white' }}>
-                          {petConfig.name || 'Bilge'}
-                        </span>
-                        <span style={{ fontSize: '0.58rem', fontWeight: 'bold', color: '#fbbf24', background: 'rgba(251,191,36,0.1)', padding: '2px 6px', borderRadius: '8px' }}>
-                          Seviye {petLevel}
-                        </span>
-                      </div>
-                      
-                      {/* XP Bar */}
-                      <div style={{ width: '100%', margin: '2px 0 4px 0' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.55rem', fontWeight: 'bold', color: '#cbd5e1', marginBottom: '2px' }}>
-                          <span>XP: {petXp} / 100</span>
-                        </div>
-                        <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: `${petXp}%`, background: 'linear-gradient(90deg, #fbbf24, #f59e0b)', borderRadius: '2px', transition: 'width 0.4s ease' }} />
-                        </div>
-                      </div>
+                      <span style={{ fontSize: '0.8rem', fontWeight: '900', color: 'white' }}>
+                        {petConfig.name || 'Bilge'}
+                      </span>
 
-                      <p style={{ fontSize: '0.7rem', color: '#e2e8f0', margin: 0, fontStyle: 'italic', lineHeight: '1.3', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                      <p style={{ fontSize: '0.74rem', color: '#e2e8f0', margin: 0, fontStyle: 'italic', lineHeight: '1.3', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                         {(() => {
                           const solvedAll = dailyQuestionsSolved >= 20 && dailyWordsStudied >= 10 && dailyLecturesStudied >= 1;
                           if (solvedAll) return "İnanılmazsın! Bugünün tüm hedeflerini tamamladın. Yarın da bu seriyi devam ettirelim! 🔥";
@@ -2406,69 +2391,50 @@ function App() {
                     </div>
                   </div>
 
-                  {/* Leaderboard Card */}
+                  {/* Yesterday's Study Report Card */}
                   <div className="glass-card p-5 border border-white/5 rounded-2xl text-left" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
                     <h3 style={{ fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      🏆 Lig Sıralaması (Haftalık)
+                      📅 Dünkü Çalışma Raporunuz
                     </h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {(() => {
-                        const userXp = (stats.solved * 10) + (Object.keys(wordStats).length * 5) + (dailyQuestionsSolved * 10) + (dailyWordsStudied * 5);
-                        
-                        const today = new Date();
-                        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
-                        
-                        const seedRandom = (str) => {
-                          let hash = 0;
-                          for (let i = 0; i < str.length; i++) {
-                            hash = str.charCodeAt(i) + ((hash << 5) - hash);
-                          }
-                          return Math.abs(Math.sin(hash + dayOfYear)) * 500;
-                        };
+                    {(() => {
+                      const yesterday = new Date();
+                      yesterday.setDate(yesterday.getDate() - 1);
+                      const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+                      const raw = localStorage.getItem('yokdil_study_history');
+                      const history = raw ? JSON.parse(raw) : {};
+                      const logs = history[yesterdayStr] || { questions: 0, words: 0, games: 0, paragraphs: 0 };
+                      const total = (logs.questions || 0) + (logs.words || 0) + (logs.games || 0) + (logs.paragraphs || 0);
 
-                        const names = [
-                          { name: 'AcademicOwl 🦉', base: 1400 },
-                          { name: 'YÖKDİL_Slayer ⚔️', base: 1200 },
-                          { name: 'Dr_Arzu 🩺', base: 950 },
-                          { name: 'Prof_Ahmet 🔬', base: 820 },
-                          { name: 'English_Bender 🤖', base: 680 },
-                          { name: 'Yeliz_Hoca 👩‍🏫', base: 590 },
-                          { name: 'Mustafa_K 🚀', base: 450 },
-                          { name: 'Zeynep_Bio 🧬', base: 380 },
-                          { name: 'Volkan_YDS 📝', base: 210 }
-                        ];
+                      if (total === 0) {
+                        return (
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.78rem', padding: '24px 10px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                            <span>Dün çalışma kaydı bulunmuyor.</span>
+                            <span style={{ fontSize: '0.7rem', color: '#818cf8', marginTop: '6px' }}>Bugün harika bir başlangıç yapalım! 💪</span>
+                          </div>
+                        );
+                      }
 
-                        const competitors = names.map(comp => {
-                          const variance = Math.floor(seedRandom(comp.name) % 150);
-                          return {
-                            name: comp.name,
-                            xp: comp.base + variance,
-                            isUser: false
-                          };
-                        });
-
-                        competitors.push({
-                          name: `${currentUser?.name || 'Kullanıcı'} (Sen) ⚡`,
-                          xp: userXp,
-                          isUser: true
-                        });
-
-                        competitors.sort((a, b) => b.xp - a.xp);
-
-                        return competitors.map((comp, idx) => {
-                          const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx + 1}.`;
-                          return (
-                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 12px', background: comp.isUser ? 'rgba(99, 102, 241, 0.12)' : 'rgba(255,255,255,0.01)', border: `1px solid ${comp.isUser ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255,255,255,0.03)'}`, borderRadius: '12px' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span style={{ fontSize: '0.78rem', fontWeight: '800', color: comp.isUser ? '#a5b4fc' : 'var(--text-secondary)', width: '22px' }}>{medal}</span>
-                                <span style={{ fontSize: '0.76rem', fontWeight: comp.isUser ? '800' : '600', color: comp.isUser ? 'white' : '#cbd5e1' }}>{comp.name}</span>
-                              </div>
-                              <span style={{ fontSize: '0.72rem', fontWeight: '800', color: comp.isUser ? '#a5b4fc' : 'var(--text-secondary)' }}>{comp.xp} XP</span>
-                            </div>
-                          );
-                        });
-                      })()}
-                    </div>
+                      return (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '12px' }}>
+                            <span style={{ fontSize: '0.76rem', color: '#cbd5e1' }}>Çözülen Soru</span>
+                            <span style={{ fontSize: '0.76rem', fontWeight: '800', color: '#6366f1' }}>{logs.questions || 0} Adet</span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '12px' }}>
+                            <span style={{ fontSize: '0.76rem', color: '#cbd5e1' }}>Çalışılan Kelime</span>
+                            <span style={{ fontSize: '0.76rem', fontWeight: '800', color: '#10b981' }}>{logs.words || 0} Adet</span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '12px' }}>
+                            <span style={{ fontSize: '0.76rem', color: '#cbd5e1' }}>Okunan Paragraf</span>
+                            <span style={{ fontSize: '0.76rem', fontWeight: '800', color: '#fbbf24' }}>{logs.paragraphs || 0} Adet</span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)', borderRadius: '12px' }}>
+                            <span style={{ fontSize: '0.76rem', color: 'white', fontWeight: 'bold' }}>Toplam Aktivite</span>
+                            <span style={{ fontSize: '0.76rem', fontWeight: '800', color: '#a5b4fc' }}>{total} Eylem</span>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 
