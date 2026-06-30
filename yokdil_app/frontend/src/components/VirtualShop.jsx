@@ -74,8 +74,8 @@ const VirtualShop = ({ activeTab }) => {
         <div className="glass-card" style={{ flex: '1', minWidth: '280px', maxWidth: '340px', padding: '24px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(99,102,241,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
           <span style={{ fontSize: '0.64rem', fontWeight: '800', color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Canlı Önizleme</span>
           
-          <div style={{ transform: 'scale(1.6)', margin: '40px 0' }}>
-            <MascotOwl state="happy" speech={null} />
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '20px 0' }}>
+            <MascotPet state="happy" customConfig={petConfig} size={110} isFloating={false} />
           </div>
 
           <div style={{ width: '100%', textAlign: 'center', background: 'rgba(255,255,255,0.02)', padding: '14px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.04)' }}>
