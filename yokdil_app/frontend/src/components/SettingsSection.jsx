@@ -27,7 +27,9 @@ const SettingsSection = ({
   setAutoPronounceEnabled,
   handleResetAllProgress,
   yokdilExamDate,
-  setYokdilExamDate
+  setYokdilExamDate,
+  chatbotName,
+  setChatbotName
 }) => {
   const [profileName, setProfileName] = useState(currentUser?.name || '');
   const [profileEmail, setProfileEmail] = useState(currentUser?.email || '');
@@ -361,15 +363,45 @@ const SettingsSection = ({
             <div style={{ display: 'flex', gap: '4px' }}>
               {['sm', 'base', 'lg', 'xl'].map(sz => (
                 <button
-                  key={sz}
-                  onClick={() => setFontSize(sz)}
-                  className={`px-2.5 py-1 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                    fontSize === sz ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                  }`}
+                   key={sz}
+                   onClick={() => setFontSize(sz)}
+                   className={`px-2.5 py-1 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                     fontSize === sz ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
+                   }`}
                 >
-                  {sz.toUpperCase()}
+                   {sz.toUpperCase()}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Chatbot Name Settings */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '14px' }}>
+            <div>
+              <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Yapay Zeka Asistanı Adı</div>
+              <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Chatbot asistanınızın ismi.</div>
+            </div>
+            <div>
+              <input 
+                type="text"
+                value={chatbotName || ''}
+                onChange={(e) => {
+                  setChatbotName(e.target.value);
+                  localStorage.setItem('yokdil_chatbot_name', e.target.value);
+                }}
+                placeholder="Örn: Bilge Asistan"
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  color: 'white',
+                  fontSize: '0.75rem',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  outline: 'none',
+                  width: '150px',
+                  textAlign: 'right'
+                }}
+              />
             </div>
           </div>
         </div>

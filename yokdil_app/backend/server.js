@@ -639,6 +639,285 @@ app.post('/api/user/sync', auth, (req, res) => {
   });
 });
 
+// NLP CHATBOT ENDPOINT
+app.post(['/api/chat', '/api/:category/chat'], async (req, res) => {
+  const { message, history, activeChallenge } = req.body;
+  if (!message) {
+    return res.status(400).json({ error: 'Mesaj alanı zorunludur.' });
+  }
+
+  const category = req.params.category || req.query.category || 'fen';
+  
+  // Parse token if present
+  let userId = null;
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      userId = decoded.userId;
+    } catch (e) {
+      // Ignore invalid token
+    }
+  }
+
+  // Load user data if authenticated
+  let currentUserProfile = null;
+  if (userId) {
+    try {
+      const { user } = getOrRecreateUser(userId);
+      currentUserProfile = user;
+    } catch (e) {
+      console.error("Failed to load user profile in chat:", e);
+    }
+  }
+
+  // Load local dictionary
+  const dictPath = path.join(questionsDir, category, 'dictionary.json');
+  let dictionary = {};
+  if (fs.existsSync(dictPath)) {
+    try {
+      dictionary = JSON.parse(fs.readFileSync(dictPath, 'utf8'));
+    } catch (e) {
+      console.error("Dictionary load error inside chat:", e);
+    }
+  }
+
+  // NLP: Normalization function
+  const normalizeText = (text) => {
+    return text
+      .toLowerCase()
+      .replace(/ı/g, 'i')
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "")
+      .trim();
+  };
+
+  const cleanMessage = normalizeText(message);
+  const tokens = cleanMessage.split(/\s+/);
+
+  // 1. Vocabulary challenge or Grammar challenge answer checking
+  if (activeChallenge) {
+    if (activeChallenge.type === 'grammar') {
+      const userAnswer = cleanMessage.toUpperCase().replace(/[^A-D]/g, "");
+      const correctAnswer = activeChallenge.correctAnswer.toUpperCase();
+      
+      if (userAnswer === correctAnswer || cleanMessage.includes(normalizeText(correctAnswer))) {
+        return res.json({
+          response: `🎉 **Tebrikler! Doğru Seçenek!** Cevabın gerçekten **"${correctAnswer}"** seçeneğiydi. Harika gidiyorsun! Yeni bir gramer sorusu ister misin? ("gramer sor" yazabilirsin)`,
+          challenge: null
+        });
+      } else {
+        return res.json({
+          response: `❌ **Maalesef doğru değil.** Doğru seçenek **"${correctAnswer}"** olacaktı. Gelişmeye devam etmek için yeni sorular çözebilirsin!`,
+          challenge: null
+        });
+      }
+    } else if (activeChallenge.word) {
+      const userAnswer = cleanMessage;
+      const correctAnswers = activeChallenge.correctAnswer
+        .split(',')
+        .map(ans => normalizeText(ans.trim()));
+
+      const isCorrect = correctAnswers.some(correct => {
+        return userAnswer.includes(correct) || correct.includes(userAnswer) && userAnswer.length > 2;
+      });
+
+      if (isCorrect) {
+        return res.json({
+          response: `🎉 Tebrikler! Doğru cevap! **"${activeChallenge.word}"** gerçekten **"${activeChallenge.correctAnswer}"** anlamına gelir. Harika gidiyorsun! Yeni bir soru sormamı ister misin? (Evet/Hayır veya "sına" yazabilirsin)`,
+          challenge: null
+        });
+      } else {
+        return res.json({
+          response: `❌ Maalesef doğru değil. **"${activeChallenge.word}"** kelimesinin anlamı **"${activeChallenge.correctAnswer}"** olacaktı. Olsun, hata yapmak öğrenmenin bir parçasıdır! Yeniden denemek veya başka bir kelime sormamı ister misin?`,
+          challenge: null
+        });
+      }
+    }
+  }
+
+  // Define User Stats for the System Manual
+  const mistakesCount = currentUserProfile?.mistakes ? currentUserProfile.mistakes.length : 0;
+  const notebookCount = currentUserProfile?.notebook ? currentUserProfile.notebook.length : 0;
+  const streakCount = currentUserProfile ? (currentUserProfile.streak || currentUserProfile.studyStreak || 0) : 0;
+  const solvedCount = currentUserProfile?.answers ? Object.keys(currentUserProfile.answers).length : 0;
+  const gemsCount = currentUserProfile?.gems || 0;
+  const activeOutfit = currentUserProfile?.activeOutfits ? currentUserProfile.activeOutfits.join(', ') : 'default';
+
+  // Construct comprehensive System Context Prompt (App Manual & Coach Rules)
+  const SYSTEM_PROMPT = `
+Sen YÖKDİL Fen Bilimleri Hazırlık uygulamasındaki "Bilge Asistan" adlı yapay zeka koçu ve yol arkadaşısın.
+Görevin, kullanıcının YÖKDİL sınavına hazırlanmasına yardımcı olmak, akademik ingilizce sorularını yanıtlamak ve arayüzü verimli kullanmasını sağlamaktır.
+
+Kullanıcının Canlı Profil İstatistikleri:
+- Hata Kutusu Soru Sayısı: ${mistakesCount} adet
+- Kelime Defterindeki Kelime Sayısı: ${notebookCount} adet
+- Günlük Çalışma Serisi (Streak): ${streakCount} gün
+- Çözdüğü Toplam Soru Sayısı: ${solvedCount} adet
+- Güncel Mücevher Bakiyesi: ${gemsCount} adet
+- Karakterin Aktif Kıyafetleri: ${activeOutfit}
+
+Uygulama Arayüzü & Özellikleri Kullanım Kılavuzu:
+1. **Kelime Çalış (Vocabulary)**: Aralıklı tekrar (Leitner) kart sistemi. Kelime öğrenildikçe sonraki kutulara aktarılır. Kelime testleri ve günlük hedefler barındırır.
+2. **Gramer Çalış (Lectures)**: YÖKDİL'de sıkça sorulan gramer konularının (Bağlaçlar, Tenses, Passive, Relative Clauses vb.) konu anlatımları ve sonundaki ünite testlerini içerir.
+3. **Okuma Çalış (Reading)**: Paragraf soruları ve 100'den fazla okuma kitabı içerir. Okurken bilmediğin kelimelerin üzerine tıklayarak anında Türkçe çevirisini görebilir ve tek tıkla kelime defterine kaydedebilirsin.
+4. **Hata Kutusu (Mistake Inbox)**: Sınavlarda yanlış yaptığın sorular ve kelime eşleştirme hataları burada birikir. "Hata Temizleme Maratonu" başlatarak bu hataları çözüp eritebilirsin.
+5. **Performans (Stats)**: Çözülen soru sayılarını, doğru/yanlış analizlerini ve gelişim grafiklerini gösterir.
+6. **Mağaza (Shop)**: Soru çözerek kazanılan mücevherlerle (Gems) Bilge Mascot karakteri için yeni şapkalar, kıyafetler, gözlükler ve oda arka planları satın alınabilir.
+7. **Profil & Sync**: Bulut senkronizasyonu yapar ve QR kod ile diğer cihazları birbirine bağlar.
+
+Yapay Zeka Kuralları:
+- Hazır, basmakalıp cevaplar verme. Tıpkı gerçek bir insan, uzman bir YÖKDİL öğretmeni gibi esnek, düşünen ve empati kuran bir doğal dil kullan.
+- Kullanıcının istatistiklerini (örneğin streak veya hata sayısını) sohbetin bağlamına göre doğal bir şekilde cümlelerine serpiştir. (Örnek: "Hata kutunda ${mistakesCount} soru birikmiş, bugün orayı temizlemeye ne dersin?")
+- Arayüzle ilgili bir soru sorulduğunda yukarıdaki kullanım kılavuzunu referans alarak net ve yönlendirici bilgi ver.
+- YÖKDİL Fen Bilimleri sınavı için bağlaç taktikleri, tenses, fizik/kimya/biyoloji/uzay/çevre kelimeleri sorulduğunda rehberlik et.
+- Yanıtlarını Türkçe dilinde ver.
+`;
+
+  // 1.5 Local Chitchat Intents engine (ensures 100% reliable, fast chitchat response and prevents translation mixups)
+  const LOCAL_INTENTS = [
+    {
+      keywords: ["nasilsin", "keyifler", "ne haber", "iyi misin", "nasil gidiyor"],
+      response: "Çok iyiyim, teşekkür ederim! YÖKDİL hazırlık maratonunda senin gibi çalışkan bir dosta koçluk yapmak beni son derece motive ediyor. Sen nasılsın, bugün çalışmalar nasıl gidiyor? 🦉"
+    },
+    {
+      keywords: ["kimsin", "adin ne", "ismin ne", "nesin", "sen kimsin", "tanit"],
+      response: "Ben senin bilge YÖKDİL Fen Bilimleri asistanınım! 🦉 Akademik İngilizce, fen terimleri, dil bilgisi taktikleri ve sınav analizlerinde sana rehberlik etmek için eğitildim. Yanından hiç ayrılmayan çalışma ortağınım!"
+    },
+    {
+      keywords: ["tesekkur", "sagol", "tesekkurler", "sağol"],
+      response: "Rica ederim, ne demek! Akademik yoldaki bu başarı senin azminle gelecek. Ben her zaman buradayım, merak ettiğin ne varsa sorabilirsin! 🌟"
+    },
+    {
+      keywords: ["fikra", "saka", "komik bir sey", "guldur"],
+      response: "Hadi sana İngilizce akademik bir fıkra anlatayım! 😄\n\n*Why did the grammar book look so sad?*\n*Because it had too many tenses (tensions)!* 📚😂\n\nUmarım yüzünü biraz güldürebilmişimdir. Çalışmaya keyifle devam edelim!"
+    },
+    {
+      keywords: ["gorusuruz", "hoscakal", "baybay", "bye", "kactim"],
+      response: "Görüşmek üzere! Bugün harika çalıştın. Serini bozmamak için yarın tekrar görüşmeyi unutma. Kendine çok iyi bak, iyi çalışmalar! 🦉👋"
+    }
+  ];
+
+  const matchedIntent = LOCAL_INTENTS.find(intent => 
+    intent.keywords.some(kw => cleanMessage.includes(kw) || kw.includes(cleanMessage) && cleanMessage.length > 2)
+  );
+
+  if (matchedIntent) {
+    return res.json({ response: matchedIntent.response });
+  }
+
+  // 2. Try Generative LLM API Client (Hugging Face Serverless Inference API)
+  try {
+    const response = await fetch("https://api-inference.huggingface.co/models/Qwen/Qwen2.5-7B-Instruct", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        inputs: `<|im_start|>system\n${SYSTEM_PROMPT}<|im_end|>\n<|im_start|>user\n${message}<|im_end|>\n<|im_start|>assistant\n`,
+        parameters: {
+          max_new_tokens: 280,
+          temperature: 0.7,
+          return_full_text: false
+        }
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      let reply = "";
+      if (Array.isArray(data) && data[0] && data[0].generated_text) {
+        reply = data[0].generated_text.trim();
+      } else if (data.generated_text) {
+        reply = data.generated_text.trim();
+      }
+      
+      reply = reply.replace(/<\|im_end\|>/g, "").replace(/<\|im_start\|>/g, "").trim();
+      if (reply && reply.length > 5) {
+        return res.json({ response: reply });
+      }
+    }
+  } catch (e) {
+    console.error("Generative AI connection failed, fallback to local NLP engine:", e);
+  }
+
+  // 3. Fail-safe Local NLP Matching Fallback (if API is rate-limited or offline)
+  const dictKeys = Object.keys(dictionary);
+  let foundWord = null;
+
+  for (const w of dictKeys) {
+    if (cleanMessage === w || tokens.includes(w)) {
+      foundWord = w;
+      break;
+    }
+  }
+
+  const isDictSearchQuery = tokens.some(t => ['kelime', 'anlam', 'sozluk', 'ne demek', 'anlami', 'tanim', 'cevir', 'translate'].includes(t));
+  if (!foundWord && isDictSearchQuery) {
+    const cleanWord = cleanMessage
+      .replace('nedir', '')
+      .replace('ne demek', '')
+      .replace('anlami', '')
+      .replace('kelimesinin', '')
+      .replace('kelimesi', '')
+      .replace('cevir', '')
+      .replace('anlam', '')
+      .trim();
+
+    if (dictionary[cleanWord]) {
+      foundWord = cleanWord;
+    } else {
+      const closest = dictKeys.find(w => w.includes(cleanWord) || cleanWord.includes(w));
+      if (closest) foundWord = closest;
+    }
+  }
+
+  if (foundWord) {
+    return res.json({
+      response: `📖 **${foundWord}**: "${dictionary[foundWord]}" anlamına gelir.\n\nBu kelime YÖKDİL Fen Bilimleri makalelerinde sıklıkla araştırma metotlarını, deneysel analizleri veya akademik çıkarımları açıklamak amacıyla tercih edilir.`
+    });
+  }
+
+  // Try Online Translation Fallback (ONLY if it is explicitly a translation or dictionary query)
+  const isTranslationRequested = tokens.some(t => ['nedir', 'demek', 'anlam', 'anlami', 'tanim', 'cevir', 'translate', 'sozluk'].includes(t)) || 
+                                 (!/[çğışöüÇĞİŞÖÜ]/.test(message) && tokens.length <= 4); // short English phrase/word
+
+  if (isTranslationRequested) {
+    try {
+      const hasTrChars = /[çğışöüÇĞİŞÖÜ]/.test(message) || tokens.some(t => ['nedir', 'demek', 'nasil', 'ne', 'merhaba', 'selam', 'cevir'].includes(t));
+      const langpair = hasTrChars ? 'tr|en' : 'en|tr';
+
+      const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(message)}&langpair=${langpair}`);
+      const resData = await response.json();
+      const translation = resData?.responseData?.translatedText || resData?.matches?.[0]?.translation;
+      if (translation && !translation.toLowerCase().includes("mymemory")) {
+        return res.json({
+          response: `🌍 **Akademik Çeviri Asistanı (Çevrimiçi)**\n\nMetnini YÖKDİL hazırlığın için analiz edip çevirdim:\n\n**"${message}"**\n👇\n**"${translation.trim()}"**\n\nBu kelime veya cümleyi YÖKDİL makalelerinde sık sık görebilirsin. Başka bir şey sorabilirsin! 🦉`
+        });
+      }
+    } catch (e) {
+      console.error("Online fallback translation failed in chat:", e);
+    }
+  }
+
+  // Default natural sentence variation responder
+  const defaults = [
+    `Harika bir soru! YÖKDİL Fen Bilimleri hazırlık sürecinde her gün kelime çalışıp hedeflerini tamamlaman çok önemlidir. Şu an Hata kutunda **${mistakesCount}** yanlış soru birikmiş durumda. Çalışmaya Konu Anlatımı kısmından devam edebilir veya çözemediğin bir terim olursa buraya yazabilirsin. 🦉`,
+    `Seni duymak çok güzel! Akademik İngilizce yolculuğunda şu an serin **${streakCount}** gün olarak görünüyor. Başarını pekiştirmek için bugün kelime kartlarını kaydırmaya veya gramer okumaya ne dersin? Sorularını bekliyorum!`,
+    `Bilge asistanın her zaman yanında! Arayüzdeki Mağaza, Gramer, Okuma veya Hata Kutusu bölümlerinden hangisi hakkında bilgi almak istersin? Sorularını dilediğin gibi sorabilirsin.`
+  ];
+  const randomDefault = defaults[Math.floor(Math.random() * defaults.length)];
+
+  return res.json({
+    response: randomDefault
+  });
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Backend server is running on http://localhost:${PORT}`);

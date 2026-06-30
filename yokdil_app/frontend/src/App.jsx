@@ -335,6 +335,8 @@ function App() {
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
   const [authUsername, setAuthUsername] = useState('');
   const [authPassword, setAuthPassword] = useState('');
+  const [authConfirmPassword, setAuthConfirmPassword] = useState('');
+  const [chatbotName, setChatbotName] = useState(() => localStorage.getItem('yokdil_chatbot_name') || 'Bilge Asistan');
   const [authFullName, setAuthFullName] = useState('');
   const [deviceLinkInfo, setDeviceLinkInfo] = useState(null);
   const [showDeviceLinkModal, setShowDeviceLinkModal] = useState(false);
@@ -1383,6 +1385,104 @@ function App() {
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef(null);
 
+  // Draggable & Resizable Chatbot States
+  const [chatPos, setChatPos] = useState(null);
+  const [chatSize, setChatSize] = useState({ width: 380, height: 520 });
+  const [activeChatChallenge, setActiveChatChallenge] = useState(null);
+
+  useEffect(() => {
+    if (showAiChat && !chatPos) {
+      setChatPos({
+        x: window.innerWidth - 410,
+        y: window.innerHeight - 620
+      });
+    }
+  }, [showAiChat, chatPos]);
+
+  const handleHeaderMouseDown = (e) => {
+    if (e.button !== 0) return;
+    if (e.target.closest('button') || e.target.closest('i')) return;
+    e.preventDefault();
+    
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const initialX = chatPos ? chatPos.x : (window.innerWidth - 410);
+    const initialY = chatPos ? chatPos.y : (window.innerHeight - 620);
+
+    const handleMouseMove = (moveEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const deltaY = moveEvent.clientY - startY;
+      setChatPos({
+        x: initialX + deltaX,
+        y: initialY + deltaY
+      });
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleHeaderTouchStart = (e) => {
+    if (e.target.closest('button') || e.target.closest('i')) return;
+    
+    const touch = e.touches[0];
+    const startX = touch.clientX;
+    const startY = touch.clientY;
+    const initialX = chatPos ? chatPos.x : (window.innerWidth - 410);
+    const initialY = chatPos ? chatPos.y : (window.innerHeight - 620);
+
+    const handleTouchMove = (moveEvent) => {
+      const currentTouch = moveEvent.touches[0];
+      const deltaX = currentTouch.clientX - startX;
+      const deltaY = currentTouch.clientY - startY;
+      setChatPos({
+        x: initialX + deltaX,
+        y: initialY + deltaY
+      });
+    };
+
+    const handleTouchEnd = () => {
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+
+    document.addEventListener('touchmove', handleTouchMove);
+    document.addEventListener('touchend', handleTouchEnd);
+  };
+
+  const handleResizeMouseDown = (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const initialWidth = chatSize.width;
+    const initialHeight = chatSize.height;
+
+    const handleMouseMove = (moveEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const deltaY = moveEvent.clientY - startY;
+      setChatSize({
+        width: Math.max(300, Math.min(800, initialWidth + deltaX)),
+        height: Math.max(350, Math.min(800, initialHeight + deltaY))
+      });
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -1421,7 +1521,7 @@ function App() {
     recognition.start();
   };
 
-  const handleSendAiMessage = (customText = null) => {
+  const handleSendAiMessage = async (customText = null) => {
     const textToSend = customText || aiInput;
     if (!textToSend.trim()) return;
 
@@ -1430,40 +1530,41 @@ function App() {
     setAiMessages(prev => [...prev, userMsg]);
     if (!customText) setAiInput('');
 
-    // Respond
-    setTimeout(() => {
-      let botResponse = "";
-      const lowerText = textToSend.toLowerCase();
+    try {
+      const categoryParam = selectedCategory || 'fen';
+      const response = await fetch(`${BACKEND_URL}/api/${categoryParam}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && token !== 'null' ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          message: textToSend,
+          activeChallenge: activeChatChallenge
+        })
+      });
 
-      if (lowerText.includes("gramer") || lowerText.includes("dil bilgisi") || lowerText.includes("tense") || lowerText.includes("zamanlar")) {
-        botResponse = "YÖKDİL Fen sınavlarında en çok kullanılan zamanlar *Simple Past* (geçmişte tamamlanmış çalışmalar için) ve *Present Perfect* (günümüze etkisi süren araştırmalar için) zamanlarıdır. Örneğin: 'Scientists have discovered...' cümle yapısı Present Perfect kullanır ve YÖKDİL'in vazgeçilmezidir. 📝";
-      } else if (lowerText.includes("taktik") || lowerText.includes("ipucu") || lowerText.includes("tüyo")) {
-        botResponse = "YÖKDİL sınavında başarılı olmak için şu 3 taktiğe dikkat et:\n1. **Bağlaçlara çalış:** Cümle tamamlama sorularında zıtlık bağlaçları (although, contrast) ve neden-sonuç bağlaçları (because, since) en çok doğru cevap çıkan yapılardır.\n2. **Kelimeleri cümle içinde öğren:** Kartlardaki örnek cümleler zihninde kalıcı olmasını sağlar.\n3. **Hata Kutunu erit:** Yanlış yaptığın soruları en az iki kere tekrar çöz. 🎯";
-      } else if (lowerText.includes("kelime") || lowerText.includes("anlam") || lowerText.includes("çevir")) {
-        const cleanWord = lowerText.replace("nedir", "").replace("anlamı", "").replace("ne demek", "").replace("çevir", "").trim();
-        const found = dictionaryList.find(item => {
-          if (!item || !item.english || !item.turkish) return false;
-          return item.english.toLowerCase() === cleanWord || item.turkish.toLowerCase().includes(cleanWord);
-        });
-        if (found) {
-          botResponse = `**${found.english}**: "${found.turkish}" anlamına gelir. Bu kelimeyi YÖKDİL Akademik Kelime Defterine kaydederek aralıklı tekrar (Leitner) yöntemiyle çalışabilirsin! 📚`;
-        } else {
-          botResponse = `"${textToSend}" ifadesini inceledim. Bu terim akademik İngilizce makalelerinde sıklıkla araştırma yöntemleri veya bulguları tasvir etmek için kullanılır. Gramer olarak özne-yüklem uyumuna dikkat etmelisin! 💡`;
-        }
-      } else if (lowerText.includes("test") || lowerText.includes("soru sor")) {
-        const randomWord = dictionaryList[Math.floor(Math.random() * dictionaryList.length)] || { english: "evaluate", turkish: "değerlendirmek" };
-        botResponse = `Hadi küçük bir kelime testi yapalım! **"${randomWord.english}"** kelimesinin Türkçe anlamı nedir? Cevabını buraya yazabilirsin! 🧠`;
-      } else {
-        botResponse = "Harika bir soru! YÖKDİL hazırlık sürecinde her gün kelime çalışıp hedeflerini tamamlaman çok önemlidir. Konu Anlatımı kısmından çalışmaya devam edebilir veya çözemediğin bir kelime olursa buraya yazabilirsin. 🦉";
+      if (!response.ok) {
+        throw new Error('API response error');
       }
 
-      setAiMessages(prev => [...prev, { sender: 'bot', text: botResponse }]);
+      const data = await response.json();
+      
+      setAiMessages(prev => [...prev, { sender: 'bot', text: data.response }]);
+      if (data.challenge) {
+        setActiveChatChallenge(data.challenge);
+      } else {
+        setActiveChatChallenge(null);
+      }
+
       if (aiVoiceMode) {
-        // Strip markdown symbols before speaking
-        const cleanText = botResponse.replace(/[*_`#]/g, "");
+        const cleanText = data.response.replace(/[*_`#]/g, "");
         playSpeechAudio(cleanText);
       }
-    }, 1000);
+    } catch (error) {
+      console.error("Chatbot API failed:", error);
+      setAiMessages(prev => [...prev, { sender: 'bot', text: "Üzgünüm, şu anda bağlantı hatası yaşıyorum. Lütfen sunucunun çalıştığından emin olun." }]);
+    }
   };
 
   const handleAskAI = (text) => {
@@ -1906,6 +2007,10 @@ function App() {
               const uName = authUsername.trim();
               const fullName = authFullName.trim();
               const pass = authPassword;
+              if (pass !== authConfirmPassword) {
+                alert("Şifreler uyuşmuyor! Lütfen kontrol edin.");
+                return;
+              }
               if (!uName || !fullName || !pass) return;
               try {
                 const res = await fetch(`${BACKEND_URL}/api/auth/register`, {
@@ -1947,6 +2052,16 @@ function App() {
               onChange={(e) => setAuthPassword(e.target.value)}
               className="landing-gate-input"
             />
+            {authMode === 'register' && (
+              <input 
+                type="password" 
+                required
+                placeholder="Şifre Tekrar"
+                value={authConfirmPassword}
+                onChange={(e) => setAuthConfirmPassword(e.target.value)}
+                className="landing-gate-input"
+              />
+            )}
             {authMode === 'register' && (
               <p style={{ fontSize: '0.72rem', color: '#F6AD55', margin: '-4px 0 4px 0', lineHeight: 1.3, textAlign: 'left', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
                 <i className="fa-solid fa-triangle-exclamation" style={{ marginTop: '2px' }}></i>
@@ -2087,25 +2202,25 @@ function App() {
                     <div className="menu-icon subject-icon" style={{ borderColor: '#2B6CB0', color: '#4299E1' }}><i className="fa-solid fa-flask"></i></div>
                     <div className="menu-text">
                       <h4>Fen Bilimleri</h4>
-                      <p>4 sınav (2024-2026) ve 320 soru (Tamamı temiz JSON olarak yüklendi).</p>
+                      <p>9 sınav (2018-2026) ve 720 soru (Tamamı temiz JSON olarak yüklendi).</p>
                     </div>
                     <i className="fa-solid fa-chevron-right arrow-icon"></i>
                   </button>
-                  <button className="menu-item subject-card gai-card" onClick={() => { setSelectedCategory('sosyal'); setActiveTab('dashboard'); setSelectedExam(null); setQuizActive(false); }}>
+                  <button className="menu-item subject-card gai-card" style={{ opacity: 0.6, cursor: 'not-allowed' }} title="Geliştirilme Aşamasında - Yakında!">
                     <div className="menu-icon subject-icon" style={{ borderColor: '#805AD5', color: '#B794F4' }}><i className="fa-solid fa-gavel"></i></div>
                     <div className="menu-text">
-                      <h4>Sosyal Bilimler <span style={{ fontSize: '0.65rem', background: '#F97316', color: '#fff', padding: '1px 4px', borderRadius: '4px', marginLeft: '4px', fontWeight: 'bold' }}>Boş</span></h4>
-                      <p>Sosyal bilimler sınavları ve kelimeleri yakında eklenecektir.</p>
+                      <h4>Sosyal Bilimler <span style={{ fontSize: '0.65rem', background: '#4A5568', color: '#fff', padding: '1px 6px', borderRadius: '4px', marginLeft: '6px', fontWeight: 'bold' }}>Yakında</span></h4>
+                      <p>Sosyal bilimler sınavları ve kelimeleri yakında eklenecektir (Geliştirilme Aşamasında).</p>
                     </div>
-                    <i className="fa-solid fa-chevron-right arrow-icon"></i>
+                    <i className="fa-solid fa-lock arrow-icon" style={{ color: '#718096' }}></i>
                   </button>
-                  <button className="menu-item subject-card ds-card" onClick={() => { setSelectedCategory('saglik'); setActiveTab('dashboard'); setSelectedExam(null); setQuizActive(false); }}>
+                  <button className="menu-item subject-card ds-card" style={{ opacity: 0.6, cursor: 'not-allowed' }} title="Geliştirilme Aşamasında - Yakında!">
                     <div className="menu-icon subject-icon" style={{ borderColor: '#059669', color: '#34D399' }}><i className="fa-solid fa-heart-pulse"></i></div>
                     <div className="menu-text">
-                      <h4>Sağlık Bilimleri <span style={{ fontSize: '0.65rem', background: '#F97316', color: '#fff', padding: '1px 4px', borderRadius: '4px', marginLeft: '4px', fontWeight: 'bold' }}>Boş</span></h4>
-                      <p>Tıp ve sağlık bilimleri sınavları ve kelimeleri yakında eklenecektir.</p>
+                      <h4>Sağlık Bilimleri <span style={{ fontSize: '0.65rem', background: '#4A5568', color: '#fff', padding: '1px 6px', borderRadius: '4px', marginLeft: '6px', fontWeight: 'bold' }}>Yakında</span></h4>
+                      <p>Tıp ve sağlık bilimleri sınavları ve kelimeleri yakında eklenecektir (Geliştirilme Aşamasında).</p>
                     </div>
-                    <i className="fa-solid fa-chevron-right arrow-icon"></i>
+                    <i className="fa-solid fa-lock arrow-icon" style={{ color: '#718096' }}></i>
                   </button>
                 </div>
               </section>
@@ -3040,6 +3155,8 @@ function App() {
               handleResetAllProgress={handleResetAllProgress}
               yokdilExamDate={yokdilExamDate}
               setYokdilExamDate={setYokdilExamDate}
+              chatbotName={chatbotName}
+              setChatbotName={setChatbotName}
             />
 
           </main>
@@ -3142,16 +3259,46 @@ function App() {
               className="ai-chat-float-btn"
               onClick={() => setShowAiChat(true)}
               title="Bilge Çalışma Arkadaşı AI Asistanı 🦉"
+              style={{ overflow: 'hidden', padding: 0 }}
             >
-              <i className="fa-solid fa-robot"></i>
+              <MascotPet 
+                state="happy" 
+                speech={null} 
+                customConfig={petConfig} 
+                size={48} 
+                isFloating={false} 
+              />
             </button>
           ) : (
-            <div className="ai-chat-window">
-              <div className="ai-chat-header">
+            <div 
+              className="ai-chat-window"
+              style={{
+                left: chatPos ? `${chatPos.x}px` : 'auto',
+                top: chatPos ? `${chatPos.y}px` : 'auto',
+                right: chatPos ? 'auto' : '24px',
+                bottom: chatPos ? 'auto' : '90px',
+                width: `${chatSize.width}px`,
+                height: `${chatSize.height}px`,
+                position: 'fixed'
+              }}
+            >
+              <div 
+                className="ai-chat-header"
+                onMouseDown={handleHeaderMouseDown}
+                onTouchStart={handleHeaderTouchStart}
+              >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ fontSize: '1.2rem' }}>{getOutfitEmoji()}</div>
+                  <div style={{ width: '36px', height: '36px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <MascotPet 
+                      state="happy" 
+                      speech={null} 
+                      customConfig={petConfig} 
+                      size={36} 
+                      isFloating={false} 
+                    />
+                  </div>
                   <div style={{ textAlign: 'left' }}>
-                    <h4 style={{ fontSize: '0.82rem', color: 'white', fontWeight: '800', margin: 0 }}>Bilge Asistan</h4>
+                    <h4 style={{ fontSize: '0.82rem', color: 'white', fontWeight: '800', margin: 0 }}>{chatbotName}</h4>
                     <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: 'bold' }}>Çevrimiçi | YÖKDİL Koçu</span>
                   </div>
                 </div>
@@ -3253,6 +3400,12 @@ function App() {
                   <i className="fa-solid fa-paper-plane"></i>
                 </button>
               </div>
+
+              {/* Resize Handle */}
+              <div 
+                className="ai-chat-resize-handle"
+                onMouseDown={handleResizeMouseDown}
+              />
             </div>
           )}
         </div>

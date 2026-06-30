@@ -3530,7 +3530,7 @@ body.light-theme .setting-item {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.2s ease, transform 0.2s ease;
     z-index: 9998;
 }
 
@@ -3541,6 +3541,24 @@ body.light-theme .setting-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: grab;
+    user-select: none;
+}
+
+.ai-chat-header:active {
+    cursor: grabbing;
+}
+
+.ai-chat-resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    cursor: se-resize;
+    z-index: 10000;
+    background: linear-gradient(135deg, transparent 45%, rgba(255, 255, 255, 0.15) 55%, rgba(255, 255, 255, 0.3) 100%);
+    border-bottom-right-radius: 20px;
 }
 
 .ai-chat-messages {

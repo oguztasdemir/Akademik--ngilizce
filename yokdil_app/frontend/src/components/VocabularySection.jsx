@@ -583,6 +583,9 @@ const VocabularySection = ({
     if (activeTab !== 'vocabulary' || subTab !== 'flashcards' || flashcardsList.length === 0) return;
 
     const handleKeyDown = (e) => {
+      if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA' || document.activeElement.isContentEditable)) {
+        return;
+      }
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         setRevealMeaning(prev => !prev);
