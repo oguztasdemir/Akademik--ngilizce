@@ -33,6 +33,8 @@ const SettingsSection = ({
   const [profileEmail, setProfileEmail] = useState(currentUser?.email || '');
   const [profileUsername, setProfileUsername] = useState(currentUser?.username || '');
   const [profilePassword, setProfilePassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [changePasswordEnabled, setChangePasswordEnabled] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState('');
   const [updateError, setUpdateError] = useState('');
 
@@ -72,6 +74,18 @@ const SettingsSection = ({
     e.preventDefault();
     setUpdateSuccess('');
     setUpdateError('');
+
+    if (changePasswordEnabled) {
+      if (!profilePassword || profilePassword.length < 4) {
+        setUpdateError('Yeni şifre en az 4 karakter olmalıdır.');
+        return;
+      }
+      if (profilePassword !== confirmPassword) {
+        setUpdateError('Yeni şifreler uyuşmuyor.');
+        return;
+      }
+    }
+
     try {
       const res = await fetch(`${BACKEND_URL}/api/user/profile`, {
         method: 'PUT',
@@ -83,7 +97,7 @@ const SettingsSection = ({
           name: profileName,
           username: profileUsername,
           email: profileEmail,
-          password: profilePassword || undefined
+          password: changePasswordEnabled ? profilePassword : undefined
         })
       });
       const data = await res.json();
@@ -102,6 +116,8 @@ const SettingsSection = ({
       
       setUpdateSuccess('Profiliniz başarıyla güncellendi.');
       setProfilePassword('');
+      setConfirmPassword('');
+      setChangePasswordEnabled(false);
     } catch (err) {
       setUpdateError(err.message);
     }
@@ -189,16 +205,49 @@ const SettingsSection = ({
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Yeni Şifre (Değiştirmek istemiyorsanız boş bırakın)</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '4px 0' }}>
                   <input
-                    type="password"
-                    value={profilePassword}
-                    onChange={(e) => setProfilePassword(e.target.value)}
-                    placeholder="Yeni Şifre"
-                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
+                    type="checkbox"
+                    id="change-password-toggle"
+                    checked={changePasswordEnabled}
+                    onChange={(e) => {
+                      setChangePasswordEnabled(e.target.checked);
+                      if(!e.target.checked) {
+                        setProfilePassword('');
+                        setConfirmPassword('');
+                      }
+                    }}
+                    style={{ cursor: 'pointer' }}
                   />
+                  <label htmlFor="change-password-toggle" style={{ fontSize: '0.72rem', fontWeight: 'bold', color: 'var(--text-main)', cursor: 'pointer' }}>
+                    🔒 Şifre Değiştirmek İstiyorum
+                  </label>
                 </div>
+
+                {changePasswordEnabled && (
+                  <>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Yeni Şifre</label>
+                      <input
+                        type="password"
+                        value={profilePassword}
+                        onChange={(e) => setProfilePassword(e.target.value)}
+                        placeholder="Yeni Şifre"
+                        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
+                      />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Yeni Şifre (Tekrar)</label>
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Yeni Şifre (Tekrar)"
+                        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
+                      />
+                    </div>
+                  </>
+                )}
 
                 {updateSuccess && <div style={{ fontSize: '0.66rem', color: '#34d399', fontWeight: 'bold' }}>{updateSuccess}</div>}
                 {updateError && <div style={{ fontSize: '0.66rem', color: '#f87171', fontWeight: 'bold' }}>{updateError}</div>}

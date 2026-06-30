@@ -534,12 +534,41 @@ app.post('/api/auth/login', (req, res) => {
   });
 });
 
+// Helper to find or recreate user (handles Vercel container recycle database loss)
+const getOrRecreateUser = (userId, reqBody = {}) => {
+  const users = readUsers();
+  const idStr = String(userId);
+  let userIndex = users.findIndex(u => String(u.id) === idStr);
+  
+  if (userIndex === -1) {
+    const newUser = {
+      id: idStr,
+      username: reqBody.username || "ogrenci_" + idStr.substring(idStr.length - 6),
+      name: reqBody.name || "Öğrenci",
+      email: reqBody.email || "",
+      password: reqBody.password ? bcrypt.hashSync(reqBody.password, 10) : "",
+      answers: reqBody.answers || {},
+      flagged: reqBody.flagged || {},
+      mistakes: reqBody.mistakes || [],
+      notebook: reqBody.notebook || [],
+      wordStats: reqBody.wordStats || {},
+      questionStats: reqBody.questionStats || {},
+      gems: 0,
+      ownedOutfits: ["default"],
+      activeOutfits: ["default"],
+      streak: 0
+    };
+    users.push(newUser);
+    writeUsers(users);
+    return { user: newUser, index: users.length - 1, users };
+  }
+  
+  return { user: users[userIndex], index: userIndex, users };
+};
+
 // GET PROFILE
 app.get('/api/user/profile', auth, (req, res) => {
-  const users = readUsers();
-  const user = users.find(u => u.id === req.userId);
-  if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
-
+  const { user } = getOrRecreateUser(req.userId);
   res.json({
     id: user.id,
     email: user.email,
@@ -554,19 +583,17 @@ app.get('/api/user/profile', auth, (req, res) => {
 // UPDATE PROFILE
 app.put('/api/user/profile', auth, (req, res) => {
   const { name, username, email, password } = req.body;
-  const users = readUsers();
-  const userIndex = users.findIndex(u => u.id === req.userId);
-  if (userIndex === -1) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+  const { user, index, users } = getOrRecreateUser(req.userId, req.body);
 
   if (username) {
-    const existing = users.find(u => u.username === username.toLowerCase() && u.id !== req.userId);
+    const existing = users.find(u => u.username === username.toLowerCase() && String(u.id) !== String(req.userId));
     if (existing) return res.status(400).json({ error: 'Bu kullanıcı adı zaten alınmış.' });
-    users[userIndex].username = username.toLowerCase();
+    users[index].username = username.toLowerCase();
   }
 
-  if (name) users[userIndex].name = name;
-  if (email) users[userIndex].email = email.toLowerCase();
-  if (password) users[userIndex].password = bcrypt.hashSync(password, 10);
+  if (name) users[index].name = name;
+  if (email) users[index].email = email.toLowerCase();
+  if (password) users[index].password = bcrypt.hashSync(password, 10);
 
   writeUsers(users);
   res.json({ message: 'Profil başarıyla güncellendi.' });
@@ -575,7 +602,7 @@ app.put('/api/user/profile', auth, (req, res) => {
 // DELETE ACCOUNT
 app.delete('/api/user/profile', auth, (req, res) => {
   const users = readUsers();
-  const filteredUsers = users.filter(u => u.id !== req.userId);
+  const filteredUsers = users.filter(u => String(u.id) !== String(req.userId));
   writeUsers(filteredUsers);
   res.json({ message: 'Hesap başarıyla silindi.' });
 });
@@ -583,28 +610,31 @@ app.delete('/api/user/profile', auth, (req, res) => {
 // BULUT SYNC API
 app.post('/api/user/sync', auth, (req, res) => {
   const { answers, flagged, mistakes, notebook, wordStats, questionStats } = req.body;
-  const users = readUsers();
-  const idx = users.findIndex(u => u.id === req.userId);
-  if (idx === -1) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+  const { user, index, users } = getOrRecreateUser(req.userId, req.body);
 
-  const user = users[idx];
-  user.answers = { ...user.answers, ...answers };
-  user.flagged = { ...user.flagged, ...flagged };
-  user.mistakes = mistakes || user.mistakes || [];
-  user.notebook = notebook || user.notebook || [];
-  user.wordStats = { ...(user.wordStats || {}), ...(wordStats || {}) };
-  user.questionStats = { ...(user.questionStats || {}), ...(questionStats || {}) };
+  users[index].answers = { ...user.answers, ...answers };
+  users[index].flagged = { ...user.flagged, ...flagged };
+  users[index].mistakes = mistakes || user.mistakes || [];
+  users[index].notebook = notebook || user.notebook || [];
+  users[index].wordStats = { ...(user.wordStats || {}), ...(wordStats || {}) };
+  users[index].questionStats = { ...(user.questionStats || {}), ...(questionStats || {}) };
 
   writeUsers(users);
 
   res.json({
+    message: 'Eşitleme başarılı.',
+    user: {
+      id: users[index].id,
+      name: users[index].name,
+      username: users[index].username
+    },
     syncState: {
-      answers: user.answers,
-      flagged: user.flagged,
-      mistakes: user.mistakes,
-      notebook: user.notebook,
-      wordStats: user.wordStats,
-      questionStats: user.questionStats
+      answers: users[index].answers,
+      flagged: users[index].flagged,
+      mistakes: users[index].mistakes,
+      notebook: users[index].notebook,
+      wordStats: users[index].wordStats,
+      questionStats: users[index].questionStats
     }
   });
 });
