@@ -168,15 +168,26 @@ const VirtualShop = ({ activeTab }) => {
                   <button
                     key={hat.id}
                     onClick={() => updateConfig('hat', hat.id)}
-                    className="glass-card flex flex-col items-center justify-center p-5 transition-all hover:scale-[1.02]"
+                    className="glass-card flex flex-col items-center justify-center p-3 transition-all hover:scale-[1.02]"
                     style={{
                       borderRadius: '16px',
                       border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.05)',
                       background: isSelected ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,42,0.3)',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      gap: '8px'
                     }}
                   >
-                    <span style={{ fontSize: '0.78rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1' }}>
+                    <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <MascotPet 
+                        state="neutral" 
+                        customConfig={{
+                          ...petConfig,
+                          hat: hat.id
+                        }} 
+                        size={44}
+                      />
+                    </div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1', textAlign: 'center' }}>
                       {hat.name}
                     </span>
                   </button>
@@ -194,15 +205,26 @@ const VirtualShop = ({ activeTab }) => {
                   <button
                     key={glass.id}
                     onClick={() => updateConfig('glasses', glass.id)}
-                    className="glass-card flex flex-col items-center justify-center p-5 transition-all hover:scale-[1.02]"
+                    className="glass-card flex flex-col items-center justify-center p-3 transition-all hover:scale-[1.02]"
                     style={{
                       borderRadius: '16px',
                       border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.05)',
                       background: isSelected ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,42,0.3)',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      gap: '8px'
                     }}
                   >
-                    <span style={{ fontSize: '0.78rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1' }}>
+                    <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <MascotPet 
+                        state="neutral" 
+                        customConfig={{
+                          ...petConfig,
+                          glasses: glass.id
+                        }} 
+                        size={44}
+                      />
+                    </div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1', textAlign: 'center' }}>
                       {glass.name}
                     </span>
                   </button>
@@ -220,15 +242,26 @@ const VirtualShop = ({ activeTab }) => {
                   <button
                     key={cloth.id}
                     onClick={() => updateConfig('clothing', cloth.id)}
-                    className="glass-card flex flex-col items-center justify-center p-5 transition-all hover:scale-[1.02]"
+                    className="glass-card flex flex-col items-center justify-center p-3 transition-all hover:scale-[1.02]"
                     style={{
                       borderRadius: '16px',
                       border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.05)',
                       background: isSelected ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,42,0.3)',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      gap: '8px'
                     }}
                   >
-                    <span style={{ fontSize: '0.78rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1' }}>
+                    <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <MascotPet 
+                        state="neutral" 
+                        customConfig={{
+                          ...petConfig,
+                          clothing: cloth.id
+                        }} 
+                        size={44}
+                      />
+                    </div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1', textAlign: 'center' }}>
                       {cloth.name}
                     </span>
                   </button>
@@ -246,15 +279,26 @@ const VirtualShop = ({ activeTab }) => {
                   <button
                     key={item.id}
                     onClick={() => updateConfig('item', item.id)}
-                    className="glass-card flex flex-col items-center justify-center p-5 transition-all hover:scale-[1.02]"
+                    className="glass-card flex flex-col items-center justify-center p-3 transition-all hover:scale-[1.02]"
                     style={{
                       borderRadius: '16px',
                       border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.05)',
                       background: isSelected ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,42,0.3)',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      gap: '8px'
                     }}
                   >
-                    <span style={{ fontSize: '0.78rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1' }}>
+                    <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <MascotPet 
+                        state="neutral" 
+                        customConfig={{
+                          ...petConfig,
+                          item: item.id
+                        }} 
+                        size={44}
+                      />
+                    </div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1', textAlign: 'center' }}>
                       {item.name}
                     </span>
                   </button>

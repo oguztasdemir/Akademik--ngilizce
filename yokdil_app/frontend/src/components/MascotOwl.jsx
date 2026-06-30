@@ -41,6 +41,7 @@ const MascotOwl = ({ state, speech }) => {
       state={state} 
       speech={speech} 
       customConfig={petConfig} 
+      isFloating={true}
     />
   );
 };
