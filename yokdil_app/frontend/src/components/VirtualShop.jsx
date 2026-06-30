@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MascotOwl from './MascotOwl';
-import { 
+import MascotPet, { 
   ANIMAL_CATALOG, 
   ACCESSORY_HATS, 
   ACCESSORY_GLASSES, 
@@ -75,7 +75,7 @@ const VirtualShop = ({ activeTab }) => {
           <span style={{ fontSize: '0.64rem', fontWeight: '800', color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Canlı Önizleme</span>
           
           <div style={{ transform: 'scale(1.6)', margin: '40px 0' }}>
-            <MascotOwl state="happy" speech="Harika görünüyorum!" />
+            <MascotOwl state="happy" speech={null} />
           </div>
 
           <div style={{ width: '100%', textAlign: 'center', background: 'rgba(255,255,255,0.02)', padding: '14px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.04)' }}>
@@ -136,7 +136,19 @@ const VirtualShop = ({ activeTab }) => {
                         textAlign: 'center'
                       }}
                     >
-                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: animal.color, marginBottom: '8px', border: '1px solid rgba(255,255,255,0.1)' }} />
+                      <div style={{ width: '48px', height: '48px', marginBottom: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <MascotPet 
+                          state="neutral" 
+                          customConfig={{
+                            animalId: animal.id,
+                            hat: 'none',
+                            glasses: 'none',
+                            clothing: 'none',
+                            item: 'none'
+                          }} 
+                          size={44}
+                        />
+                      </div>
                       <span style={{ fontSize: '0.74rem', fontWeight: '800', color: isSelected ? '#fbbf24' : '#cbd5e1' }}>
                         {animal.name}
                       </span>

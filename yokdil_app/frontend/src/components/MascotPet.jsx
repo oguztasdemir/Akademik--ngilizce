@@ -151,7 +151,7 @@ export const ACCESSORY_ITEMS = [
   { id: 'mug', name: 'Kahve Kupası ☕' }
 ];
 
-const MascotPet = ({ state, speech, customConfig }) => {
+const MascotPet = ({ state, speech, customConfig, size = 80 }) => {
   // Load configuration or fall back to default Chick
   const config = customConfig || {
     animalId: 'chick',
@@ -223,7 +223,7 @@ const MascotPet = ({ state, speech, customConfig }) => {
           <i className="fa-solid fa-volume-high text-indigo-400" style={{ fontSize: '0.8rem' }}></i>
         </div>
       )}
-      <div className={`duo-mascot-container ${animClass}`} style={{ width: '80px', height: '80px' }}>
+      <div className={`duo-mascot-container ${animClass}`} style={{ width: `${size}px`, height: `${size}px` }}>
         <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Shadow */}
           <ellipse cx="50" cy="94" rx="20" ry="4" fill="rgba(0,0,0,0.15)" />
