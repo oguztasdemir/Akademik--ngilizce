@@ -152,7 +152,7 @@ const MascotPet = ({ state, speech, customConfig, size = 80, isFloating = false 
 
   const animal = ANIMAL_CATALOG.find(a => a.id === config.animalId) || ANIMAL_CATALOG[0];
 
-  let bodyColor = animal.color;
+  let bodyColor = config.color || animal.color;
   let cheekColor = animal.cheek || '#FDA4AF';
   let animClass = "duo-mascot-neutral";
 

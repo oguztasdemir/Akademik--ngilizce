@@ -90,13 +90,13 @@ const VirtualShop = ({ activeTab }) => {
 
         {/* Right Side: Tabbed Catalog Customizer */}
         <div style={{ flex: '2', minWidth: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {/* Customizer Subtabs */}
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', background: 'rgba(255,255,255,0.01)', padding: '6px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.04)' }}>
             <button onClick={() => setShopTab('animals')} style={tabStyle(shopTab === 'animals')}>🐾 Hayvanlar ({ANIMAL_CATALOG.length})</button>
             <button onClick={() => setShopTab('hats')} style={tabStyle(shopTab === 'hats')}>🤠 Şapkalar</button>
             <button onClick={() => setShopTab('glasses')} style={tabStyle(shopTab === 'glasses')}>😎 Gözlükler</button>
             <button onClick={() => setShopTab('clothing')} style={tabStyle(shopTab === 'clothing')}>👕 Kıyafetler</button>
             <button onClick={() => setShopTab('items')} style={tabStyle(shopTab === 'items')}>🪄 Eşyalar</button>
+            <button onClick={() => setShopTab('colors')} style={tabStyle(shopTab === 'colors')}>🎨 Renk</button>
           </div>
 
           {/* Tab Content: Animals */}
@@ -304,6 +304,71 @@ const VirtualShop = ({ activeTab }) => {
                   </button>
                 );
               })}
+            </div>
+          )}
+
+          {/* Tab Content: Colors */}
+          {shopTab === 'colors' && (
+            <div className="space-y-4">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: 'var(--text-main)' }}>Özel Renk Seçin:</span>
+                <input 
+                  type="color" 
+                  value={petConfig.color || '#FBBF24'} 
+                  onChange={(e) => updateConfig('color', e.target.value)} 
+                  style={{
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: 'none',
+                    width: '50px',
+                    height: '32px',
+                    borderRadius: '8px',
+                    cursor: 'pointer'
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))', gap: '8px', marginTop: '12px' }}>
+                {[
+                  { name: 'Varsayılan', val: '' },
+                  { name: 'Kırmızı', val: '#EF4444' },
+                  { name: 'Pembe', val: '#EC4899' },
+                  { name: 'Mor', val: '#8B5CF6' },
+                  { name: 'Mavi', val: '#3B82F6' },
+                  { name: 'Açık Mavi', val: '#0EA5E9' },
+                  { name: 'Turkuaz', val: '#14B8A6' },
+                  { name: 'Yeşil', val: '#10B981' },
+                  { name: 'Fıstık', val: '#84CC16' },
+                  { name: 'Sarı', val: '#FBBF24' },
+                  { name: 'Turuncu', val: '#F97316' },
+                  { name: 'Koyu Gri', val: '#475569' },
+                  { name: 'Gümüş', val: '#94A3B8' }
+                ].map(col => {
+                  const isSelected = (!col.val && !petConfig.color) || (petConfig.color === col.val);
+                  return (
+                    <button
+                      key={col.name}
+                      onClick={() => updateConfig('color', col.val)}
+                      className="glass-card flex flex-col items-center justify-center p-3 transition-all hover:scale-[1.03]"
+                      style={{
+                        borderRadius: '12px',
+                        border: isSelected ? '2px solid #fbbf24' : '1px solid rgba(255,255,255,0.05)',
+                        background: isSelected ? 'rgba(251,191,36,0.06)' : 'rgba(15,23,42,0.3)',
+                        cursor: 'pointer',
+                        gap: '6px'
+                      }}
+                    >
+                      <div style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        background: col.val || ANIMAL_CATALOG.find(a => a.id === petConfig.animalId)?.color || '#FBBF24',
+                        border: '1px solid rgba(255,255,255,0.1)'
+                      }} />
+                      <span style={{ fontSize: '0.62rem', color: '#cbd5e1', fontWeight: 'bold' }}>{col.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
