@@ -41,7 +41,7 @@ const VocabularySection = ({
     "adjust": { synonyms: "modify, adapt, tune, alter", antonyms: "disarrange, freeze, leave, neglect", sentence: "Please adjust the microscope focus to see the cell walls clearly.", sentenceTr: "Hücre duvarlarını net görmek için lütfen mikroskobun odağını ayarlayın." },
     "adopt": { synonyms: "take up, embrace, accept, assume", antonyms: "reject, discard, abandon, dismiss", sentence: "The community decided to adopt green renewable solar panels.", sentenceTr: "Topluluk, yeşil yenilenebilir güneş panellerini benimsemeye karar verdi." },
     "adverse": { synonyms: "unfavorable, hostile, negative, harmful", antonyms: "beneficial, favorable, positive, helpful", sentence: "The clinical drug trial showed no adverse side effects.", sentenceTr: "Klinik ilaç testi hiçbir olumsuz yan etki göstermedi." },
-    "advocate": { synonyms: "support, champion, recommend, defend", antonyms: "oppose, protest, condemn, attack", sentence: "Many modern environmentalists advocate for clean energy production.", sentenceTr: "Birçok modern çevreci temiz enerji üretimini savunuyor." },
+    "advocate": { synonyms: "support, champion, recommend, defend", antonyms: "oppose, protest, condemn, attack", sentence: "Many modern environmentalists advocate for clean energy production.", sentenceTr: "Birçok modern çevreci temiz energy üretimini savunuyor." },
     "affect": { synonyms: "influence, impact, alter, modify", antonyms: "remain, default, stabilize, ignore", sentence: "Temperature changes affect the overall rate of photosynthesis.", sentenceTr: "Sıcaklık değişimleri fotosentezin genel hızını etkiler." },
     "allay": { synonyms: "soothe, calm, ease, relieve", antonyms: "intensify, worsen, aggravate, provoke", sentence: "The medicine helped to allay the patient's severe headache.", sentenceTr: "İlaç hastanın şiddetli baş ağrısını hafifletmeye yardımcı oldu." },
     "allocate": { synonyms: "assign, distribute, allot, share", antonyms: "withhold, retain, keep, hoard", sentence: "The university will allocate funds for the new chemistry lab.", sentenceTr: "Üniversite yeni kimya laboratuvarı için bütçe ayıracak." },
@@ -52,7 +52,36 @@ const VocabularySection = ({
     "assume": { synonyms: "presume, suppose, accept, take on", antonyms: "know, prove, reject, doubt", sentence: "We cannot assume that the results will be identical every time.", sentenceTr: "Sonuçların her seferinde aynı olacağını varsayamayız." },
     "barrier": { synonyms: "obstacle, hurdle, blockade, wall", antonyms: "opening, pathway, assistance, bridge", sentence: "The cell membrane acts as a protective barrier against viruses.", sentenceTr: "Hücre zarı virüslere karşı koruyucu bir engel görevi görür." },
     "beneficial": { synonyms: "advantageous, useful, helpful, favorable", antonyms: "harmful, detrimental, adverse, damaging", sentence: "Regular physical activity is highly beneficial for heart health.", sentenceTr: "Düzenli fiziksel aktivite kalp sağlığı için oldukça faydalıdır." },
-    "breakthrough": { synonyms: "discovery, advance, find, progress", antonyms: "setback, failure, decline, step backward", sentence: "The research team made a breakthrough in cancer treatments.", sentenceTr: "Araştırma ekibi kanser tedavilerinde çığır açan bir buluş yaptı." }
+    "breakthrough": { synonyms: "discovery, advance, find, progress", antonyms: "setback, failure, decline, step backward", sentence: "The research team made a breakthrough in cancer treatments.", sentenceTr: "Araştırma ekibi kanser tedavilerinde çığır açan bir buluş yaptı." },
+    "challenge": { synonyms: "difficulty, obstacle, test, problem", antonyms: "ease, simple", sentence: "The team faced a major challenge during the clinical trials.", sentenceTr: "Ekip klinik deneyler sırasında büyük bir zorlukla karşılaştı." },
+    "clarify": { synonyms: "explain, simplify, elucidate, clear up", antonyms: "confuse, obscure", sentence: "The researcher had to clarify the methodology used in the study.", sentenceTr: "Araştırmacı çalışmada kullanılan metodolojiyi açıklamak zorunda kaldı." },
+    "collaborate": { synonyms: "cooperate, work together, join forces", antonyms: "oppose, compete", sentence: "Scientists collaborate across borders to solve complex issues.", sentenceTr: "Bilim insanları karmaşık sorunları çözmek için sınırlar ötesinde işbirliği yapıyor." },
+    "comprehensive": { synonyms: "inclusive, complete, thorough, extensive", antonyms: "limited, incomplete", sentence: "The report provided a comprehensive review of the ecosystem.", sentenceTr: "Rapor, ekosistemin kapsamlı bir incelemesini sundu." },
+    "crucial": { synonyms: "critical, vital, essential, key", antonyms: "trivial, minor, unimportant", sentence: "Early detection is crucial for successful cancer treatment.", sentenceTr: "Erken teşhis, başarılı kanser tedavisi için hayati önem taşır." },
+    "decline": { synonyms: "decrease, drop, reject, refuse", antonyms: "increase, accept, grow", sentence: "We observed a sharp decline in the population of bees.", sentenceTr: "Arı popülasyonunda keskin bir düşüş gözlemledik." },
+    "demonstrate": { synonyms: "show, prove, exhibit, illustrate", antonyms: "hide, conceal", sentence: "The experiment helps to demonstrate the laws of gravity.", sentenceTr: "Deney yerçekimi kanunlarını kanıtlamaya yardımcı olur." },
+    "diverse": { synonyms: "various, varied, different, heterogeneous", antonyms: "similar, uniform", sentence: "This region is known for its diverse biological species.", sentenceTr: "Bu bölge, çeşitli biyolojik türleriyle tanınır." },
+    "enhance": { synonyms: "improve, boost, upgrade, intensify", antonyms: "worsen, diminish, decrease", sentence: "New software will enhance the speed of calculations.", sentenceTr: "Yeni yazılım, hesaplamaların hızını artıracak." },
+    "evaluate": { synonyms: "assess, judge, appraise, analyze", antonyms: "ignore, neglect", sentence: "We need to evaluate the long-term impact of the policy.", sentenceTr: "Politikanın uzun vadeli etkisini değerlendirmemiz gerekiyor." },
+    "fluctuate": { synonyms: "vary, shift, alter, oscillate", antonyms: "stabilize, persist", sentence: "Temperatures fluctuate significantly during the spring.", sentenceTr: "Sıcaklıklar ilkbahar aylarında önemli ölçüde dalgalanır." },
+    "guarantee": { synonyms: "ensure, assure, warrant, promise", antonyms: "deny, reject", sentence: "We cannot guarantee positive outcomes in all cases.", sentenceTr: "Tüm durumlarda olumlu sonuçları garanti edemeyiz." },
+    "hypothesis": { synonyms: "theory, assumption, thesis, guess", antonyms: "fact, certainty", sentence: "The scientist formulated a new hypothesis for the study.", sentenceTr: "Bilim insanı çalışma için yeni bir hipotez formüle etti." },
+    "implement": { synonyms: "apply, execute, enforce, perform", antonyms: "neglect, ignore, cancel", sentence: "The hospital will implement new patient care protocols.", sentenceTr: "Hastane yeni hasta bakım protokollerini uygulayacak." },
+    "inevitable": { synonyms: "unavoidable, certain, inescapable", antonyms: "avoidable, uncertain", sentence: "Some degree of wear and tear is inevitable in machinery.", sentenceTr: "Makinelerde bir dereceye kadar aşınma ve yıpranma kaçınılmazdır." },
+    "investigate": { synonyms: "examine, inspect, explore, probe", antonyms: "ignore, overlook", sentence: "The police will investigate the cause of the fire.", sentenceTr: "Polis yangının çıkış nedenini araştıracak." },
+    "maintain": { synonyms: "keep, preserve, sustain, continue", antonyms: "abandon, discontinue", sentence: "It is important to maintain a healthy balance in life.", sentenceTr: "Hayatta sağlıklı bir dengeyi korumak önemlidir." },
+    "negligible": { synonyms: "insignificant, minor, trivial, small", antonyms: "significant, important", sentence: "The risk of side effects from this vaccine is negligible.", sentenceTr: "Bu aşının yan etki riski ihmal edilebilir düzeydedir." },
+    "obtain": { synonyms: "get, acquire, gain, secure", antonyms: "lose, forfeit", sentence: "You must obtain approval before conducting the experiment.", sentenceTr: "Deneyi gerçekleştirmeden önce onay almalısınız." },
+    "predict": { synonyms: "foresee, forecast, anticipate, expect", antonyms: "doubt, misunderstand", sentence: "It is difficult to predict weather patterns with total accuracy.", sentenceTr: "Hava durumunu tam bir doğrulukla tahmin etmek zordur." },
+    "profound": { synonyms: "deep, intense, significant, serious", antonyms: "shallow, superficial", sentence: "The discovery had a profound impact on physics.", sentenceTr: "Keşif, fizik üzerinde derin bir etki yarattı." },
+    "reject": { synonyms: "refuse, deny, decline, discard", antonyms: "accept, approve", sentence: "The journal decided to reject the submitted paper.", sentenceTr: "Dergi, sunulan makaleyi reddetmeye karar verdi." },
+    "reveal": { synonyms: "disclose, show, uncover, expose", antonyms: "hide, conceal", sentence: "X-rays reveal structural details hidden inside cells.", sentenceTr: "Röntgen ışınları hücrelerin içinde saklı yapısal detayları açığa çıkarır." },
+    "significant": { synonyms: "important, substantial, meaningful", antonyms: "insignificant, minor", sentence: "There is a significant difference between the two samples.", sentenceTr: "İki örnek arasında önemli bir fark var." },
+    "sustain": { synonyms: "maintain, support, uphold, prolong", antonyms: "abandon, destroy", sentence: "The soil is too poor to sustain agriculture.", sentenceTr: "Toprak, tarımı sürdürmek için çok yetersiz." },
+    "transfer": { synonyms: "move, shift, convey, relocate", antonyms: "keep, hold", sentence: "Heat transfers from hotter objects to colder ones.", sentenceTr: "Isı sıcak nesnelerden soğuk olanlara aktarılır." },
+    "undertake": { synonyms: "take on, launch, begin, attempt", antonyms: "abandon, avoid", sentence: "The institute will undertake a major study on climate.", sentenceTr: "Enstitü, iklim konusunda büyük bir çalışma üstlenecek." },
+    "validate": { synonyms: "confirm, verify, prove, authenticate", antonyms: "disprove, invalidate", sentence: "Tests are required to validate the diagnostic tool.", sentenceTr: "Teşhis aracını doğrulamak için testler gereklidir." },
+    "yield": { synonyms: "produce, provide, give, generate", antonyms: "resist, withhold", sentence: "The investment is expected to yield high returns.", sentenceTr: "Yatırımın yüksek getiri sağlaması bekleniyor." }
   };
 
   const startSpeechListening = (wordObj) => {
@@ -155,13 +184,245 @@ const VocabularySection = ({
   const [activeRight, setActiveRight] = useState(null);
   const [matchedWords, setMatchedWords] = useState(new Set());
   const [matchErrors, setMatchErrors] = useState(new Set());
+  const [matchMode, setMatchMode] = useState('turkish'); // 'turkish', 'synonym'
 
   // Input states for custom word
   const [showAddForm, setShowAddForm] = useState(false);
   const [customEnglish, setCustomEnglish] = useState('');
   const [customTurkish, setCustomTurkish] = useState('');
 
+  // Dictation game state
+  const [dictationIndex, setDictationIndex] = useState(0);
+  const [dictationInput, setDictationInput] = useState('');
+  const [dictationChecked, setDictationChecked] = useState(false);
+  const [dictationResult, setDictationResult] = useState(null); // 'correct', 'wrong'
+  const [dictationList, setDictationList] = useState([]);
+
   const pool = notebook.length > 0 ? notebook : vocabPracticeList;
+
+  // Initialize Dictation game
+  useEffect(() => {
+    if (subTab === 'dictation' && pool.length > 0) {
+      const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
+      setDictationList(shuffled);
+      setDictationIndex(0);
+      setDictationInput('');
+      setDictationChecked(false);
+      setDictationResult(null);
+    }
+  }, [subTab, pool]);
+
+  // Pronounce word automatically in Dictation mode on index change
+  useEffect(() => {
+    if (subTab === 'dictation' && dictationList.length > 0 && dictationList[dictationIndex]) {
+      const timer = setTimeout(() => {
+        if (playSpeechAudio) {
+          playSpeechAudio(dictationList[dictationIndex].english);
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [dictationIndex, subTab, dictationList, playSpeechAudio]);
+
+  const handleCheckDictation = () => {
+    if (dictationChecked) return;
+    if (incrementDailyQuestions) incrementDailyQuestions();
+    const wordObj = dictationList[dictationIndex];
+    if (!wordObj) return;
+    
+    const userInput = dictationInput.trim().toLowerCase();
+    const correctTarget = wordObj.english.trim().toLowerCase();
+    const isCorrect = userInput === correctTarget;
+    
+    setDictationChecked(true);
+    setDictationResult(isCorrect ? 'correct' : 'wrong');
+    
+    if (recordWordStat) {
+      recordWordStat(wordObj.english, isCorrect);
+    }
+  };
+
+  const handleNextDictation = () => {
+    setDictationInput('');
+    setDictationChecked(false);
+    setDictationResult(null);
+    setDictationIndex(prev => prev + 1);
+  };
+
+  // Sentence Builder States
+  const [sbIndex, setSbIndex] = useState(0);
+  const [sbList, setSbList] = useState([]);
+  const [sbScrambled, setSbScrambled] = useState([]);
+  const [sbSelected, setSbSelected] = useState([]);
+  const [sbChecked, setSbChecked] = useState(false);
+  const [sbResult, setSbResult] = useState(null); // 'correct', 'wrong'
+
+  // Pronunciation Lab States
+  const [prIndex, setPrIndex] = useState(0);
+  const [prList, setPrList] = useState([]);
+  const [prScore, setPrScore] = useState(null);
+  const [prListening, setPrListening] = useState(false);
+
+  // Audio Playlist States
+  const [apPlaying, setApPlaying] = useState(false);
+  const [apIndex, setApIndex] = useState(0);
+
+  // Audio Playlist Loop Effect
+  useEffect(() => {
+    let timer = null;
+    if (apPlaying && pool.length > 0) {
+      const playWordAndAdvance = async () => {
+        const currentWord = pool[apIndex];
+        if (!currentWord) {
+          setApPlaying(false);
+          return;
+        }
+
+        if (playSpeechAudio) {
+          playSpeechAudio(currentWord.english);
+        }
+
+        timer = setTimeout(() => {
+          if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(currentWord.turkish);
+            utterance.lang = 'tr-TR';
+            window.speechSynthesis.speak(utterance);
+          }
+
+          timer = setTimeout(() => {
+            setApIndex(prev => {
+              if (prev < pool.length - 1) return prev + 1;
+              setApPlaying(false);
+              return 0;
+            });
+          }, 3000);
+
+        }, 3000);
+      };
+
+      playWordAndAdvance();
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [apPlaying, apIndex, pool, playSpeechAudio]);
+
+  // Initialize Sentence Builder
+  useEffect(() => {
+    if (subTab === 'sentenceBuilder' && pool.length > 0) {
+      const valid = pool.filter(w => w.sentence_en && w.sentence_en.trim().split(/\s+/).length > 2);
+      const list = valid.sort(() => 0.5 - Math.random()).slice(0, 5);
+      setSbList(list);
+      setSbIndex(0);
+      setSbChecked(false);
+      setSbResult(null);
+      setSbSelected([]);
+      if (list.length > 0) {
+        scrambleSentenceWords(list[0].sentence_en);
+      }
+    }
+  }, [subTab, pool]);
+
+  const scrambleSentenceWords = (sentenceText) => {
+    const words = sentenceText.split(/\s+/).map(w => w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")).filter(Boolean);
+    const scrambled = [...words].sort(() => 0.5 - Math.random());
+    setSbScrambled(scrambled);
+    setSbSelected([]);
+  };
+
+  // Initialize Pronunciation List
+  useEffect(() => {
+    if (subTab === 'pronunciation' && pool.length > 0) {
+      const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
+      setPrList(shuffled);
+      setPrIndex(0);
+      setPrScore(null);
+      setPrListening(false);
+    }
+  }, [subTab, pool]);
+
+  const startSpeechRecognitionPr = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Tarayıcınız ses tanıma teknolojisini desteklememektedir. Google Chrome kullanmanızı tavsiye ederiz.");
+      return;
+    }
+    const currentWordObj = prList[prIndex];
+    if (!currentWordObj) return;
+
+    const rec = new SpeechRecognition();
+    rec.lang = 'en-US';
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+
+    setPrListening(true);
+    setPrScore(null);
+
+    rec.onresult = (e) => {
+      const speechToText = e.results[0][0].transcript.toLowerCase().trim();
+      const target = currentWordObj.english.toLowerCase().trim();
+      
+      let score = 0;
+      if (speechToText === target) {
+        score = 100;
+      } else {
+        let matches = 0;
+        const targetWords = target.split(/\s+/);
+        const speechWords = speechToText.split(/\s+/);
+        targetWords.forEach(tw => {
+          if (speechWords.includes(tw)) matches++;
+        });
+        score = Math.round((matches / Math.max(1, targetWords.length)) * 100);
+        if (score === 0 && (speechToText.includes(target) || target.includes(speechToText))) {
+          score = 60;
+        }
+      }
+      setPrScore(score);
+      
+      const isCorrect = score >= 70;
+      if (recordWordStat) {
+        recordWordStat(currentWordObj.english, isCorrect);
+      }
+    };
+
+    rec.onerror = (err) => {
+      console.error("Speech recognition error:", err);
+      setPrListening(false);
+      alert("Ses alınamadı. Lütfen mikrofon izinlerini kontrol edin.");
+    };
+
+    rec.onend = () => {
+      setPrListening(false);
+    };
+
+    rec.start();
+  };
+
+  const handleCheckSentence = () => {
+    if (sbChecked) return;
+    if (incrementDailyQuestions) incrementDailyQuestions();
+    const currentObj = sbList[sbIndex];
+    if (!currentObj) return;
+
+    const correctTarget = currentObj.sentence_en.split(/\s+/).map(w => w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase()).filter(Boolean).join(" ");
+    const userTarget = sbSelected.map(w => w.toLowerCase()).join(" ");
+
+    const isCorrect = correctTarget === userTarget;
+    setSbChecked(true);
+    setSbResult(isCorrect ? 'correct' : 'wrong');
+  };
+
+  const handleNextSentence = () => {
+    setSbChecked(false);
+    setSbResult(null);
+    setSbSelected([]);
+    const nextIdx = sbIndex + 1;
+    setSbIndex(nextIdx);
+    if (nextIdx < sbList.length) {
+      scrambleSentenceWords(sbList[nextIdx].sentence_en);
+    }
+  };
 
   // Shuffling flashcards randomly so it is not in order
   useEffect(() => {
@@ -207,14 +468,38 @@ const VocabularySection = ({
   }, [flashcardIndex, subTab, activeTab, autoPronounceEnabled, flashcardsList, playSpeechAudio]);
 
   // Build the 5-pair Matching Game
-  const startMatchingGame = () => {
-    if (pool.length < 5) {
+  const startMatchingGame = (mode = matchMode) => {
+    const getSynonym = (w) => {
+      if (w.synonyms) return w.synonyms.split(',')[0].trim();
+      const entry = ACADEMIC_DICTIONARY_EXT[w.english.toLowerCase()];
+      if (entry && entry.synonyms) {
+        const list = entry.synonyms.split(',');
+        return list[0].trim();
+      }
+      return null;
+    };
+
+    let selectedPool = [...pool];
+    if (mode === 'synonym') {
+      selectedPool = pool.filter(w => getSynonym(w) !== null);
+      if (selectedPool.length < 5) {
+        alert("Eş anlamlı eşleştirme için yeterli kelime bulunamadı. Lütfen daha fazla akademik kelime yükleyin veya kelime ekleyin.");
+        setMatchMode('turkish');
+        return;
+      }
+    }
+
+    if (selectedPool.length < 5) {
       alert("Eşleştirme oyunu için en az 5 kelime eklemiş olmanız gerekmektedir. Lütfen Akademik Kelimeleri Yükle butonunu kullanın.");
       return;
     }
-    const selected = [...pool].sort(() => 0.5 - Math.random()).slice(0, 5);
+
+    const selected = selectedPool.sort(() => 0.5 - Math.random()).slice(0, 5);
     const leftSide = selected.map(w => ({ id: w.id, text: w.english })).sort(() => 0.5 - Math.random());
-    const rightSide = selected.map(w => ({ id: w.id, text: w.turkish })).sort(() => 0.5 - Math.random());
+    const rightSide = selected.map(w => ({ 
+      id: w.id, 
+      text: mode === 'synonym' ? getSynonym(w) : w.turkish 
+    })).sort(() => 0.5 - Math.random());
     
     setMatchLeft(leftSide);
     setMatchRight(rightSide);
@@ -228,7 +513,7 @@ const VocabularySection = ({
     if (subTab === 'matching') {
       startMatchingGame();
     }
-  }, [subTab, pool]);
+  }, [subTab, pool, matchMode]);
 
   const handleMatchSelect = (item, side) => {
     if (matchedWords.has(item.id)) return;
@@ -282,11 +567,46 @@ const VocabularySection = ({
   }, [subTab, pool]);
 
   const handleCheckSpelling = () => {
+    if (spellingChecked) return;
     if (incrementDailyQuestions) incrementDailyQuestions();
     const wordObj = spellingList[spellingIndex];
     if (!wordObj) return;
     
-    const isCorrect = spellingInput.trim().toLowerCase() === wordObj.english.trim().toLowerCase();
+    const userInput = spellingInput.trim().toLowerCase();
+    const correctTarget = wordObj.english.trim().toLowerCase();
+    
+    // Check 1: Exact match
+    let isCorrect = userInput === correctTarget;
+    
+    // Check 2: Synonym match in ACADEMIC_DICTIONARY_EXT (Direct & Reverse lookup)
+    if (!isCorrect) {
+      const entryDirect = ACADEMIC_DICTIONARY_EXT[correctTarget];
+      if (entryDirect && entryDirect.synonyms) {
+        const synList = entryDirect.synonyms.split(',').map(s => s.trim().toLowerCase());
+        if (synList.includes(userInput)) {
+          isCorrect = true;
+        }
+      }
+      
+      if (!isCorrect) {
+        const entryReverse = ACADEMIC_DICTIONARY_EXT[userInput];
+        if (entryReverse && entryReverse.synonyms) {
+          const synList = entryReverse.synonyms.split(',').map(s => s.trim().toLowerCase());
+          if (synList.includes(correctTarget)) {
+            isCorrect = true;
+          }
+        }
+      }
+    }
+    
+    // Check 3: Check wordObj's own synonyms if present (custom words)
+    if (!isCorrect && wordObj.synonyms) {
+      const synList = wordObj.synonyms.split(',').map(s => s.trim().toLowerCase());
+      if (synList.includes(userInput)) {
+        isCorrect = true;
+      }
+    }
+    
     setSpellingChecked(true);
     setSpellingResult(isCorrect ? 'correct' : 'wrong');
     
@@ -584,6 +904,11 @@ const VocabularySection = ({
         <button onClick={() => setSubTab('flashcards')} style={subTab === 'flashcards' ? activeTabStyle : inactiveTabStyle}>📇 Kartlar</button>
         <button onClick={() => setSubTab('matching')} style={subTab === 'matching' ? activeTabStyle : inactiveTabStyle}>🧩 Eşleştirme</button>
         <button onClick={() => setSubTab('spelling')} style={subTab === 'spelling' ? activeTabStyle : inactiveTabStyle}>✍️ Yazma Testi</button>
+        <button onClick={() => setSubTab('dictation')} style={subTab === 'dictation' ? activeTabStyle : inactiveTabStyle}>🎧 Dikte (Dinle-Yaz)</button>
+        <button onClick={() => setSubTab('leitner')} style={subTab === 'leitner' ? activeTabStyle : inactiveTabStyle}>📦 Leitner Kutuları</button>
+        <button onClick={() => setSubTab('pronunciation')} style={subTab === 'pronunciation' ? activeTabStyle : inactiveTabStyle}>🎙️ Telaffuz Laboratuvarı</button>
+        <button onClick={() => setSubTab('sentenceBuilder')} style={subTab === 'sentenceBuilder' ? activeTabStyle : inactiveTabStyle}>🧩 Cümle Kurma</button>
+        <button onClick={() => setSubTab('audioPlaylist')} style={subTab === 'audioPlaylist' ? activeTabStyle : inactiveTabStyle}>🎧 Kulaklık Modu</button>
         <button onClick={() => setSubTab('mcq')} style={subTab === 'mcq' ? activeTabStyle : inactiveTabStyle}>🎯 Çoktan Seçmeli</button>
         <button onClick={() => setSubTab('table')} style={subTab === 'table' ? activeTabStyle : inactiveTabStyle}>📊 Kelime Listesi</button>
       </div>
@@ -608,9 +933,8 @@ const VocabularySection = ({
                   </div>
 
                   {/* Flippable Flashcard Card */}
-                  {/* Flippable Flashcard Card */}
                   <div 
-                    onClick={() => setRevealMeaning(!revealMeaning)}
+                    className={`flip-card-container ${revealMeaning ? 'flipped' : ''}`}
                     onTouchStart={(e) => {
                       setTouchEnd(null);
                       setTouchStart(e.targetTouches[0].clientX);
@@ -631,46 +955,61 @@ const VocabularySection = ({
                         setFlashcardIndex(prev => (prev - 1 + flashcardsList.length) % flashcardsList.length);
                       }
                     }}
-                    className="glass-card text-center"
-                    style={{ 
-                      padding: '40px 20px',
-                      cursor: 'pointer',
-                      minHeight: '190px',
-                      borderRadius: '20px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      background: revealMeaning ? 'rgba(99, 102, 241, 0.05)' : 'rgba(18, 24, 41, 0.45)',
-                      border: revealMeaning ? '1px solid rgba(99, 102, 241, 0.25)' : '1px solid rgba(255, 255, 255, 0.05)',
-                      transition: 'all 0.25s ease'
-                    }}
                   >
-                    {!revealMeaning ? (
-                      <div className="space-y-2">
-                        <h3 className="text-2xl font-extrabold text-slate-100 font-heading tracking-wide" style={{ fontSize: '1.8rem', color: '#f8fafc', margin: '0 0 8px 0' }}>
-                          {currentWord.english}
-                        </h3>
-                        <p style={{ fontSize: '0.65rem', fontWeight: '800', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>Anlamı Görmek İçin Tıkla</p>
-                        {currentWord.sentence_en && (
-                          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontStyle: 'italic', maxWidth: '320px', margin: '12px auto 0 auto', lineHeight: '1.4' }}>
-                            "{currentWord.sentence_en}"
-                          </p>
-                        )}
+                    <div className="flip-card-inner" onClick={() => setRevealMeaning(!revealMeaning)}>
+                      {/* Front Side */}
+                      <div className="flip-card-front">
+                        <div className="space-y-2 relative w-full h-full flex flex-col justify-center items-center">
+                          {/* Audio button */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (playSpeechAudio) playSpeechAudio(currentWord.english);
+                            }}
+                            style={{
+                              position: 'absolute',
+                              top: '-15px',
+                              right: '5px',
+                              padding: '8px',
+                              borderRadius: '50%',
+                              background: 'rgba(255, 255, 255, 0.05)',
+                              border: '1px solid rgba(255, 255, 255, 0.08)',
+                              color: '#a5b4fc',
+                              zIndex: 10
+                            }}
+                            className="hover:bg-white/10 transition-colors"
+                            title="Telaffuz Dinle"
+                          >
+                            <Volume2 className="h-4 w-4" />
+                          </button>
+                          
+                          <h3 className="text-2xl font-extrabold text-slate-100 font-heading tracking-wide" style={{ fontSize: '1.8rem', color: '#f8fafc', margin: '0 0 8px 0' }}>
+                            {currentWord.english}
+                          </h3>
+                          <p style={{ fontSize: '0.65rem', fontWeight: '800', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>Anlamı Görmek İçin Tıkla</p>
+                          {currentWord.sentence_en && (
+                            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontStyle: 'italic', maxWidth: '320px', margin: '12px auto 0 auto', lineHeight: '1.4' }}>
+                              "{currentWord.sentence_en}"
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <h3 className="text-xl font-bold text-indigo-400 font-heading" style={{ fontSize: '1.6rem', color: '#818cf8', margin: '0 0 8px 0' }}>
-                          {currentWord.turkish}
-                        </h3>
-                        <p style={{ fontSize: '0.65rem', fontWeight: '800', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>İngilizce: {currentWord.english}</p>
-                        {currentWord.sentence_tr && (
-                          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontStyle: 'italic', maxWidth: '320px', margin: '12px auto 0 auto', lineHeight: '1.4' }}>
-                            "{currentWord.sentence_tr}"
-                          </p>
-                        )}
+                      
+                      {/* Back Side */}
+                      <div className="flip-card-back">
+                        <div className="space-y-2 relative w-full h-full flex flex-col justify-center items-center">
+                          <h3 className="text-xl font-bold text-indigo-400 font-heading" style={{ fontSize: '1.6rem', color: '#818cf8', margin: '0 0 8px 0' }}>
+                            {currentWord.turkish}
+                          </h3>
+                          <p style={{ fontSize: '0.65rem', fontWeight: '800', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>İngilizce: {currentWord.english}</p>
+                          {currentWord.sentence_tr && (
+                            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontStyle: 'italic', maxWidth: '320px', margin: '12px auto 0 auto', lineHeight: '1.4' }}>
+                              "{currentWord.sentence_tr}"
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    )}
+                    </div>
                   </div>
 
                   {/* Controls & Free Navigation */}
@@ -736,11 +1075,37 @@ const VocabularySection = ({
           <div className="flex justify-between items-center text-[10px] text-slate-400" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '0.78rem', fontWeight: 'bold' }}>Kelime Eşleştirme (5 Çift - Mobil Uyumlu 📱)</span>
             <button 
-              onClick={startMatchingGame}
+              onClick={() => startMatchingGame()}
               className="text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1"
               style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', border: 'none', background: 'none' }}
             >
               <RefreshCw className="h-3 w-3" /> Yeniden Dağıt
+            </button>
+          </div>
+
+          {/* Mode Switcher */}
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', background: 'rgba(255,255,255,0.02)', padding: '4px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.04)' }}>
+            <button
+              onClick={() => { setMatchMode('turkish'); }}
+              className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer border`}
+              style={{
+                background: matchMode === 'turkish' ? 'var(--primary-gradient)' : 'transparent',
+                borderColor: matchMode === 'turkish' ? 'transparent' : 'rgba(255,255,255,0.05)',
+                color: matchMode === 'turkish' ? '#fff' : 'var(--text-secondary)'
+              }}
+            >
+              🇹🇷 İngilizce - Türkçe Eşleştirme
+            </button>
+            <button
+              onClick={() => { setMatchMode('synonym'); }}
+              className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer border`}
+              style={{
+                background: matchMode === 'synonym' ? 'var(--primary-gradient)' : 'transparent',
+                borderColor: matchMode === 'synonym' ? 'transparent' : 'rgba(255,255,255,0.05)',
+                color: matchMode === 'synonym' ? '#fff' : 'var(--text-secondary)'
+              }}
+            >
+              🇬🇧 Eş Anlamlı Kelime Eşleştirme (Synonyms)
             </button>
           </div>
 
@@ -766,9 +1131,11 @@ const VocabularySection = ({
               })}
             </div>
 
-            {/* Right Column: Turkish Meanings */}
+            {/* Right Column: Turkish Meanings / Synonyms */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <h4 style={{ textAlign: 'center', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '4px' }}>Türkçe Anlamı</h4>
+              <h4 style={{ textAlign: 'center', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '4px' }}>
+                {matchMode === 'synonym' ? 'Eş Anlamlısı (Synonym)' : 'Türkçe Anlamı'}
+              </h4>
               {matchRight.map(item => {
                 const isMatched = matchedWords.has(item.id);
                 const isActive = activeRight?.id === item.id;
@@ -888,6 +1255,449 @@ const VocabularySection = ({
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* SUBTAB 3.1: DICTATION PRACTICE */}
+      {subTab === 'dictation' && (
+        <div className="space-y-4">
+          {dictationList.length > 0 && dictationIndex < dictationList.length ? (
+            (() => {
+              const currentWord = dictationList[dictationIndex];
+              return (
+                <div className="glass-card p-6 border border-white/5 rounded-2xl space-y-4">
+                  <div className="flex justify-between items-center text-[10px] text-slate-400" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>🎧 DİKTE (DINLE VE YAZ)</span>
+                    <span>Soru {dictationIndex + 1} / {dictationList.length}</span>
+                  </div>
+
+                  <div className="text-center py-6 space-y-4">
+                    <button
+                      onClick={() => {
+                        if (playSpeechAudio) playSpeechAudio(currentWord.english);
+                      }}
+                      className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 hover:bg-indigo-600/40 hover:scale-105 transition-all cursor-pointer"
+                      title="Tekrar Dinle"
+                    >
+                      <Volume2 className="h-6 w-6" />
+                    </button>
+                    <p style={{ fontSize: '0.7rem', fontWeight: '800', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>Telaffuzu duyduğunuz kelimeyi yazın:</p>
+                  </div>
+
+                  <input 
+                    type="text"
+                    placeholder="İngilizce kelimeyi buraya yazın..."
+                    value={dictationInput}
+                    onChange={(e) => {
+                      if (!dictationChecked) {
+                        setDictationInput(e.target.value);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && dictationInput.trim() && !dictationChecked) {
+                        handleCheckDictation();
+                      }
+                    }}
+                    disabled={dictationChecked}
+                    className="duo-input"
+                    style={{ width: '100%', padding: '12px 16px', fontSize: '0.9rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', color: 'white', outline: 'none' }}
+                  />
+
+                  {dictationChecked && (
+                    <div className="space-y-2">
+                      <div className={`p-4 border rounded-2xl text-xs font-semibold ${
+                        dictationResult === 'correct' 
+                          ? 'border-emerald-500/20 bg-emerald-500/5 text-emerald-400' 
+                          : 'border-rose-500/20 bg-rose-500/5 text-rose-400'
+                      }`} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div>{dictationResult === 'correct' ? '✔️ Harika, Doğru!' : `❌ Hata! Doğru yazılışı: ${currentWord.english}`}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-main)', marginTop: '4px' }}>
+                          Türkçe Anlamı: <strong>{currentWord.turkish}</strong>
+                        </div>
+                        {currentWord.sentence_en && (
+                          <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontStyle: 'italic', marginTop: '4px' }}>
+                            "{currentWord.sentence_en}"
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    {!dictationChecked ? (
+                      <button
+                        onClick={handleCheckDictation}
+                        disabled={!dictationInput.trim()}
+                        className="btn-primary"
+                        style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                      >
+                        Kontrol Et
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleNextDictation}
+                        className="btn-primary"
+                        style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                      >
+                        {dictationIndex < dictationList.length - 1 ? 'Sonraki Kelime ➡️' : 'Pratiği Bitir 🏁'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })()
+          ) : (
+            <div className="glass-card p-6 border border-emerald-500/20 bg-emerald-500/5 text-center rounded-2xl space-y-4">
+              <CheckCircle className="h-8 w-8 text-emerald-400 mx-auto" />
+              <h4 className="text-sm font-bold text-slate-100">Tebrikler! Dikte pratik testini tamamladınız.</h4>
+              <button 
+                onClick={() => setSubTab('flashcards')}
+                className="btn-primary"
+                style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+              >
+                Kartlara Dön
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* SUBTAB 3.1.2: PRONUNCIATION LABORATORY */}
+      {subTab === 'pronunciation' && (
+        <div className="space-y-4">
+          {prList.length > 0 && prIndex < prList.length ? (
+            (() => {
+              const currentWord = prList[prIndex];
+              return (
+                <div className="glass-card p-6 border border-white/5 rounded-2xl space-y-5 text-center">
+                  <div className="flex justify-between items-center text-[10px] text-slate-400" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>🎙️ TELAFFUZ LABORATUVARI</span>
+                    <span>Soru {prIndex + 1} / {prList.length}</span>
+                  </div>
+
+                  <div className="py-4 space-y-2">
+                    <h2 style={{ fontSize: '2rem', fontWeight: '900', color: 'white', letterSpacing: '0.02em', margin: 0 }}>{currentWord.english}</h2>
+                    <p style={{ fontSize: '0.78rem', color: 'var(--primary-light)', fontWeight: '700', margin: 0 }}>{currentWord.turkish}</p>
+                  </div>
+
+                  <div className="flex justify-center gap-4 py-4" style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+                    <button
+                      onClick={() => {
+                        if (playSpeechAudio) playSpeechAudio(currentWord.english);
+                      }}
+                      className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-all cursor-pointer"
+                      title="Örnek Telaffuzu Dinle"
+                    >
+                      <Volume2 className="h-5 w-5" />
+                    </button>
+
+                    <button
+                      onClick={startSpeechRecognitionPr}
+                      disabled={prListening}
+                      className={`flex h-16 w-16 items-center justify-center rounded-full transition-all cursor-pointer ${
+                        prListening 
+                          ? 'bg-rose-600/30 border border-rose-500 text-rose-400 animate-pulse' 
+                          : 'bg-indigo-600 border border-indigo-500 text-white hover:scale-105 shadow-lg shadow-indigo-600/20'
+                      }`}
+                      style={{ fontSize: '1.4rem' }}
+                      title="Mikrofonu Aç ve Konuş"
+                    >
+                      <i className="fa-solid fa-microphone"></i>
+                    </button>
+                  </div>
+
+                  {prListening && (
+                    <p style={{ fontSize: '0.7rem', color: '#f43f5e', fontWeight: 'bold' }}>Dinleniyor... Şimdi konuşun.</p>
+                  )}
+
+                  {prScore !== null && (
+                    <div className="space-y-2">
+                      <div className={`p-4 border rounded-2xl text-xs font-semibold max-w-xs mx-auto ${
+                        prScore >= 70 
+                          ? 'border-emerald-500/20 bg-emerald-500/5 text-emerald-400' 
+                          : 'border-amber-500/20 bg-amber-500/5 text-amber-400'
+                      }`} style={{ display: 'flex', flexDirection: 'column', gap: '4px', margin: '0 auto' }}>
+                        <div style={{ fontSize: '0.9rem', fontWeight: '900' }}>Telaffuz Skoru: {prScore} / 100</div>
+                        <div style={{ fontSize: '0.7rem', opacity: 0.8 }}>
+                          {prScore >= 90 ? '🥇 Kusursuz Telaffuz!' : prScore >= 70 ? '✔️ Çok İyi, Anlaşılır!' : '⚠️ Biraz daha gayret! Tekrar deneyin.'}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <button
+                      onClick={() => {
+                        setPrScore(null);
+                        setPrIndex(prev => prev + 1);
+                      }}
+                      className="btn-primary"
+                      style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                    >
+                      {prIndex < prList.length - 1 ? 'Sonraki Kelime ➡️' : 'Pratiği Bitir 🏁'}
+                    </button>
+                  </div>
+                </div>
+              );
+            })()
+          ) : (
+            <div className="glass-card p-6 border border-emerald-500/20 bg-emerald-500/5 text-center rounded-2xl space-y-4">
+              <CheckCircle className="h-8 w-8 text-emerald-400 mx-auto" />
+              <h4 className="text-sm font-bold text-slate-100">Tebrikler! Telaffuz pratiğini tamamladınız.</h4>
+              <button 
+                onClick={() => setSubTab('flashcards')}
+                className="btn-primary"
+                style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+              >
+                Kartlara Dön
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* SUBTAB 3.1.3: SCRAMBLED SENTENCES BUILDER */}
+      {subTab === 'sentenceBuilder' && (
+        <div className="space-y-4">
+          {sbList.length > 0 && sbIndex < sbList.length ? (
+            (() => {
+              const currentWord = sbList[sbIndex];
+              return (
+                <div className="glass-card p-6 border border-white/5 rounded-2xl space-y-5 text-left">
+                  <div className="flex justify-between items-center text-[10px] text-slate-400" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>🧩 CÜMLE KURMA OYUNU</span>
+                    <span>Soru {sbIndex + 1} / {sbList.length}</span>
+                  </div>
+
+                  <div>
+                    <h4 style={{ fontSize: '0.72rem', fontWeight: '800', color: 'var(--primary-light)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Türkçe Anlamı:</h4>
+                    <p style={{ fontSize: '0.85rem', color: 'white', margin: 0, fontWeight: '700' }}>"{currentWord.sentence_tr}"</p>
+                  </div>
+
+                  {/* Built sentence area */}
+                  <div style={{ minHeight: '60px', padding: '12px', background: 'rgba(255,255,255,0.01)', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+                    {sbSelected.map((word, idx) => (
+                      <span
+                        key={idx}
+                        onClick={() => {
+                          if (!sbChecked) {
+                            setSbSelected(prev => prev.filter((_, i) => i !== idx));
+                          }
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 text-xs font-bold cursor-pointer hover:bg-rose-500/20 hover:border-rose-500/30 hover:text-rose-300 transition-all"
+                      >
+                        {word}
+                      </span>
+                    ))}
+                    {sbSelected.length === 0 && (
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Kelimeleri sıralamak için aşağıdaki bloklara tıklayın...</span>
+                    )}
+                  </div>
+
+                  {/* Scrambled word tags options */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '8px 0' }}>
+                    {sbScrambled.map((word, idx) => {
+                      const selectedCount = sbSelected.filter(w => w === word).length;
+                      const scrambledCount = sbScrambled.filter(w => w === word).length;
+                      const isSelected = selectedCount >= scrambledCount;
+
+                      return (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            if (!sbChecked && !isSelected) {
+                              setSbSelected(prev => [...prev, word]);
+                            }
+                          }}
+                          className={`word-tag-btn ${isSelected ? 'tag-selected' : ''}`}
+                        >
+                          {word}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {sbChecked && (
+                    <div className="space-y-2">
+                      <div className={`p-4 border rounded-2xl text-xs font-semibold ${
+                        sbResult === 'correct' 
+                          ? 'border-emerald-500/20 bg-emerald-500/5 text-emerald-400' 
+                          : 'border-rose-500/20 bg-rose-500/5 text-rose-400'
+                      }`} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div>{sbResult === 'correct' ? '✔️ Harika, Doğru Cümle Yapısı!' : '❌ Sıralamada hata var!'}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-main)', marginTop: '4px' }}>
+                          Doğru Cümle: <strong>{currentWord.sentence_en}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <button
+                      onClick={() => setSbSelected([])}
+                      disabled={sbChecked || sbSelected.length === 0}
+                      className="btn-secondary"
+                      style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                    >
+                      Temizle
+                    </button>
+
+                    {!sbChecked ? (
+                      <button
+                        onClick={handleCheckSentence}
+                        disabled={sbSelected.length === 0}
+                        className="btn-primary"
+                        style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                      >
+                        Kontrol Et
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleNextSentence}
+                        className="btn-primary"
+                        style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                      >
+                        {sbIndex < sbList.length - 1 ? 'Sonraki Cümle ➡️' : 'Oyunu Bitir 🏁'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })()
+          ) : (
+            <div className="glass-card p-6 border border-emerald-500/20 bg-emerald-500/5 text-center rounded-2xl space-y-4">
+              <CheckCircle className="h-8 w-8 text-emerald-400 mx-auto" />
+              <h4 className="text-sm font-bold text-slate-100">Tebrikler! Cümle kurma oyununu tamamladınız.</h4>
+              <button 
+                onClick={() => setSubTab('flashcards')}
+                className="btn-primary"
+                style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+              >
+                Kartlara Dön
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* SUBTAB 3.1.4: AUDIO PLAYLIST MODE */}
+      {subTab === 'audioPlaylist' && (
+        <div className="space-y-4">
+          <div className="glass-card p-6 border border-white/5 rounded-2xl space-y-6 text-center">
+            <div className="flex justify-between items-center text-[10px] text-slate-400" style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>🎧 KULAKLIK MODU (PODCAST)</span>
+              <span>Kelime {apIndex + 1} / {pool.length}</span>
+            </div>
+
+            {pool.length > 0 ? (
+              (() => {
+                const currentWord = pool[apIndex];
+                if (!currentWord) return null;
+                return (
+                  <div className="space-y-6 py-6">
+                    <div style={{ animation: apPlaying ? 'pulse 2s infinite' : 'none' }}>
+                      <h2 style={{ fontSize: '2.4rem', fontWeight: '900', color: 'white', letterSpacing: '0.02em', margin: 0 }}>{currentWord.english}</h2>
+                      <p style={{ fontSize: '1rem', color: 'var(--primary-light)', fontWeight: '700', marginTop: '6px' }}>{currentWord.turkish}</p>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+                      <button
+                        onClick={() => {
+                          setApIndex(prev => Math.max(0, prev - 1));
+                        }}
+                        className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-slate-300 hover:bg-white/10 transition-all cursor-pointer"
+                        title="Önceki Kelime"
+                      >
+                        <i className="fa-solid fa-backward"></i>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setApPlaying(prev => !prev);
+                        }}
+                        className="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-600 border border-indigo-500 text-white hover:scale-105 shadow-lg shadow-indigo-600/20 transition-all cursor-pointer"
+                        style={{ fontSize: '1.4rem' }}
+                      >
+                        <i className={apPlaying ? "fa-solid fa-pause" : "fa-solid fa-play"}></i>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setApIndex(prev => (prev < pool.length - 1 ? prev + 1 : 0));
+                        }}
+                        className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-slate-300 hover:bg-white/10 transition-all cursor-pointer"
+                        title="Sonraki Kelime"
+                      >
+                        <i className="fa-solid fa-forward"></i>
+                      </button>
+                    </div>
+
+                    <p style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', maxWidth: '280px', margin: '0 auto', lineHeight: 1.4 }}>
+                      Kulaklık modunda kelimeler ve Türkçe karşılıkları sırayla seslendirilir. Telefonunuz cebinizdeyken dinleyerek çalışabilirsiniz.
+                    </p>
+                  </div>
+                );
+              })()
+            ) : (
+              <div style={{ padding: '24px', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>Kelimelerim listesi boş.</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* SUBTAB 3.2: LEITNER SYSTEM BOXES */}
+      {subTab === 'leitner' && (
+        <div className="space-y-4">
+          <div className="glass-card p-5 border border-white/5 rounded-2xl">
+            <h3 style={{ fontSize: '0.9rem', fontWeight: '800', marginBottom: '4px' }}>📦 Leitner Spaced Repetition (Aralıklı Tekrar)</h3>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+              Ezberlediğiniz kelimeler doğru bildikçe sağdaki kutulara taşınır. Yanlış bilinen kelimeler en baştaki Kutu 1'e geri döner. Hedefiniz tüm kelimeleri Kutu 5'e ulaştırmaktır!
+            </p>
+
+            {/* Boxes shelf */}
+            <div className="leitner-shelf">
+              {[1, 2, 3, 4, 5].map(boxNum => {
+                const wordsInBox = pool.filter(w => (w.leitnerBox || 1) === boxNum);
+                
+                return (
+                  <div key={boxNum} className="leitner-box-card">
+                    <div style={{ fontSize: '1.4rem', marginBottom: '4px' }}>
+                      {boxNum === 5 ? '👑' : '📦'}
+                    </div>
+                    <div style={{ fontSize: '0.78rem', fontWeight: '800', color: 'var(--text-main)' }}>Kutu {boxNum}</div>
+                    <div style={{ fontSize: '0.62rem', color: 'var(--primary-light)', fontWeight: 'bold', margin: '4px 0' }}>
+                      {wordsInBox.length} Kelime
+                    </div>
+                    <div style={{ 
+                      maxHeight: '120px', 
+                      overflowY: 'auto', 
+                      marginTop: '10px', 
+                      borderTop: '1px solid rgba(255,255,255,0.05)', 
+                      paddingTop: '8px', 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      gap: '4px',
+                      alignItems: 'center' 
+                    }}>
+                      {wordsInBox.map(w => (
+                        <span 
+                          key={w.id} 
+                          className="px-1.5 py-0.5 rounded bg-white/5 text-[9px] text-slate-300 font-semibold cursor-pointer hover:bg-white/10"
+                          onClick={() => setDrawerWord(w)}
+                          title={w.turkish}
+                        >
+                          {w.english}
+                        </span>
+                      ))}
+                      {wordsInBox.length === 0 && (
+                        <span style={{ fontSize: '0.55rem', color: 'var(--text-secondary)' }}>Boş</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
 
@@ -1042,7 +1852,7 @@ const VocabularySection = ({
           )}
 
           {/* Word Table */}
-          <div className="glass-card border border-white/5 rounded-2xl overflow-hidden">
+          <div className="glass-card border border-white/5 rounded-2xl overflow-hidden vocab-table-card">
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left" style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>

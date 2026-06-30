@@ -47,11 +47,13 @@ const QuizSection = ({
   mascotState,
   setMascotState,
   mascotSpeech,
-  setMascotSpeech
+  setMascotSpeech,
+  questionTimeSpent
 }) => {
   const [speechSpeed, setSpeechSpeed] = useState(1);
   const [showMap, setShowMap] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [showCheatSheet, setShowCheatSheet] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(180 * 60); // 3 hours countdown
 
   React.useEffect(() => {
@@ -179,6 +181,30 @@ const QuizSection = ({
           }}>
             ⏱️ {formatTime(secondsLeft)}
           </div>
+          {/* Pacing Coach Badge */}
+          {questionTimeSpent !== undefined && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: questionTimeSpent > 90 ? 'rgba(239, 68, 68, 0.12)' : questionTimeSpent > 45 ? 'rgba(245, 158, 11, 0.12)' : 'rgba(16, 185, 129, 0.12)',
+              border: `1px solid ${questionTimeSpent > 90 ? '#ef4444' : questionTimeSpent > 45 ? '#fbbf24' : '#10b981'}`,
+              padding: '4px 10px',
+              borderRadius: '12px',
+              color: questionTimeSpent > 90 ? '#f87171' : questionTimeSpent > 45 ? '#fbbf24' : '#34d399',
+              fontSize: '0.72rem',
+              fontWeight: '800'
+            }}>
+              {questionTimeSpent > 90 ? '⚠️ Yavaş (Limit Aşıldı)' : questionTimeSpent > 45 ? '⏱️ Normal' : '⚡ Hızlı'} ({questionTimeSpent}s)
+            </div>
+          )}
+          <button
+            onClick={() => setShowCheatSheet(true)}
+            className="rounded-lg px-2.5 py-1 text-[10px] font-bold border border-indigo-500/20 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 cursor-pointer"
+            title="Gramer Formül Kartları"
+          >
+            📑 Gramer Formülleri
+          </button>
           <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>
             {quizQuestions.indexOf(currentQuizIndex) + 1} / {quizQuestions.length}
           </span>
@@ -217,18 +243,10 @@ const QuizSection = ({
               onDoubleClick={handleDoubleClick}
               className="duo-question-title"
               style={{ fontSize: fontSize === 'sm' ? '1rem' : fontSize === 'lg' ? '1.35rem' : fontSize === 'xl' ? '1.5rem' : '1.15rem', cursor: 'pointer', lineHeight: '1.6', textAlign: 'left' }}
-              title="Kelime çevirisi için tek tıklayın (cevaplandıktan sonra) veya sürükleyin"
             >
-              {answers[currentQuizIndex] !== undefined ? (
-                renderInteractiveQuestion(
-                  selectedExam.questions[currentQuizIndex - 1].text,
-                  selectedExam.questions[currentQuizIndex - 1].number || currentQuizIndex
-                )
-              ) : (
-                cleanQuestionText(
-                  selectedExam.questions[currentQuizIndex - 1].text,
-                  selectedExam.questions[currentQuizIndex - 1].number || currentQuizIndex
-                )
+              {renderInteractiveQuestion(
+                selectedExam.questions[currentQuizIndex - 1].text,
+                selectedExam.questions[currentQuizIndex - 1].number || currentQuizIndex
               )}
             </div>
 
@@ -395,6 +413,73 @@ const QuizSection = ({
           </div>
         );
       })()}
+      {/* Grammar Cheat Sheet Modal Overlay */}
+      {showCheatSheet && (
+        <div className="auth-modal-overlay" style={{ zIndex: 100000 }} onClick={() => setShowCheatSheet(false)}>
+          <div 
+            className="auth-modal-card text-left" 
+            style={{ maxWidth: '520px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(10, 15, 30, 0.95)', border: '1px solid rgba(99, 102, 241, 0.3)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '10px' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '800', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                📑 YÖKDİL Bağlaç & Gramer Formülleri
+              </h3>
+              <button 
+                onClick={() => setShowCheatSheet(false)}
+                style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem' }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div style={{ maxHeight: '380px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '14px', paddingRight: '4px' }}>
+              {/* Category 1 */}
+              <div>
+                <h4 style={{ fontSize: '0.78rem', color: '#fbbf24', fontWeight: '800', borderBottom: '1px solid rgba(251, 191, 36, 0.15)', paddingBottom: '4px', marginBottom: '6px' }}>
+                  1. ZITLIK BAĞLAÇLARI (Contrast)
+                </h4>
+                <div style={{ fontSize: '0.72rem', color: '#cbd5e1', lineHeight: '1.4' }}>
+                  <p style={{ margin: '4px 0' }}><strong>+ Cümle Alır (Clause):</strong> Although, Even though, Though, While, Whereas, Much as</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ İsim/Fiil Alır (Noun/Ving):</strong> Despite, In spite of, Notwithstanding</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ Zarf (Geçiş Kelimesi):</strong> However, Nevertheless, Nonetheless, Even so</p>
+                </div>
+              </div>
+
+              {/* Category 2 */}
+              <div>
+                <h4 style={{ fontSize: '0.78rem', color: '#60a5fa', fontWeight: '800', borderBottom: '1px solid rgba(96, 165, 250, 0.15)', paddingBottom: '4px', marginBottom: '6px' }}>
+                  2. NEDEN-SONUÇ BAĞLAÇLARI (Cause & Effect)
+                </h4>
+                <div style={{ fontSize: '0.72rem', color: '#cbd5e1', lineHeight: '1.4' }}>
+                  <p style={{ margin: '4px 0' }}><strong>+ Cümle Alır (Clause):</strong> Because, Since, As, Inasmuch as, Seeing that</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ İsim Alır (Noun):</strong> Because of, Due to, Owing to, On account of, As a result of</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ Sonuç Zarfı:</strong> Therefore, Thus, Hence, As a result, Consequently</p>
+                </div>
+              </div>
+
+              {/* Category 3 */}
+              <div>
+                <h4 style={{ fontSize: '0.78rem', color: '#34d399', fontWeight: '800', borderBottom: '1px solid rgba(52, 211, 153, 0.15)', paddingBottom: '4px', marginBottom: '6px' }}>
+                  3. KOŞUL BAĞLAÇLARI (Condition)
+                </h4>
+                <div style={{ fontSize: '0.72rem', color: '#cbd5e1', lineHeight: '1.4' }}>
+                  <p style={{ margin: '4px 0' }}><strong>+ Cümle Alır (Clause):</strong> If, Unless, Provided that, As long as, In case</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ İsim Alır (Noun):</strong> In case of, But for, Without</p>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setShowCheatSheet(false)}
+              className="btn-primary"
+              style={{ width: '100%', padding: '10px', fontSize: '0.78rem', cursor: 'pointer' }}
+            >
+              Anladım, Kapat
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

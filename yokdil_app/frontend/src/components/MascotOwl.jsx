@@ -20,11 +20,36 @@ const MascotOwl = ({ state, speech }) => {
     animClass = "duo-mascot-thinking";
   }
 
+  const handleSpeak = (e) => {
+    e.stopPropagation();
+    if (!speech) return;
+    try {
+      const synth = window.speechSynthesis;
+      if (synth.speaking) {
+        synth.cancel();
+      }
+      // Remove emojis
+      const cleanText = speech.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "");
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      synth.speak(utterance);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
       {speech && (
-        <div className="mascot-bubble">
-          {speech}
+        <div 
+          className="mascot-bubble"
+          onClick={handleSpeak}
+          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+          title="Telaffuzu Dinlemek için Tıkla 🔊"
+        >
+          <span>{speech}</span>
+          <i className="fa-solid fa-volume-high text-indigo-400" style={{ fontSize: '0.8rem' }}></i>
         </div>
       )}
       <div className={`duo-mascot-container ${animClass}`}>
@@ -37,7 +62,7 @@ const MascotOwl = ({ state, speech }) => {
           
           {/* Light Cream Belly */}
           <ellipse cx="50" cy="62" rx="20" ry="20" fill="#FFFDF0" />
-
+ 
           {/* Cute Rosy Cheeks */}
           <circle cx="28" cy="58" r="5" fill="#FDA4AF" opacity="0.75" />
           <circle cx="72" cy="58" r="5" fill="#FDA4AF" opacity="0.75" />
@@ -46,7 +71,7 @@ const MascotOwl = ({ state, speech }) => {
           <path d="M50 21 Q47 11 50 21" stroke={bodyColor} strokeWidth="3" strokeLinecap="round" />
           <path d="M47 22 Q43 13 47 22" stroke={bodyColor} strokeWidth="3.5" strokeLinecap="round" />
           <path d="M53 22 Q57 14 53 22" stroke={bodyColor} strokeWidth="3" strokeLinecap="round" />
-
+ 
           {/* Eyes */}
           {state === 'happy' ? (
             <>
@@ -56,45 +81,57 @@ const MascotOwl = ({ state, speech }) => {
             </>
           ) : state === 'sad' ? (
             <>
-              {/* Sad eyes */}
-              <circle cx="35" cy="48" r="8" fill="white" />
-              <circle cx="65" cy="48" r="8" fill="white" />
-              <circle cx="35" cy="50" r="4.5" fill="#1E293B" />
-              <circle cx="65" cy="50" r="4.5" fill="#1E293B" />
+              {/* Sad eyes - Blinking group */}
+              <g className="mascot-eye-left">
+                <circle cx="35" cy="48" r="8" fill="white" />
+                <circle cx="35" cy="50" r="4.5" fill="#1E293B" />
+              </g>
+              <g className="mascot-eye-right">
+                <circle cx="65" cy="48" r="8" fill="white" />
+                <circle cx="65" cy="50" r="4.5" fill="#1E293B" />
+              </g>
               {/* Sad eyebrows */}
               <path d="M27 38 L39 42" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" />
               <path d="M73 38 L61 42" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" />
             </>
           ) : state === 'thinking' ? (
             <>
-              {/* Curious looking up eyes */}
-              <circle cx="35" cy="48" r="8" fill="white" />
-              <circle cx="65" cy="48" r="8" fill="white" />
-              <circle cx="38" cy="44" r="4.5" fill="#1E293B" />
-              <circle cx="62" cy="44" r="4.5" fill="#1E293B" />
+              {/* Curious looking up eyes - Blinking group */}
+              <g className="mascot-eye-left">
+                <circle cx="35" cy="48" r="8" fill="white" />
+                <circle cx="38" cy="44" r="4.5" fill="#1E293B" />
+              </g>
+              <g className="mascot-eye-right">
+                <circle cx="65" cy="48" r="8" fill="white" />
+                <circle cx="62" cy="44" r="4.5" fill="#1E293B" />
+              </g>
               {/* Thinking query eyebrows */}
               <path d="M28 38 Q35 34 42 38" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" fill="none" />
               <path d="M58 42 L72 38" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" />
             </>
           ) : (
             <>
-              {/* Shiny cute cartoon eyes */}
-              <circle cx="35" cy="48" r="8" fill="white" />
-              <circle cx="65" cy="48" r="8" fill="white" />
-              <circle cx="35" cy="48" r="4.5" fill="#1E293B" />
-              <circle cx="65" cy="48" r="4.5" fill="#1E293B" />
-              <circle cx="37" cy="45" r="1.5" fill="white" />
-              <circle cx="67" cy="45" r="1.5" fill="white" />
+              {/* Shiny cute cartoon eyes - Blinking group */}
+              <g className="mascot-eye-left">
+                <circle cx="35" cy="48" r="8" fill="white" />
+                <circle cx="35" cy="48" r="4.5" fill="#1E293B" />
+                <circle cx="37" cy="45" r="1.5" fill="white" />
+              </g>
+              <g className="mascot-eye-right">
+                <circle cx="65" cy="48" r="8" fill="white" />
+                <circle cx="65" cy="48" r="4.5" fill="#1E293B" />
+                <circle cx="67" cy="45" r="1.5" fill="white" />
+              </g>
             </>
           )}
-
+ 
           {/* Cute Orange Beak */}
           <polygon points="50,56 43,47 57,47" fill="#F97316" />
-
+ 
           {/* Wings */}
           <path d={wingPathLeft} fill={bodyColor} style={{ transition: 'all 0.3s ease' }} />
           <path d={wingPathRight} fill={bodyColor} style={{ transition: 'all 0.3s ease' }} />
-
+ 
           {/* Cute Orange Feet */}
           <circle cx="40" cy="91" r="3.5" fill="#F97316" />
           <circle cx="60" cy="91" r="3.5" fill="#F97316" />

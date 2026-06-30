@@ -6,7 +6,8 @@ const Sidebar = ({
   setActiveTab, 
   setSelectedCategory, 
   setSelectedExam, 
-  setQuizActive
+  setQuizActive,
+  onLogout
 }) => {
   if (!selectedCategory) return null;
 
@@ -63,7 +64,23 @@ const Sidebar = ({
     justifyContent: 'center',
     gap: '8px',
     transition: 'all 0.2s ease',
-    marginTop: 'auto'
+  };
+
+  const logoutBtnStyle = {
+    width: '100%',
+    padding: '10px 16px',
+    fontSize: '0.78rem',
+    fontWeight: '700',
+    borderRadius: '10px',
+    border: '1px solid rgba(239, 68, 68, 0.2)',
+    background: 'rgba(239, 68, 68, 0.05)',
+    color: '#FEB2B2',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    transition: 'all 0.2s ease',
   };
 
   return (
@@ -108,6 +125,10 @@ const Sidebar = ({
           <i className="fa-solid fa-chart-line"></i>
           <span>Performans</span>
         </button>
+        <button style={getSidebarItemStyle('shop')} onClick={() => { setActiveTab('shop'); setQuizActive(false); }}>
+          <i className="fa-solid fa-store"></i>
+          <span>Sanal Dükkan</span>
+        </button>
         <button style={getSidebarItemStyle('settings')} onClick={() => { setActiveTab('settings'); setQuizActive(false); }}>
           <i className="fa-solid fa-gear"></i>
           <span>Ayarlar</span>
@@ -115,7 +136,7 @@ const Sidebar = ({
       </nav>
 
       {/* Footer Area */}
-      <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <button 
           style={changeCourseBtnStyle}
           onClick={() => { setSelectedCategory(null); setSelectedExam(null); setQuizActive(false); }}
@@ -123,6 +144,14 @@ const Sidebar = ({
           onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
         >
           <i className="fa-solid fa-arrow-right-to-bracket"></i> Alan Değiştir
+        </button>
+        <button 
+          style={logoutBtnStyle}
+          onClick={onLogout}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.05)'; }}
+        >
+          <i className="fa-solid fa-right-from-bracket"></i> Çıkış Yap
         </button>
       </div>
     </aside>

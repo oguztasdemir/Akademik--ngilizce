@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, User, Sparkles } from 'lucide-react';
 
-const AuthModal = ({ show, onClose, onAuthSuccess }) => {
+const AuthModal = ({ show, onClose, onAuthSuccess, BACKEND_URL }) => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ const AuthModal = ({ show, onClose, onAuthSuccess }) => {
     setLoading(true);
 
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/auth/login', {
+      const res = await fetch(`${BACKEND_URL || (window.location.protocol + '//' + window.location.hostname + ':5000')}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim() })

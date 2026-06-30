@@ -110,7 +110,7 @@ app.get('/api/passages', (req, res) => {
 });
 
 // Endpoint for word/phrase translation dictionary lookup
-app.post(['/api/translate', '/api/:category/translate'], (req, res) => {
+app.post(['/api/translate', '/api/:category/translate'], async (req, res) => {
   const { text } = req.body;
   if (!text) {
     return res.status(400).json({ error: 'Text is required' });
@@ -121,19 +121,39 @@ app.post(['/api/translate', '/api/:category/translate'], (req, res) => {
   if (fs.existsSync(dictPath)) {
     const dictData = JSON.parse(fs.readFileSync(dictPath, 'utf8'));
     
+    // Check 1: Direct Match
     if (dictData[cleanWord]) {
       return res.json({ word: text, translation: dictData[cleanWord], source: 'local_dict' });
     }
     
-    let lemma = cleanWord;
-    if (cleanWord.endsWith('s')) lemma = cleanWord.slice(0, -1);
-    else if (cleanWord.endsWith('ed')) lemma = cleanWord.slice(0, -2);
-    else if (cleanWord.endsWith('ing')) lemma = cleanWord.slice(0, -3);
+    // Check 2: Lemma / Conjugation Match
+    let lemmas = [cleanWord];
+    if (cleanWord.endsWith('s')) lemmas.push(cleanWord.slice(0, -1));
+    if (cleanWord.endsWith('d')) lemmas.push(cleanWord.slice(0, -1)); // placed -> place
+    if (cleanWord.endsWith('ed')) lemmas.push(cleanWord.slice(0, -2)); // wanted -> want
+    if (cleanWord.endsWith('ing')) lemmas.push(cleanWord.slice(0, -3)); // going -> go
+    if (cleanWord.endsWith('ies')) lemmas.push(cleanWord.slice(0, -3) + 'y'); // studies -> study
+    if (cleanWord.endsWith('ied')) lemmas.push(cleanWord.slice(0, -3) + 'y'); // studied -> study
 
-    if (dictData[lemma]) {
-      return res.json({ word: text, translation: dictData[lemma], source: 'local_dict_lemma' });
+    for (const lem of lemmas) {
+      if (dictData[lem]) {
+        return res.json({ word: text, translation: dictData[lem], source: 'local_dict_lemma' });
+      }
     }
 
+    // Check 3: External Translation API Fallback (MyMemory API)
+    try {
+      const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanWord)}&langpair=en|tr`);
+      const resData = await response.json();
+      const translation = resData?.responseData?.translatedText || resData?.matches?.[0]?.translation;
+      if (translation && !translation.toLowerCase().includes("mymemory")) {
+        return res.json({ word: text, translation: translation.toLowerCase().trim(), source: 'mymemory_api' });
+      }
+    } catch (e) {
+      console.error("External translation failed:", e);
+    }
+
+    // Check 4: Return fallback note
     return res.json({ 
       word: text, 
       translation: `[Çeviri Mevcut Değil] - '${text}' kelimesi YÖKDİL akademik kelime defterine eklenmiştir.`, 
@@ -359,10 +379,23 @@ Anlam bütünlüğü ve dilbilgisi kuralları doğrultusunda doğru cevap **${co
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const USER_DB_PATH = path.join(__dirname, 'data', 'user_db.json');
+const USER_DB_PATH = process.env.VERCEL 
+  ? '/tmp/user_db.json' 
+  : path.join(__dirname, 'data', 'user_db.json');
+
 const JWT_SECRET = 'yokdil_super_secret_key_12345';
 
 const readUsers = () => {
+  if (process.env.VERCEL && !fs.existsSync(USER_DB_PATH)) {
+    const templatePath = path.join(__dirname, 'data', 'user_db.json');
+    if (fs.existsSync(templatePath)) {
+      try {
+        fs.writeFileSync(USER_DB_PATH, fs.readFileSync(templatePath, 'utf8'), 'utf8');
+      } catch (e) {
+        console.error("Failed to copy template user_db.json", e);
+      }
+    }
+  }
   if (!fs.existsSync(USER_DB_PATH)) return [];
   const data = fs.readFileSync(USER_DB_PATH, 'utf8');
   return JSON.parse(data || '[]');
@@ -387,28 +420,92 @@ const auth = (req, res, next) => {
 };
 
 // LOGIN / REGISTER COMBINED API (Name only)
-app.post('/api/auth/login', (req, res) => {
-  const { name } = req.body;
+// REGISTER API
+app.post('/api/auth/register', (req, res) => {
+  const { username, name, password } = req.body;
+  if (!username || !username.trim()) {
+    return res.status(400).json({ error: 'Kullanıcı adı gereklidir.' });
+  }
   if (!name || !name.trim()) {
-    return res.status(400).json({ error: 'Lütfen bir isim girin.' });
+    return res.status(400).json({ error: 'Ad Soyad gereklidir.' });
+  }
+  if (!password || password.length < 4) {
+    return res.status(400).json({ error: 'Şifre en az 4 karakter olmalıdır.' });
   }
 
+  const cleanUsername = username.trim().toLowerCase();
   const cleanName = name.trim();
   const users = readUsers();
-  
-  let user = users.find(u => u.name.toLowerCase() === cleanName.toLowerCase());
-  
+
+  const existingUser = users.find(u => 
+    (u.username && u.username.toLowerCase() === cleanUsername) || 
+    (u.name && u.name.toLowerCase() === cleanUsername)
+  );
+  if (existingUser) {
+    return res.status(400).json({ error: 'Bu kullanıcı adı zaten alınmış.' });
+  }
+
+  const newUser = {
+    id: Date.now().toString(),
+    username: cleanUsername,
+    name: cleanName,
+    password: bcrypt.hashSync(password, 10),
+    answers: {},
+    flagged: {},
+    mistakes: [],
+    notebook: [],
+    gems: 0,
+    ownedOutfits: ["default"],
+    activeOutfits: ["default"],
+    streak: 0
+  };
+
+  users.push(newUser);
+  writeUsers(users);
+
+  const token = jwt.sign({ userId: newUser.id }, JWT_SECRET, { expiresIn: '30d' });
+  res.json({
+    token,
+    user: {
+      id: newUser.id,
+      name: newUser.name,
+      username: newUser.username
+    }
+  });
+});
+
+// LOGIN API
+app.post('/api/auth/login', (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !username.trim()) {
+    return res.status(400).json({ error: 'Lütfen kullanıcı adınızı girin.' });
+  }
+  if (!password) {
+    return res.status(400).json({ error: 'Lütfen şifrenizi girin.' });
+  }
+
+  const cleanUsername = username.trim().toLowerCase();
+  const users = readUsers();
+
+  let user = users.find(u => 
+    (u.username && u.username.toLowerCase() === cleanUsername) || 
+    (u.name && u.name.toLowerCase() === cleanUsername) ||
+    (u.name && u.name.toLocaleLowerCase('tr-TR') === username.trim().toLocaleLowerCase('tr-TR'))
+  );
+
   if (!user) {
-    user = {
-      id: Date.now().toString(),
-      name: cleanName,
-      answers: {},
-      flagged: {},
-      mistakes: [],
-      notebook: []
-    };
-    users.push(user);
+    return res.status(400).json({ error: 'Kullanıcı bulunamadı.' });
+  }
+
+  if (!user.password) {
+    user.username = user.username || cleanUsername;
+    user.password = bcrypt.hashSync(password, 10);
     writeUsers(users);
+  } else {
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ error: 'Hatalı şifre.' });
+    }
   }
 
   const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '30d' });
@@ -416,7 +513,8 @@ app.post('/api/auth/login', (req, res) => {
     token,
     user: {
       id: user.id,
-      name: user.name
+      name: user.name,
+      username: user.username
     }
   });
 });

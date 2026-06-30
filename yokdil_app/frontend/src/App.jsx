@@ -17,8 +17,13 @@ import SettingsSection from './components/SettingsSection';
 import MistakeInbox from './components/MistakeInbox';
 import ParagraphsSection from './components/ParagraphsSection';
 import AuthModal from './components/AuthModal';
+import VirtualShop from './components/VirtualShop';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:5000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (
+  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : window.location.origin
+);
 
 const parseInlineMarkdown = (text) => {
   if (!text) return '';
@@ -280,6 +285,10 @@ function App() {
   const [token, setToken] = useState(() => localStorage.getItem('yokdil_token') || 'null');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [loginName, setLoginName] = useState('');
+  const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
+  const [authUsername, setAuthUsername] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authFullName, setAuthFullName] = useState('');
   const [deviceLinkInfo, setDeviceLinkInfo] = useState(null);
   const [showDeviceLinkModal, setShowDeviceLinkModal] = useState(false);
 
@@ -307,6 +316,10 @@ function App() {
   const [mascotState, setMascotState] = useState('neutral');
   const [mascotSpeech, setMascotSpeech] = useState("YÖKDİL'e hazır mısın?");
   const [mistakes, setMistakes] = useState(() => JSON.parse(localStorage.getItem('yokdil_mistakes') || '[]'));
+  const [gems, setGems] = useState(() => parseInt(localStorage.getItem('yokdil_gems') || '0', 10));
+  const [ownedOutfits, setOwnedOutfits] = useState(() => JSON.parse(localStorage.getItem('yokdil_owned_outfits') || '[]'));
+  const [activeOutfits, setActiveOutfits] = useState(() => JSON.parse(localStorage.getItem('yokdil_active_outfits') || '[]'));
+  const [streakFreezeActive, setStreakFreezeActive] = useState(() => localStorage.getItem('yokdil_streak_freeze') === 'true');
   
   // Word stats for spacing repetition algorithm
   const [wordStats, setWordStats] = useState(() => JSON.parse(localStorage.getItem('yokdil_word_stats') || '{}'));
@@ -330,6 +343,22 @@ function App() {
   const [examSubmitted, setExamSubmitted] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
   const timerIntervalRef = useRef(null);
+
+  const [questionTimeSpent, setQuestionTimeSpent] = useState(0);
+
+  useEffect(() => {
+    let interval = null;
+    if (quizActive && !examSubmitted) {
+      interval = setInterval(() => {
+        setQuestionTimeSpent(prev => prev + 1);
+      }, 1000);
+    } else {
+      setQuestionTimeSpent(0);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [quizActive, examSubmitted, currentQuizIndex]);
 
   // Lectures States
   const [lecturesList, setLecturesList] = useState([]);
@@ -359,6 +388,14 @@ function App() {
   const [dailyQuestionGoal, setDailyQuestionGoal] = useState(parseInt(localStorage.getItem('yokdil_goal_target_questions') || '20', 10));
   const [dailyWordGoal, setDailyWordGoal] = useState(parseInt(localStorage.getItem('yokdil_goal_target_words') || '10', 10));
   const [autoPronounceEnabled, setAutoPronounceEnabled] = useState(localStorage.getItem('yokdil_auto_pronounce') === 'true');
+
+  const [yokdilExamDate, setYokdilExamDate] = useState(() => {
+    return localStorage.getItem('yokdil_exam_date') || '';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('yokdil_exam_date', yokdilExamDate);
+  }, [yokdilExamDate]);
 
   // Explanation state
   const [activeExplanation, setActiveExplanation] = useState(null);
@@ -642,6 +679,11 @@ function App() {
     const newQuestions = dailyQuestionsSolved + 1;
     setDailyQuestionsSolved(newQuestions);
     localStorage.setItem('yokdil_daily_questions', String(newQuestions));
+    setGems(prev => {
+      const newVal = prev + 5;
+      localStorage.setItem('yokdil_gems', String(newVal));
+      return newVal;
+    });
     updateStreakAndDate();
   };
 
@@ -649,6 +691,11 @@ function App() {
     const newWords = dailyWordsStudied + 1;
     setDailyWordsStudied(newWords);
     localStorage.setItem('yokdil_daily_words', String(newWords));
+    setGems(prev => {
+      const newVal = prev + 2;
+      localStorage.setItem('yokdil_gems', String(newVal));
+      return newVal;
+    });
     updateStreakAndDate();
   };
 
@@ -799,7 +846,7 @@ function App() {
     // Shuffle topic questions
     collectedQuestions = collectedQuestions.sort(() => 0.5 - Math.random());
 
-    setQuizQuestions(collectedQuestions);
+    setQuizQuestions(collectedQuestions.map((_, i) => i + 1));
     setSelectedExam({
       id: `topic-${topicKey}`,
       name: `Konu Çalışması: ${getTopicName(topicKey)}`,
@@ -956,6 +1003,20 @@ function App() {
     };
     setWordStats(updated);
     localStorage.setItem('yokdil_word_stats', JSON.stringify(updated));
+
+    // Leitner Box Update
+    setNotebook(prev => {
+      const updatedNotebook = prev.map(item => {
+        if ((item.english || '').toLowerCase() === w) {
+          const currentBox = item.leitnerBox || 1;
+          const nextBox = isCorrect ? Math.min(5, currentBox + 1) : 1;
+          return { ...item, leitnerBox: nextBox };
+        }
+        return item;
+      });
+      localStorage.setItem('yokdil_notebook', JSON.stringify(updatedNotebook));
+      return updatedNotebook;
+    });
   };
 
   const handleToggleFlag = (qIndex) => {
@@ -997,6 +1058,55 @@ function App() {
     setDailyLecturesStudied(0);
     
     alert("Tüm verileriniz başarıyla sıfırlanmıştır.");
+  };
+
+  // AI Chatbot States
+  const [showAiChat, setShowAiChat] = useState(false);
+  const [aiMessages, setAiMessages] = useState([
+    { sender: 'bot', text: 'Merhaba! Ben bilge çalışma arkadaşın. YÖKDİL İngilizce kelimeleri, gramer kuralları veya çeviriler hakkında merak ettiğin her şeyi bana sorabilirsin! 🦉' }
+  ]);
+  const [aiInput, setAiInput] = useState('');
+
+  const handleSendAiMessage = (customText = null) => {
+    const textToSend = customText || aiInput;
+    if (!textToSend.trim()) return;
+
+    // Add user message
+    const userMsg = { sender: 'user', text: textToSend };
+    setAiMessages(prev => [...prev, userMsg]);
+    if (!customText) setAiInput('');
+
+    // Respond
+    setTimeout(() => {
+      let botResponse = "";
+      const lowerText = textToSend.toLowerCase();
+
+      if (lowerText.includes("gramer") || lowerText.includes("dil bilgisi") || lowerText.includes("tense") || lowerText.includes("zamanlar")) {
+        botResponse = "YÖKDİL Fen sınavlarında en çok kullanılan zamanlar *Simple Past* (geçmişte tamamlanmış çalışmalar için) ve *Present Perfect* (günümüze etkisi süren araştırmalar için) zamanlarıdır. Örneğin: 'Scientists have discovered...' cümle yapısı Present Perfect kullanır ve YÖKDİL'in vazgeçilmezidir. 📝";
+      } else if (lowerText.includes("taktik") || lowerText.includes("ipucu") || lowerText.includes("tüyo")) {
+        botResponse = "YÖKDİL sınavında başarılı olmak için şu 3 taktiğe dikkat et:\n1. **Bağlaçlara çalış:** Cümle tamamlama sorularında zıtlık bağlaçları (although, contrast) ve neden-sonuç bağlaçları (because, since) en çok doğru cevap çıkan yapılardır.\n2. **Kelimeleri cümle içinde öğren:** Kartlardaki örnek cümleler zihninde kalıcı olmasını sağlar.\n3. **Hata Kutunu erit:** Yanlış yaptığın soruları en az iki kere tekrar çöz. 🎯";
+      } else if (lowerText.includes("kelime") || lowerText.includes("anlam") || lowerText.includes("çevir")) {
+        const cleanWord = lowerText.replace("nedir", "").replace("anlamı", "").replace("ne demek", "").replace("çevir", "").trim();
+        const found = dictionaryList.find(item => item.english.toLowerCase() === cleanWord || item.turkish.toLowerCase().includes(cleanWord));
+        if (found) {
+          botResponse = `**${found.english}**: "${found.turkish}" anlamına gelir. Bu kelimeyi YÖKDİL Akademik Kelime Defterine kaydederek aralıklı tekrar (Leitner) yöntemiyle çalışabilirsin! 📚`;
+        } else {
+          botResponse = `"${textToSend}" ifadesini inceledim. Bu terim akademik İngilizce makalelerinde sıklıkla araştırma yöntemleri veya bulguları tasvir etmek için kullanılır. Gramer olarak özne-yüklem uyumuna dikkat etmelisin! 💡`;
+        }
+      } else if (lowerText.includes("test") || lowerText.includes("soru sor")) {
+        const randomWord = dictionaryList[Math.floor(Math.random() * dictionaryList.length)] || { english: "evaluate", turkish: "değerlendirmek" };
+        botResponse = `Hadi küçük bir kelime testi yapalım! **"${randomWord.english}"** kelimesinin Türkçe anlamı nedir? Cevabını buraya yazabilirsin! 🧠`;
+      } else {
+        botResponse = "Harika bir soru! YÖKDİL hazırlık sürecinde her gün kelime çalışıp hedeflerini tamamlaman çok önemlidir. Konu Anlatımı kısmından çalışmaya devam edebilir veya çözemediğin bir kelime olursa buraya yazabilirsin. 🦉";
+      }
+
+      setAiMessages(prev => [...prev, { sender: 'bot', text: botResponse }]);
+    }, 1000);
+  };
+
+  const handleAskAI = (text) => {
+    setShowAiChat(true);
+    handleSendAiMessage(`"${text}" kelimesini/cümlesini açıklar mısın ve YÖKDİL için önemini yazar mısın?`);
   };
 
   const handleSubmitExam = () => {
@@ -1310,10 +1420,10 @@ function App() {
       reading: { name: "Cümle/Paragraf (Reading/Clauses)", solved: 0, correct: 0, total: 44 }
     };
 
-    if (selectedExam) {
-      const correctAnswers = selectedExam.answers;
+    exams.forEach(ex => {
+      const exAns = JSON.parse(localStorage.getItem(`answers_${ex.id}`)) || {};
       for (let i = 1; i <= 80; i++) {
-        const userAns = answers[i];
+        const userAns = exAns[i];
         let tKey = "reading";
         if (i >= 1 && i <= 6) tKey = "vocab";
         else if (i >= 7 && i <= 15) tKey = "tenses";
@@ -1323,7 +1433,7 @@ function App() {
         if (userAns) {
           solved++;
           topicStats[tKey].solved++;
-          if (userAns === correctAnswers[i - 1]) {
+          if (userAns === ex.answers[i - 1]) {
             correct++;
             topicStats[tKey].correct++;
           } else {
@@ -1331,30 +1441,7 @@ function App() {
           }
         }
       }
-    } else {
-      exams.forEach(ex => {
-        const exAns = JSON.parse(localStorage.getItem(`answers_${ex.id}`)) || {};
-        for (let i = 1; i <= 80; i++) {
-          const userAns = exAns[i];
-          let tKey = "reading";
-          if (i >= 1 && i <= 6) tKey = "vocab";
-          else if (i >= 7 && i <= 15) tKey = "tenses";
-          else if (i >= 16 && i <= 20) tKey = "preps";
-          else if (i >= 21 && i <= 36) tKey = "conjs";
-
-          if (userAns) {
-            solved++;
-            topicStats[tKey].solved++;
-            if (userAns === ex.answers[i - 1]) {
-              correct++;
-              topicStats[tKey].correct++;
-            } else {
-              wrong++;
-            }
-          }
-        }
-      });
-    }
+    });
 
     const totalSolved = solved;
     const score = totalSolved > 0 ? Math.round((correct / totalSolved) * 100) : 0;
@@ -1382,40 +1469,120 @@ function App() {
           <div>
             <h1 className="landing-gate-title">YÖKDİL Akademik Hazırlık</h1>
             <p className="landing-gate-text" style={{ marginTop: '8px' }}>
-              Akademik İngilizce serüveninize başlayın. İsminizi yazarak anında kendi bulut profilinizi oluşturun veya mevcut hesabınıza bağlanın.
+              Akademik İngilizce hazırlık platformuna hoş geldiniz.
             </p>
+          </div>
+
+          <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '16px', gap: '16px', justifyContent: 'center' }}>
+            <button 
+              type="button" 
+              onClick={() => setAuthMode('login')} 
+              style={{
+                background: 'none',
+                border: 'none',
+                color: authMode === 'login' ? 'var(--primary-light)' : 'rgba(255,255,255,0.5)',
+                borderBottom: authMode === 'login' ? '2px solid var(--primary-light)' : 'none',
+                padding: '8px 16px',
+                fontSize: '0.88rem',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              Giriş Yap
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setAuthMode('register')} 
+              style={{
+                background: 'none',
+                border: 'none',
+                color: authMode === 'register' ? 'var(--primary-light)' : 'rgba(255,255,255,0.5)',
+                borderBottom: authMode === 'register' ? '2px solid var(--primary-light)' : 'none',
+                padding: '8px 16px',
+                fontSize: '0.88rem',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              Kayıt Ol
+            </button>
           </div>
 
           <form onSubmit={async (e) => {
             e.preventDefault();
-            const inputVal = loginName.trim();
-            if (!inputVal) return;
-            try {
-              const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: inputVal })
-              });
-              const data = await res.json();
-              if (!res.ok) throw new Error(data.error);
-              handleAuthSuccess(data.token, data.user);
-            } catch (err) {
-              alert("Giriş başarısız: " + err.message);
+            if (authMode === 'login') {
+              const uName = authUsername.trim();
+              const pass = authPassword;
+              if (!uName || !pass) return;
+              try {
+                const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ username: uName, password: pass })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                handleAuthSuccess(data.token, data.user);
+              } catch (err) {
+                alert("Giriş başarısız: " + err.message);
+              }
+            } else {
+              const uName = authUsername.trim();
+              const fullName = authFullName.trim();
+              const pass = authPassword;
+              if (!uName || !fullName || !pass) return;
+              try {
+                const res = await fetch(`${BACKEND_URL}/api/auth/register`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ username: uName, name: fullName, password: pass })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                handleAuthSuccess(data.token, data.user);
+              } catch (err) {
+                alert("Kayıt başarısız: " + err.message);
+              }
             }
-          }} className="landing-gate-form">
+          }} className="landing-gate-form" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {authMode === 'register' && (
+              <input 
+                type="text" 
+                required
+                placeholder="Adınız Soyadınız"
+                value={authFullName}
+                onChange={(e) => setAuthFullName(e.target.value)}
+                className="landing-gate-input"
+              />
+            )}
             <input 
               type="text" 
               required
-              placeholder="Adınız Soyadınız"
-              value={loginName}
-              onChange={(e) => setLoginName(e.target.value)}
+              placeholder="Kullanıcı Adı"
+              value={authUsername}
+              onChange={(e) => setAuthUsername(e.target.value)}
               className="landing-gate-input"
             />
+            <input 
+              type="password" 
+              required
+              placeholder="Şifre"
+              value={authPassword}
+              onChange={(e) => setAuthPassword(e.target.value)}
+              className="landing-gate-input"
+            />
+            {authMode === 'register' && (
+              <p style={{ fontSize: '0.72rem', color: '#F6AD55', margin: '-4px 0 4px 0', lineHeight: 1.3, textAlign: 'left', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                <i className="fa-solid fa-triangle-exclamation" style={{ marginTop: '2px' }}></i>
+                <span>Lütfen başka platformlarda kullandığınız şifreleri girmeyiniz. Yeni ve farklı bir şifre belirleyiniz.</span>
+              </p>
+            )}
             <button 
               type="submit" 
               className="landing-gate-button"
+              style={{ marginTop: '8px' }}
             >
-              Başla
+              {authMode === 'login' ? 'Giriş Yap' : 'Kayıt Ol'}
             </button>
           </form>
         </div>
@@ -1437,7 +1604,7 @@ function App() {
   ];
 
   return (
-    <div className={`theme-wrapper ${theme} ${selectedCategory ? 'theme-' + selectedCategory : ''} ${sepiaActive ? 'sepia-filter' : ''} min-h-screen flex items-center justify-center p-0 md:p-4`}>
+    <div className={`theme-wrapper ${theme} font-size-${fontSize} ${selectedCategory ? 'theme-' + selectedCategory : ''} ${sepiaActive ? 'sepia-filter' : ''} min-h-screen flex items-center justify-center p-0 md:p-4`}>
       
       <Confetti particles={confetti} />
       
@@ -1449,6 +1616,7 @@ function App() {
         translationResult={translationResult}
         playSpeechAudio={playSpeechAudio}
         handleAddToNotebook={handleAddToNotebook}
+        handleAskAI={handleAskAI}
         setShowPopover={setShowPopover}
       />
 
@@ -1460,6 +1628,7 @@ function App() {
           setSelectedCategory={setSelectedCategory}
           setSelectedExam={setSelectedExam}
           setQuizActive={setQuizActive}
+          onLogout={handleLogout}
         />
         
         <div className="app-content-wrapper">
@@ -1492,7 +1661,7 @@ function App() {
                   boxShadow: '0 0 10px rgba(249, 115, 22, 0.25)',
                   marginRight: '4px'
                 }}>
-                  🔥 {studyStreak} Gün
+                  <span className="streak-flame-animated" style={{ display: 'inline-block' }}>🔥</span> {studyStreak} Gün
                 </div>
                 {currentUser && (
                   <span className="text-[10px] text-indigo-300 font-bold hidden md:inline">
@@ -1583,7 +1752,72 @@ function App() {
                     <h2>Selam, {currentUser.name}! 👋</h2>
                     <p>YÖKDİL {selectedCategory === 'fen' ? 'Fen Bilimleri' : selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri'} hazırlık performansın aşağıda listelenmiştir.</p>
                   </div>
-                  
+
+                  {/* YÖKDİL Countdown Card */}
+                  <div className="glass-card" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px',
+                    padding: '16px 20px',
+                    borderRadius: '18px',
+                    minWidth: '280px',
+                    flex: '0.8',
+                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                    background: 'rgba(15, 23, 42, 0.2)',
+                    textAlign: 'left'
+                  }}>
+                    {/* Circle Timer */}
+                    <div style={{ position: 'relative', width: '64px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <svg width="64" height="64" viewBox="0 0 64 64" style={{ transform: 'rotate(-90deg)' }}>
+                        <circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.05)" strokeWidth="4" fill="transparent" />
+                        <circle 
+                          cx="32" 
+                          cy="32" 
+                          r="28" 
+                          stroke="var(--primary-light)" 
+                          strokeWidth="4" 
+                          fill="transparent"
+                          strokeDasharray="175.9"
+                          strokeDashoffset={(() => {
+                            if (!yokdilExamDate) return "175.9";
+                            const examTime = new Date(yokdilExamDate).getTime();
+                            const now = new Date().getTime();
+                            const diff = examTime - now;
+                            if (diff <= 0) return "0";
+                            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                            const percent = Math.max(0, Math.min(100, (days / 120) * 100)); // assume 120 days max range
+                            return (175.9 - (175.9 * percent) / 100).toFixed(1);
+                          })()} 
+                          strokeLinecap="round"
+                          style={{ transition: 'stroke-dashoffset 0.5s ease' }}
+                        />
+                      </svg>
+                      <div style={{ position: 'absolute', fontSize: '0.78rem', fontWeight: '900', color: 'white' }}>
+                        {(() => {
+                          if (!yokdilExamDate) return "0";
+                          const diff = new Date(yokdilExamDate).getTime() - new Date().getTime();
+                          const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                          return days > 0 ? `${days}G` : "Sınav";
+                        })()}
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <span style={{ fontSize: '0.64rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em' }}>YÖKDİL Geri Sayım ⏰</span>
+                      <p style={{ fontSize: '0.72rem', color: '#cbd5e1', margin: 0, lineHeight: 1.4 }}>
+                        {yokdilExamDate ? (
+                          <>
+                            Hedef Sınav Tarihi: <strong>{new Date(yokdilExamDate).toLocaleDateString('tr-TR')}</strong>. Başarılar dileriz!
+                          </>
+                        ) : (
+                          <>
+                            Henüz sınav tarihi seçmediniz. Ayarlar sekmesinden belirleyebilirsiniz.
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
                   {/* Right Side: Bilge Baykuş Study Buddy Mascot */}
                   <div className="glass-card" style={{
                     display: 'flex',
@@ -1710,13 +1944,78 @@ function App() {
                   )}
                 </div>
 
-                {/* ACHIEVEMENTS ROZETLER CABINET */}
+                {/* DAILY QUESTS & LEADERBOARD GRID */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+                  {/* Daily Quests Card */}
+                  <div className="glass-card p-5 border border-white/5 rounded-2xl text-left" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+                    <h3 style={{ fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      🎯 Günlük Görevleriniz
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {[
+                        { name: 'Soru Havuzunu Erit', desc: 'Bugün en az 10 soru çözün.', progress: dailyQuestionsSolved, target: 10, reward: '+50 Kristal' },
+                        { name: 'Akademik Kelime Çalış', desc: 'Bugün en az 5 kelime çalışın.', progress: dailyWordsStudied, target: 5, reward: '+20 Kristal' },
+                        { name: 'Konu Anlatımı Oku', desc: 'Bugün en az 1 ders notu tamamlayın.', progress: dailyLecturesStudied, target: 1, reward: '+100 Kristal' }
+                      ].map((quest, idx) => {
+                        const isDone = quest.progress >= quest.target;
+                        return (
+                          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: isDone ? 'rgba(16, 185, 129, 0.04)' : 'rgba(255,255,255,0.01)', border: `1px solid ${isDone ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.03)'}`, borderRadius: '12px', opacity: isDone ? 0.75 : 1 }}>
+                            <div>
+                              <h4 style={{ fontSize: '0.76rem', fontWeight: 'bold', color: isDone ? '#34d399' : 'white', textDecoration: isDone ? 'line-through' : 'none' }}>{quest.name}</h4>
+                              <p style={{ fontSize: '0.62rem', color: 'var(--text-secondary)' }}>{quest.desc}</p>
+                            </div>
+                            <div style={{ textAlign: 'right' }}>
+                              <span style={{ fontSize: '0.72rem', fontWeight: '800', color: isDone ? '#34d399' : 'var(--primary-light)' }}>
+                                {isDone ? 'Tamamlandı ✓' : `${quest.progress}/${quest.target}`}
+                              </span>
+                              <div style={{ fontSize: '0.55rem', color: '#fbbf24', fontWeight: 'bold' }}>{quest.reward}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Leaderboard Card */}
+                  <div className="glass-card p-5 border border-white/5 rounded-2xl text-left" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+                    <h3 style={{ fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      🏆 Lig Sıralaması (Haftalık)
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {(() => {
+                        const userXp = (stats.solved * 10) + (Object.keys(wordStats).length * 5) + (dailyLecturesStudied * 50);
+                        const competitors = [
+                          { name: 'AcademicOwl 🦉', xp: 1350, isUser: false },
+                          { name: 'BioChemist 🧪', xp: 1100, isUser: false },
+                          { name: 'Dr_English 🩺', xp: 850, isUser: false },
+                          { name: `${currentUser.name} (Sen) ⚡`, xp: userXp, isUser: true },
+                          { name: 'EngStudent 📖', xp: 350, isUser: false }
+                        ].sort((a, b) => b.xp - a.xp);
+
+                        return competitors.map((comp, idx) => {
+                          const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx + 1}.`;
+                          return (
+                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 12px', background: comp.isUser ? 'rgba(99, 102, 241, 0.12)' : 'rgba(255,255,255,0.01)', border: `1px solid ${comp.isUser ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255,255,255,0.03)'}`, borderRadius: '12px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ fontSize: '0.78rem', fontWeight: '800', color: comp.isUser ? '#a5b4fc' : 'var(--text-secondary)', width: '22px' }}>{medal}</span>
+                                <span style={{ fontSize: '0.76rem', fontWeight: comp.isUser ? '800' : '600', color: comp.isUser ? 'white' : '#cbd5e1' }}>{comp.name}</span>
+                              </div>
+                              <span style={{ fontSize: '0.72rem', fontWeight: '800', color: comp.isUser ? '#a5b4fc' : 'var(--text-secondary)' }}>{comp.xp} XP</span>
+                            </div>
+                          );
+                        });
+                      })()}
+                    </div>
+                  </div>
+                </div>
+
+                {/* ACHIEVEMENTS ROZETLER & WARDROBE CABINET */}
                 <div className="glass-card p-6 border border-white/5 bg-white/1 rounded-2xl" style={{ marginBottom: '20px', padding: '20px', borderRadius: '18px' }}>
                   <h3 style={{ fontSize: '0.92rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    🏆 Başarı Rozetleriniz
+                    🏆 Başarı Rozetleriniz & Koleksiyonunuz
                   </h3>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginBottom: '20px' }}>
                     {[
                       { id: 'first_step', name: 'İlk Adım 🏁', desc: 'İlk sorunuzu çözün.', completed: getStats().solved > 0 },
                       { id: 'word_master', name: 'Kelime Avcısı 🦁', desc: 'İlk kelimeyi çalışın.', completed: Object.keys(wordStats).length > 0 },
@@ -1733,7 +2032,7 @@ function App() {
                           textAlign: 'center',
                           opacity: ach.completed ? 1.0 : 0.45,
                           transition: 'all 0.3s ease',
-                          boxShadow: ach.completed ? '0 0 10px rgba(99, 102, 241, 0.15)' : 'none'
+                          boxShadow: ach.completed ? '0 0 12px rgba(99, 102, 241, 0.2)' : 'none'
                         }}
                       >
                         <div style={{ fontSize: '1.2rem', marginBottom: '6px' }}>{ach.completed ? '🌟' : '🔒'}</div>
@@ -1741,6 +2040,46 @@ function App() {
                         <p style={{ fontSize: '0.62rem', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.3' }}>{ach.desc}</p>
                       </div>
                     ))}
+                  </div>
+
+                  {/* Wardrobe Showcase */}
+                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
+                    <span style={{ fontSize: '0.68rem', fontWeight: '800', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '12px', textAlign: 'left' }}>🎭 Aktif Aksesuarlarınız</span>
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                      {[
+                        { id: 'glasses', name: 'Bilge Gözlüğü', icon: '👓' },
+                        { id: 'robe', name: 'Mezuniyet Cübbesi', icon: '🎓' },
+                        { id: 'crown', name: 'Kraliyet Tacı', icon: '👑' }
+                      ].map(item => {
+                        const isOwned = (ownedOutfits || []).includes(item.id);
+                        const isActive = (activeOutfits || []).includes(item.id);
+                        
+                        return (
+                          <div 
+                            key={item.id}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              padding: '6px 12px',
+                              borderRadius: '20px',
+                              fontSize: '0.72rem',
+                              fontWeight: '700',
+                              background: isActive ? 'rgba(16, 185, 129, 0.1)' : isOwned ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.01)',
+                              border: isActive ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid rgba(255,255,255,0.05)',
+                              color: isActive ? '#34d399' : isOwned ? '#cbd5e1' : '#64748b',
+                              opacity: isOwned ? 1 : 0.4
+                            }}
+                          >
+                            <span>{item.icon}</span>
+                            <span>{item.name}</span>
+                            <span style={{ fontSize: '0.55rem', fontWeight: '800', textTransform: 'uppercase', opacity: 0.8, marginLeft: '4px' }}>
+                              {isActive ? 'Giyildi' : isOwned ? 'Gardıropta' : 'Kilitli'}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
 
@@ -2113,6 +2452,7 @@ function App() {
               setMascotState={setMascotState}
               mascotSpeech={mascotSpeech}
               setMascotSpeech={setMascotSpeech}
+              questionTimeSpent={questionTimeSpent}
             />
 
             {/* TAB 3: VOCABULARY SECTION */}
@@ -2161,6 +2501,7 @@ function App() {
               BACKEND_URL={BACKEND_URL}
               incrementDailyQuestions={incrementDailyQuestions}
               incrementDailyLectures={incrementDailyLectures}
+              handleTextSelection={handleTextSelection}
             />
 
             {/* TAB 5: MISTAKE INBOX SECTION */}
@@ -2193,6 +2534,19 @@ function App() {
               notebook={notebook}
             />
 
+            {/* TAB 7.5: VIRTUAL SHOP */}
+            <VirtualShop 
+              activeTab={activeTab}
+              gems={gems}
+              setGems={setGems}
+              ownedOutfits={ownedOutfits}
+              setOwnedOutfits={setOwnedOutfits}
+              activeOutfits={activeOutfits}
+              setActiveOutfits={setActiveOutfits}
+              streakFreezeActive={streakFreezeActive}
+              setStreakFreezeActive={setStreakFreezeActive}
+            />
+
             {/* TAB 8: SETTINGS SECTION */}
             <SettingsSection 
               activeTab={activeTab}
@@ -2217,6 +2571,8 @@ function App() {
               autoPronounceEnabled={autoPronounceEnabled}
               setAutoPronounceEnabled={setAutoPronounceEnabled}
               handleResetAllProgress={handleResetAllProgress}
+              yokdilExamDate={yokdilExamDate}
+              setYokdilExamDate={setYokdilExamDate}
             />
 
           </main>
@@ -2261,6 +2617,96 @@ function App() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {/* Floating AI Chatbot Widget */}
+      {selectedCategory && (
+        <div className="ai-chat-widget">
+          {!showAiChat ? (
+            <button 
+              className="ai-chat-float-btn"
+              onClick={() => setShowAiChat(true)}
+              title="Bilge Çalışma Arkadaşı AI Asistanı 🦉"
+            >
+              <i className="fa-solid fa-robot"></i>
+            </button>
+          ) : (
+            <div className="ai-chat-window">
+              <div className="ai-chat-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ fontSize: '1.2rem' }}>🦉</div>
+                  <div style={{ textAlign: 'left' }}>
+                    <h4 style={{ fontSize: '0.82rem', color: 'white', fontWeight: '800', margin: 0 }}>Bilge Asistan</h4>
+                    <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: 'bold' }}>Çevrimiçi | YÖKDİL Koçu</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowAiChat(false)}
+                  style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+
+              <div className="ai-chat-messages">
+                {aiMessages.map((msg, index) => (
+                  <div 
+                    key={index}
+                    className={`ai-msg ${msg.sender === 'user' ? 'ai-msg-user' : 'ai-msg-bot'}`}
+                  >
+                    {renderMarkdown(msg.text)}
+                  </div>
+                ))}
+              </div>
+
+              {/* Quick Prompt Suggesters */}
+              <div style={{ display: 'flex', gap: '4px', padding: '6px 12px', background: 'rgba(0,0,0,0.1)', overflowX: 'auto', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+                {[
+                  { text: 'Taktik ver 🎯', prompt: 'YÖKDİL Fen sınavı için en iyi bağlaç taktikleri nelerdir?' },
+                  { text: 'Dil bilgisi 📝', prompt: 'YÖKDİL sınavında en sık çıkan gramer konuları hangileridir?' },
+                  { text: 'Beni sına 🧠', prompt: 'Beni sına ve YÖKDİL seviyesinde rastgele bir kelime sor.' }
+                ].map((sug, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSendAiMessage(sug.prompt)}
+                    style={{
+                      flexShrink: 0,
+                      padding: '4px 10px',
+                      fontSize: '0.62rem',
+                      fontWeight: '800',
+                      borderRadius: '10px',
+                      background: 'rgba(99, 102, 241, 0.1)',
+                      border: '1px solid rgba(99, 102, 241, 0.2)',
+                      color: '#a5b4fc',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {sug.text}
+                  </button>
+                ))}
+              </div>
+
+              <div className="ai-chat-input-area">
+                <input 
+                  type="text"
+                  placeholder="Kelime, gramer veya taktik sor..."
+                  value={aiInput}
+                  onChange={(e) => setAiInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSendAiMessage();
+                  }}
+                  className="ai-chat-input"
+                />
+                <button 
+                  onClick={() => handleSendAiMessage()}
+                  className="btn-primary"
+                  style={{ padding: '8px 12px', borderRadius: '10px', fontSize: '0.72rem', cursor: 'pointer' }}
+                >
+                  <i className="fa-solid fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

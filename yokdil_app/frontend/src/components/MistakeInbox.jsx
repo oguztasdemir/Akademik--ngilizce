@@ -42,7 +42,7 @@ const MistakeInbox = ({
     setIsAnswered(false);
     setActiveExplanation(null);
     const mist = mistakes[index];
-    loadQuestionExplanation(mist.qNumber);
+    loadQuestionExplanation(mist.qNumber, mist.examId);
   };
 
   const handleCheckAnswer = () => {
@@ -433,10 +433,14 @@ const MistakeInbox = ({
                   </button>
                 </div>
 
-                <div className="text-center py-6 space-y-2">
-                  <h3 className="text-2xl font-extrabold text-slate-100 font-heading tracking-wide">
-                    {word.english}
-                  </h3>
+                <div className="text-center py-6 space-y-4" style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.04)' }}>
+                  <div>
+                    <span style={{ fontSize: '0.62rem', fontWeight: 'bold', textTransform: 'uppercase', color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>İngilizce Kelime</span>
+                    <h3 className="text-2xl font-extrabold text-slate-100 font-heading tracking-wide" style={{ margin: '4px 0 0 0' }}>
+                      {word.english}
+                    </h3>
+                  </div>
+                  
                   <span className="text-[10px] text-rose-400 font-bold uppercase tracking-wider flex items-center justify-center gap-1">
                     <Star className="h-3 w-3 inline text-rose-400" />
                     Doğru: {stats.correct} | Yanlış: {stats.wrong}
@@ -444,13 +448,21 @@ const MistakeInbox = ({
                 </div>
 
                 {vocabReveal ? (
-                  <div className="glass-card p-4 border border-indigo-500/20 bg-indigo-950/10 text-center rounded-2xl space-y-2 animate-fade-in">
-                    <div className="text-sm font-bold text-indigo-300">{word.turkish}</div>
-                    {word.sentence_en && (
-                      <p className="text-[11px] text-slate-400 italic">"{word.sentence_en}"</p>
-                    )}
-                    {word.sentence_tr && (
-                      <p className="text-[11px] text-slate-500 italic">"{word.sentence_tr}"</p>
+                  <div className="glass-card p-5 border border-indigo-500/20 bg-indigo-950/10 text-center rounded-2xl space-y-3 animate-fade-in" style={{ padding: '20px' }}>
+                    <div>
+                      <span style={{ fontSize: '0.62rem', fontWeight: 'bold', textTransform: 'uppercase', color: '#818cf8', letterSpacing: '0.05em' }}>Türkçe Anlamı</span>
+                      <div style={{ fontSize: '1.6rem', fontWeight: '800', color: '#34d399', marginTop: '6px' }}>{word.turkish}</div>
+                    </div>
+                    {(word.sentence_en || word.sentence_tr) && (
+                      <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px', marginTop: '12px', textAlign: 'left' }}>
+                        <span style={{ fontSize: '0.62rem', fontWeight: 'bold', textTransform: 'uppercase', color: 'var(--text-secondary)', letterSpacing: '0.05em', display: 'block', marginBottom: '4px' }}>Örnek Cümle</span>
+                        {word.sentence_en && (
+                          <p style={{ fontSize: '0.8rem', color: '#e2e8f0', fontStyle: 'italic', margin: '4px 0 0 0', lineHeight: 1.4 }}>"{word.sentence_en}"</p>
+                        )}
+                        {word.sentence_tr && (
+                          <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', margin: '2px 0 0 0', lineHeight: 1.4 }}>{word.sentence_tr}</p>
+                        )}
+                      </div>
                     )}
                   </div>
                 ) : (

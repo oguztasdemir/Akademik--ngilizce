@@ -9,6 +9,7 @@ const TranslationPopover = ({
   translationResult, 
   playSpeechAudio, 
   handleAddToNotebook, 
+  handleAskAI,
   setShowPopover 
 }) => {
   if (!show) return null;
@@ -21,7 +22,7 @@ const TranslationPopover = ({
         top: `${position.y - 120}px` 
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '8px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifySpace: 'space-between', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '8px', marginBottom: '8px' }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--primary-light)' }}>Çeviri Kutusu</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button 
@@ -50,13 +51,28 @@ const TranslationPopover = ({
           <div className="mt-1 text-sm text-emerald-400 font-medium">
             {translationResult ? translationResult.translation : 'Kelime bulunamadı.'}
           </div>
-          <button
-            onClick={() => handleAddToNotebook(selectedText, translationResult?.translation)}
-            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg bg-indigo-600 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 transition-all"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            <span>Deftere Kaydet</span>
-          </button>
+          <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+            <button
+              onClick={() => handleAddToNotebook(selectedText, translationResult?.translation)}
+              className="flex-1 flex items-center justify-center gap-1 rounded-lg bg-indigo-600 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 transition-all"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              <span>Kaydet</span>
+            </button>
+            {handleAskAI && (
+              <button
+                onClick={() => {
+                  handleAskAI(selectedText);
+                  setShowPopover(false);
+                }}
+                className="flex-1 flex items-center justify-center gap-1 rounded-lg bg-emerald-600 py-1.5 text-xs font-semibold text-white hover:bg-emerald-500 transition-all"
+                title="AI Çalışma Arkadaşına Sor"
+              >
+                <i className="fa-solid fa-robot" style={{ fontSize: '0.8rem' }}></i>
+                <span>AI'a Sor</span>
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

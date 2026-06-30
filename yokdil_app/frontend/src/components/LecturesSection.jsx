@@ -11,8 +11,42 @@ const LecturesSection = ({
   startTopicQuiz,
   BACKEND_URL,
   incrementDailyQuestions,
-  incrementDailyLectures
+  incrementDailyLectures,
+  handleTextSelection
 }) => {
+  const renderInteractiveSentence = (text) => {
+    if (!text) return '';
+    const words = text.split(/\s+/);
+    return words.map((word, idx) => {
+      const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+      return (
+        <span
+          key={idx}
+          onClick={(e) => {
+            if (handleTextSelection) {
+              handleTextSelection({
+                clientX: e.clientX,
+                clientY: e.clientY,
+                target: e.target,
+                customText: cleanWord
+              });
+            }
+          }}
+          style={{
+            cursor: 'pointer',
+            padding: '1px 2px',
+            borderRadius: '4px',
+            display: 'inline-block'
+          }}
+          onMouseEnter={(e) => { e.target.style.color = '#818cf8'; e.target.style.background = 'rgba(99,102,241,0.08)'; }}
+          onMouseLeave={(e) => { e.target.style.color = 'inherit'; e.target.style.background = 'transparent'; }}
+        >
+          {word}{' '}
+        </span>
+      );
+    });
+  };
+
   const [lectureStep, setLectureStep] = useState(1); // 1 = explanation slides, 2 = exercise quiz
   const [currentSlideIdx, setCurrentSlideIdx] = useState(0);
   const [exerciseIdx, setExerciseIdx] = useState(0);
@@ -20,6 +54,7 @@ const LecturesSection = ({
   const [exerciseChecked, setExerciseChecked] = useState(false);
   const [exerciseScore, setExerciseScore] = useState(0);
   const [exerciseList, setExerciseList] = useState([]);
+  const [showCheatSheet, setShowCheatSheet] = useState(false);
 
   // Reset states on lecture change
   useEffect(() => {
@@ -57,14 +92,12 @@ const LecturesSection = ({
   const handleSelectOption = (opt) => {
     if (exerciseChecked) return;
     setExerciseSelected(opt);
-  };
 
-  const handleCheckExercise = () => {
     if (incrementDailyQuestions) incrementDailyQuestions();
     const currentEx = exerciseList[exerciseIdx];
-    if (!currentEx || !exerciseSelected) return;
+    if (!currentEx) return;
 
-    const isCorrect = exerciseSelected === currentEx.answer;
+    const isCorrect = opt === currentEx.answer;
     setExerciseChecked(true);
     if (isCorrect) {
       setExerciseScore(prev => prev + 1);
@@ -194,13 +227,22 @@ const LecturesSection = ({
           <div className="space-y-4">
             {/* Header Control Bar */}
             <div className="glass-card flex items-center justify-between" style={{ padding: '12px 20px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
-              <button
-                onClick={() => handleLoadLecture(null)}
-                className="btn-secondary"
-                style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
-                <ChevronLeft className="h-4 w-4" /> Konu Listesine Dön
-              </button>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <button
+                  onClick={() => handleLoadLecture(null)}
+                  className="btn-secondary"
+                  style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <ChevronLeft className="h-4 w-4" /> Konu Listesine Dön
+                </button>
+                <button
+                  onClick={() => setShowCheatSheet(true)}
+                  className="rounded-lg px-3 py-1.5 text-xs font-bold border border-indigo-500/20 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 cursor-pointer"
+                  title="Gramer Formül Kartları"
+                >
+                  📑 Gramer Formülleri
+                </button>
+              </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Aşama:</span>
@@ -393,8 +435,8 @@ const LecturesSection = ({
                           <span>Soru {exerciseIdx + 1} / {exerciseList.length}</span>
                         </div>
 
-                        <div className="text-sm font-semibold text-slate-200 text-center leading-relaxed py-4 border-y border-white/5" style={{ fontSize: '1rem', color: '#e2e8f0' }}>
-                          {currentEx.sentence}
+                        <div className="text-sm font-semibold text-slate-200 text-center leading-relaxed py-4 border-y border-white/5" style={{ fontSize: '1rem', color: '#e2e8f0', cursor: 'pointer' }}>
+                          {renderInteractiveSentence(currentEx.sentence)}
                         </div>
 
                         {/* Options Grid with premium styled borders */}
@@ -426,16 +468,7 @@ const LecturesSection = ({
                         )}
 
                         <div className="flex justify-end" style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '14px' }}>
-                          {!exerciseChecked ? (
-                            <button
-                              onClick={handleCheckExercise}
-                              disabled={!exerciseSelected}
-                              className="btn-primary"
-                              style={{ padding: '10px 20px', fontSize: '0.78rem', cursor: 'pointer' }}
-                            >
-                              Kontrol Et
-                            </button>
-                          ) : (
+                          {exerciseChecked && (
                             <button
                               onClick={handleNextExercise}
                               className="btn-primary"
@@ -486,6 +519,73 @@ const LecturesSection = ({
           </div>
         )}
       </div>
+      {/* Grammar Cheat Sheet Modal Overlay */}
+      {showCheatSheet && (
+        <div className="auth-modal-overlay" style={{ zIndex: 100000 }} onClick={() => setShowCheatSheet(false)}>
+          <div 
+            className="auth-modal-card text-left" 
+            style={{ maxWidth: '520px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(10, 15, 30, 0.95)', border: '1px solid rgba(99, 102, 241, 0.3)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '10px' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '800', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                📑 YÖKDİL Bağlaç & Gramer Formülleri
+              </h3>
+              <button 
+                onClick={() => setShowCheatSheet(false)}
+                style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem' }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div style={{ maxHeight: '380px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '14px', paddingRight: '4px' }}>
+              {/* Category 1 */}
+              <div>
+                <h4 style={{ fontSize: '0.78rem', color: '#fbbf24', fontWeight: '800', borderBottom: '1px solid rgba(251, 191, 36, 0.15)', paddingBottom: '4px', marginBottom: '6px' }}>
+                  1. ZITLIK BAĞLAÇLARI (Contrast)
+                </h4>
+                <div style={{ fontSize: '0.72rem', color: '#cbd5e1', lineHeight: '1.4' }}>
+                  <p style={{ margin: '4px 0' }}><strong>+ Cümle Alır (Clause):</strong> Although, Even though, Though, While, Whereas, Much as</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ İsim/Fiil Alır (Noun/Ving):</strong> Despite, In spite of, Notwithstanding</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ Zarf (Geçiş Kelimesi):</strong> However, Nevertheless, Nonetheless, Even so</p>
+                </div>
+              </div>
+
+              {/* Category 2 */}
+              <div>
+                <h4 style={{ fontSize: '0.78rem', color: '#60a5fa', fontWeight: '800', borderBottom: '1px solid rgba(96, 165, 250, 0.15)', paddingBottom: '4px', marginBottom: '6px' }}>
+                  2. NEDEN-SONUÇ BAĞLAÇLARI (Cause & Effect)
+                </h4>
+                <div style={{ fontSize: '0.72rem', color: '#cbd5e1', lineHeight: '1.4' }}>
+                  <p style={{ margin: '4px 0' }}><strong>+ Cümle Alır (Clause):</strong> Because, Since, As, Inasmuch as, Seeing that</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ İsim Alır (Noun):</strong> Because of, Due to, Owing to, On account of, As a result of</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ Sonuç Zarfı:</strong> Therefore, Thus, Hence, As a result, Consequently</p>
+                </div>
+              </div>
+
+              {/* Category 3 */}
+              <div>
+                <h4 style={{ fontSize: '0.78rem', color: '#34d399', fontWeight: '800', borderBottom: '1px solid rgba(52, 211, 153, 0.15)', paddingBottom: '4px', marginBottom: '6px' }}>
+                  3. KOŞUL BAĞLAÇLARI (Condition)
+                </h4>
+                <div style={{ fontSize: '0.72rem', color: '#cbd5e1', lineHeight: '1.4' }}>
+                  <p style={{ margin: '4px 0' }}><strong>+ Cümle Alır (Clause):</strong> If, Unless, Provided that, As long as, In case</p>
+                  <p style={{ margin: '4px 0' }}><strong>+ İsim Alır (Noun):</strong> In case of, But for, Without</p>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setShowCheatSheet(false)}
+              className="btn-primary"
+              style={{ width: '100%', padding: '10px', fontSize: '0.78rem', cursor: 'pointer' }}
+            >
+              Anladım, Kapat
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
