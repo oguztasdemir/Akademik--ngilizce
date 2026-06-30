@@ -12,7 +12,8 @@ const PerformanceSection = ({
   vocabPracticeList = [],
   notebook = []
 }) => {
-  const [perfTab, setPerfTab] = useState('tests'); // 'tests', 'vocabulary'
+  const [perfTab, setPerfTab] = useState('tests'); // 'tests', 'vocabulary', 'calendar'
+  const [selectedDayDetails, setSelectedDayDetails] = useState(null);
 
   if (activeTab !== 'performance') return null;
 
@@ -148,7 +149,7 @@ const PerformanceSection = ({
         background: 'var(--bg-card)', 
         borderRadius: '14px', 
         border: '1px solid var(--border-color)',
-        maxWidth: '380px'
+        maxWidth: '520px'
       }}>
         <button 
           onClick={() => setPerfTab('tests')}
@@ -165,7 +166,7 @@ const PerformanceSection = ({
             transition: 'all 0.25s ease'
           }}
         >
-          📝 Test Performansı
+          📝 Testler
         </button>
         <button 
           onClick={() => setPerfTab('vocabulary')}
@@ -182,7 +183,24 @@ const PerformanceSection = ({
             transition: 'all 0.25s ease'
           }}
         >
-          📇 Kelime Performansı
+          📇 Kelimeler
+        </button>
+        <button 
+          onClick={() => setPerfTab('calendar')}
+          style={{
+            flex: 1,
+            padding: '8px 16px',
+            fontSize: '0.75rem',
+            fontWeight: '700',
+            borderRadius: '10px',
+            background: perfTab === 'calendar' ? 'var(--primary-gradient)' : 'transparent',
+            color: perfTab === 'calendar' ? '#ffffff' : 'var(--text-secondary)',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.25s ease'
+          }}
+        >
+          📅 Çalışma Takvimi
         </button>
       </div>
 
@@ -587,6 +605,160 @@ const PerformanceSection = ({
           </div>
         </div>
       )}
+
+      {/* SUBTAB 3: INTERACTIVE STUDY CALENDAR */}
+      {perfTab === 'calendar' && (
+        <div className="glass-card" style={{ padding: '24px', borderRadius: '20px', border: '1px solid var(--border-color)', background: 'var(--bg-card)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '8px' }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
+              📅 Çalışma Geçmişi Takvimi
+            </h3>
+            <span style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
+              Yoğunluk renkleriyle çalışma takibinizi yapın. Detaylar için güne tıklayın.
+            </span>
+          </div>
+
+          {/* Calendar Grid */}
+          {(() => {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth(); // 0-indexed
+            
+            const monthNames = [
+              "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+              "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+            ];
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const startPadding = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+
+            const days = [];
+            for (let i = 0; i < startPadding; i++) {
+              days.push(null);
+            }
+            for (let d = 1; d <= totalDays; d++) {
+              const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+              days.push({ day: d, dateStr });
+            }
+
+            const historyRaw = localStorage.getItem('yokdil_study_history');
+            const studyHistory = historyRaw ? JSON.parse(historyRaw) : {};
+
+            const weekDays = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
+
+            return (
+              <div>
+                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '1rem', color: 'white', marginBottom: '14px' }}>
+                  {monthNames[month]} {year}
+                </div>
+
+                {/* Grid header */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', textAlign: 'center', marginBottom: '8px' }}>
+                  {weekDays.map(wd => (
+                    <div key={wd} style={{ fontSize: '0.7rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>
+                      {wd}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Days grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px' }}>
+                  {days.map((item, index) => {
+                    if (!item) {
+                      return <div key={`empty-${index}`} style={{ aspectRatio: '1', background: 'transparent' }} />;
+                    }
+
+                    const logs = studyHistory[item.dateStr] || { questions: 0, words: 0, games: 0, paragraphs: 0 };
+                    const totalUnits = (logs.questions || 0) + (logs.words || 0) + (logs.games || 0) + (logs.paragraphs || 0);
+                    
+                    // Intensity color mapping
+                    let bgColor = 'rgba(255, 255, 255, 0.02)';
+                    let border = '1px solid rgba(255, 255, 255, 0.05)';
+                    if (totalUnits > 0) {
+                      if (totalUnits < 5) {
+                        bgColor = 'rgba(99, 102, 241, 0.15)';
+                        border = '1px solid rgba(99, 102, 241, 0.3)';
+                      } else if (totalUnits < 15) {
+                        bgColor = 'rgba(99, 102, 241, 0.4)';
+                        border = '1px solid rgba(99, 102, 241, 0.6)';
+                      } else {
+                        bgColor = 'rgba(99, 102, 241, 0.8)';
+                        border = '1px solid #a5b4fc';
+                      }
+                    }
+
+                    const isToday = new Date().toISOString().split('T')[0] === item.dateStr;
+
+                    return (
+                      <button
+                        key={item.dateStr}
+                        onClick={() => setSelectedDayDetails({ date: item.dateStr, logs })}
+                        style={{
+                          aspectRatio: '1',
+                          background: bgColor,
+                          border: isToday ? '2px solid #34d399' : border,
+                          borderRadius: '10px',
+                          color: totalUnits > 15 ? 'white' : 'var(--text-main)',
+                          fontWeight: 'bold',
+                          fontSize: '0.8rem',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'all 0.2s ease',
+                          outline: 'none',
+                          boxShadow: totalUnits > 15 ? '0 0 10px rgba(99, 102, 241, 0.3)' : 'none'
+                        }}
+                      >
+                        {item.day}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Modal / Popover Detail */}
+          {selectedDayDetails && (
+            <div style={{ marginTop: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '20px', position: 'relative' }}>
+              <button 
+                onClick={() => setSelectedDayDetails(null)}
+                style={{ position: 'absolute', right: '14px', top: '14px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.8rem' }}
+              >
+                ✕ Kapat
+              </button>
+              <h4 style={{ fontSize: '0.85rem', fontWeight: '800', color: 'white', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 0 14px 0' }}>
+                📊 {selectedDayDetails.date} Çalışma Detayları
+              </h4>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '10px', padding: '12px' }}>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 'bold', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Çözülen Soru</div>
+                  <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#818cf8', marginTop: '4px' }}>{selectedDayDetails.logs.questions || 0}</div>
+                </div>
+
+                <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '10px', padding: '12px' }}>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 'bold', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Çalışılan Kelime</div>
+                  <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#fbbf24', marginTop: '4px' }}>{selectedDayDetails.logs.words || 0}</div>
+                </div>
+
+                <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '10px', padding: '12px' }}>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 'bold', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Oynanan Oyun</div>
+                  <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#f43f5e', marginTop: '4px' }}>{selectedDayDetails.logs.games || 0}</div>
+                </div>
+
+                <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '10px', padding: '12px' }}>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 'bold', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Okunan Sayfa</div>
+                  <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#10b981', marginTop: '4px' }}>{selectedDayDetails.logs.paragraphs || 0}</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Kişiselleştirilmiş Yazdırılabilir Çalışma Rehberi */}
       <div className="print-study-guide-only" style={{ marginTop: '40px', borderTop: '2px dashed #000', paddingTop: '30px', fontFamily: 'serif', textAlign: 'left' }}>
         <h2 style={{ textAlign: 'center', fontSize: '1.8rem', color: '#000', marginBottom: '10px' }}>YÖKDİL Kişiselleştirilmiş Çalışma Reçetesi 📄</h2>

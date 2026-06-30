@@ -209,10 +209,10 @@ const LecturesSection = ({
                       </div>
                       <div>
                         <h4 style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 4px 0' }}>
-                          {lec.name}
+                          {lec.title || lec.name}
                         </h4>
                         <p style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
-                          100 Adet YÖKDİL Akademik Gramer Alıştırma Sorusu İçerir.
+                          {lec.description || "YÖKDİL Akademik gramer konusu anlatımı ve interaktif pratik soruları."}
                         </p>
                       </div>
                     </div>

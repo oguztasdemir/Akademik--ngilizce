@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Check, X, HelpCircle, ArrowRight, Volume2 } from 'lucide-react';
+import { BookOpen, Check, X, HelpCircle, ArrowRight, Volume2, ChevronLeft, ChevronRight, Bookmark } from 'lucide-react';
+
+import ACADEMIC_BOOKS from './reading_books.json';
 
 const ParagraphsSection = ({
   activeTab,
@@ -7,17 +9,18 @@ const ParagraphsSection = ({
   BACKEND_URL,
   incrementDailyQuestions,
   incrementDailyWords,
-  playSpeechAudio
+  playSpeechAudio,
+  notebook,
+  handleAddCustomWord,
+  logStudyActivity
 }) => {
-  const [passages, setPassages] = useState([]);
-  const [selectedPassage, setSelectedPassage] = useState(null);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [checkedQuestions, setCheckedQuestions] = useState({});
-  const [score, setScore] = useState(0);
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [activeChapterIdx, setActiveChapterIdx] = useState(0);
+  const [activePageIdx, setActivePageIdx] = useState(0);
+  
   const [translatedWord, setTranslatedWord] = useState(null);
   const [translationText, setTranslationText] = useState('');
   const [translationPos, setTranslationPos] = useState(null);
-  const [loading, setLoading] = useState(false);
   
   // Focus Mode States
   const [focusMode, setFocusMode] = useState(false);
@@ -31,26 +34,47 @@ const ParagraphsSection = ({
   const [clozeAnswers, setClozeAnswers] = useState({});
   const [clozeChecked, setClozeChecked] = useState(false);
   const [clozeScore, setClozeScore] = useState(0);
+  const [dualViewActive, setDualViewActive] = useState(false);
+  const [books, setBooks] = useState(ACADEMIC_BOOKS);
+  const [activeFilter, setActiveFilter] = useState('all');
+
+  useEffect(() => {
+    if (selectedBook && logStudyActivity) {
+      logStudyActivity('paragraphs', 1);
+    }
+  }, [selectedBook, activePageIdx, activeChapterIdx]);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      setActiveFilter(selectedCategory);
+    }
+  }, [selectedCategory]);
 
   useEffect(() => {
     if (activeTab === 'paragraphs' && BACKEND_URL) {
-      setLoading(true);
-      fetch(`${BACKEND_URL}/api/passages`)
+      fetch(`${BACKEND_URL}/api/books`)
         .then(res => res.json())
         .then(data => {
-          // Filter by category or show all
-          const filtered = data.filter(p => p.category === selectedCategory);
-          setPassages(filtered);
-          setLoading(false);
+          setBooks(data);
         })
         .catch(err => {
-          console.error("Error loading passages:", err);
-          setLoading(false);
+          console.error("Error loading books from API:", err);
         });
     }
-  }, [activeTab, selectedCategory, BACKEND_URL]);
+  }, [activeTab, BACKEND_URL]);
+
+  useEffect(() => {
+    // Reset reading progress when book changes
+    setActiveChapterIdx(0);
+    setActivePageIdx(0);
+    setClozeMode(false);
+    setClozeAnswers({});
+    setClozeChecked(false);
+  }, [selectedBook]);
 
   if (activeTab !== 'paragraphs') return null;
+
+  const filteredBooks = books.filter(b => activeFilter === 'all' || b.category === activeFilter);
 
   const handleWordClick = async (event, rawWord) => {
     event.stopPropagation();
@@ -61,8 +85,8 @@ const ParagraphsSection = ({
 
     const rect = event.target.getBoundingClientRect();
     setTranslationPos({
-      top: rect.bottom + window.scrollY + 6,
-      left: rect.left + window.scrollX
+      top: rect.bottom + 6,
+      left: rect.left
     });
     setTranslatedWord(rawWord);
     setTranslationText('Çeviriliyor...');
@@ -84,24 +108,6 @@ const ParagraphsSection = ({
     }
   };
 
-  const handleSelectOption = (qId, option) => {
-    if (checkedQuestions[qId]) return;
-    setSelectedAnswers(prev => ({ ...prev, [qId]: option }));
-  };
-
-  const handleCheckQuestion = (qObj) => {
-    if (checkedQuestions[qObj.id]) return;
-    if (!selectedAnswers[qObj.id]) return;
-
-    if (incrementDailyQuestions) incrementDailyQuestions();
-
-    const isCorrect = selectedAnswers[qObj.id] === qObj.answer;
-    setCheckedQuestions(prev => ({ ...prev, [qObj.id]: true }));
-    if (isCorrect) {
-      setScore(prev => prev + 1);
-    }
-  };
-
   const SYNONYM_MAP = {
     "evaluate": "assess",
     "discover": "find",
@@ -115,7 +121,12 @@ const ParagraphsSection = ({
     "determine": "decide"
   };
 
-  // Helper to tokenize passage sentences into clickable word tags
+  // Check if word is already in notebook
+  const isWordInNotebook = (w) => {
+    const clean = w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+    return (notebook || []).some(item => item.english.toLowerCase() === clean);
+  };
+
   const renderInteractivePassage = (text) => {
     const words = text.split(/\s+/);
     return words.map((word, idx) => {
@@ -123,6 +134,7 @@ const ParagraphsSection = ({
       const synonym = SYNONYM_MAP[cleanWord];
       const shouldSwap = synonymSwapperActive && synonym;
       const displayWord = shouldSwap ? word.toLowerCase().replace(cleanWord, synonym) : word;
+      const isKnown = isWordInNotebook(cleanWord);
       
       return (
         <span
@@ -136,16 +148,18 @@ const ParagraphsSection = ({
             display: 'inline-block',
             color: shouldSwap ? '#f59e0b' : 'inherit',
             fontWeight: shouldSwap ? '800' : 'normal',
-            borderBottom: shouldSwap ? '1px dashed #f59e0b' : 'none'
+            borderBottom: shouldSwap ? '1px dashed #f59e0b' : 'none',
+            background: isKnown ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
+            textDecoration: isKnown ? 'underline' : 'none'
           }}
-          title={shouldSwap ? `Orijinal: ${word}` : ''}
+          title={shouldSwap ? `Orijinal: ${word}` : isKnown ? 'Deftere Kaydedildi' : ''}
           onMouseEnter={(e) => { 
             e.target.style.color = '#818cf8'; 
             e.target.style.background = 'rgba(99,102,241,0.08)'; 
           }}
           onMouseLeave={(e) => { 
             e.target.style.color = shouldSwap ? '#f59e0b' : 'inherit'; 
-            e.target.style.background = 'transparent'; 
+            e.target.style.background = isKnown ? 'rgba(245, 158, 11, 0.15)' : 'transparent'; 
           }}
         >
           {displayWord}{' '}
@@ -229,117 +243,168 @@ const ParagraphsSection = ({
     });
   };
 
+  const activeChapter = selectedBook?.chapters?.[activeChapterIdx];
+  const fullChapterText = activeChapter?.pages?.join('\n\n') || '';
+  const fullChapterTurkish = activeChapter?.turkishPages?.join('\n\n') || '';
+
+  const progressPercent = Math.round(((activeChapterIdx + 1) / (selectedBook?.chapters?.length || 1)) * 100);
+
   return (
     <div style={{ position: 'relative' }} onClick={() => setTranslatedWord(null)}>
       {/* Translation Popover Bubble */}
       {translatedWord && translationPos && (
         <div style={{
-          position: 'absolute',
+          position: 'fixed',
           top: `${translationPos.top}px`,
           left: `${translationPos.left}px`,
+          zIndex: 99999,
           background: 'rgba(15, 23, 42, 0.95)',
+          border: '1px solid rgba(99, 102, 241, 0.4)',
+          borderRadius: '12px',
+          padding: '12px 16px',
+          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
           backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(99, 102, 241, 0.3)',
-          padding: '8px 12px',
-          borderRadius: '8px',
-          color: '#e2e8f0',
-          fontSize: '0.72rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-          zIndex: 1000,
-          pointerEvents: 'auto',
-          maxWidth: '220px',
+          maxWidth: '280px',
           textAlign: 'left'
-        }}>
-          <div style={{ fontWeight: 'bold', color: '#818cf8', marginBottom: '2px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span>{translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")}</span>
+        }} onClick={(e) => e.stopPropagation()}>
+          <div style={{ display: 'flex', alignItems: 'center', justifycontent: 'space-between', gap: '10px', marginBottom: '6px' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: 'white' }}>{translatedWord}</span>
             <button 
-              onClick={() => playSpeechAudio && playSpeechAudio(translatedWord)}
-              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0 }}
+              onClick={() => {
+                if (playSpeechAudio) playSpeechAudio(translatedWord);
+              }}
+              style={{ background: 'none', border: 'none', color: 'var(--primary-light)', cursor: 'pointer' }}
             >
-              <Volume2 className="h-3 w-3" />
+              <Volume2 className="h-3.5 w-3.5" />
             </button>
           </div>
-          <p style={{ margin: 0, fontSize: '0.7rem', color: '#f8fafc' }}>{translationText}</p>
+          <div style={{ fontSize: '0.72rem', color: '#cbd5e1', lineHeight: '1.4', marginBottom: '8px' }}>
+            {translationText}
+          </div>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <button
+              onClick={() => {
+                if (handleAddCustomWord) {
+                  const clean = translatedWord.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+                  handleAddCustomWord(clean, translationText, `Marked from book: ${selectedBook.title}`, selectedBook.category);
+                  alert(`"${clean}" defterinize eklendi!`);
+                }
+              }}
+              disabled={isWordInNotebook(translatedWord)}
+              className="px-2.5 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] transition-all cursor-pointer border-none"
+              style={{ flex: 1, opacity: isWordInNotebook(translatedWord) ? 0.5 : 1 }}
+            >
+              {isWordInNotebook(translatedWord) ? '✓ Kaydedildi' : '📇 Deftere Ekle'}
+            </button>
+          </div>
         </div>
       )}
 
-      {loading ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '20px' }}>
-          <div style={{ height: '24px', width: '30%', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px', className: 'animate-pulse' }} />
-          <div className="glass-card" style={{ padding: '24px', borderRadius: '16px', height: '200px', background: 'rgba(255, 255, 255, 0.01)', className: 'animate-pulse' }} />
-        </div>
-      ) : !selectedPassage ? (
-        /* PASSAGES LIST SCREEN */
-        <div className="space-y-4">
-          <div className="welcome-card text-left">
-            <h2>Akademik Okuma Çalışması 📖</h2>
-            <p>Paragrafları okuyun, bilmediğiniz kelimelerin üzerine tıklayarak çevirisini anında öğrenin ve okuduğunu anlama sorularını çözün.</p>
+      {!selectedBook ? (
+        /* BOOKSHELF / LIBRARY VIEW */
+        <div className="space-y-6 text-left">
+          <div className="section-title">
+            <h2 className="flex items-center gap-2"><BookOpen className="h-6 w-6 text-indigo-400" /> Akademik Kitaplık</h2>
+            <p>Seviyenize uygun kitapları okuyun, anlamını bilmediğiniz kelimelerin üzerine tıklayarak kelime defterinize ekleyin.</p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {passages.map(p => (
+          {/* Category Filters */}
+          <div className="tab-buttons" style={{ marginBottom: '6px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {[
+              { id: 'all', label: '🌍 Tüm Kitaplar' },
+              { id: 'fen', label: '🔬 Fen Bilimleri' },
+              { id: 'saglik', label: '🩺 Sağlık Bilimleri' },
+              { id: 'sosyal', label: '⚖️ Sosyal Bilimler' }
+            ].map(f => (
+              <button
+                key={f.id}
+                onClick={() => setActiveFilter(f.id)}
+                className={`tab-btn ${activeFilter === f.id ? 'active' : ''}`}
+                style={{ padding: '8px 16px', fontSize: '0.76rem', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer' }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginTop: '16px' }}>
+            {filteredBooks.map((book) => (
               <div 
-                key={p.id}
-                onClick={() => {
-                  setSelectedPassage(p);
-                  setSelectedAnswers({});
-                  setCheckedQuestions({});
-                  setScore(0);
-                }}
-                className="glass-card flex items-center justify-between hover:bg-white/2"
-                style={{
-                  padding: '16px 20px',
-                  borderRadius: '14px',
-                  border: '1px solid rgba(255, 255, 255, 0.05)',
+                key={book.id}
+                className="glass-card flex flex-col justify-between hover:scale-[1.02] transition-all"
+                style={{ 
+                  borderRadius: '20px', 
+                  padding: '24px', 
+                  background: 'rgba(11, 15, 26, 0.6)', 
+                  border: '1px solid var(--border-color)',
                   cursor: 'pointer',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  transition: 'all 0.2s ease'
+                  flexDirection: 'column',
+                  gap: '16px'
                 }}
+                onClick={() => setSelectedBook(book)}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '50%',
-                    background: 'rgba(99, 102, 241, 0.15)',
-                    border: '1px solid rgba(99, 102, 241, 0.25)',
-                    color: '#a5b4fc',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0
-                  }}>
-                    <BookOpen className="h-4.5 w-4.5" />
-                  </div>
-                  <div style={{ textAlign: 'left' }}>
-                    <h4 style={{ fontSize: '0.85rem', fontWeight: '800', color: 'white', margin: '0 0 2px 0' }}>{p.title}</h4>
-                    <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', margin: 0 }}>
-                      3 Adet Okuduğunu Anlama Sorusu İçerir.
-                    </p>
-                  </div>
+                {/* Book Cover Visualizer */}
+                <div style={{ 
+                  background: book.coverColor, 
+                  height: '160px', 
+                  borderRadius: '12px', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justifyContent: 'flex-end', 
+                  padding: '16px', 
+                  position: 'relative',
+                  overflow: 'hidden',
+                  boxShadow: 'inset 0 -40px 80px rgba(0,0,0,0.6)'
+                }}>
+                  <Bookmark className="h-5 w-5 absolute top-3 right-3 text-white/40" />
+                  <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{book.category === 'fen' ? '🔬 FEN BİLİMLERİ' : '⚖️ SOSYAL BİLİMLER'}</span>
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white', margin: '4px 0 0 0', lineHeight: 1.2 }}>{book.title}</h3>
+                  <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.8)', marginTop: '2px' }}>{book.author}</span>
                 </div>
-                <ArrowRight className="h-4 w-4 text-slate-500" />
+
+                <div className="space-y-2">
+                  <p style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                    {book.description}
+                  </p>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px', marginTop: 'auto' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>
+                    {book.chapters.length} Bölüm
+                  </span>
+                  <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '0.72rem', cursor: 'pointer' }}>
+                    Okumaya Başla →
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         </div>
       ) : (
-        /* PASSAGE SPLIT COMPREHENSION SCREEN */
-        <div className="space-y-4">
+        /* ACTIVE BOOK READER VIEW */
+        <div className="space-y-4 text-left">
+          {/* Top Control Bar */}
           <div className="glass-card flex items-center justify-between" style={{ padding: '12px 20px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
             <button
               onClick={() => {
-                setSelectedPassage(null);
+                setSelectedBook(null);
                 setFocusMode(false);
                 setUseReadingRuler(false);
               }}
               className="btn-secondary"
               style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
             >
-              ← Paragraf Listesine Dön
+              ← Kütüphaneye Dön
             </button>
+
+            {/* Reading Progress */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: '80px', height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ width: `${progressPercent}%`, height: '100%', background: 'var(--primary-light)' }}></div>
+              </div>
+              <span style={{ fontSize: '0.68rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>%{progressPercent} Okundu</span>
+            </div>
 
             {/* Focus Options */}
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -396,189 +461,187 @@ const ParagraphsSection = ({
               >
                 📝 Cloze Test Modu
               </button>
+              <button
+                onClick={() => setDualViewActive(!dualViewActive)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  dualViewActive ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                }`}
+                title="Eş Zamanlı Çeviri (Parallel Reading)"
+              >
+                📖 Eş Zamanlı Çeviri
+              </button>
             </div>
-
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>
-              Doğru Sayısı: {score} / 3
-            </span>
           </div>
 
+          {/* Reader Body Layout */}
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'stretch' }}>
-            {/* Left side: Passage details */}
             <div className={`glass-card ${focusMode ? 'focus-container' : ''} ${useReadingRuler ? 'reading-ruler-active' : ''}`} style={{ flex: '1', minWidth: '320px', padding: '24px', borderRadius: '18px', display: 'flex', flexDirection: 'column', gap: '16px', background: focusMode ? 'rgba(8,10,16,0.98)' : 'rgba(11, 15, 26, 0.6)' }}>
-              <div style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px' }}>
-                <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Akademik Metin</span>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'white', margin: '4px 0 0 0' }}>{selectedPassage.title}</h3>
+              
+              {/* Book Chapter / Header */}
+              <div style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{selectedBook.title}</span>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: '800', color: 'white', margin: '4px 0 0 0' }}>{activeChapter.title}</h3>
+                </div>
+                {/* Chapter Selector Dropdown */}
+                <select
+                  value={activeChapterIdx}
+                  onChange={(e) => {
+                    setActiveChapterIdx(parseInt(e.target.value));
+                    setActivePageIdx(0);
+                  }}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    color: 'white',
+                    padding: '6px 12px',
+                    borderRadius: '8px',
+                    fontSize: '0.72rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {selectedBook.chapters.map((ch, idx) => (
+                    <option key={idx} value={idx} style={{ background: '#0a0f1d' }}>Bölüm {idx + 1}</option>
+                  ))}
+                </select>
               </div>
-              <div className={`focus-passage-text ${useDyslexicFont ? 'font-dyslexic' : ''}`} style={{ fontSize: '0.86rem', lineHeight: '1.8', color: '#cbd5e1', textAlign: 'justify', margin: 0 }}>
-                {clozeMode ? (
-                  <div>
-                    <div style={{ marginBottom: '14px', padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: '10px', fontSize: '0.72rem', color: '#a5b4fc', fontWeight: 'bold' }}>
-                      📝 Metindeki boş bırakılmış yerlere en uygun düşen akademik kelimeleri seçin.
-                    </div>
-                    {renderClozePassage(selectedPassage.passage)}
 
-                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      {!clozeChecked ? (
-                        <button
-                          onClick={() => {
-                            let correctCount = 0;
-                            let totalTargets = 0;
-                            const words = selectedPassage.passage.split(/\s+/);
-                            words.forEach(word => {
-                              const clean = word.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-                              if (CLOZE_TARGETS.includes(clean)) {
-                                const ans = clozeAnswers[totalTargets];
-                                if (ans === clean) correctCount++;
-                                totalTargets++;
-                              }
-                            });
-                            setClozeChecked(true);
-                            setClozeScore(correctCount);
-                            if (incrementDailyQuestions) incrementDailyQuestions();
-                          }}
-                          className="btn-primary"
-                          style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
-                        >
-                          Cevapları Kontrol Et
-                        </button>
-                      ) : (
-                        <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#34d399' }}>
-                          Cloze Test Skoru: {clozeScore} / {selectedPassage.passage.split(/\s+/).map(w => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")).filter(clean => CLOZE_TARGETS.includes(clean)).length} Doğru!
-                        </div>
-                      )}
-                      {clozeChecked && (
-                        <button
-                          onClick={() => {
-                            setClozeAnswers({});
-                            setClozeChecked(false);
-                            setClozeScore(0);
-                          }}
-                          className="btn-secondary"
-                          style={{ padding: '6px 12px', fontSize: '0.72rem', cursor: 'pointer' }}
-                        >
-                          Yeniden Başlat
-                        </button>
-                      )}
+              {/* Text Render Area */}
+              <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'stretch' }}>
+                <div 
+                  className={`focus-passage-text ${useDyslexicFont ? 'font-dyslexic' : ''}`} 
+                  style={{ 
+                    flex: 1, 
+                    minWidth: '280px', 
+                    maxHeight: '480px', 
+                    overflowY: 'auto', 
+                    paddingRight: '12px',
+                    fontSize: '0.94rem', 
+                    lineHeight: '2.0', 
+                    color: '#cbd5e1', 
+                    textAlign: 'justify', 
+                    margin: 0 
+                  }}
+                >
+                  {clozeMode ? (
+                    <div>
+                      <div style={{ marginBottom: '14px', padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: '10px', fontSize: '0.72rem', color: '#a5b4fc', fontWeight: 'bold' }}>
+                        📝 Metindeki boş bırakılmış yerlere en uygun düşen akademik kelimeleri seçin.
+                      </div>
+                      {renderClozePassage(fullChapterText)}
+
+                      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        {!clozeChecked ? (
+                          <button
+                            onClick={() => {
+                              let correctCount = 0;
+                              let totalTargets = 0;
+                              const words = fullChapterText.split(/\s+/);
+                              words.forEach(word => {
+                                const clean = word.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+                                if (CLOZE_TARGETS.includes(clean)) {
+                                  const ans = clozeAnswers[totalTargets];
+                                  if (ans === clean) correctCount++;
+                                  totalTargets++;
+                                }
+                              });
+                              setClozeChecked(true);
+                              setClozeScore(correctCount);
+                              if (incrementDailyQuestions) incrementDailyQuestions();
+                            }}
+                            className="btn-primary"
+                            style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                          >
+                            Cevapları Kontrol Et
+                          </button>
+                        ) : (
+                          <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#34d399' }}>
+                            Cloze Test Skoru: {clozeScore} / {fullChapterText.split(/\s+/).map(w => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")).filter(clean => CLOZE_TARGETS.includes(clean)).length} Doğru!
+                          </div>
+                        )}
+                        {clozeChecked && (
+                          <button
+                            onClick={() => {
+                              setClozeAnswers({});
+                              setClozeChecked(false);
+                              setClozeScore(0);
+                            }}
+                            className="btn-secondary"
+                            style={{ padding: '6px 12px', fontSize: '0.72rem', cursor: 'pointer' }}
+                          >
+                            Yeniden Başlat
+                          </button>
+                        )}
+                      </div>
                     </div>
+                  ) : (
+                    fullChapterText.split('\n\n').map((para, paraIdx) => (
+                      <p 
+                        key={paraIdx}
+                        className={hoveredParagraphIndex === paraIdx ? 'ruler-highlight' : ''}
+                        onMouseEnter={() => {
+                          if (useReadingRuler) setHoveredParagraphIndex(paraIdx);
+                        }}
+                        onMouseLeave={() => {
+                          if (useReadingRuler) setHoveredParagraphIndex(null);
+                        }}
+                        style={{ marginBottom: '16px' }}
+                      >
+                        {renderInteractivePassage(para)}
+                      </p>
+                    ))
+                  )}
+                </div>
+
+                {dualViewActive && !clozeMode && (
+                  <div 
+                    style={{ 
+                      flex: 1, 
+                      minWidth: '280px', 
+                      maxHeight: '480px', 
+                      overflowY: 'auto', 
+                      padding: '20px', 
+                      background: 'rgba(255,255,255,0.02)', 
+                      borderLeft: '1px solid rgba(255,255,255,0.06)', 
+                      borderRadius: '14px', 
+                      alignSelf: 'stretch' 
+                    }}
+                  >
+                    <div style={{ fontSize: '0.68rem', fontWeight: '800', color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '8px' }}>
+                      ⚖️ Türkçe Akademik Çeviri
+                    </div>
+                    {fullChapterTurkish.split('\n\n').map((para, paraIdx) => (
+                      <p key={paraIdx} style={{ fontSize: '0.9rem', lineHeight: '2.0', color: '#94a3b8', textAlign: 'justify', marginBottom: '16px' }}>
+                        {para}
+                      </p>
+                    ))}
                   </div>
-                ) : (
-                  selectedPassage.passage.split('\n').filter(Boolean).map((para, idx) => (
-                    <p 
-                      key={idx} 
-                      className={hoveredParagraphIndex === idx ? 'ruler-highlight' : ''}
-                      onMouseEnter={() => {
-                        if (useReadingRuler) setHoveredParagraphIndex(idx);
-                      }}
-                      onMouseLeave={() => {
-                        if (useReadingRuler) setHoveredParagraphIndex(null);
-                      }}
-                      style={{ marginBottom: '12px' }}
-                    >
-                      {renderInteractivePassage(para)}
-                    </p>
-                  ))
                 )}
               </div>
-              <div style={{ marginTop: 'auto', background: 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.1)', padding: '10px 14px', borderRadius: '10px', fontSize: '0.68rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                💡 <span style={{ textAlign: 'left' }}>Paragraf içerisindeki herhangi bir kelimeye tıklayarak Türkçe çevirisini anında görebilirsiniz.</span>
+
+              {/* Reader Navigation / Chapter footer info */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px', marginTop: 'auto' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>
+                  Okuma İlerlemesi: %{progressPercent}
+                </div>
+                {activeChapterIdx < selectedBook.chapters.length - 1 ? (
+                  <button
+                    onClick={() => {
+                      setActiveChapterIdx(prev => prev + 1);
+                    }}
+                    className="btn-primary"
+                    style={{ padding: '6px 12px', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
+                  >
+                    Sonraki Bölüm <ChevronRight className="h-4 w-4" />
+                  </button>
+                ) : (
+                  <span style={{ fontSize: '0.72rem', color: '#34d399', fontWeight: 'bold' }}>🎉 Kitap Tamamlandı!</span>
+                )}
               </div>
-            </div>
 
-            {/* Right side: Questions */}
-            <div style={{ flex: '1', minWidth: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {selectedPassage.questions.map((q, qIdx) => {
-                const isChecked = checkedQuestions[q.id];
-                const selectedOpt = selectedAnswers[q.id];
-                return (
-                  <div key={q.id} className="glass-card" style={{ padding: '20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'left' }}>
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-                      <span style={{
-                        background: 'rgba(99,102,241,0.15)',
-                        border: '1px solid rgba(99,102,241,0.25)',
-                        color: '#a5b4fc',
-                        width: '22px',
-                        height: '22px',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.7rem',
-                        fontWeight: 'bold',
-                        flexShrink: 0
-                      }}>
-                        {qIdx + 1}
-                      </span>
-                      <h4 style={{ fontSize: '0.8rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: '1.4' }}>{q.question}</h4>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '14px' }}>
-                      {q.options.map((opt) => {
-                        let btnStyle = {
-                          width: '100%',
-                          padding: '10px 14px',
-                          borderRadius: '8px',
-                          fontSize: '0.74rem',
-                          textAlign: 'left',
-                          border: '1px solid rgba(255,255,255,0.05)',
-                          background: 'rgba(255,255,255,0.02)',
-                          color: '#94a3b8',
-                          cursor: isChecked ? 'default' : 'pointer',
-                          transition: 'all 0.2s ease'
-                        };
-
-                        if (isChecked) {
-                          if (opt === q.answer) {
-                            btnStyle.background = 'rgba(16, 185, 129, 0.15)';
-                            btnStyle.border = '1px solid #10b981';
-                            btnStyle.color = '#34d399';
-                          } else if (opt === selectedOpt) {
-                            btnStyle.background = 'rgba(239, 68, 68, 0.15)';
-                            btnStyle.border = '1px solid #ef4444';
-                            btnStyle.color = '#f87171';
-                          }
-                        } else if (opt === selectedOpt) {
-                          btnStyle.background = 'rgba(99, 102, 241, 0.15)';
-                          btnStyle.border = '1px solid #6366f1';
-                          btnStyle.color = '#a5b4fc';
-                        }
-
-                        return (
-                          <button
-                            key={opt}
-                            disabled={isChecked}
-                            onClick={() => handleSelectOption(q.id, opt)}
-                            style={btnStyle}
-                          >
-                            {opt}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {!isChecked && (
-                      <button
-                        disabled={!selectedOpt}
-                        onClick={() => handleCheckQuestion(q)}
-                        className="btn-primary"
-                        style={{
-                          width: '100%',
-                          padding: '8px',
-                          fontSize: '0.72rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '6px',
-                          cursor: selectedOpt ? 'pointer' : 'not-allowed',
-                          opacity: selectedOpt ? 1.0 : 0.5
-                        }}
-                      >
-                        Cevabı Kontrol Et <HelpCircle className="h-4 w-4" />
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
+              <div style={{ background: 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.1)', padding: '10px 14px', borderRadius: '10px', fontSize: '0.68rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                💡 <span style={{ textAlign: 'left' }}>Metin içerisindeki bilinmeyen kelimelere tıklayıp anlamını görebilir ve tek tıkla Kelimelerim defterine ekleyebilirsiniz. Kaydedilen kelimelerin arka planı sarı olarak işaretlenir.</span>
+              </div>
             </div>
           </div>
         </div>

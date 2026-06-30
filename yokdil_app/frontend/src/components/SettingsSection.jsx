@@ -10,6 +10,7 @@ const SettingsSection = ({
   handleResetProgress,
   selectedExam,
   currentUser,
+  setCurrentUser,
   onLogout,
   onOpenAuthModal,
   token,
@@ -30,9 +31,18 @@ const SettingsSection = ({
 }) => {
   const [profileName, setProfileName] = useState(currentUser?.name || '');
   const [profileEmail, setProfileEmail] = useState(currentUser?.email || '');
+  const [profileUsername, setProfileUsername] = useState(currentUser?.username || '');
   const [profilePassword, setProfilePassword] = useState('');
   const [updateSuccess, setUpdateSuccess] = useState('');
   const [updateError, setUpdateError] = useState('');
+
+  React.useEffect(() => {
+    if (currentUser) {
+      setProfileName(currentUser.name || '');
+      setProfileEmail(currentUser.email || '');
+      setProfileUsername(currentUser.username || '');
+    }
+  }, [currentUser]);
 
   const [localIp, setLocalIp] = useState('');
   const [showQR, setShowQR] = useState(false);
@@ -71,12 +81,25 @@ const SettingsSection = ({
         },
         body: JSON.stringify({
           name: profileName,
+          username: profileUsername,
           email: profileEmail,
           password: profilePassword || undefined
         })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Profil güncellenemedi.');
+      
+      const updatedUser = {
+        ...currentUser,
+        name: profileName,
+        username: profileUsername,
+        email: profileEmail
+      };
+      if (setCurrentUser) {
+        setCurrentUser(updatedUser);
+      }
+      localStorage.setItem('yokdil_user', JSON.stringify(updatedUser));
+      
       setUpdateSuccess('Profiliniz başarıyla güncellendi.');
       setProfilePassword('');
     } catch (err) {
@@ -137,6 +160,56 @@ const SettingsSection = ({
                   <i className="fa-solid fa-right-from-bracket"></i> Çıkış Yap
                 </button>
               </div>
+
+              {/* Profile Update Form */}
+              <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '10px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', padding: '14px', borderRadius: '12px' }}>
+                <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '6px', marginBottom: '4px' }}>
+                  ⚙️ Bilgileri Güncelle
+                </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>İsim Soyisim</label>
+                  <input
+                    type="text"
+                    value={profileName}
+                    onChange={(e) => setProfileName(e.target.value)}
+                    placeholder="Adı Soyadı"
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Kullanıcı Adı</label>
+                  <input
+                    type="text"
+                    value={profileUsername}
+                    onChange={(e) => setProfileUsername(e.target.value)}
+                    placeholder="kullaniciadi"
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Yeni Şifre (Değiştirmek istemiyorsanız boş bırakın)</label>
+                  <input
+                    type="password"
+                    value={profilePassword}
+                    onChange={(e) => setProfilePassword(e.target.value)}
+                    placeholder="Yeni Şifre"
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
+                  />
+                </div>
+
+                {updateSuccess && <div style={{ fontSize: '0.66rem', color: '#34d399', fontWeight: 'bold' }}>{updateSuccess}</div>}
+                {updateError && <div style={{ fontSize: '0.66rem', color: '#f87171', fontWeight: 'bold' }}>{updateError}</div>}
+
+                <button
+                  type="submit"
+                  className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all cursor-pointer border-none mt-2"
+                >
+                  Bilgileri Kaydet
+                </button>
+              </form>
 
               {/* QR Code Section */}
               <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', padding: '14px', border: '1px solid rgba(255,255,255,0.04)', display: 'flex', flexDirection: 'column', gap: '10px' }}>

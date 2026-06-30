@@ -23,6 +23,10 @@ const MistakeInbox = ({
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
 
+  // Marathon Mode states
+  const [isMarathonMode, setIsMarathonMode] = useState(false);
+  const [marathonIndex, setMarathonIndex] = useState(0);
+
   // Vocabulary mistakes states
   const [activeWordIndex, setActiveWordIndex] = useState(null);
   const [vocabReveal, setVocabReveal] = useState(false);
@@ -55,6 +59,39 @@ const MistakeInbox = ({
     setMistakes(newMistakes);
     localStorage.setItem('yokdil_mistakes', JSON.stringify(newMistakes));
     setActiveMistakeIndex(null);
+  };
+
+  const handleStartMarathon = () => {
+    if (mistakes.length === 0) return;
+    setIsMarathonMode(true);
+    setMarathonIndex(0);
+    setSelectedOption(null);
+    setIsAnswered(false);
+    setActiveExplanation(null);
+    const firstMistake = mistakes[0];
+    loadQuestionExplanation(firstMistake.qNumber, firstMistake.examId);
+  };
+
+  const handleNextMarathonQuestion = () => {
+    const targetMistake = mistakes[marathonIndex];
+    const newMistakes = mistakes.filter(m => !(m.qNumber === targetMistake.qNumber && m.examId === targetMistake.examId));
+    setMistakes(newMistakes);
+    localStorage.setItem('yokdil_mistakes', JSON.stringify(newMistakes));
+
+    if (newMistakes.length === 0) {
+      setIsMarathonMode(false);
+      alert("🎉 Harika! Tüm hatalı sorularınızı başarıyla temizlediniz!");
+      return;
+    }
+
+    const nextIndex = marathonIndex >= newMistakes.length ? 0 : marathonIndex;
+    setMarathonIndex(nextIndex);
+    setSelectedOption(null);
+    setIsAnswered(false);
+    setActiveExplanation(null);
+    
+    const nextMist = newMistakes[nextIndex];
+    loadQuestionExplanation(nextMist.qNumber, nextMist.examId);
   };
 
   // Mark word mistake as resolved
@@ -127,7 +164,7 @@ const MistakeInbox = ({
 
       {/* SECTION 1: TEST MISTAKES */}
       {mistakeSection === 'tests' && (
-        activeMistakeIndex === null ? (
+        (activeMistakeIndex === null && !isMarathonMode) ? (
           mistakes.length === 0 ? (
             <div className="glass-card p-8 border border-white/5 text-center text-slate-500 text-xs rounded-3xl" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
               <ShieldAlert className="h-10 w-14 text-indigo-400 mx-auto mb-2 animate-pulse" />
@@ -135,6 +172,27 @@ const MistakeInbox = ({
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button
+                onClick={handleStartMarathon}
+                style={{
+                  background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+                  color: '#1e293b',
+                  padding: '14px 20px',
+                  borderRadius: '16px',
+                  fontSize: '0.82rem',
+                  fontWeight: '800',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 15px rgba(245, 158, 11, 0.2)',
+                  marginBottom: '10px'
+                }}
+              >
+                ⚡ Hata Temizleme Maratonu Başlat ({mistakes.length} Soru) 🏃‍♂️
+              </button>
               {mistakes.map((mist, idx) => {
                 const examName = exams.find(e => e.id === mist.examId)?.name || 'YÖKDİL Sınavı';
                 return (
@@ -181,7 +239,6 @@ const MistakeInbox = ({
                     </div>
                     
                     <button 
-                      className="btn-primary"
                       style={{
                         padding: '8px 16px',
                         fontSize: '0.75rem',
@@ -203,6 +260,139 @@ const MistakeInbox = ({
               })}
             </div>
           )
+        ) : isMarathonMode ? (
+          /* Marathon mode rendering */
+          (() => {
+            const mist = mistakes[marathonIndex];
+            if (!mist) return null;
+            const exam = exams.find(e => e.id === mist.examId);
+            if (!exam) return null;
+            const question = exam.questions.find(q => q.number === mist.qNumber);
+            if (!question) return null;
+
+            const isCorrect = selectedOption === exam.answers[mist.qNumber - 1];
+
+            return (
+              <div className="duo-quiz-container" style={{ paddingBottom: '0' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <button 
+                    onClick={() => setIsMarathonMode(false)}
+                    className="btn-secondary"
+                    style={{ padding: '6px 12px', fontSize: '0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <ChevronLeft className="h-4 w-4" /> Maratondan Çık
+                  </button>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>
+                    Soru: {marathonIndex + 1} / {mistakes.length}
+                  </span>
+                </div>
+
+                <div className="duo-question-card">
+                  <div className="duo-question-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <span className="duo-question-badge">{exam.name} - Soru {mist.qNumber}</span>
+                    <button 
+                      onClick={() => playSpeechAudio(question.text)}
+                      className="text-slate-500 hover:text-indigo-400 ml-auto"
+                      style={{ fontSize: '0.75rem', fontWeight: '700' }}
+                    >
+                      🔊 Dinle
+                    </button>
+                  </div>
+                  
+                  <div className="duo-question-title">
+                    {question.text}
+                  </div>
+                </div>
+
+                <div className="duo-options-list">
+                  {['A', 'B', 'C', 'D', 'E'].map((option, idx) => {
+                    const optText = question.options[idx];
+                    const isSelected = selectedOption === option;
+                    const correctAns = exam.answers[mist.qNumber - 1];
+                    
+                    let cardClass = '';
+                    if (isAnswered) {
+                      if (option === correctAns) {
+                        cardClass = 'correct';
+                      } else if (isSelected) {
+                        cardClass = 'incorrect';
+                      } else {
+                        cardClass = 'disabled';
+                      }
+                    } else if (isSelected) {
+                      cardClass = 'selected';
+                    }
+
+                    return (
+                      <div
+                        key={option}
+                        onClick={() => {
+                          if (!isAnswered) {
+                            setSelectedOption(option);
+                          }
+                        }}
+                        className={`duo-option-card ${cardClass}`}
+                      >
+                        <div className="duo-option-badge">{option}</div>
+                        <div className="duo-option-text">{optText || `Seçenek ${option}`}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {selectedOption && !isAnswered && (
+                  <button
+                    onClick={handleCheckAnswer}
+                    className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white rounded-xl transition-all mt-4"
+                    style={{ background: 'var(--primary-gradient)', cursor: 'pointer' }}
+                  >
+                    Cevabı Kontrol Et
+                  </button>
+                )}
+
+                {isAnswered && (
+                  <div className="space-y-3.5 mt-4" style={{ marginTop: '16px' }}>
+                    <div className={`p-4 border rounded-2xl text-xs font-semibold ${
+                      isCorrect 
+                        ? 'border-emerald-500/20 bg-emerald-500/5 text-emerald-400' 
+                        : 'border-rose-500/20 bg-rose-500/5 text-rose-400'
+                    }`}>
+                      {isCorrect ? 'Tebrikler! Doğru cevap.' : `Yanlış cevap. Doğru şık: ${exam.answers[mist.qNumber - 1]}`}
+                    </div>
+
+                    {isCorrect ? (
+                      <button
+                        onClick={handleNextMarathonQuestion}
+                        className="w-full py-3 text-xs font-bold text-white rounded-xl transition-all"
+                        style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none', cursor: 'pointer' }}
+                      >
+                        Doğru! Sonraki Soruya Geç ➡️
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setSelectedOption(null);
+                          setIsAnswered(false);
+                          setActiveExplanation(null);
+                        }}
+                        className="w-full py-3 text-xs font-bold text-white rounded-xl transition-all"
+                        style={{ background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none', cursor: 'pointer' }}
+                      >
+                        Tekrar Dene 🔄
+                      </button>
+                    )}
+
+                    {activeExplanation && (
+                      <div className="glass-card p-4.5 border border-white/5 bg-white/1 rounded-2xl space-y-2 mt-4 text-xs">
+                        <h4 className="font-bold text-slate-300 border-b border-white/5 pb-1">Gramer/Kelime Çözüm Analizi:</h4>
+                        {renderMarkdown(activeExplanation.explanation)}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })()
         ) : (
           /* Re-solving single mistake */
           (() => {
@@ -385,7 +575,6 @@ const MistakeInbox = ({
                     </div>
                     
                     <button 
-                      className="btn-primary"
                       style={{
                         padding: '8px 16px',
                         fontSize: '0.75rem',

@@ -121,13 +121,13 @@ const Sidebar = ({
           <i className="fa-solid fa-circle-exclamation"></i>
           <span>Hata Kutusu</span>
         </button>
+        <button style={getSidebarItemStyle('minigames')} onClick={() => { setActiveTab('minigames'); setQuizActive(false); }}>
+          <i className="fa-solid fa-gamepad"></i>
+          <span>Oyun Parkı</span>
+        </button>
         <button style={getSidebarItemStyle('performance')} onClick={() => { setActiveTab('performance'); setQuizActive(false); }}>
           <i className="fa-solid fa-chart-line"></i>
           <span>Performans</span>
-        </button>
-        <button style={getSidebarItemStyle('shop')} onClick={() => { setActiveTab('shop'); setQuizActive(false); }}>
-          <i className="fa-solid fa-store"></i>
-          <span>Sanal Dükkan</span>
         </button>
         <button style={getSidebarItemStyle('settings')} onClick={() => { setActiveTab('settings'); setQuizActive(false); }}>
           <i className="fa-solid fa-gear"></i>

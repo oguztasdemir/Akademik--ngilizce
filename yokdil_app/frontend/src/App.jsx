@@ -17,7 +17,19 @@ import SettingsSection from './components/SettingsSection';
 import MistakeInbox from './components/MistakeInbox';
 import ParagraphsSection from './components/ParagraphsSection';
 import AuthModal from './components/AuthModal';
-import VirtualShop from './components/VirtualShop';
+import MinigamesSection from './components/MinigamesSection';
+
+import fallbackExamsFen from './components/exams_db_fen.json';
+import fallbackExamsSosyal from './components/exams_db_sosyal.json';
+import fallbackExamsSaglik from './components/exams_db_saglik.json';
+
+import fallbackVocabFen from './components/vocab_db_fen.json';
+import fallbackVocabSosyal from './components/vocab_db_sosyal.json';
+import fallbackVocabSaglik from './components/vocab_db_saglik.json';
+
+import fallbackDictFen from './components/dictionary_fen.json';
+import fallbackDictSosyal from './components/dictionary_sosyal.json';
+import fallbackDictSaglik from './components/dictionary_saglik.json';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (
   window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -293,7 +305,24 @@ function App() {
   const [showDeviceLinkModal, setShowDeviceLinkModal] = useState(false);
 
   // Navigation & Config States
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const getInitialHashState = () => {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#/') && hash !== '#/landing') {
+      const parts = hash.split('/');
+      if (parts.length >= 3) {
+        return { 
+          category: parts[1], 
+          tab: parts[2], 
+          quiz: parts[3] === 'quiz' 
+        };
+      }
+    }
+    return { category: null, tab: 'dashboard', quiz: false };
+  };
+
+  const initialHashState = getInitialHashState();
+
+  const [activeTab, setActiveTab] = useState(initialHashState.tab);
   const [selectedTestTab, setSelectedTestTab] = useState('years'); // 'years', 'topics'
   const [theme, setTheme] = useState(() => localStorage.getItem('yokdil_theme') || 'theme-dark');
   const [fontSize, setFontSize] = useState(() => localStorage.getItem('yokdil_font_size') || 'base');
@@ -303,8 +332,8 @@ function App() {
   // Data States
   const [exams, setExams] = useState([]);
   const [selectedExam, setSelectedExam] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [quizActive, setQuizActive] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(initialHashState.category);
+  const [quizActive, setQuizActive] = useState(initialHashState.quiz);
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [quizMode, setQuizMode] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -360,8 +389,19 @@ function App() {
     };
   }, [quizActive, examSubmitted, currentQuizIndex]);
 
+  const FALLBACK_LECTURES = [
+    { id: "01_Prepositions_Time_Place", title: "01. Zaman ve Yer Edatları (Prepositions of Time & Place)", description: "YÖKDİL'de sıklıkla sorgulanan zaman ve yer bildiren edatlar (in, on, at vb.) ve kullanımları." },
+    { id: "02_Prepositions_Collocations", title: "02. Edat Kombinasyonları (Prepositions & Collocations)", description: "Fiil, sıfat ve isimlerle birlikte kullanılan sabit edat yapıları ve akademik eşleşmeler." },
+    { id: "03_Tenses_Present_Past", title: "03. Zamanlar - Şimdiki ve Geçmiş Zaman (Tenses: Present & Past)", description: "Academic İngilizce cümlelerinde present ve past zaman yapıları, ipucu veren zaman zarfları." },
+    { id: "04_Tenses_Perfect_Future", title: "04. Zamanlar - Yakın Geçmiş ve Gelecek Zaman (Tenses: Perfect & Future)", description: "Perfect tenses (have/has V3, had V3) ve future zaman yapıları, YÖKDİL soru tipleri." },
+    { id: "05_Active_Passive_Voice", title: "05. Etken ve Edilgen Çatı (Active & Passive Voice)", description: "Akademik makalelerde sıkça kullanılan edilgen (passive) anlatımlar ve causatives (ettirgen) yapılar." },
+    { id: "06_Conjunctions_Contrast", title: "06. Zıtlık Bağlaçları (Conjunctions of Contrast)", description: "YÖKDİL sınavının en önemli konusu: Zıtlık bildiren bağlaçlar (although, despite, but, however vb.)." },
+    { id: "07_Conjunctions_Cause_Effect", title: "07. Sebep-Sonuç Bağlaçları (Conjunctions of Cause & Effect)", description: "Nedensellik ve sonuç bildiren bağlaçlar (because, therefore, thus, since, as a result vb.)." },
+    { id: "08_Relative_Clauses", title: "08. Sıfat Cümlecikleri & Kısaltmalar (Relative Clauses)", description: "İsimleri niteleyen sıfat cümlecikleri (who, which, that, whose) ve kısaltma (reduction) kuralları." }
+  ];
+
   // Lectures States
-  const [lecturesList, setLecturesList] = useState([]);
+  const [lecturesList, setLecturesList] = useState(FALLBACK_LECTURES);
   const [activeLecture, setActiveLecture] = useState(null);
   const [lectureLoading, setLectureLoading] = useState(false);
 
@@ -387,6 +427,8 @@ function App() {
   const [dailyLecturesStudied, setDailyLecturesStudied] = useState(0);
   const [dailyQuestionGoal, setDailyQuestionGoal] = useState(parseInt(localStorage.getItem('yokdil_goal_target_questions') || '20', 10));
   const [dailyWordGoal, setDailyWordGoal] = useState(parseInt(localStorage.getItem('yokdil_goal_target_words') || '10', 10));
+  const [purchasedOutfits, setPurchasedOutfits] = useState(() => JSON.parse(localStorage.getItem('yokdil_purchased_outfits') || '["default"]'));
+  const [activeOutfit, setActiveOutfit] = useState(() => localStorage.getItem('yokdil_active_outfit') || 'default');
   const [autoPronounceEnabled, setAutoPronounceEnabled] = useState(localStorage.getItem('yokdil_auto_pronounce') === 'true');
 
   const [yokdilExamDate, setYokdilExamDate] = useState(() => {
@@ -396,6 +438,68 @@ function App() {
   useEffect(() => {
     localStorage.setItem('yokdil_exam_date', yokdilExamDate);
   }, [yokdilExamDate]);
+
+  const getOutfitEmoji = () => {
+    switch (activeOutfit) {
+      case 'wizard': return '🧙‍♂️';
+      case 'scientist': return '👨‍🔬';
+      case 'king': return '👑';
+      case 'scholar': return '🎓';
+      default: return '🦉';
+    }
+  };
+
+  const handleBuyOutfit = (key, cost) => {
+    if (gems < cost) {
+      alert("Yetersiz kristal! Günlük hedefleri tamamlayarak veya oyunları oynayarak kristal kazanabilirsiniz.");
+      return;
+    }
+    const newGems = gems - cost;
+    setGems(newGems);
+    localStorage.setItem('yokdil_gems', String(newGems));
+
+    const nextOutfits = [...purchasedOutfits, key];
+    setPurchasedOutfits(nextOutfits);
+    localStorage.setItem('yokdil_purchased_outfits', JSON.stringify(nextOutfits));
+
+    setActiveOutfit(key);
+    localStorage.setItem('yokdil_active_outfit', key);
+  };
+
+  const getAchievementTier = (id, value) => {
+    let thresholds = [10, 50, 200, 500];
+    let names = ["Bronz 🥉", "Gümüş 🥈", "Altın 🥇", "Elmas 💎"];
+    
+    if (id === 'word_master') {
+      thresholds = [5, 25, 100, 300];
+    } else if (id === 'grammar_master') {
+      thresholds = [1, 5, 15, 35];
+    } else if (id === 'on_fire') {
+      thresholds = [1, 3, 7, 30];
+    }
+
+    let tierIndex = -1;
+    for (let i = 0; i < thresholds.length; i++) {
+      if (value >= thresholds[i]) {
+        tierIndex = i;
+      }
+    }
+
+    const currentTierName = tierIndex >= 0 ? names[tierIndex] : "Kilitli 🔒";
+    const nextTierIndex = tierIndex + 1 < thresholds.length ? tierIndex + 1 : thresholds.length - 1;
+    const nextTarget = thresholds[nextTierIndex];
+    const prevThreshold = tierIndex >= 0 ? thresholds[tierIndex] : 0;
+    
+    const progress = value >= nextTarget ? 100 : Math.round(((value - prevThreshold) / (nextTarget - prevThreshold)) * 100);
+
+    return {
+      tierName: currentTierName,
+      nextTarget,
+      progress: Math.max(0, Math.min(100, progress)),
+      isMax: tierIndex === thresholds.length - 1,
+      completed: tierIndex >= 0
+    };
+  };
 
   // Explanation state
   const [activeExplanation, setActiveExplanation] = useState(null);
@@ -569,29 +673,62 @@ function App() {
   useEffect(() => {
     if (!selectedCategory) return;
     setLoading(true);
+
+    // Load fallback local data immediately
+    let localExams = [];
+    let localVocab = [];
+    let localDict = {};
+
+    if (selectedCategory === 'fen') {
+      localExams = fallbackExamsFen;
+      localVocab = fallbackVocabFen;
+      localDict = fallbackDictFen;
+    } else if (selectedCategory === 'sosyal') {
+      localExams = fallbackExamsSosyal;
+      localVocab = fallbackVocabSosyal;
+      localDict = fallbackDictSosyal;
+    } else if (selectedCategory === 'saglik') {
+      localExams = fallbackExamsSaglik;
+      localVocab = fallbackVocabSaglik;
+      localDict = fallbackDictSaglik;
+    }
+
+    setExams(localExams);
+    setVocabPracticeList(localVocab);
+    const initialDictList = Object.entries(localDict).map(([eng, tr]) => ({ english: eng, turkish: tr }));
+    setDictionaryList(initialDictList);
+    setLoading(false);
+
+    // Fetch fresh values from backend (if online / backend is up)
     fetch(`${BACKEND_URL}/api/${selectedCategory}/exams`)
       .then(res => res.json())
       .then(data => {
-        setExams(data);
-        setLoading(false);
+        if (data && Array.isArray(data) && data.length > 0) {
+          setExams(data);
+        }
       })
       .catch(err => {
         console.error("Error fetching exams:", err);
-        setLoading(false);
       });
 
     fetch(`${BACKEND_URL}/api/${selectedCategory}/dictionary`)
       .then(res => res.json())
       .then(data => {
-        const list = Object.entries(data).map(([eng, tr]) => ({ english: eng, turkish: tr }));
-        setDictionaryList(list);
+        if (data && typeof data === 'object') {
+          const list = Object.entries(data).map(([eng, tr]) => ({ english: eng, turkish: tr }));
+          if (list.length > 0) {
+            setDictionaryList(list);
+          }
+        }
       })
       .catch(err => console.error("Error fetching dictionary list:", err));
 
     fetch(`${BACKEND_URL}/api/${selectedCategory}/vocabulary`)
       .then(res => res.json())
       .then(data => {
-        setVocabPracticeList(data);
+        if (data && Array.isArray(data) && data.length > 0) {
+          setVocabPracticeList(data);
+        }
       })
       .catch(err => console.error("Error fetching vocabulary database:", err));
   }, [selectedCategory]);
@@ -675,6 +812,17 @@ function App() {
     }
   };
 
+  const logStudyActivity = (type, amt = 1) => {
+    const today = new Date().toISOString().split('T')[0];
+    const raw = localStorage.getItem('yokdil_study_history');
+    let history = raw ? JSON.parse(raw) : {};
+    if (!history[today]) {
+      history[today] = { questions: 0, words: 0, games: 0, paragraphs: 0 };
+    }
+    history[today][type] = (history[today][type] || 0) + amt;
+    localStorage.setItem('yokdil_study_history', JSON.stringify(history));
+  };
+
   const incrementDailyQuestions = () => {
     const newQuestions = dailyQuestionsSolved + 1;
     setDailyQuestionsSolved(newQuestions);
@@ -684,6 +832,7 @@ function App() {
       localStorage.setItem('yokdil_gems', String(newVal));
       return newVal;
     });
+    logStudyActivity('questions');
     updateStreakAndDate();
   };
 
@@ -696,6 +845,7 @@ function App() {
       localStorage.setItem('yokdil_gems', String(newVal));
       return newVal;
     });
+    logStudyActivity('words');
     updateStreakAndDate();
   };
 
@@ -703,6 +853,7 @@ function App() {
     const newLectures = dailyLecturesStudied + 1;
     setDailyLecturesStudied(newLectures);
     localStorage.setItem('yokdil_daily_lectures', String(newLectures));
+    logStudyActivity('questions', 5); // count lecture completions as active practice too
     updateStreakAndDate();
   };
 
@@ -1066,6 +1217,40 @@ function App() {
     { sender: 'bot', text: 'Merhaba! Ben bilge çalışma arkadaşın. YÖKDİL İngilizce kelimeleri, gramer kuralları veya çeviriler hakkında merak ettiğin her şeyi bana sorabilirsin! 🦉' }
   ]);
   const [aiInput, setAiInput] = useState('');
+  const [aiVoiceMode, setAiVoiceMode] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+
+  const startVoiceRecognition = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Tarayıcınız ses tanımayı desteklemiyor.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const speechToText = event.results[0][0].transcript;
+      setAiInput(speechToText);
+    };
+
+    recognition.onerror = (err) => {
+      console.error(err);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+  };
 
   const handleSendAiMessage = (customText = null) => {
     const textToSend = customText || aiInput;
@@ -1101,6 +1286,11 @@ function App() {
       }
 
       setAiMessages(prev => [...prev, { sender: 'bot', text: botResponse }]);
+      if (aiVoiceMode) {
+        // Strip markdown symbols before speaking
+        const cleanText = botResponse.replace(/[*_`#]/g, "");
+        playSpeechAudio(cleanText);
+      }
     }, 1000);
   };
 
@@ -1266,8 +1456,22 @@ function App() {
         setLectureLoading(false);
       })
       .catch(err => {
-        console.error("Error loading lecture:", err);
-        setLectureLoading(false);
+        console.warn("API load failed, falling back to local public lectures:", err);
+        fetch(`/lectures/${id}.md`)
+          .then(res => res.text())
+          .then(text => {
+            const lecInfo = FALLBACK_LECTURES.find(l => l.id === id) || {};
+            setActiveLecture({
+              id,
+              title: lecInfo.title || id,
+              content: text
+            });
+            setLectureLoading(false);
+          })
+          .catch(e => {
+            console.error("Failed to load local lecture:", e);
+            setLectureLoading(false);
+          });
       });
   };
 
@@ -1748,9 +1952,18 @@ function App() {
 
                 <div style={{ display: 'flex', gap: '20px', alignItems: 'stretch', flexWrap: 'wrap', marginBottom: '20px' }}>
                   {/* Left Side: Welcome text */}
-                  <div className="welcome-card text-left" style={{ flex: 1, minWidth: '280px', margin: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <h2>Selam, {currentUser.name}! 👋</h2>
-                    <p>YÖKDİL {selectedCategory === 'fen' ? 'Fen Bilimleri' : selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri'} hazırlık performansın aşağıda listelenmiştir.</p>
+                  <div className="welcome-card text-left" style={{ flex: 1, minWidth: '280px', margin: 0, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                    <div>
+                      <h2>Selam, {currentUser.name}! 👋</h2>
+                      <p>YÖKDİL {selectedCategory === 'fen' ? 'Fen Bilimleri' : selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri'} hazırlık performansın aşağıda listelenmiştir.</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(251, 146, 60, 0.1)', border: '1px solid rgba(251, 146, 60, 0.25)', padding: '10px 16px', borderRadius: '16px' }}>
+                      <span style={{ fontSize: '1.8rem' }}>🔥</span>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <span style={{ fontSize: '0.9rem', fontWeight: '900', color: '#ff7849' }}>{studyStreak} Gün Seri!</span>
+                        <span style={{ fontSize: '0.62rem', color: '#fbd38d' }}>Harikasın! Seriyi bozma</span>
+                      </div>
+                    </div>
                   </div>
 
                   {/* YÖKDİL Countdown Card */}
@@ -1860,6 +2073,38 @@ function App() {
                       </p>
                     </div>
                   </div>
+                </div>
+
+                {/* QUICK FLASHCARD WIDGET */}
+                <div className="glass-card text-left" style={{ marginBottom: '20px', padding: '16px 20px', borderRadius: '18px', border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(99, 102, 241, 0.03)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxWidth: '480px' }}>
+                    <span style={{ fontSize: '0.64rem', fontWeight: '800', color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.05em' }}>💡 Hızlı Kelime Hatırlatıcısı (Spaced Repetition)</span>
+                    <h4 style={{ fontSize: '1rem', fontWeight: '800', color: 'white', margin: '4px 0 0 0' }}>
+                      {(() => {
+                        const wordsInNotebook = notebook || [];
+                        if (wordsInNotebook.length > 0) {
+                          const word = wordsInNotebook[0];
+                          return `"${word.english}" kelimesinin Türkçe anlamını hatırlıyor musunuz?`;
+                        }
+                        return `"${"mitigate"}" kelimesinin Türkçe anlamını hatırlıyor musunuz?`;
+                      })()}
+                    </h4>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const wordsInNotebook = notebook || [];
+                      if (wordsInNotebook.length > 0) {
+                        const word = wordsInNotebook[0];
+                        alert(`Kelime: ${word.english}\nAnlamı: ${word.turkish}`);
+                      } else {
+                        alert(`Kelime: mitigate\nAnlamı: hafifletmek, azaltmak`);
+                      }
+                    }}
+                    className="btn-primary"
+                    style={{ padding: '8px 16px', fontSize: '0.72rem', cursor: 'pointer' }}
+                  >
+                    Anlamı Gör 👀
+                  </button>
                 </div>
 
                 {/* DAILY GOALS PANEL */}
@@ -1983,14 +2228,47 @@ function App() {
                     </h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {(() => {
-                        const userXp = (stats.solved * 10) + (Object.keys(wordStats).length * 5) + (dailyLecturesStudied * 50);
-                        const competitors = [
-                          { name: 'AcademicOwl 🦉', xp: 1350, isUser: false },
-                          { name: 'BioChemist 🧪', xp: 1100, isUser: false },
-                          { name: 'Dr_English 🩺', xp: 850, isUser: false },
-                          { name: `${currentUser.name} (Sen) ⚡`, xp: userXp, isUser: true },
-                          { name: 'EngStudent 📖', xp: 350, isUser: false }
-                        ].sort((a, b) => b.xp - a.xp);
+                        const userXp = (stats.solved * 10) + (Object.keys(wordStats).length * 5) + (dailyQuestionsSolved * 10) + (dailyWordsStudied * 5);
+                        
+                        const today = new Date();
+                        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+                        
+                        const seedRandom = (str) => {
+                          let hash = 0;
+                          for (let i = 0; i < str.length; i++) {
+                            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                          }
+                          return Math.abs(Math.sin(hash + dayOfYear)) * 500;
+                        };
+
+                        const names = [
+                          { name: 'AcademicOwl 🦉', base: 1400 },
+                          { name: 'YÖKDİL_Slayer ⚔️', base: 1200 },
+                          { name: 'Dr_Arzu 🩺', base: 950 },
+                          { name: 'Prof_Ahmet 🔬', base: 820 },
+                          { name: 'English_Bender 🤖', base: 680 },
+                          { name: 'Yeliz_Hoca 👩‍🏫', base: 590 },
+                          { name: 'Mustafa_K 🚀', base: 450 },
+                          { name: 'Zeynep_Bio 🧬', base: 380 },
+                          { name: 'Volkan_YDS 📝', base: 210 }
+                        ];
+
+                        const competitors = names.map(comp => {
+                          const variance = Math.floor(seedRandom(comp.name) % 150);
+                          return {
+                            name: comp.name,
+                            xp: comp.base + variance,
+                            isUser: false
+                          };
+                        });
+
+                        competitors.push({
+                          name: `${currentUser?.name || 'Kullanıcı'} (Sen) ⚡`,
+                          xp: userXp,
+                          isUser: true
+                        });
+
+                        competitors.sort((a, b) => b.xp - a.xp);
 
                         return competitors.map((comp, idx) => {
                           const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx + 1}.`;
@@ -2017,69 +2295,109 @@ function App() {
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginBottom: '20px' }}>
                     {[
-                      { id: 'first_step', name: 'İlk Adım 🏁', desc: 'İlk sorunuzu çözün.', completed: getStats().solved > 0 },
-                      { id: 'word_master', name: 'Kelime Avcısı 🦁', desc: 'İlk kelimeyi çalışın.', completed: Object.keys(wordStats).length > 0 },
-                      { id: 'grammar_master', name: 'Gramer Ustası 🎓', desc: 'Dil bilgisi dersi tamamlayın.', completed: dailyLecturesStudied > 0 },
-                      { id: 'on_fire', name: 'Alev Aldı! 🔥', desc: 'Çalışma serisi başlatın.', completed: studyStreak > 0 }
-                    ].map(ach => (
-                      <div 
-                        key={ach.id} 
-                        style={{
-                          background: ach.completed ? 'rgba(99, 102, 241, 0.08)' : 'rgba(255, 255, 255, 0.02)',
-                          border: ach.completed ? '1px solid rgba(99, 102, 241, 0.25)' : '1px solid rgba(255, 255, 255, 0.05)',
-                          padding: '12px',
-                          borderRadius: '12px',
-                          textAlign: 'center',
-                          opacity: ach.completed ? 1.0 : 0.45,
-                          transition: 'all 0.3s ease',
-                          boxShadow: ach.completed ? '0 0 12px rgba(99, 102, 241, 0.2)' : 'none'
-                        }}
-                      >
-                        <div style={{ fontSize: '1.2rem', marginBottom: '6px' }}>{ach.completed ? '🌟' : '🔒'}</div>
-                        <h4 style={{ fontSize: '0.78rem', fontWeight: 'bold', color: ach.completed ? 'white' : 'var(--text-secondary)', margin: '0 0 2px 0' }}>{ach.name}</h4>
-                        <p style={{ fontSize: '0.62rem', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.3' }}>{ach.desc}</p>
-                      </div>
-                    ))}
+                      { id: 'first_step', name: 'Soru Avcısı 🏁', value: getStats().solved, desc: 'Toplam çözülen akademik soru.' },
+                      { id: 'word_master', name: 'Kelime Sihirbazı 🦁', value: Object.keys(wordStats).length, desc: 'Defterdeki çalışılan kelime.' },
+                      { id: 'grammar_master', name: 'Derskolik 🎓', value: dailyLecturesStudied, desc: 'Bugün tamamlanan ders notu.' },
+                      { id: 'on_fire', name: 'Seri Canavarı 🔥', value: studyStreak, desc: 'Çalışılan ardışık gün serisi.' }
+                    ].map(ach => {
+                      const tier = getAchievementTier(ach.id, ach.value);
+                      return (
+                        <div 
+                          key={ach.id} 
+                          style={{
+                            background: tier.completed ? 'rgba(99, 102, 241, 0.06)' : 'rgba(255, 255, 255, 0.01)',
+                            border: tier.completed ? '1px solid rgba(99, 102, 241, 0.2)' : '1px solid rgba(255, 255, 255, 0.04)',
+                            padding: '14px 12px',
+                            borderRadius: '14px',
+                            textAlign: 'center',
+                            transition: 'all 0.3s ease',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            gap: '8px'
+                          }}
+                        >
+                          <div>
+                            <div style={{ fontSize: '1.3rem', marginBottom: '4px' }}>{tier.completed ? '🌟' : '🔒'}</div>
+                            <h4 style={{ fontSize: '0.78rem', fontWeight: 'bold', color: 'white', margin: '0 0 2px 0' }}>{ach.name}</h4>
+                            <p style={{ fontSize: '0.62rem', color: 'var(--text-secondary)', margin: '0 0 8px 0', lineHeight: '1.2' }}>{ach.desc}</p>
+                          </div>
+
+                          <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.58rem', fontWeight: 'bold' }}>
+                              <span style={{ color: tier.completed ? '#cbd5e1' : 'var(--text-secondary)' }}>{tier.tierName}</span>
+                              <span style={{ color: 'var(--text-secondary)' }}>{ach.value} / {tier.nextTarget}</span>
+                            </div>
+                            <div style={{ height: '5px', background: 'rgba(255,255,255,0.03)', borderRadius: '3px', overflow: 'hidden' }}>
+                              <div style={{ height: '100%', width: `${tier.progress}%`, background: 'linear-gradient(90deg, #6366f1, #a5b4fc)', borderRadius: '3px' }}></div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* WARDROBE CABINET: SELECT MASCOT OUTFITS */}
+                <div className="glass-card p-6 border border-white/5 bg-white/1 rounded-2xl" style={{ marginBottom: '20px', padding: '20px', borderRadius: '18px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <h3 style={{ fontSize: '0.92rem', fontWeight: '800', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      🦉 Maskot Gardırobu & Özelleştirme
+                    </h3>
                   </div>
 
-                  {/* Wardrobe Showcase */}
-                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
-                    <span style={{ fontSize: '0.68rem', fontWeight: '800', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '12px', textAlign: 'left' }}>🎭 Aktif Aksesuarlarınız</span>
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                      {[
-                        { id: 'glasses', name: 'Bilge Gözlüğü', icon: '👓' },
-                        { id: 'robe', name: 'Mezuniyet Cübbesi', icon: '🎓' },
-                        { id: 'crown', name: 'Kraliyet Tacı', icon: '👑' }
-                      ].map(item => {
-                        const isOwned = (ownedOutfits || []).includes(item.id);
-                        const isActive = (activeOutfits || []).includes(item.id);
-                        
-                        return (
-                          <div 
-                            key={item.id}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '6px',
-                              padding: '6px 12px',
-                              borderRadius: '20px',
-                              fontSize: '0.72rem',
-                              fontWeight: '700',
-                              background: isActive ? 'rgba(16, 185, 129, 0.1)' : isOwned ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.01)',
-                              border: isActive ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid rgba(255,255,255,0.05)',
-                              color: isActive ? '#34d399' : isOwned ? '#cbd5e1' : '#64748b',
-                              opacity: isOwned ? 1 : 0.4
-                            }}
-                          >
-                            <span>{item.icon}</span>
-                            <span>{item.name}</span>
-                            <span style={{ fontSize: '0.55rem', fontWeight: '800', textTransform: 'uppercase', opacity: 0.8, marginLeft: '4px' }}>
-                              {isActive ? 'Giyildi' : isOwned ? 'Gardıropta' : 'Kilitli'}
-                            </span>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '14px', textAlign: 'left' }}>
+                    Bilge Baykuş maskotunuza dilediğiniz kıyafeti seçin ve aktif görünümünü anında özelleştirin!
+                  </p>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
+                    {[
+                      { key: 'default', name: 'Standart Baykuş', emoji: '🦉' },
+                      { key: 'wizard', name: 'Büyücü Baykuş', emoji: '🧙‍♂️' },
+                      { key: 'scientist', name: 'Bilim İnsanı', emoji: '👨‍🔬' },
+                      { key: 'king', name: 'Kral Baykuş', emoji: '👑' },
+                      { key: 'scholar', name: 'Mezun Baykuş', emoji: '🎓' }
+                    ].map(outfit => {
+                      const isActive = activeOutfit === outfit.key;
+
+                      return (
+                        <div 
+                          key={outfit.key}
+                          style={{
+                            background: isActive ? 'rgba(99, 102, 241, 0.12)' : 'rgba(255,255,255,0.02)',
+                            border: `1px solid ${isActive ? '#6366f1' : 'rgba(255,255,255,0.05)'}`,
+                            padding: '12px',
+                            borderRadius: '12px',
+                            textAlign: 'center',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            gap: '8px',
+                            boxShadow: isActive ? '0 0 10px rgba(99, 102, 241, 0.2)' : 'none'
+                          }}
+                        >
+                          <div style={{ fontSize: '1.8rem' }}>{outfit.emoji}</div>
+                          <div>
+                            <h4 style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'white', margin: '0 0 2px 0' }}>{outfit.name}</h4>
                           </div>
-                        );
-                      })}
-                    </div>
+
+                          {isActive ? (
+                            <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#34d399', background: 'rgba(16,185,129,0.1)', padding: '3px 8px', borderRadius: '6px' }}>Aktif</span>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                setActiveOutfit(outfit.key);
+                                localStorage.setItem('yokdil_active_outfit', outfit.key);
+                              }}
+                              className="px-2.5 py-1 text-[10px] font-bold rounded bg-white/5 hover:bg-white/10 text-slate-300 transition-all cursor-pointer border-none"
+                            >
+                              Giy
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -2184,7 +2502,7 @@ function App() {
                     </div>
                     
                     {selectedTestTab === 'years' ? (
-                      selectedCategory === 'fen' ? (
+                      exams && exams.length > 0 ? (
                         <div className="menu-list" style={{ marginTop: '8px' }}>
                           {exams.map(ex => {
                             const examAns = JSON.parse(localStorage.getItem(`answers_${ex.id}`)) || {};
@@ -2208,7 +2526,7 @@ function App() {
                         </div>
                       ) : (
                         <div className="empty-state text-center py-16 text-slate-500">
-                          <p style={{ fontSize: '0.85rem' }}>Bu kategori için sınav kaydı bulunmamaktadır. Sosyal ve Sağlık bilimleri yakında eklenecektir.</p>
+                          <p style={{ fontSize: '0.85rem' }}>Bu kategori için sınav kaydı bulunmamaktadır.</p>
                         </div>
                       )
                     ) : (
@@ -2482,6 +2800,9 @@ function App() {
               incrementDailyQuestions={incrementDailyQuestions}
               incrementDailyWords={incrementDailyWords}
               playSpeechAudio={playSpeechAudio}
+              notebook={notebook}
+              handleAddCustomWord={handleAddCustomWord}
+              logStudyActivity={logStudyActivity}
             />
 
             {/* TAB 4: LECTURES SECTION */}
@@ -2532,19 +2853,18 @@ function App() {
               wordStats={wordStats}
               vocabPracticeList={vocabPracticeList}
               notebook={notebook}
+              logStudyActivity={logStudyActivity}
             />
 
-            {/* TAB 7.5: VIRTUAL SHOP */}
-            <VirtualShop 
+            {/* TAB 7.5: MINIGAMES SECTION */}
+            <MinigamesSection
               activeTab={activeTab}
-              gems={gems}
-              setGems={setGems}
-              ownedOutfits={ownedOutfits}
-              setOwnedOutfits={setOwnedOutfits}
-              activeOutfits={activeOutfits}
-              setActiveOutfits={setActiveOutfits}
-              streakFreezeActive={streakFreezeActive}
-              setStreakFreezeActive={setStreakFreezeActive}
+              notebook={notebook}
+              playSpeechAudio={playSpeechAudio}
+              incrementDailyQuestions={incrementDailyQuestions}
+              playCorrectSound={playCorrectSound}
+              playIncorrectSound={playIncorrectSound}
+              logStudyActivity={logStudyActivity}
             />
 
             {/* TAB 8: SETTINGS SECTION */}
@@ -2557,6 +2877,7 @@ function App() {
               handleResetProgress={handleResetProgress}
               selectedExam={selectedExam}
               currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
               onLogout={handleLogout}
               token={token}
               BACKEND_URL={BACKEND_URL}
@@ -2634,7 +2955,7 @@ function App() {
             <div className="ai-chat-window">
               <div className="ai-chat-header">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ fontSize: '1.2rem' }}>🦉</div>
+                  <div style={{ fontSize: '1.2rem' }}>{getOutfitEmoji()}</div>
                   <div style={{ textAlign: 'left' }}>
                     <h4 style={{ fontSize: '0.82rem', color: 'white', fontWeight: '800', margin: 0 }}>Bilge Asistan</h4>
                     <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: 'bold' }}>Çevrimiçi | YÖKDİL Koçu</span>
@@ -2686,7 +3007,22 @@ function App() {
                 ))}
               </div>
 
-              <div className="ai-chat-input-area">
+              <div className="ai-chat-input-area" style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                <button
+                  onClick={startVoiceRecognition}
+                  style={{
+                    padding: '8px',
+                    borderRadius: '10px',
+                    background: isListening ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.05)',
+                    border: `1px solid ${isListening ? '#ef4444' : 'rgba(255,255,255,0.08)'}`,
+                    color: isListening ? '#f87171' : '#94a3b8',
+                    cursor: 'pointer'
+                  }}
+                  title={isListening ? "Dinleniyor..." : "Konuşarak Sor (İngilizce)"}
+                >
+                  <i className={`fa-solid ${isListening ? 'fa-microphone-lines' : 'fa-microphone'}`}></i>
+                </button>
+
                 <input 
                   type="text"
                   placeholder="Kelime, gramer veya taktik sor..."
@@ -2696,7 +3032,24 @@ function App() {
                     if (e.key === 'Enter') handleSendAiMessage();
                   }}
                   className="ai-chat-input"
+                  style={{ flex: 1 }}
                 />
+
+                <button
+                  onClick={() => setAiVoiceMode(!aiVoiceMode)}
+                  style={{
+                    padding: '8px',
+                    borderRadius: '10px',
+                    background: aiVoiceMode ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)',
+                    border: `1px solid ${aiVoiceMode ? '#10b981' : 'rgba(255,255,255,0.08)'}`,
+                    color: aiVoiceMode ? '#34d399' : '#94a3b8',
+                    cursor: 'pointer'
+                  }}
+                  title={aiVoiceMode ? "Sesli Yanıt Açık" : "Sesli Yanıt Kapalı"}
+                >
+                  <i className={`fa-solid ${aiVoiceMode ? 'fa-volume-high' : 'fa-volume-xmark'}`}></i>
+                </button>
+
                 <button 
                   onClick={() => handleSendAiMessage()}
                   className="btn-primary"

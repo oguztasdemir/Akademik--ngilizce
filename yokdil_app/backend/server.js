@@ -109,6 +109,21 @@ app.get('/api/passages', (req, res) => {
   }
 });
 
+// Endpoint to get YÖKDİL reading books database (100+ books)
+app.get('/api/books', (req, res) => {
+  const booksPath = path.join(questionsDir, 'genel', 'reading_books.json');
+  if (fs.existsSync(booksPath)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(booksPath, 'utf8'));
+      res.json(data);
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to read books database' });
+    }
+  } else {
+    res.status(404).json({ error: 'Books database not found' });
+  }
+});
+
 // Endpoint for word/phrase translation dictionary lookup
 app.post(['/api/translate', '/api/:category/translate'], async (req, res) => {
   const { text } = req.body;
@@ -538,10 +553,16 @@ app.get('/api/user/profile', auth, (req, res) => {
 
 // UPDATE PROFILE
 app.put('/api/user/profile', auth, (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, username, email, password } = req.body;
   const users = readUsers();
   const userIndex = users.findIndex(u => u.id === req.userId);
   if (userIndex === -1) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+
+  if (username) {
+    const existing = users.find(u => u.username === username.toLowerCase() && u.id !== req.userId);
+    if (existing) return res.status(400).json({ error: 'Bu kullanıcı adı zaten alınmış.' });
+    users[userIndex].username = username.toLowerCase();
+  }
 
   if (name) users[userIndex].name = name;
   if (email) users[userIndex].email = email.toLowerCase();

@@ -203,14 +203,18 @@ const VocabularySection = ({
   // Initialize Dictation game
   useEffect(() => {
     if (subTab === 'dictation' && pool.length > 0) {
-      const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
-      setDictationList(shuffled);
-      setDictationIndex(0);
-      setDictationInput('');
-      setDictationChecked(false);
-      setDictationResult(null);
+      if (dictationList.length === 0) {
+        const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
+        setDictationList(shuffled);
+        setDictationIndex(0);
+        setDictationInput('');
+        setDictationChecked(false);
+        setDictationResult(null);
+      }
+    } else if (subTab !== 'dictation') {
+      setDictationList([]);
     }
-  }, [subTab, pool]);
+  }, [subTab, pool, dictationList.length]);
 
   // Pronounce word automatically in Dictation mode on index change
   useEffect(() => {
@@ -248,6 +252,75 @@ const VocabularySection = ({
     setDictationResult(null);
     setDictationIndex(prev => prev + 1);
   };
+
+  const PREP_DRILL_QUESTIONS = [
+    {
+      id: 1,
+      sentence: "The research team's breakthrough depends _____ receiving the necessary funding.",
+      options: ["on", "in", "to", "for"],
+      answer: "on",
+      tip: "'depend' fiili yönelme ve bağlılık belirtirken daima 'on' edatını alır."
+    },
+    {
+      id: 2,
+      sentence: "They were able to cope _____ the unprecedented rise in temperature.",
+      options: ["with", "by", "from", "at"],
+      answer: "with",
+      tip: "'cope with' (başa çıkmak) YÖKDİL'de en sık çıkan kalıplardan biridir."
+    },
+    {
+      id: 3,
+      sentence: "The new guidelines are aimed _____ reducing carbon emission levels.",
+      options: ["at", "for", "to", "with"],
+      answer: "at",
+      tip: "'be aimed at' (bir şeyi hedeflemek) yapısında 'at' edatı kullanılır."
+    },
+    {
+      id: 4,
+      sentence: "Many chronic diseases are associated _____ poor nutritional habits.",
+      options: ["with", "about", "for", "in"],
+      answer: "with",
+      tip: "'be associated with' (bir şeyle ilişkilendirilmek) kalıbı 'with' edatı alır."
+    },
+    {
+      id: 5,
+      sentence: "We must prevent the disease _____ spreading further in the region.",
+      options: ["from", "to", "against", "with"],
+      answer: "from",
+      tip: "'prevent someone/something from doing something' (birinin bir şey yapmasını engellemek) şeklinde kullanılır."
+    }
+  ];
+
+  const [drillIndex, setDrillIndex] = useState(0);
+  const [drillSelected, setDrillSelected] = useState(null);
+  const [drillChecked, setDrillChecked] = useState(false);
+  const [drillScore, setDrillScore] = useState(0);
+
+  // Duel states
+  const [duelActive, setDuelActive] = useState(false);
+  const [duelTime, setDuelTime] = useState(30);
+  const [duelScore, setDuelScore] = useState(0);
+  const [duelSelectedEng, setDuelSelectedEng] = useState(null);
+  const [duelSelectedTr, setDuelSelectedTr] = useState(null);
+  const [duelCompletedPairs, setDuelCompletedPairs] = useState([]);
+  const [duelEngList, setDuelEngList] = useState([]);
+  const [duelTrList, setDuelTrList] = useState([]);
+
+  useEffect(() => {
+    let timer = null;
+    if (duelActive && duelTime > 0) {
+      timer = setInterval(() => {
+        setDuelTime(t => {
+          if (t <= 1) {
+            setDuelActive(false);
+            return 0;
+          }
+          return t - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [duelActive, duelTime]);
 
   // Sentence Builder States
   const [sbIndex, setSbIndex] = useState(0);
@@ -311,18 +384,22 @@ const VocabularySection = ({
   // Initialize Sentence Builder
   useEffect(() => {
     if (subTab === 'sentenceBuilder' && pool.length > 0) {
-      const valid = pool.filter(w => w.sentence_en && w.sentence_en.trim().split(/\s+/).length > 2);
-      const list = valid.sort(() => 0.5 - Math.random()).slice(0, 5);
-      setSbList(list);
-      setSbIndex(0);
-      setSbChecked(false);
-      setSbResult(null);
-      setSbSelected([]);
-      if (list.length > 0) {
-        scrambleSentenceWords(list[0].sentence_en);
+      if (sbList.length === 0) {
+        const valid = pool.filter(w => w.sentence_en && w.sentence_en.trim().split(/\s+/).length > 2);
+        const list = valid.sort(() => 0.5 - Math.random()).slice(0, 5);
+        setSbList(list);
+        setSbIndex(0);
+        setSbChecked(false);
+        setSbResult(null);
+        setSbSelected([]);
+        if (list.length > 0) {
+          scrambleSentenceWords(list[0].sentence_en);
+        }
       }
+    } else if (subTab !== 'sentenceBuilder') {
+      setSbList([]);
     }
-  }, [subTab, pool]);
+  }, [subTab, pool, sbList.length]);
 
   const scrambleSentenceWords = (sentenceText) => {
     const words = sentenceText.split(/\s+/).map(w => w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")).filter(Boolean);
@@ -334,13 +411,17 @@ const VocabularySection = ({
   // Initialize Pronunciation List
   useEffect(() => {
     if (subTab === 'pronunciation' && pool.length > 0) {
-      const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
-      setPrList(shuffled);
-      setPrIndex(0);
-      setPrScore(null);
-      setPrListening(false);
+      if (prList.length === 0) {
+        const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
+        setPrList(shuffled);
+        setPrIndex(0);
+        setPrScore(null);
+        setPrListening(false);
+      }
+    } else if (subTab !== 'pronunciation') {
+      setPrList([]);
     }
-  }, [subTab, pool]);
+  }, [subTab, pool, prList.length]);
 
   const startSpeechRecognitionPr = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -421,6 +502,63 @@ const VocabularySection = ({
     setSbIndex(nextIdx);
     if (nextIdx < sbList.length) {
       scrambleSentenceWords(sbList[nextIdx].sentence_en);
+    }
+  };
+
+  const handleStartDuel = () => {
+    if (pool.length < 5) {
+      alert("Düello için kütüphaneden defterinize en az 5 kelime eklemeniz gerekir!");
+      return;
+    }
+    const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 5);
+    const engList = shuffled.map(w => ({ id: w.english, val: w.english }));
+    const trList = shuffled.map(w => ({ id: w.english, val: w.turkish }));
+    
+    setDuelEngList(engList.sort(() => 0.5 - Math.random()));
+    setDuelTrList(trList.sort(() => 0.5 - Math.random()));
+    setDuelScore(0);
+    setDuelTime(30);
+    setDuelCompletedPairs([]);
+    setDuelSelectedEng(null);
+    setDuelSelectedTr(null);
+    setDuelActive(true);
+  };
+
+  const handleSelectDuelCard = (type, id) => {
+    if (type === 'eng') {
+      setDuelSelectedEng(id);
+      if (duelSelectedTr) {
+        if (duelSelectedTr === id) {
+          setDuelCompletedPairs(prev => [...prev, id]);
+          setDuelScore(s => s + 10);
+          setDuelSelectedEng(null);
+          setDuelSelectedTr(null);
+          if (typeof playCorrectSound === 'function') playCorrectSound();
+        } else {
+          if (typeof playIncorrectSound === 'function') playIncorrectSound();
+          setTimeout(() => {
+            setDuelSelectedEng(null);
+            setDuelSelectedTr(null);
+          }, 300);
+        }
+      }
+    } else {
+      setDuelSelectedTr(id);
+      if (duelSelectedEng) {
+        if (duelSelectedEng === id) {
+          setDuelCompletedPairs(prev => [...prev, id]);
+          setDuelScore(s => s + 10);
+          setDuelSelectedEng(null);
+          setDuelSelectedTr(null);
+          if (typeof playCorrectSound === 'function') playCorrectSound();
+        } else {
+          if (typeof playIncorrectSound === 'function') playIncorrectSound();
+          setTimeout(() => {
+            setDuelSelectedEng(null);
+            setDuelSelectedTr(null);
+          }, 300);
+        }
+      }
     }
   };
 
@@ -511,9 +649,14 @@ const VocabularySection = ({
 
   useEffect(() => {
     if (subTab === 'matching') {
-      startMatchingGame();
+      if (matchLeft.length === 0 && matchRight.length === 0) {
+        startMatchingGame();
+      }
+    } else if (subTab !== 'matching') {
+      setMatchLeft([]);
+      setMatchRight([]);
     }
-  }, [subTab, pool, matchMode]);
+  }, [subTab, pool, matchMode, matchLeft.length, matchRight.length]);
 
   const handleMatchSelect = (item, side) => {
     if (matchedWords.has(item.id)) return;
@@ -557,14 +700,18 @@ const VocabularySection = ({
   // Initialize Spelling game
   useEffect(() => {
     if (subTab === 'spelling' && pool.length > 0) {
-      const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
-      setSpellingList(shuffled);
-      setSpellingIndex(0);
-      setSpellingInput('');
-      setSpellingChecked(false);
-      setSpellingResult(null);
+      if (spellingList.length === 0) {
+        const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
+        setSpellingList(shuffled);
+        setSpellingIndex(0);
+        setSpellingInput('');
+        setSpellingChecked(false);
+        setSpellingResult(null);
+      }
+    } else if (subTab !== 'spelling') {
+      setSpellingList([]);
     }
-  }, [subTab, pool]);
+  }, [subTab, pool, spellingList.length]);
 
   const handleCheckSpelling = () => {
     if (spellingChecked) return;
@@ -639,19 +786,23 @@ const VocabularySection = ({
   // Initialize MCQ game
   useEffect(() => {
     if (subTab === 'mcq' && pool.length >= 4) {
-      const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
-      setMcqList(shuffled);
-      setMcqIndex(0);
-      setMcqSelected(null);
-      setMcqChecked(false);
-      setMcqScore(0);
-      setMcqFinished(false);
-      
-      if (shuffled[0]) {
-        setMcqOptions(generateMcqOptions(shuffled[0], pool));
+      if (mcqList.length === 0) {
+        const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 10);
+        setMcqList(shuffled);
+        setMcqIndex(0);
+        setMcqSelected(null);
+        setMcqChecked(false);
+        setMcqScore(0);
+        setMcqFinished(false);
+        
+        if (shuffled[0]) {
+          setMcqOptions(generateMcqOptions(shuffled[0], pool));
+        }
       }
+    } else if (subTab !== 'mcq') {
+      setMcqList([]);
     }
-  }, [subTab, pool]);
+  }, [subTab, pool, mcqList.length]);
 
   const handleMcqSelect = (option) => {
     if (mcqChecked) return;
@@ -909,6 +1060,8 @@ const VocabularySection = ({
         <button onClick={() => setSubTab('pronunciation')} style={subTab === 'pronunciation' ? activeTabStyle : inactiveTabStyle}>🎙️ Telaffuz Laboratuvarı</button>
         <button onClick={() => setSubTab('sentenceBuilder')} style={subTab === 'sentenceBuilder' ? activeTabStyle : inactiveTabStyle}>🧩 Cümle Kurma</button>
         <button onClick={() => setSubTab('audioPlaylist')} style={subTab === 'audioPlaylist' ? activeTabStyle : inactiveTabStyle}>🎧 Kulaklık Modu</button>
+        <button onClick={() => setSubTab('prepDrills')} style={subTab === 'prepDrills' ? activeTabStyle : inactiveTabStyle}>✏️ Edat Sondajı</button>
+        <button onClick={() => setSubTab('duel')} style={subTab === 'duel' ? activeTabStyle : inactiveTabStyle}>⚡ Kelime Düellosu</button>
         <button onClick={() => setSubTab('mcq')} style={subTab === 'mcq' ? activeTabStyle : inactiveTabStyle}>🎯 Çoktan Seçmeli</button>
         <button onClick={() => setSubTab('table')} style={subTab === 'table' ? activeTabStyle : inactiveTabStyle}>📊 Kelime Listesi</button>
       </div>
@@ -1084,36 +1237,50 @@ const VocabularySection = ({
           </div>
 
           {/* Mode Switcher */}
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', background: 'rgba(255,255,255,0.02)', padding: '4px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.04)' }}>
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', background: 'rgba(255,255,255,0.02)', padding: '6px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '8px' }}>
             <button
               onClick={() => { setMatchMode('turkish'); }}
-              className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer border`}
               style={{
-                background: matchMode === 'turkish' ? 'var(--primary-gradient)' : 'transparent',
-                borderColor: matchMode === 'turkish' ? 'transparent' : 'rgba(255,255,255,0.05)',
-                color: matchMode === 'turkish' ? '#fff' : 'var(--text-secondary)'
+                flex: 1,
+                padding: '8px 14px',
+                fontSize: '0.72rem',
+                fontWeight: '800',
+                borderRadius: '10px',
+                transition: 'all 0.25s ease',
+                cursor: 'pointer',
+                border: matchMode === 'turkish' ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.05)',
+                background: matchMode === 'turkish' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                color: matchMode === 'turkish' ? '#34d399' : 'var(--text-secondary)'
               }}
             >
-              🇹🇷 İngilizce - Türkçe Eşleştirme
+              🇹🇷 İngilizce - Türkçe
             </button>
             <button
               onClick={() => { setMatchMode('synonym'); }}
-              className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer border`}
               style={{
-                background: matchMode === 'synonym' ? 'var(--primary-gradient)' : 'transparent',
-                borderColor: matchMode === 'synonym' ? 'transparent' : 'rgba(255,255,255,0.05)',
-                color: matchMode === 'synonym' ? '#fff' : 'var(--text-secondary)'
+                flex: 1,
+                padding: '8px 14px',
+                fontSize: '0.72rem',
+                fontWeight: '800',
+                borderRadius: '10px',
+                transition: 'all 0.25s ease',
+                cursor: 'pointer',
+                border: matchMode === 'synonym' ? '1px solid #8b5cf6' : '1px solid rgba(255,255,255,0.05)',
+                background: matchMode === 'synonym' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+                color: matchMode === 'synonym' ? '#c084fc' : 'var(--text-secondary)'
               }}
             >
-              🇬🇧 Eş Anlamlı Kelime Eşleştirme (Synonyms)
+              🔄 Eş Anlamlı (Synonym)
             </button>
           </div>
 
           {/* Grid structured with clear side-by-side columns and row separation */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', background: 'rgba(0,0,0,0.15)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.03)' }}>
             {/* Left Column: English Words */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <h4 style={{ textAlign: 'center', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '4px' }}>İngilizce</h4>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: 'rgba(99, 102, 241, 0.1)', border: '1px solid rgba(99, 102, 241, 0.2)', padding: '6px 12px', borderRadius: '10px', color: '#a5b4fc', fontSize: '0.68rem', fontWeight: '800', textTransform: 'uppercase', marginBottom: '8px' }}>
+                🇬🇧 İngilizce
+              </div>
               {matchLeft.map(item => {
                 const isMatched = matchedWords.has(item.id);
                 const isActive = activeLeft?.id === item.id;
@@ -1133,9 +1300,9 @@ const VocabularySection = ({
 
             {/* Right Column: Turkish Meanings / Synonyms */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <h4 style={{ textAlign: 'center', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '4px' }}>
-                {matchMode === 'synonym' ? 'Eş Anlamlısı (Synonym)' : 'Türkçe Anlamı'}
-              </h4>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: matchMode === 'synonym' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(16, 185, 129, 0.1)', border: matchMode === 'synonym' ? '1px solid rgba(139, 92, 246, 0.2)' : '1px solid rgba(16, 185, 129, 0.2)', padding: '6px 12px', borderRadius: '10px', color: matchMode === 'synonym' ? '#c084fc' : '#34d399', fontSize: '0.68rem', fontWeight: '800', textTransform: 'uppercase', marginBottom: '8px' }}>
+                {matchMode === 'synonym' ? '🔄 Eş Anlamlısı' : '🇹🇷 Karşılığı'}
+              </div>
               {matchRight.map(item => {
                 const isMatched = matchedWords.has(item.id);
                 const isActive = activeRight?.id === item.id;
@@ -1640,6 +1807,271 @@ const VocabularySection = ({
               })()
             ) : (
               <div style={{ padding: '24px', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>Kelimelerim listesi boş.</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* SUBTAB: PREPOSITION & PHRASAL DRILLS */}
+      {subTab === 'prepDrills' && (
+        <div className="space-y-4">
+          <div className="glass-card p-6 border border-white/5 rounded-2xl space-y-6">
+            <div className="flex justify-between items-center text-[10px] text-slate-400" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontWeight: '800', color: 'var(--primary-light)' }}>✏️ EDAT & PHRASAL VERB PRATİĞİ</span>
+              <span>Soru {drillIndex + 1} / {PREP_DRILL_QUESTIONS.length}</span>
+            </div>
+
+            {drillIndex < PREP_DRILL_QUESTIONS.length ? (
+              (() => {
+                const currentQuestion = PREP_DRILL_QUESTIONS[drillIndex];
+                if (!currentQuestion) return null;
+                return (
+                  <div className="space-y-6">
+                    <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: `${((drillIndex) / PREP_DRILL_QUESTIONS.length) * 100}%`, height: '100%', background: 'var(--primary-light)' }}></div>
+                    </div>
+
+                    <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '20px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                      <p style={{ fontSize: '1.05rem', lineHeight: '1.6', color: '#cbd5e1', margin: 0, textAlign: 'left' }}>
+                        {currentQuestion.sentence}
+                      </p>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+                      {currentQuestion.options.map((opt) => {
+                        const isSelected = drillSelected === opt;
+                        const isCorrect = currentQuestion.answer === opt;
+                        
+                        let optStyle = {
+                          background: 'rgba(255, 255, 255, 0.03)',
+                          border: '1px solid rgba(255,255,255,0.08)',
+                          borderRadius: '10px',
+                          padding: '12px 16px',
+                          color: '#cbd5e1',
+                          fontSize: '0.85rem',
+                          fontWeight: 'bold',
+                          cursor: drillChecked ? 'default' : 'pointer',
+                          textAlign: 'left',
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px'
+                        };
+
+                        if (drillChecked) {
+                          if (isCorrect) {
+                            optStyle.background = 'rgba(16, 185, 129, 0.15)';
+                            optStyle.borderColor = '#10b981';
+                            optStyle.color = '#34d399';
+                          } else if (isSelected) {
+                            optStyle.background = 'rgba(239, 68, 68, 0.15)';
+                            optStyle.borderColor = '#ef4444';
+                            optStyle.color = '#f87171';
+                          } else {
+                            optStyle.opacity = 0.4;
+                          }
+                        } else if (isSelected) {
+                          optStyle.background = 'rgba(99, 102, 241, 0.12)';
+                          optStyle.borderColor = '#6366f1';
+                          optStyle.color = '#a5b4fc';
+                        }
+
+                        return (
+                          <button
+                            key={opt}
+                            disabled={drillChecked}
+                            onClick={() => setDrillSelected(opt)}
+                            style={optStyle}
+                          >
+                            <span style={{ 
+                              width: '18px', 
+                              height: '18px', 
+                              borderRadius: '50%', 
+                              border: `1px solid ${isSelected ? '#6366f1' : 'rgba(255,255,255,0.2)'}`, 
+                              display: 'inline-flex', 
+                              alignItems: 'center', 
+                              justifyContent: 'center',
+                              fontSize: '0.62rem',
+                              color: isSelected ? 'white' : 'transparent',
+                              background: isSelected ? '#6366f1' : 'transparent'
+                            }}>
+                              ✓
+                            </span>
+                            {opt}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {drillChecked && (
+                      <div style={{ background: 'rgba(99, 102, 241, 0.05)', border: '1px solid rgba(99, 102, 241, 0.15)', padding: '14px', borderRadius: '12px', textAlign: 'left' }}>
+                        <div style={{ fontSize: '0.8rem', fontWeight: '800', color: drillSelected === currentQuestion.answer ? '#34d399' : '#f87171', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                          {drillSelected === currentQuestion.answer ? '🎉 Doğru Tebrikler!' : '❌ Hatalı Cevap!'}
+                        </div>
+                        <p style={{ fontSize: '0.72rem', color: '#a5b4fc', margin: 0, lineHeight: 1.4 }}>
+                          <strong>Gramer İpucu:</strong> {currentQuestion.tip}
+                        </p>
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                      {!drillChecked ? (
+                        <button
+                          disabled={!drillSelected}
+                          onClick={() => {
+                            if (drillSelected === currentQuestion.answer) {
+                              setDrillScore(prev => prev + 1);
+                            }
+                            setDrillChecked(true);
+                            if (incrementDailyQuestions) incrementDailyQuestions();
+                          }}
+                          className="btn-primary"
+                          style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                        >
+                          Kontrol Et
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setDrillSelected(null);
+                            setDrillChecked(false);
+                            setDrillIndex(prev => prev + 1);
+                          }}
+                          className="btn-primary"
+                          style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                        >
+                          {drillIndex < PREP_DRILL_QUESTIONS.length - 1 ? 'Devam Et ➡️' : 'Sonuçları Gör 🏆'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()
+            ) : (
+              <div className="text-center py-6 space-y-4">
+                <div style={{ fontSize: '3rem' }}>🏆</div>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>Edat Pratiği Tamamlandı!</h3>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                  Skorunuz: {drillScore} / {PREP_DRILL_QUESTIONS.length} Doğru
+                </p>
+                <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ width: `${(drillScore / PREP_DRILL_QUESTIONS.length) * 100}%`, height: '100%', background: '#10b981' }}></div>
+                </div>
+                <button
+                  onClick={() => {
+                    setDrillIndex(0);
+                    setDrillSelected(null);
+                    setDrillChecked(false);
+                    setDrillScore(0);
+                  }}
+                  className="btn-secondary"
+                  style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                >
+                  Yeniden Başlat
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* SUBTAB: KELİME DÜELLOSU */}
+      {subTab === 'duel' && (
+        <div className="space-y-4 text-left">
+          <div className="glass-card p-6 border border-white/5 rounded-2xl space-y-6">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+              <div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '900', color: 'white', margin: 0 }}>⚡ Zamana Karşı Kelime Düellosu</h3>
+                <p style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
+                  Kelimeleri Türkçe karşılıkları ile en hızlı şekilde eşleştirin. Her doğru eşleştirme +10 Puan kazandırır.
+                </p>
+              </div>
+              {duelActive && (
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '6px 12px', borderRadius: '10px', color: '#f87171', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                    ⏱️ {duelTime} sn
+                  </div>
+                  <div style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '6px 12px', borderRadius: '10px', color: '#34d399', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                    🏆 {duelScore} Puan
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {!duelActive ? (
+              <div className="text-center py-6 space-y-4">
+                <div style={{ fontSize: '3rem' }}>⚡</div>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: 'white' }}>Düelloya Hazır mısın?</h4>
+                <p style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', maxWidth: '400px', margin: '0 auto' }}>
+                  30 saniye içinde en çok eşleştirmeyi yapın. Defterinizdeki kelimeler karıştırılarak karşınıza çıkacaktır.
+                </p>
+                <button
+                  onClick={handleStartDuel}
+                  className="btn-primary"
+                  style={{ padding: '10px 24px', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer' }}
+                >
+                  Oyunu Başlat 🚀
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'stretch' }}>
+                {/* English Column */}
+                <div style={{ flex: 1, minWidth: '220px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ fontSize: '0.7rem', fontWeight: '800', color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '6px' }}>İngilizce Kelimeler</div>
+                  {duelEngList.map(card => {
+                    const isMatched = duelCompletedPairs.includes(card.id);
+                    const isSelected = duelSelectedEng === card.id;
+                    if (isMatched) return null;
+                    
+                    return (
+                      <button
+                        key={card.id}
+                        onClick={() => handleSelectDuelCard('eng', card.id)}
+                        className={`w-full text-left p-3 rounded-xl border transition-all cursor-pointer font-bold text-xs ${
+                          isSelected ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300' : 'bg-white/2 border-white/5 text-slate-300 hover:bg-white/5'
+                        }`}
+                      >
+                        {card.val}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Turkish Column */}
+                <div style={{ flex: 1, minWidth: '220px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ fontSize: '0.7rem', fontWeight: '800', color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '6px' }}>Türkçe Anlamları</div>
+                  {duelTrList.map(card => {
+                    const isMatched = duelCompletedPairs.includes(card.id);
+                    const isSelected = duelSelectedTr === card.id;
+                    if (isMatched) return null;
+                    
+                    return (
+                      <button
+                        key={card.id}
+                        onClick={() => handleSelectDuelCard('tr', card.id)}
+                        className={`w-full text-left p-3 rounded-xl border transition-all cursor-pointer font-bold text-xs ${
+                          isSelected ? 'bg-amber-600/20 border-amber-500 text-amber-300' : 'bg-white/2 border-white/5 text-slate-300 hover:bg-white/5'
+                        }`}
+                      >
+                        {card.val}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {duelActive && duelCompletedPairs.length === 5 && (
+              <div className="text-center py-4 space-y-2">
+                <p style={{ fontSize: '0.8rem', color: '#34d399', fontWeight: 'bold' }}>Tebrikler! Tüm kelimeleri eşleştirdiniz.</p>
+                <button
+                  onClick={handleStartDuel}
+                  className="btn-primary"
+                  style={{ padding: '8px 16px', fontSize: '0.72rem', cursor: 'pointer' }}
+                >
+                  Yeni Tur Yükle 🔄
+                </button>
+              </div>
             )}
           </div>
         </div>
