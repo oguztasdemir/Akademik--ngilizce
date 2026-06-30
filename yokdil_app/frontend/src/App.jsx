@@ -2419,41 +2419,6 @@ function App() {
                   </div>
                 </div>
 
-                {/* Install App Promo card */}
-                <div className="action-card text-left" style={{ marginBottom: '15px', border: '1px solid var(--primary-light)', background: 'rgba(66, 153, 225, 0.06)' }}>
-                  <div className="action-content">
-                    <h3 style={{ color: 'var(--primary-light)', fontSize: '0.9rem', margin: 0 }}><i className="fa-solid fa-mobile-screen-button"></i> Uygulamayı Cihaza Yükle</h3>
-                    <p style={{ fontSize: '0.75rem', margin: '4px 0 0 0' }}>Tabletinize veya telefonunuza kurarak kesintisiz çalışın.</p>
-                  </div>
-                  <i className="fa-solid fa-cloud-arrow-down arrow-icon" style={{ fontSize: '1.1rem' }}></i>
-                </div>
-
-                {/* PDF download promo booklet */}
-                <a 
-                  href={`${BACKEND_URL}/pdfs/YOKDIL_Temiz_Soru_Kitapcigi.pdf`} 
-                  download="YOKDIL_Temiz_Soru_Kitapcigi.pdf" 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="action-card text-left" 
-                  style={{ 
-                    textDecoration: 'none', 
-                    marginBottom: '15px', 
-                    border: '1px solid #48BB78', 
-                    background: 'rgba(72, 187, 120, 0.06)', 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    alignItems: 'center', 
-                    cursor: 'pointer',
-                    padding: '12px 16px',
-                    borderRadius: '12px'
-                  }}
-                >
-                  <div className="action-content">
-                    <h3 style={{ color: '#48BB78', fontSize: '0.9rem', margin: 0 }}><i className="fa-solid fa-file-pdf"></i> Temiz Çalışma Kitapçığını İndir</h3>
-                    <p style={{ fontSize: '0.75rem', margin: '4px 0 0 0', color: 'var(--text-secondary)' }}>Dikey hizalı ve not alanlı 244 sayfalık PDF kitapçığı.</p>
-                  </div>
-                  <i className="fa-solid fa-download arrow-icon" style={{ fontSize: '1.1rem', color: '#48BB78' }}></i>
-                </a>
 
                 <div className="stats-grid">
                   <div className="stat-card">
@@ -2498,9 +2463,34 @@ function App() {
               <section id="screen-tests" className="app-screen active text-left">
                 {!selectedExam ? (
                   <div className="space-y-4">
-                    <div className="section-title">
-                      <h2>YÖKDİL Sınav ve Konu Listesi</h2>
-                      <p>Yıllara göre deneme çözün veya konulara göre ayrılmış soru havuzundan pratik yapın.</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+                      <div className="section-title" style={{ margin: 0 }}>
+                        <h2>YÖKDİL Sınav ve Konu Listesi</h2>
+                        <p>Yıllara göre deneme çözün veya konulara göre ayrılmış soru havuzundan pratik yapın.</p>
+                      </div>
+                      <a 
+                        href={`${BACKEND_URL}/pdfs/YOKDIL_Temiz_Soru_Kitapcigi.pdf`} 
+                        download="YOKDIL_Temiz_Soru_Kitapcigi.pdf" 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="btn-primary flex items-center gap-2"
+                        style={{ 
+                          textDecoration: 'none', 
+                          padding: '10px 18px', 
+                          borderRadius: '12px', 
+                          fontSize: '0.78rem', 
+                          fontWeight: 'bold', 
+                          display: 'inline-flex', 
+                          alignItems: 'center', 
+                          gap: '8px', 
+                          background: 'linear-gradient(135deg, #10b981, #059669)',
+                          color: '#fff',
+                          border: 'none',
+                          boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                        }}
+                      >
+                        <i className="fa-solid fa-file-pdf"></i> Tüm Testi İndir
+                      </a>
                     </div>
 
                     {/* Subtabs years vs topics */}
