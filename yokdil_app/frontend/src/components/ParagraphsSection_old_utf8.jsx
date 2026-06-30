@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BookOpen, Check, X, HelpCircle, ArrowRight, Volume2, Award, BookOpenCheck } from 'lucide-react';
+﻿import React, { useState, useEffect } from 'react';
+import { BookOpen, Check, X, HelpCircle, ArrowRight, Volume2 } from 'lucide-react';
 
 const ParagraphsSection = ({
   activeTab,
@@ -7,10 +7,7 @@ const ParagraphsSection = ({
   BACKEND_URL,
   incrementDailyQuestions,
   incrementDailyWords,
-  playSpeechAudio,
-  notebook,
-  handleAddCustomWord,
-  logStudyActivity
+  playSpeechAudio
 }) => {
   const [passages, setPassages] = useState([]);
   const [selectedPassage, setSelectedPassage] = useState(null);
@@ -22,13 +19,11 @@ const ParagraphsSection = ({
   const [translationPos, setTranslationPos] = useState(null);
   const [loading, setLoading] = useState(false);
   
-  // Track completed passages
-  const [completedPassages, setCompletedPassages] = useState(() => {
-    return JSON.parse(localStorage.getItem('completed_passages') || '[]');
-  });
-
   // Focus Mode States
   const [focusMode, setFocusMode] = useState(false);
+  const [useDyslexicFont, setUseDyslexicFont] = useState(false);
+  const [useReadingRuler, setUseReadingRuler] = useState(false);
+  const [hoveredParagraphIndex, setHoveredParagraphIndex] = useState(null);
   const [synonymSwapperActive, setSynonymSwapperActive] = useState(false);
 
   // Cloze Test States
@@ -43,11 +38,8 @@ const ParagraphsSection = ({
       fetch(`${BACKEND_URL}/api/passages`)
         .then(res => res.json())
         .then(data => {
-          // Sort passages by word count (short to long)
-          const sorted = data.sort((a, b) => (a.wordCount || 0) - (b.wordCount || 0));
-          
           // Filter by category or show all
-          const filtered = sorted.filter(p => !selectedCategory || p.category === selectedCategory);
+          const filtered = data.filter(p => p.category === selectedCategory);
           setPassages(filtered);
           setLoading(false);
         })
@@ -57,10 +49,6 @@ const ParagraphsSection = ({
         });
     }
   }, [activeTab, selectedCategory, BACKEND_URL]);
-
-  useEffect(() => {
-    localStorage.setItem('completed_passages', JSON.stringify(completedPassages));
-  }, [completedPassages]);
 
   if (activeTab !== 'paragraphs') return null;
 
@@ -77,7 +65,7 @@ const ParagraphsSection = ({
       left: rect.left + window.scrollX
     });
     setTranslatedWord(rawWord);
-    setTranslationText('Çeviriliyor...');
+    setTranslationText('├çeviriliyor...');
 
     try {
       const res = await fetch(`${BACKEND_URL}/api/translate`, {
@@ -89,10 +77,10 @@ const ParagraphsSection = ({
       if (data.translation) {
         setTranslationText(data.translation);
       } else {
-        setTranslationText('Çeviri bulunamadı.');
+        setTranslationText('├çeviri bulunamad─▒.');
       }
     } catch (e) {
-      setTranslationText('Çeviri hatası.');
+      setTranslationText('├çeviri hatas─▒.');
     }
   };
 
@@ -108,19 +96,9 @@ const ParagraphsSection = ({
     if (incrementDailyQuestions) incrementDailyQuestions();
 
     const isCorrect = selectedAnswers[qObj.id] === qObj.answer;
-    const nextChecked = { ...checkedQuestions, [qObj.id]: true };
-    setCheckedQuestions(nextChecked);
-    
+    setCheckedQuestions(prev => ({ ...prev, [qObj.id]: true }));
     if (isCorrect) {
       setScore(prev => prev + 1);
-    }
-
-    // If all questions are answered, mark passage as completed
-    if (selectedPassage) {
-      const allAnswered = selectedPassage.questions.every(q => q.id === qObj.id || nextChecked[q.id]);
-      if (allAnswered && !completedPassages.includes(selectedPassage.id)) {
-        setCompletedPassages(prev => [...prev, selectedPassage.id]);
-      }
     }
   };
 
@@ -144,36 +122,34 @@ const ParagraphsSection = ({
       const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase();
       const synonym = SYNONYM_MAP[cleanWord];
       const shouldSwap = synonymSwapperActive && synonym;
-      const displayWord = shouldSwap ? `${synonym} [${word}]` : word;
+      const displayWord = shouldSwap ? word.toLowerCase().replace(cleanWord, synonym) : word;
       
       return (
-        <React.Fragment key={idx}>
-          <span
-            onClick={(e) => handleWordClick(e, shouldSwap ? synonym : word)}
-            style={{
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-              padding: '1px 2px',
-              borderRadius: '4px',
-              display: 'inline',
-              color: shouldSwap ? '#f59e0b' : 'inherit',
-              fontWeight: shouldSwap ? '800' : 'normal',
-              borderBottom: shouldSwap ? '1px dashed #f59e0b' : 'none'
-            }}
-            title={shouldSwap ? `Orijinal: ${word}` : ''}
-            onMouseEnter={(e) => { 
-              e.target.style.color = '#818cf8'; 
-              e.target.style.background = 'rgba(99,102,241,0.08)'; 
-            }}
-            onMouseLeave={(e) => { 
-              e.target.style.color = shouldSwap ? '#f59e0b' : 'inherit'; 
-              e.target.style.background = 'transparent'; 
-            }}
-          >
-            {displayWord}
-          </span>
-          {' '}
-        </React.Fragment>
+        <span
+          key={idx}
+          onClick={(e) => handleWordClick(e, shouldSwap ? synonym : word)}
+          style={{
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+            padding: '1px 2px',
+            borderRadius: '4px',
+            display: 'inline-block',
+            color: shouldSwap ? '#f59e0b' : 'inherit',
+            fontWeight: shouldSwap ? '800' : 'normal',
+            borderBottom: shouldSwap ? '1px dashed #f59e0b' : 'none'
+          }}
+          title={shouldSwap ? `Orijinal: ${word}` : ''}
+          onMouseEnter={(e) => { 
+            e.target.style.color = '#818cf8'; 
+            e.target.style.background = 'rgba(99,102,241,0.08)'; 
+          }}
+          onMouseLeave={(e) => { 
+            e.target.style.color = shouldSwap ? '#f59e0b' : 'inherit'; 
+            e.target.style.background = 'transparent'; 
+          }}
+        >
+          {displayWord}{' '}
+        </span>
       );
     });
   };
@@ -211,57 +187,45 @@ const ParagraphsSection = ({
         const options = [clean, ...(CLOZE_DISTRACTORS[clean] || ["although", "however", "therefore"])].sort();
         
         return (
-          <React.Fragment key={idx}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', margin: '0 4px' }}>
-              <select
-                value={clozeAnswers[blankId] || ''}
-                onChange={(e) => {
-                  if (!clozeChecked) {
-                    setClozeAnswers(prev => ({ ...prev, [blankId]: e.target.value }));
-                  }
-                }}
-                disabled={clozeChecked}
-                style={{
-                  background: clozeChecked
-                    ? (clozeAnswers[blankId] === clean ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)')
-                    : 'rgba(99, 102, 241, 0.08)',
-                  border: `1px solid ${
-                    clozeChecked
-                      ? (clozeAnswers[blankId] === clean ? '#10b981' : '#ef4444')
-                      : 'rgba(99, 102, 241, 0.3)'
-                  }`,
-                  color: clozeChecked
-                    ? (clozeAnswers[blankId] === clean ? '#34d399' : '#f87171')
-                    : 'white',
-                  padding: '2px 6px',
-                  borderRadius: '6px',
-                  fontSize: '0.78rem',
-                  outline: 'none',
-                  cursor: 'pointer'
-                }}
-              >
-                <option value="">[ Seçiniz ]</option>
-                {options.map((opt, oIdx) => (
-                  <option key={oIdx} value={opt} style={{ background: '#0f172a', color: 'white' }}>{opt}</option>
-                ))}
-              </select>
-              {clozeChecked && clozeAnswers[blankId] !== clean && (
-                <span style={{ color: '#10b981', fontSize: '0.72rem', fontWeight: 'bold' }} title="Doğru Cevap">
-                  (Doğru: {clean})
-                </span>
-              )}
-              {punctuation && <span style={{ color: 'inherit' }}>{punctuation}</span>}
-            </span>
-          </React.Fragment>
+          <span key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', margin: '0 4px' }}>
+            <select
+              value={clozeAnswers[blankId] || ''}
+              onChange={(e) => {
+                if (!clozeChecked) {
+                  setClozeAnswers(prev => ({ ...prev, [blankId]: e.target.value }));
+                }
+              }}
+              disabled={clozeChecked}
+              style={{
+                background: clozeChecked
+                  ? (clozeAnswers[blankId] === clean ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)')
+                  : 'rgba(99, 102, 241, 0.08)',
+                border: `1px solid ${
+                  clozeChecked
+                    ? (clozeAnswers[blankId] === clean ? '#10b981' : '#ef4444')
+                    : 'rgba(99, 102, 241, 0.3)'
+                }`,
+                color: clozeChecked
+                  ? (clozeAnswers[blankId] === clean ? '#34d399' : '#f87171')
+                  : 'white',
+                padding: '2px 6px',
+                borderRadius: '6px',
+                fontSize: '0.78rem',
+                outline: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              <option value="">[ Se├ğiniz ]</option>
+              {options.map((opt, oIdx) => (
+                <option key={oIdx} value={opt} style={{ background: '#0f172a', color: 'white' }}>{opt}</option>
+              ))}
+            </select>
+            {punctuation && <span style={{ color: 'inherit' }}>{punctuation}</span>}
+          </span>
         );
       }
       
-      return (
-        <React.Fragment key={idx}>
-          <span style={{ margin: '0 2px' }}>{word}</span>
-          {' '}
-        </React.Fragment>
-      );
+      return <span key={idx} style={{ margin: '0 2px' }}>{word} </span>;
     });
   };
 
@@ -308,76 +272,57 @@ const ParagraphsSection = ({
         /* PASSAGES LIST SCREEN */
         <div className="space-y-4">
           <div className="welcome-card text-left">
-            <h2>Akademik Okuma Çalışması 📖</h2>
-            <p>Paragrafları okuyun, bilmediğiniz kelimelerin üzerine tıklayarak çevirisini anında öğrenin ve okuduğunu anlama sorularını çözün.</p>
+            <h2>Akademik Okuma ├çal─▒┼şmas─▒ ­şôû</h2>
+            <p>Paragraflar─▒ okuyun, bilmedi─şiniz kelimelerin ├╝zerine t─▒klayarak ├ğevirisini an─▒nda ├Â─şrenin ve okudu─şunu anlama sorular─▒n─▒ ├ğ├Âz├╝n.</p>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {passages.map(p => {
-              const isCompleted = completedPassages.includes(p.id);
-              return (
-                <div 
-                  key={p.id}
-                  onClick={() => {
-                    setSelectedPassage(p);
-                    setSelectedAnswers({});
-                    setCheckedQuestions({});
-                    setScore(0);
-                    setClozeMode(false);
-                    setClozeChecked(false);
-                  }}
-                  className="glass-card flex items-center justify-between hover:bg-white/2"
-                  style={{
-                    padding: '16px 20px',
-                    borderRadius: '14px',
-                    border: '1px solid rgba(255, 255, 255, 0.05)',
-                    cursor: 'pointer',
+            {passages.map(p => (
+              <div 
+                key={p.id}
+                onClick={() => {
+                  setSelectedPassage(p);
+                  setSelectedAnswers({});
+                  setCheckedQuestions({});
+                  setScore(0);
+                }}
+                className="glass-card flex items-center justify-between hover:bg-white/2"
+                style={{
+                  padding: '16px 20px',
+                  borderRadius: '14px',
+                  border: '1px solid rgba(255, 255, 255, 0.05)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    background: 'rgba(99, 102, 241, 0.15)',
+                    border: '1px solid rgba(99, 102, 241, 0.25)',
+                    color: '#a5b4fc',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <div style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      background: isCompleted ? 'rgba(16, 185, 129, 0.15)' : 'rgba(99, 102, 241, 0.15)',
-                      border: isCompleted ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid rgba(99, 102, 241, 0.25)',
-                      color: isCompleted ? '#34d399' : '#a5b4fc',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
-                    }}>
-                      {isCompleted ? <BookOpenCheck className="h-5 w-5" /> : <BookOpen className="h-5 w-5" />}
-                    </div>
-                    <div style={{ textAlign: 'left' }}>
-                      <h4 style={{ fontSize: '0.85rem', fontWeight: '800', color: 'white', margin: '0 0 2px 0' }}>
-                        {p.title} 
-                      </h4>
-                      <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', margin: 0 }}>
-                        {p.wordCount} Kelime | 3 Anlama Sorusu
-                      </p>
-                    </div>
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}>
+                    <BookOpen className="h-4.5 w-4.5" />
                   </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    {isCompleted ? (
-                      <span style={{ fontSize: '0.62rem', fontWeight: 'bold', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-                        ✓ OKUNDU
-                      </span>
-                    ) : (
-                      <span style={{ fontSize: '0.62rem', fontWeight: 'bold', background: 'rgba(148, 163, 184, 0.08)', color: '#94a3b8', padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(148, 163, 184, 0.15)' }}>
-                        OKUNMADI
-                      </span>
-                    )}
-                    <ArrowRight className="h-4 w-4 text-slate-500" />
+                  <div style={{ textAlign: 'left' }}>
+                    <h4 style={{ fontSize: '0.85rem', fontWeight: '800', color: 'white', margin: '0 0 2px 0' }}>{p.title}</h4>
+                    <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', margin: 0 }}>
+                      3 Adet Okudu─şunu Anlama Sorusu ─░├ğerir.
+                    </p>
                   </div>
                 </div>
-              );
-            })}
+                <ArrowRight className="h-4 w-4 text-slate-500" />
+              </div>
+            ))}
           </div>
         </div>
       ) : (
@@ -388,11 +333,12 @@ const ParagraphsSection = ({
               onClick={() => {
                 setSelectedPassage(null);
                 setFocusMode(false);
+                setUseReadingRuler(false);
               }}
               className="btn-secondary"
               style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
             >
-              ← Paragraf Listesine Dön
+              ÔåÉ Paragraf Listesine D├Ân
             </button>
 
             {/* Focus Options */}
@@ -402,20 +348,40 @@ const ParagraphsSection = ({
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   focusMode ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
                 }`}
-                title="Odaklanma Modu (Karanlık Mod & Dikkat Dağıtıcıları Gizleme)"
+                title="Odaklanma Modu (Karanl─▒k Mod & Dikkat Da─ş─▒t─▒c─▒lar─▒ Gizleme)"
               >
-                👁️ Odaklanma Modu
+                ­şæü´©Å Odaklanma Modu
               </button>
               {focusMode && (
-                <button
-                  onClick={() => setSynonymSwapperActive(!synonymSwapperActive)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    synonymSwapperActive ? 'bg-orange-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
-                  }`}
-                  title="Eşanlamlı Kelime Değiştirici (Synonym Swapper)"
-                >
-                  🔄 Eşanlamlı Değiştirici
-                </button>
+                <>
+                  <button
+                    onClick={() => setUseReadingRuler(!useReadingRuler)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      useReadingRuler ? 'bg-emerald-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                    }`}
+                    title="Okuma Cetveli (Sat─▒r Hizalama)"
+                  >
+                    ­şôÅ Okuma Cetveli
+                  </button>
+                  <button
+                    onClick={() => setUseDyslexicFont(!useDyslexicFont)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      useDyslexicFont ? 'bg-amber-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                    }`}
+                    title="Disleksi Uyumlu Yaz─▒ Tipi"
+                  >
+                    ­şöñ Disleksi Fontu
+                  </button>
+                  <button
+                    onClick={() => setSynonymSwapperActive(!synonymSwapperActive)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      synonymSwapperActive ? 'bg-orange-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                    }`}
+                    title="E┼şanlaml─▒ Kelime De─şi┼ştirici (Synonym Swapper)"
+                  >
+                    ­şöä E┼şanlaml─▒ De─şi┼ştirici
+                  </button>
+                </>
               )}
               <button
                 onClick={() => {
@@ -426,29 +392,29 @@ const ParagraphsSection = ({
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   clozeMode ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
                 }`}
-                title="Cloze Test Modu (Boşluk Doldurma)"
+                title="Cloze Test Modu (Bo┼şluk Doldurma)"
               >
-                ✏️ Cloze Test Modu
+                ­şôØ Cloze Test Modu
               </button>
             </div>
 
             <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>
-              Doğru Sayısı: {score} / 3
+              Do─şru Say─▒s─▒: {score} / 3
             </span>
           </div>
 
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'stretch' }}>
             {/* Left side: Passage details */}
-            <div className={`glass-card ${focusMode ? 'focus-container' : ''}`} style={{ flex: '1', minWidth: '320px', padding: '24px', borderRadius: '18px', display: 'flex', flexDirection: 'column', gap: '16px', background: focusMode ? 'rgba(8,10,16,0.98)' : 'rgba(11, 15, 26, 0.6)' }}>
+            <div className={`glass-card ${focusMode ? 'focus-container' : ''} ${useReadingRuler ? 'reading-ruler-active' : ''}`} style={{ flex: '1', minWidth: '320px', padding: '24px', borderRadius: '18px', display: 'flex', flexDirection: 'column', gap: '16px', background: focusMode ? 'rgba(8,10,16,0.98)' : 'rgba(11, 15, 26, 0.6)' }}>
               <div style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px' }}>
-                <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Akademik Metin ({selectedPassage.wordCount} Kelime)</span>
+                <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Akademik Metin</span>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'white', margin: '4px 0 0 0' }}>{selectedPassage.title}</h3>
               </div>
-              <div style={{ fontSize: '0.86rem', lineHeight: '1.8', color: '#cbd5e1', textAlign: 'justify', margin: 0 }}>
+              <div className={`focus-passage-text ${useDyslexicFont ? 'font-dyslexic' : ''}`} style={{ fontSize: '0.86rem', lineHeight: '1.8', color: '#cbd5e1', textAlign: 'justify', margin: 0 }}>
                 {clozeMode ? (
                   <div>
                     <div style={{ marginBottom: '14px', padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: '10px', fontSize: '0.72rem', color: '#a5b4fc', fontWeight: 'bold' }}>
-                      ✏️ Metindeki boş bırakılmış yerlere en uygun düşen akademik kelimeleri seçin.
+                      ­şôØ Metindeki bo┼ş b─▒rak─▒lm─▒┼ş yerlere en uygun d├╝┼şen akademik kelimeleri se├ğin.
                     </div>
                     {renderClozePassage(selectedPassage.passage)}
 
@@ -474,11 +440,11 @@ const ParagraphsSection = ({
                           className="btn-primary"
                           style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
                         >
-                          Cevapları Kontrol Et
+                          Cevaplar─▒ Kontrol Et
                         </button>
                       ) : (
                         <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#34d399' }}>
-                          Cloze Test Skoru: {clozeScore} / {selectedPassage.passage.split(/\s+/).map(w => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")).filter(clean => CLOZE_TARGETS.includes(clean)).length} Doğru!
+                          Cloze Test Skoru: {clozeScore} / {selectedPassage.passage.split(/\s+/).map(w => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")).filter(clean => CLOZE_TARGETS.includes(clean)).length} Do─şru!
                         </div>
                       )}
                       {clozeChecked && (
@@ -491,21 +457,31 @@ const ParagraphsSection = ({
                           className="btn-secondary"
                           style={{ padding: '6px 12px', fontSize: '0.72rem', cursor: 'pointer' }}
                         >
-                          Yeniden Başlat
+                          Yeniden Ba┼şlat
                         </button>
                       )}
                     </div>
                   </div>
                 ) : (
                   selectedPassage.passage.split('\n').filter(Boolean).map((para, idx) => (
-                    <p key={idx} style={{ marginBottom: '12px' }}>
+                    <p 
+                      key={idx} 
+                      className={hoveredParagraphIndex === idx ? 'ruler-highlight' : ''}
+                      onMouseEnter={() => {
+                        if (useReadingRuler) setHoveredParagraphIndex(idx);
+                      }}
+                      onMouseLeave={() => {
+                        if (useReadingRuler) setHoveredParagraphIndex(null);
+                      }}
+                      style={{ marginBottom: '12px' }}
+                    >
                       {renderInteractivePassage(para)}
                     </p>
                   ))
                 )}
               </div>
               <div style={{ marginTop: 'auto', background: 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.1)', padding: '10px 14px', borderRadius: '10px', fontSize: '0.68rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                💡 <span style={{ textAlign: 'left' }}>Paragraf içerisindeki herhangi bir kelimeye tıklayarak Türkçe çevirisini anında görebilirsiniz.</span>
+                ­şÆí <span style={{ textAlign: 'left' }}>Paragraf i├ğerisindeki herhangi bir kelimeye t─▒klayarak T├╝rk├ğe ├ğevirisini an─▒nda g├Ârebilirsiniz.</span>
               </div>
             </div>
 
@@ -597,7 +573,7 @@ const ParagraphsSection = ({
                           opacity: selectedOpt ? 1.0 : 0.5
                         }}
                       >
-                        Cevabı Kontrol Et <HelpCircle className="h-4 w-4" />
+                        Cevab─▒ Kontrol Et <HelpCircle className="h-4 w-4" />
                       </button>
                     )}
                   </div>

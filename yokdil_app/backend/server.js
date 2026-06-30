@@ -298,7 +298,7 @@ app.get(['/api/exams/:examId/explain/:qNumber', '/api/:category/exams/:examId/ex
     }
     
     if (!meaning) {
-      meaning = "[Anlamı Sözlükte Yok]";
+      meaning = "Akademik Seçenek / İfade";
     }
     
     const isCorrect = letter === correctAnswer ? "*(Doğru Cevap)*" : "";

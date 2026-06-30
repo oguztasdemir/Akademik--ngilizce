@@ -20,29 +20,31 @@ const LecturesSection = ({
     return words.map((word, idx) => {
       const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
       return (
-        <span
-          key={idx}
-          onClick={(e) => {
-            if (handleTextSelection) {
-              handleTextSelection({
-                clientX: e.clientX,
-                clientY: e.clientY,
-                target: e.target,
-                customText: cleanWord
-              });
-            }
-          }}
-          style={{
-            cursor: 'pointer',
-            padding: '1px 2px',
-            borderRadius: '4px',
-            display: 'inline-block'
-          }}
-          onMouseEnter={(e) => { e.target.style.color = '#818cf8'; e.target.style.background = 'rgba(99,102,241,0.08)'; }}
-          onMouseLeave={(e) => { e.target.style.color = 'inherit'; e.target.style.background = 'transparent'; }}
-        >
-          {word}{' '}
-        </span>
+        <React.Fragment key={idx}>
+          <span
+            onClick={(e) => {
+              if (handleTextSelection) {
+                handleTextSelection({
+                  clientX: e.clientX,
+                  clientY: e.clientY,
+                  target: e.target,
+                  customText: cleanWord
+                });
+              }
+            }}
+            style={{
+              cursor: 'pointer',
+              padding: '1px 2px',
+              borderRadius: '4px',
+              display: 'inline'
+            }}
+            onMouseEnter={(e) => { e.target.style.color = '#818cf8'; e.target.style.background = 'rgba(99,102,241,0.08)'; }}
+            onMouseLeave={(e) => { e.target.style.color = 'inherit'; e.target.style.background = 'transparent'; }}
+          >
+            {word}
+          </span>
+          {' '}
+        </React.Fragment>
       );
     });
   };
@@ -67,11 +69,20 @@ const LecturesSection = ({
     setExerciseList([]);
     
     if (activeLecture && BACKEND_URL) {
-      // Fetch 100 questions dynamically from general (genel) JSON served by backend
+      // Fetch questions dynamically from general JSON served by backend
       fetch(`${BACKEND_URL}/api/lectures/${activeLecture.id}/exercises`)
         .then(res => res.json())
         .then(data => {
-          setExerciseList(data);
+          const scrambled = data.map(q => {
+            if (q && Array.isArray(q.options)) {
+              return {
+                ...q,
+                options: [...q.options].sort(() => 0.5 - Math.random())
+              };
+            }
+            return q;
+          });
+          setExerciseList(scrambled);
         })
         .catch(err => {
           console.error("Error loading exercises:", err);

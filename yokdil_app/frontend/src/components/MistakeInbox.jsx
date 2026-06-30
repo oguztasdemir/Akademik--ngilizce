@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldAlert, CheckCircle2, XCircle, ArrowRight, BookOpen, Star, ChevronLeft } from 'lucide-react';
+import { ShieldAlert, CheckCircle2, XCircle, ArrowRight, BookOpen, Star, ChevronLeft, RefreshCw } from 'lucide-react';
 
 const MistakeInbox = ({
   activeTab,
@@ -33,9 +33,12 @@ const MistakeInbox = ({
 
   if (activeTab !== 'mistakes') return null;
 
+  const safeMistakes = mistakes || [];
+
   // Filter vocabulary pool for words that have wrong counts > 0
   const pool = notebook.length > 0 ? notebook : vocabPracticeList;
   const vocabMistakes = pool.filter(word => {
+    if (!word || !word.english) return false;
     const stats = wordStats[word.english.toLowerCase()] || { correct: 0, wrong: 0 };
     return stats.wrong > 0;
   });
@@ -45,8 +48,10 @@ const MistakeInbox = ({
     setSelectedOption(null);
     setIsAnswered(false);
     setActiveExplanation(null);
-    const mist = mistakes[index];
-    loadQuestionExplanation(mist.qNumber, mist.examId);
+    const mist = safeMistakes[index];
+    if (mist) {
+      loadQuestionExplanation(mist.qNumber, mist.examId);
+    }
   };
 
   const handleCheckAnswer = () => {
@@ -55,26 +60,29 @@ const MistakeInbox = ({
   };
 
   const handleRemoveMistake = (index) => {
-    const newMistakes = mistakes.filter((_, idx) => idx !== index);
+    const newMistakes = safeMistakes.filter((_, idx) => idx !== index);
     setMistakes(newMistakes);
     localStorage.setItem('yokdil_mistakes', JSON.stringify(newMistakes));
     setActiveMistakeIndex(null);
   };
 
   const handleStartMarathon = () => {
-    if (mistakes.length === 0) return;
+    if (safeMistakes.length === 0) return;
     setIsMarathonMode(true);
     setMarathonIndex(0);
     setSelectedOption(null);
     setIsAnswered(false);
     setActiveExplanation(null);
-    const firstMistake = mistakes[0];
-    loadQuestionExplanation(firstMistake.qNumber, firstMistake.examId);
+    const firstMistake = safeMistakes[0];
+    if (firstMistake) {
+      loadQuestionExplanation(firstMistake.qNumber, firstMistake.examId);
+    }
   };
 
   const handleNextMarathonQuestion = () => {
-    const targetMistake = mistakes[marathonIndex];
-    const newMistakes = mistakes.filter(m => !(m.qNumber === targetMistake.qNumber && m.examId === targetMistake.examId));
+    const targetMistake = safeMistakes[marathonIndex];
+    if (!targetMistake) return;
+    const newMistakes = safeMistakes.filter(m => !(m.qNumber === targetMistake.qNumber && m.examId === targetMistake.examId));
     setMistakes(newMistakes);
     localStorage.setItem('yokdil_mistakes', JSON.stringify(newMistakes));
 
@@ -91,7 +99,9 @@ const MistakeInbox = ({
     setActiveExplanation(null);
     
     const nextMist = newMistakes[nextIndex];
-    loadQuestionExplanation(nextMist.qNumber, nextMist.examId);
+    if (nextMist) {
+      loadQuestionExplanation(nextMist.qNumber, nextMist.examId);
+    }
   };
 
   // Mark word mistake as resolved
@@ -665,20 +675,26 @@ const MistakeInbox = ({
                 )}
 
                 {vocabReveal && (
-                  <div className="flex gap-2" style={{ display: 'flex', gap: '8px' }}>
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2" style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
                     <button 
                       onClick={() => setActiveWordIndex(null)}
-                      className="flex-1 py-3 text-xs font-bold rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 hover:bg-rose-500/10 transition-all text-center"
-                      style={{ cursor: 'pointer' }}
+                      className="flex-1 py-3 px-4 text-xs font-bold rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 hover:bg-rose-500/10 transition-all text-center flex items-center justify-center gap-2"
+                      style={{ cursor: 'pointer', minHeight: '46px' }}
                     >
-                      Tekrar Sor
+                      <RefreshCw className="h-4 w-4 animate-spin-hover" /> Tekrar Sor
                     </button>
                     <button 
                       onClick={() => handleResolveWordMistake(word.english)}
-                      className="flex-1 py-3 text-xs font-bold rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-all text-center"
-                      style={{ cursor: 'pointer' }}
+                      className="flex-1 py-3 px-4 text-xs font-bold rounded-xl text-white hover:scale-[1.02] shadow-md transition-all text-center flex items-center justify-center gap-2"
+                      style={{ 
+                        cursor: 'pointer', 
+                        minHeight: '46px',
+                        background: 'linear-gradient(135deg, #10b981, #059669)',
+                        border: 'none',
+                        boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                      }}
                     >
-                      Öğrendim (Kutudan Kaldır)
+                      <CheckCircle2 className="h-4 w-4" /> Öğrendim (Kutudan Kaldır)
                     </button>
                   </div>
                 )}

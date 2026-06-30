@@ -38,6 +38,53 @@ const SENTENCE_TEMPLATES = [
   { en: "The research team evaluated these fundamental scientific parameters.", tr: "Araştırma ekibi bu temel bilimsel parametreleri değerlendirdi." }
 ];
 
+const GAME_DETAILS = {
+  duel: {
+    aim: "İngilizce kelimeler ile Türkçe karşılıklarını eşleştirerek kelime dağarcığınızı pekiştirmek.",
+    howTo: "Sol taraftan bir İngilizce kelime seçin, ardından sağ taraftaki Türkçe karşılığına tıklayın. Doğru eşleşen kelimeler tablodan kalkar."
+  },
+  tower: {
+    aim: "Düşen İngilizce kelimenin anlamını hızla bulup kuleyi korumak.",
+    howTo: "Yukarıdan aşağıya süzülen İngilizce kelimenin doğru Türkçe anlamını aşağıdaki butonlar arasından seçin. Kelime en alta çarpmadan önce patlatmalısınız!"
+  },
+  speller: {
+    aim: "Duyduğunuz kelimenin yazılışını (spelling) doğru şekilde klavyeden girerek yazım becerilerinizi geliştirmek.",
+    howTo: "Normal veya Yavaş ses butonlarına basarak kelimeyi dinleyin. İngilizce yazılışını metin kutusuna yazıp 'Cevapla' deyin."
+  },
+  sentence: {
+    aim: "Karışık sıradaki İngilizce kelimeleri birleştirerek anlamlı ve kurallı bir cümle oluşturmak.",
+    howTo: "Verilen Türkçe cümlenin İngilizce karşılığını oluşturmak için aşağıdaki kelimelere sırayla tıklayarak cümleyi tamamlayın."
+  },
+  balloons: {
+    aim: "Anahtar İngilizce kelimenin Türkçe anlamını taşıyan balonu patlatmak.",
+    howTo: "Üst panelde gösterilen İngilizce kelimenin doğru Türkçe karşılığının olduğu balona tıklayarak puan kazanın."
+  },
+  preposition: {
+    aim: "Cümlelerdeki edat (preposition) boşluklarını doğru hedefle tamamlamak.",
+    howTo: "Cümledeki boşluğa (_____) gelmesi gereken en uygun edat şıkkını altındaki butonlardan seçip vurun."
+  },
+  synonym: {
+    aim: "Verilen kelimenin akademik eş anlamlısını (synonym) seçenekler içinden tespit etmek.",
+    howTo: "Sorulan kelimenin eş anlamlısı olan doğru seçeneği aşağıdaki şıklar arasından işaretleyin."
+  },
+  antonym: {
+    aim: "Akademik kelimelerin karşıt (zıt) anlamlısını bularak hafızanızı güçlendirmek.",
+    howTo: "Vurgulanan kelimenin zıt anlamlı karşılığını seçenekler arasından seçin."
+  },
+  dictation: {
+    aim: "İngilizce cümleleri dinleyerek tam olarak duyduğunuz şekilde klavyeden dikte etmek.",
+    howTo: "Cümleyi dinleyin, ardından noktalama işaretlerine ve büyük-küçük harflere özen göstererek metin alanına yazıp gönderin."
+  },
+  conjunction: {
+    aim: "Cümle geçişlerindeki bağlaçları (conjunction) mantıksal ilişkiye göre yerleştirmek.",
+    howTo: "Cümleyi okuyup iki kısım arasındaki anlam bütünlüğünü (zıtlık, sebep-sonuç vb.) en iyi sağlayan bağlacı seçin."
+  },
+  pronounce: {
+    aim: "YÖKDİL seviyesindeki cümleleri sesli okuyarak telaffuz doğruluğunuzu ölçmek.",
+    howTo: "'Konuşmayı Başlat' butonuna basın ve mikrofon iznini verdikten sonra cümleyi İngilizce olarak telaffuz edin."
+  }
+};
+
 const MinigamesSection = ({
   activeTab,
   notebook,
@@ -48,6 +95,9 @@ const MinigamesSection = ({
   logStudyActivity
 }) => {
   const [activeGame, setActiveGame] = useState(null);
+  const [selectedLobbyGame, setSelectedLobbyGame] = useState(null);
+  const [gameLivesLimit, setGameLivesLimit] = useState(3); // 3, 5, or 999 (unlimited)
+  const [prepOptions, setPrepOptions] = useState([]);
 
   // General Pool
   const getPool = () => {
@@ -61,6 +111,10 @@ const MinigamesSection = ({
   const [time, setTime] = useState(30);
   const [gameActive, setGameActive] = useState(false);
   const [gameTimeLimit, setGameTimeLimit] = useState(30); // 15, 30, 60, 90 or 'infinite'
+  
+  // Options Feedback State
+  const [answerIsChecked, setAnswerIsChecked] = useState(false);
+  const [selectedAnswerFeedback, setSelectedAnswerFeedback] = useState(null);
 
   // --- GAME 1: DUEL STATE & LOGIC ---
   const [duelSelectedEng, setDuelSelectedEng] = useState(null);
@@ -160,7 +214,9 @@ const MinigamesSection = ({
   const handleStartGame = (gameKey) => {
     setActiveGame(gameKey);
     setScore(0);
-    setLives(3);
+    setLives(gameLivesLimit);
+    setAnswerIsChecked(false);
+    setSelectedAnswerFeedback(null);
     if (gameTimeLimit === 'infinite') {
       setTime(9999);
     } else {
@@ -241,10 +297,10 @@ const MinigamesSection = ({
     setBalloonOptions([target.turkish, ...incorrects].sort(() => 0.5 - Math.random()));
   };
 
-  // Game 6: Preposition Spawner
   const spawnPreposition = () => {
     const target = PREPOSITION_QUESTIONS[Math.floor(Math.random() * PREPOSITION_QUESTIONS.length)];
     setPrepTarget(target);
+    setPrepOptions([...target.options].sort(() => 0.5 - Math.random()));
   };
 
   // Game 7: Synonym Spawner
@@ -338,8 +394,10 @@ const MinigamesSection = ({
       }
     };
 
-    recognition.onerror = () => {
+    recognition.onerror = (e) => {
+      console.error(e);
       setIsListening(false);
+      alert("Mikrofon hatası: Ses algılanamadı veya izin verilmedi. Lütfen tarayıcınızdan mikrofon izni verdiğinizden emin olun. (Detay: " + (e.error || 'Bilinmiyor') + ")");
     };
 
     recognition.onend = () => {
@@ -357,11 +415,21 @@ const MinigamesSection = ({
       setDuelSelectedEng(id);
       if (duelSelectedTr) {
         if (duelSelectedTr === id) {
-          setDuelCompletedPairs(p => [...p, id]);
+          const nextPairs = [...duelCompletedPairs, id];
+          setDuelCompletedPairs(nextPairs);
           setScore(s => s + 10);
           setDuelSelectedEng(null);
           setDuelSelectedTr(null);
           if (playCorrectSound) playCorrectSound();
+          if (nextPairs.length >= 5) {
+            setTimeout(() => {
+              const pool = getPool();
+              const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 5);
+              setDuelEngList(shuffled.map(w => ({ id: w.english, val: w.english })).sort(() => 0.5 - Math.random()));
+              setDuelTrList(shuffled.map(w => ({ id: w.english, val: w.turkish })).sort(() => 0.5 - Math.random()));
+              setDuelCompletedPairs([]);
+            }, 600);
+          }
         } else {
           if (playIncorrectSound) playIncorrectSound();
           setTimeout(() => {
@@ -374,11 +442,21 @@ const MinigamesSection = ({
       setDuelSelectedTr(id);
       if (duelSelectedEng) {
         if (duelSelectedEng === id) {
-          setDuelCompletedPairs(p => [...p, id]);
+          const nextPairs = [...duelCompletedPairs, id];
+          setDuelCompletedPairs(nextPairs);
           setScore(s => s + 10);
           setDuelSelectedEng(null);
           setDuelSelectedTr(null);
           if (playCorrectSound) playCorrectSound();
+          if (nextPairs.length >= 5) {
+            setTimeout(() => {
+              const pool = getPool();
+              const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 5);
+              setDuelEngList(shuffled.map(w => ({ id: w.english, val: w.english })).sort(() => 0.5 - Math.random()));
+              setDuelTrList(shuffled.map(w => ({ id: w.english, val: w.turkish })).sort(() => 0.5 - Math.random()));
+              setDuelCompletedPairs([]);
+            }, 600);
+          }
         } else {
           if (playIncorrectSound) playIncorrectSound();
           setTimeout(() => {
@@ -387,6 +465,43 @@ const MinigamesSection = ({
           }, 300);
         }
       }
+    }
+  };
+
+  // Game 2 Tower Checker
+  const handleTowerAnswer = (selectedTurkish) => {
+    if (!fallingWord || answerIsChecked) return;
+    setAnswerIsChecked(true);
+    setSelectedAnswerFeedback(selectedTurkish);
+
+    const isCorrect = selectedTurkish === fallingWord.turkish;
+    if (isCorrect) {
+      if (playCorrectSound) playCorrectSound();
+      setScore(s => s + 10);
+      if (incrementDailyQuestions) incrementDailyQuestions();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnTowerWord();
+      }, 500);
+    } else {
+      if (playIncorrectSound) playIncorrectSound();
+      setLives(l => {
+        if (l <= 1) {
+          setTimeout(() => {
+            setGameActive(false);
+            setAnswerIsChecked(false);
+            setSelectedAnswerFeedback(null);
+          }, 1500);
+          return 0;
+        }
+        return l - 1;
+      });
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnTowerWord();
+      }, 1500);
     }
   };
 
@@ -444,77 +559,149 @@ const MinigamesSection = ({
 
   // Game 5 Pop Balloon
   const handlePopBalloon = (opt) => {
-    if (opt === balloonTarget.turkish) {
+    if (answerIsChecked) return;
+    setAnswerIsChecked(true);
+    setSelectedAnswerFeedback(opt);
+
+    const isCorrect = opt === balloonTarget.turkish;
+    if (isCorrect) {
       if (playCorrectSound) playCorrectSound();
       setScore(s => s + 10);
-      spawnBalloons();
+      if (incrementDailyQuestions) incrementDailyQuestions();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnBalloons();
+      }, 600);
     } else {
       if (playIncorrectSound) playIncorrectSound();
       setLives(l => {
         if (l <= 1) {
-          setGameActive(false);
+          setTimeout(() => {
+            setGameActive(false);
+            setAnswerIsChecked(false);
+            setSelectedAnswerFeedback(null);
+          }, 1500);
           return 0;
         }
         return l - 1;
       });
-      spawnBalloons();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnBalloons();
+      }, 1500);
     }
   };
 
   // Game 6 Preposition Gun
   const handlePrepositionGun = (opt) => {
-    if (opt === prepTarget.answer) {
+    if (answerIsChecked) return;
+    setAnswerIsChecked(true);
+    setSelectedAnswerFeedback(opt);
+
+    const isCorrect = opt === prepTarget.answer;
+    if (isCorrect) {
       if (playCorrectSound) playCorrectSound();
       setScore(s => s + 10);
-      spawnPreposition();
+      if (incrementDailyQuestions) incrementDailyQuestions();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnPreposition();
+      }, 800);
     } else {
       if (playIncorrectSound) playIncorrectSound();
       setLives(l => {
         if (l <= 1) {
-          setGameActive(false);
+          setTimeout(() => {
+            setGameActive(false);
+            setAnswerIsChecked(false);
+            setSelectedAnswerFeedback(null);
+          }, 1800);
           return 0;
         }
         return l - 1;
       });
-      spawnPreposition();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnPreposition();
+      }, 1800);
     }
   };
 
   // Game 7 Synonym Solver
   const handleSynonymAnswer = (opt) => {
-    if (opt === synTarget.synonym) {
+    if (answerIsChecked) return;
+    setAnswerIsChecked(true);
+    setSelectedAnswerFeedback(opt);
+
+    const isCorrect = opt === synTarget.synonym;
+    if (isCorrect) {
       if (playCorrectSound) playCorrectSound();
       setScore(s => s + 10);
-      spawnSynonym();
+      if (incrementDailyQuestions) incrementDailyQuestions();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnSynonym();
+      }, 600);
     } else {
       if (playIncorrectSound) playIncorrectSound();
       setLives(l => {
         if (l <= 1) {
-          setGameActive(false);
+          setTimeout(() => {
+            setGameActive(false);
+            setAnswerIsChecked(false);
+            setSelectedAnswerFeedback(null);
+          }, 1500);
           return 0;
         }
         return l - 1;
       });
-      spawnSynonym();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnSynonym();
+      }, 1500);
     }
   };
 
   // Game 8 Antonym Solver
   const handleAntonymAnswer = (opt) => {
-    if (opt === antTarget.antonym) {
+    if (answerIsChecked) return;
+    setAnswerIsChecked(true);
+    setSelectedAnswerFeedback(opt);
+
+    const isCorrect = opt === antTarget.antonym;
+    if (isCorrect) {
       if (playCorrectSound) playCorrectSound();
       setScore(s => s + 10);
-      spawnAntonym();
+      if (incrementDailyQuestions) incrementDailyQuestions();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnAntonym();
+      }, 600);
     } else {
       if (playIncorrectSound) playIncorrectSound();
       setLives(l => {
         if (l <= 1) {
-          setGameActive(false);
+          setTimeout(() => {
+            setGameActive(false);
+            setAnswerIsChecked(false);
+            setSelectedAnswerFeedback(null);
+          }, 1500);
           return 0;
         }
         return l - 1;
       });
-      spawnAntonym();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnAntonym();
+      }, 1500);
     }
   };
 
@@ -540,20 +727,38 @@ const MinigamesSection = ({
 
   // Game 10 Conjunction Maze
   const handleConjunctionMaze = (opt) => {
-    if (opt === conjTarget.answer) {
+    if (answerIsChecked) return;
+    setAnswerIsChecked(true);
+    setSelectedAnswerFeedback(opt);
+
+    const isCorrect = opt === conjTarget.answer;
+    if (isCorrect) {
       if (playCorrectSound) playCorrectSound();
       setScore(s => s + 10);
-      spawnConjunction();
+      if (incrementDailyQuestions) incrementDailyQuestions();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnConjunction();
+      }, 600);
     } else {
       if (playIncorrectSound) playIncorrectSound();
       setLives(l => {
         if (l <= 1) {
-          setGameActive(false);
+          setTimeout(() => {
+            setGameActive(false);
+            setAnswerIsChecked(false);
+            setSelectedAnswerFeedback(null);
+          }, 1500);
           return 0;
         }
         return l - 1;
       });
-      spawnConjunction();
+      setTimeout(() => {
+        setAnswerIsChecked(false);
+        setSelectedAnswerFeedback(null);
+        spawnConjunction();
+      }, 1500);
     }
   };
 
@@ -586,37 +791,12 @@ const MinigamesSection = ({
             YÖKDİL sınavına özel 11 farklı eğitsel mini oyunla çalışın.
           </p>
         </div>
-        {!activeGame ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '6px 12px', borderRadius: '12px' }}>
-            <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>⏱️ Süre Sınırı:</span>
-            <select
-              value={gameTimeLimit}
-              onChange={(e) => {
-                const val = e.target.value;
-                setGameTimeLimit(val === 'infinite' ? 'infinite' : Number(val));
-              }}
-              style={{
-                background: 'rgba(15, 23, 42, 0.8)',
-                color: 'white',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '6px',
-                padding: '4px 8px',
-                fontSize: '0.72rem',
-                fontWeight: 'bold',
-                outline: 'none',
-                cursor: 'pointer'
-              }}
-            >
-              <option value={15}>15 sn (Hızlı)</option>
-              <option value={30}>30 sn (Standart)</option>
-              <option value={60}>60 sn (Rahat)</option>
-              <option value={90}>90 sn (Kolay)</option>
-              <option value="infinite">Süresiz ♾️</option>
-            </select>
-          </div>
-        ) : (
+        {(activeGame || selectedLobbyGame) && (
           <button
-            onClick={() => setActiveGame(null)}
+            onClick={() => {
+              setActiveGame(null);
+              setSelectedLobbyGame(null);
+            }}
             className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5 transition-all cursor-pointer"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Geri Dön
@@ -624,8 +804,8 @@ const MinigamesSection = ({
         )}
       </div>
 
-      {!activeGame ? (
-        /* GAME SELECTION DASHBOARD GRID (10 CARDS) */
+      {!activeGame && !selectedLobbyGame && (
+        /* GAME SELECTION DASHBOARD GRID (11 CARDS) */
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
           {GAMES_LIST.map(game => (
             <div 
@@ -639,19 +819,107 @@ const MinigamesSection = ({
                 cursor: 'pointer',
                 gap: '12px'
               }}
-              onClick={() => handleStartGame(game.key)}
+              onClick={() => setSelectedLobbyGame(game.key)}
             >
               <div>
                 <h4 style={{ fontSize: '0.9rem', fontWeight: '800', color: 'white', margin: 0 }}>{game.title}</h4>
                 <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: 1.4 }}>{game.desc}</p>
               </div>
               <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '0.68rem', width: 'fit-content' }}>
-                Başlat <Play className="h-3 w-3 inline ml-1 fill-current" />
+                Lobiye Gir <Play className="h-3 w-3 inline ml-1 fill-current" />
               </button>
             </div>
           ))}
         </div>
-      ) : (
+      )}
+
+      {!activeGame && selectedLobbyGame && (() => {
+        const details = GAME_DETAILS[selectedLobbyGame];
+        const title = GAMES_LIST.find(g => g.key === selectedLobbyGame)?.title;
+        return (
+          <div className="glass-card p-8 border border-white/5 rounded-2xl space-y-6" style={{ background: 'rgba(11, 15, 26, 0.7)', maxWidth: '600px', margin: '20px auto' }}>
+            <div className="text-center space-y-2">
+              <span className="text-xs font-bold text-indigo-400 tracking-widest uppercase">MİNİ OYUN LOBİSİ</span>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: '900', color: 'white', margin: 0 }}>{title}</h3>
+            </div>
+
+            <div className="space-y-4" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '20px 0' }}>
+              <div>
+                <h5 className="text-xs font-bold text-slate-300 uppercase mb-1">🎯 Oyunun Amacı:</h5>
+                <p className="text-xs text-slate-400 leading-relaxed">{details.aim}</p>
+              </div>
+              <div>
+                <h5 className="text-xs font-bold text-slate-300 uppercase mb-1">🎮 Nasıl Oynanır:</h5>
+                <p className="text-xs text-slate-400 leading-relaxed">{details.howTo}</p>
+              </div>
+            </div>
+
+            {/* Config selectors */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-bold text-slate-300">❤️ Can Sayısı:</span>
+                <select
+                  value={gameLivesLimit}
+                  onChange={(e) => setGameLivesLimit(Number(e.target.value))}
+                  style={{
+                    background: 'rgba(15, 23, 42, 0.8)',
+                    color: 'white',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    fontSize: '0.8rem',
+                    fontWeight: 'bold',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value={3}>3 Can (Standart)</option>
+                  <option value={5}>5 Can (Kolay)</option>
+                  <option value={999}>Sınırsız Can ♾️</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-bold text-slate-300">⏱️ Süre Sınırı:</span>
+                <select
+                  value={gameTimeLimit}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setGameTimeLimit(val === 'infinite' ? 'infinite' : Number(val));
+                  }}
+                  style={{
+                    background: 'rgba(15, 23, 42, 0.8)',
+                    color: 'white',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    fontSize: '0.8rem',
+                    fontWeight: 'bold',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value={15}>15 Saniye (Hızlı)</option>
+                  <option value={30}>30 Saniye (Standart)</option>
+                  <option value={60}>60 Saniye (Rahat)</option>
+                  <option value={90}>90 Saniye (Kolay)</option>
+                  <option value="infinite">Süresiz ♾️</option>
+                </select>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleStartGame(selectedLobbyGame)}
+              className="btn-primary w-100"
+              style={{ padding: '12px 24px', fontSize: '0.85rem', fontWeight: 'bold', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
+            >
+              Oyunu Başlat 🚀
+            </button>
+          </div>
+        );
+      })()}
+
+      {activeGame && (
         /* GAME RUNNING LAYOUT */
         <div className="glass-card p-6 border border-white/5 rounded-2xl space-y-6" style={{ background: 'rgba(11, 15, 26, 0.6)' }}>
           
@@ -769,27 +1037,51 @@ const MinigamesSection = ({
                         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: '#ef4444' }}></div>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
-                        {towerOptions.map((opt, idx) => (
-                          <button 
-                            key={idx} 
-                            onClick={() => handleTowerAnswer(opt)} 
-                            style={{
-                              width: '100%',
-                              padding: '14px 18px',
-                              borderRadius: '14px',
-                              background: 'rgba(255,255,255,0.03)',
-                              border: '1px solid rgba(255,255,255,0.08)',
-                              color: '#cbd5e1',
-                              fontWeight: '700',
-                              fontSize: '0.76rem',
-                              cursor: 'pointer',
-                              textAlign: 'left',
-                              transition: 'all 0.2s ease'
-                            }}
-                          >
-                            {opt}
-                          </button>
-                        ))}
+                        {towerOptions.map((opt, idx) => {
+                          const isCorrect = opt === fallingWord?.turkish;
+                          const isSelected = opt === selectedAnswerFeedback;
+                          
+                          let btnStyle = {
+                            width: '100%',
+                            padding: '14px 18px',
+                            borderRadius: '14px',
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            color: '#cbd5e1',
+                            fontWeight: '700',
+                            fontSize: '0.76rem',
+                            cursor: answerIsChecked ? 'default' : 'pointer',
+                            textAlign: 'left',
+                            transition: 'all 0.2s ease'
+                          };
+
+                          if (answerIsChecked) {
+                            if (isCorrect) {
+                              btnStyle.background = 'rgba(16, 185, 129, 0.15)';
+                              btnStyle.borderColor = '#10b981';
+                              btnStyle.color = '#34d399';
+                              btnStyle.fontWeight = '800';
+                            } else if (isSelected) {
+                              btnStyle.background = 'rgba(239, 68, 68, 0.15)';
+                              btnStyle.borderColor = '#ef4444';
+                              btnStyle.color = '#f87171';
+                              btnStyle.fontWeight = '800';
+                            } else {
+                              btnStyle.opacity = 0.4;
+                            }
+                          }
+
+                          return (
+                            <button 
+                              key={idx} 
+                              disabled={answerIsChecked}
+                              onClick={() => handleTowerAnswer(opt)} 
+                              style={btnStyle}
+                            >
+                              🧱 {opt}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   );
@@ -869,28 +1161,52 @@ const MinigamesSection = ({
                         <h3 style={{ fontSize: '1.6rem', fontWeight: '900', color: 'white', margin: '4px 0 0 0' }}>{balloonTarget?.english}</h3>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
-                        {balloonOptions.map((opt, idx) => (
-                          <button 
-                            key={idx} 
-                            onClick={() => handlePopBalloon(opt)} 
-                            style={{
-                              width: '100%',
-                              padding: '14px 18px',
-                              borderRadius: '14px',
-                              background: 'rgba(99, 102, 241, 0.05)',
-                              border: '1px solid rgba(99, 102, 241, 0.25)',
-                              color: '#cbd5e1',
-                              fontWeight: '700',
-                              fontSize: '0.78rem',
-                              cursor: 'pointer',
-                              textAlign: 'center',
-                              transition: 'all 0.2s ease',
-                              boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-                            }}
-                          >
-                            🎈 {opt}
-                          </button>
-                        ))}
+                        {balloonOptions.map((opt, idx) => {
+                          const isCorrect = opt === balloonTarget?.turkish;
+                          const isSelected = opt === selectedAnswerFeedback;
+                          
+                          let btnStyle = {
+                            width: '100%',
+                            padding: '14px 18px',
+                            borderRadius: '14px',
+                            background: 'rgba(99, 102, 241, 0.05)',
+                            border: '1px solid rgba(99, 102, 241, 0.25)',
+                            color: '#cbd5e1',
+                            fontWeight: '700',
+                            fontSize: '0.78rem',
+                            cursor: answerIsChecked ? 'default' : 'pointer',
+                            textAlign: 'center',
+                            transition: 'all 0.2s ease',
+                            boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                          };
+
+                          if (answerIsChecked) {
+                            if (isCorrect) {
+                              btnStyle.background = 'rgba(16, 185, 129, 0.15)';
+                              btnStyle.borderColor = '#10b981';
+                              btnStyle.color = '#34d399';
+                              btnStyle.fontWeight = '800';
+                            } else if (isSelected) {
+                              btnStyle.background = 'rgba(239, 68, 68, 0.15)';
+                              btnStyle.borderColor = '#ef4444';
+                              btnStyle.color = '#f87171';
+                              btnStyle.fontWeight = '800';
+                            } else {
+                              btnStyle.opacity = 0.4;
+                            }
+                          }
+
+                          return (
+                            <button 
+                              key={idx} 
+                              disabled={answerIsChecked}
+                              onClick={() => handlePopBalloon(opt)} 
+                              style={btnStyle}
+                            >
+                              🎈 {opt}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   );
@@ -902,27 +1218,51 @@ const MinigamesSection = ({
                         <p style={{ fontSize: '1.1rem', color: 'white', margin: 0 }}>{prepTarget?.sentence}</p>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
-                        {prepTarget?.options.map(opt => (
-                          <button 
-                            key={opt} 
-                            onClick={() => handlePrepositionGun(opt)} 
-                            style={{
-                              width: '100%',
-                              padding: '12px 18px',
-                              borderRadius: '12px',
-                              background: 'rgba(255,255,255,0.03)',
-                              border: '1px solid rgba(255,255,255,0.08)',
-                              color: '#cbd5e1',
-                              fontWeight: '700',
-                              fontSize: '0.76rem',
-                              cursor: 'pointer',
-                              textAlign: 'center',
-                              transition: 'all 0.2s ease'
-                            }}
-                          >
-                            🎯 {opt}
-                          </button>
-                        ))}
+                        {prepOptions.map(opt => {
+                          const isCorrect = opt === prepTarget?.answer;
+                          const isSelected = opt === selectedAnswerFeedback;
+                          
+                          let btnStyle = {
+                            width: '100%',
+                            padding: '12px 18px',
+                            borderRadius: '12px',
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            color: '#cbd5e1',
+                            fontWeight: '700',
+                            fontSize: '0.76rem',
+                            cursor: answerIsChecked ? 'default' : 'pointer',
+                            textAlign: 'center',
+                            transition: 'all 0.2s ease'
+                          };
+
+                          if (answerIsChecked) {
+                            if (isCorrect) {
+                              btnStyle.background = 'rgba(16, 185, 129, 0.15)';
+                              btnStyle.borderColor = '#10b981';
+                              btnStyle.color = '#34d399';
+                              btnStyle.fontWeight = '800';
+                            } else if (isSelected) {
+                              btnStyle.background = 'rgba(239, 68, 68, 0.15)';
+                              btnStyle.borderColor = '#ef4444';
+                              btnStyle.color = '#f87171';
+                              btnStyle.fontWeight = '800';
+                            } else {
+                              btnStyle.opacity = 0.4;
+                            }
+                          }
+
+                          return (
+                            <button 
+                              key={opt} 
+                              disabled={answerIsChecked}
+                              onClick={() => handlePrepositionGun(opt)} 
+                              style={btnStyle}
+                            >
+                              🎯 {opt}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   );
@@ -935,27 +1275,51 @@ const MinigamesSection = ({
                         <h3 style={{ fontSize: '1.3rem', fontWeight: '900', color: 'white', margin: '4px 0 0 0' }}>"{synTarget?.english}"</h3>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
-                        {synOptions.map(opt => (
-                          <button 
-                            key={opt} 
-                            onClick={() => handleSynonymAnswer(opt)} 
-                            style={{
-                              width: '100%',
-                              padding: '12px 18px',
-                              borderRadius: '12px',
-                              background: 'rgba(255,255,255,0.03)',
-                              border: '1px solid rgba(255,255,255,0.08)',
-                              color: '#cbd5e1',
-                              fontWeight: '700',
-                              fontSize: '0.76rem',
-                              cursor: 'pointer',
-                              textAlign: 'center',
-                              transition: 'all 0.2s ease'
-                            }}
-                          >
-                            🔄 {opt}
-                          </button>
-                        ))}
+                        {synOptions.map(opt => {
+                          const isCorrect = opt === synTarget?.synonym;
+                          const isSelected = opt === selectedAnswerFeedback;
+                          
+                          let btnStyle = {
+                            width: '100%',
+                            padding: '12px 18px',
+                            borderRadius: '12px',
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            color: '#cbd5e1',
+                            fontWeight: '700',
+                            fontSize: '0.76rem',
+                            cursor: answerIsChecked ? 'default' : 'pointer',
+                            textAlign: 'center',
+                            transition: 'all 0.2s ease'
+                          };
+
+                          if (answerIsChecked) {
+                            if (isCorrect) {
+                              btnStyle.background = 'rgba(16, 185, 129, 0.15)';
+                              btnStyle.borderColor = '#10b981';
+                              btnStyle.color = '#34d399';
+                              btnStyle.fontWeight = '800';
+                            } else if (isSelected) {
+                              btnStyle.background = 'rgba(239, 68, 68, 0.15)';
+                              btnStyle.borderColor = '#ef4444';
+                              btnStyle.color = '#f87171';
+                              btnStyle.fontWeight = '800';
+                            } else {
+                              btnStyle.opacity = 0.4;
+                            }
+                          }
+
+                          return (
+                            <button 
+                              key={opt} 
+                              disabled={answerIsChecked}
+                              onClick={() => handleSynonymAnswer(opt)} 
+                              style={btnStyle}
+                            >
+                              🔄 {opt}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   );
@@ -968,27 +1332,51 @@ const MinigamesSection = ({
                         <h3 style={{ fontSize: '1.3rem', fontWeight: '900', color: 'white', margin: '4px 0 0 0' }}>"{antTarget?.english}"</h3>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
-                        {antOptions.map(opt => (
-                          <button 
-                            key={opt} 
-                            onClick={() => handleAntonymAnswer(opt)} 
-                            style={{
-                              width: '100%',
-                              padding: '12px 18px',
-                              borderRadius: '12px',
-                              background: 'rgba(255,255,255,0.03)',
-                              border: '1px solid rgba(255,255,255,0.08)',
-                              color: '#cbd5e1',
-                              fontWeight: '700',
-                              fontSize: '0.76rem',
-                              cursor: 'pointer',
-                              textAlign: 'center',
-                              transition: 'all 0.2s ease'
-                            }}
-                          >
-                            ❌ {opt}
-                          </button>
-                        ))}
+                        {antOptions.map(opt => {
+                          const isCorrect = opt === antTarget?.antonym;
+                          const isSelected = opt === selectedAnswerFeedback;
+                          
+                          let btnStyle = {
+                            width: '100%',
+                            padding: '12px 18px',
+                            borderRadius: '12px',
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            color: '#cbd5e1',
+                            fontWeight: '700',
+                            fontSize: '0.76rem',
+                            cursor: answerIsChecked ? 'default' : 'pointer',
+                            textAlign: 'center',
+                            transition: 'all 0.2s ease'
+                          };
+
+                          if (answerIsChecked) {
+                            if (isCorrect) {
+                              btnStyle.background = 'rgba(16, 185, 129, 0.15)';
+                              btnStyle.borderColor = '#10b981';
+                              btnStyle.color = '#34d399';
+                              btnStyle.fontWeight = '800';
+                            } else if (isSelected) {
+                              btnStyle.background = 'rgba(239, 68, 68, 0.15)';
+                              btnStyle.borderColor = '#ef4444';
+                              btnStyle.color = '#f87171';
+                              btnStyle.fontWeight = '800';
+                            } else {
+                              btnStyle.opacity = 0.4;
+                            }
+                          }
+
+                          return (
+                            <button 
+                              key={opt} 
+                              disabled={answerIsChecked}
+                              onClick={() => handleAntonymAnswer(opt)} 
+                              style={btnStyle}
+                            >
+                              ❌ {opt}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   );
@@ -1024,27 +1412,51 @@ const MinigamesSection = ({
                         <p style={{ fontSize: '1.1rem', color: 'white', margin: 0 }}>{conjTarget?.sentence}</p>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
-                        {conjTarget?.options.map(opt => (
-                          <button 
-                            key={opt} 
-                            onClick={() => handleConjunctionMaze(opt)} 
-                            style={{
-                              width: '100%',
-                              padding: '12px 18px',
-                              borderRadius: '12px',
-                              background: 'rgba(255,255,255,0.03)',
-                              border: '1px solid rgba(255,255,255,0.08)',
-                              color: '#cbd5e1',
-                              fontWeight: '700',
-                              fontSize: '0.76rem',
-                              cursor: 'pointer',
-                              textAlign: 'center',
-                              transition: 'all 0.2s ease'
-                            }}
-                          >
-                            🧐 {opt}
-                          </button>
-                        ))}
+                        {conjTarget?.options.map(opt => {
+                          const isCorrect = opt === conjTarget?.answer;
+                          const isSelected = opt === selectedAnswerFeedback;
+                          
+                          let btnStyle = {
+                            width: '100%',
+                            padding: '12px 18px',
+                            borderRadius: '12px',
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            color: '#cbd5e1',
+                            fontWeight: '700',
+                            fontSize: '0.76rem',
+                            cursor: answerIsChecked ? 'default' : 'pointer',
+                            textAlign: 'center',
+                            transition: 'all 0.2s ease'
+                          };
+
+                          if (answerIsChecked) {
+                            if (isCorrect) {
+                              btnStyle.background = 'rgba(16, 185, 129, 0.15)';
+                              btnStyle.borderColor = '#10b981';
+                              btnStyle.color = '#34d399';
+                              btnStyle.fontWeight = '800';
+                            } else if (isSelected) {
+                              btnStyle.background = 'rgba(239, 68, 68, 0.15)';
+                              btnStyle.borderColor = '#ef4444';
+                              btnStyle.color = '#f87171';
+                              btnStyle.fontWeight = '800';
+                            } else {
+                              btnStyle.opacity = 0.4;
+                            }
+                          }
+
+                          return (
+                            <button 
+                              key={opt} 
+                              disabled={answerIsChecked}
+                              onClick={() => handleConjunctionMaze(opt)} 
+                              style={btnStyle}
+                            >
+                              🧐 {opt}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   );

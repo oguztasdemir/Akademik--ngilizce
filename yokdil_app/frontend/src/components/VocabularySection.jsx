@@ -295,6 +295,13 @@ const VocabularySection = ({
   const [drillSelected, setDrillSelected] = useState(null);
   const [drillChecked, setDrillChecked] = useState(false);
   const [drillScore, setDrillScore] = useState(0);
+  const [shuffledDrillOptions, setShuffledDrillOptions] = useState([]);
+
+  useEffect(() => {
+    if (subTab === 'prepDrills' && PREP_DRILL_QUESTIONS[drillIndex]) {
+      setShuffledDrillOptions([...PREP_DRILL_QUESTIONS[drillIndex].options].sort(() => 0.5 - Math.random()));
+    }
+  }, [drillIndex, subTab]);
 
   // Duel states
   const [duelActive, setDuelActive] = useState(false);
@@ -1059,7 +1066,6 @@ const VocabularySection = ({
         <button onClick={() => setSubTab('leitner')} style={subTab === 'leitner' ? activeTabStyle : inactiveTabStyle}>📦 Leitner Kutuları</button>
         <button onClick={() => setSubTab('pronunciation')} style={subTab === 'pronunciation' ? activeTabStyle : inactiveTabStyle}>🎙️ Telaffuz Laboratuvarı</button>
         <button onClick={() => setSubTab('sentenceBuilder')} style={subTab === 'sentenceBuilder' ? activeTabStyle : inactiveTabStyle}>🧩 Cümle Kurma</button>
-        <button onClick={() => setSubTab('audioPlaylist')} style={subTab === 'audioPlaylist' ? activeTabStyle : inactiveTabStyle}>🎧 Kulaklık Modu</button>
         <button onClick={() => setSubTab('prepDrills')} style={subTab === 'prepDrills' ? activeTabStyle : inactiveTabStyle}>✏️ Edat Sondajı</button>
         <button onClick={() => setSubTab('duel')} style={subTab === 'duel' ? activeTabStyle : inactiveTabStyle}>⚡ Kelime Düellosu</button>
         <button onClick={() => setSubTab('mcq')} style={subTab === 'mcq' ? activeTabStyle : inactiveTabStyle}>🎯 Çoktan Seçmeli</button>
@@ -1747,70 +1753,7 @@ const VocabularySection = ({
         </div>
       )}
 
-      {/* SUBTAB 3.1.4: AUDIO PLAYLIST MODE */}
-      {subTab === 'audioPlaylist' && (
-        <div className="space-y-4">
-          <div className="glass-card p-6 border border-white/5 rounded-2xl space-y-6 text-center">
-            <div className="flex justify-between items-center text-[10px] text-slate-400" style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>🎧 KULAKLIK MODU (PODCAST)</span>
-              <span>Kelime {apIndex + 1} / {pool.length}</span>
-            </div>
 
-            {pool.length > 0 ? (
-              (() => {
-                const currentWord = pool[apIndex];
-                if (!currentWord) return null;
-                return (
-                  <div className="space-y-6 py-6">
-                    <div style={{ animation: apPlaying ? 'pulse 2s infinite' : 'none' }}>
-                      <h2 style={{ fontSize: '2.4rem', fontWeight: '900', color: 'white', letterSpacing: '0.02em', margin: 0 }}>{currentWord.english}</h2>
-                      <p style={{ fontSize: '1rem', color: 'var(--primary-light)', fontWeight: '700', marginTop: '6px' }}>{currentWord.turkish}</p>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
-                      <button
-                        onClick={() => {
-                          setApIndex(prev => Math.max(0, prev - 1));
-                        }}
-                        className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-slate-300 hover:bg-white/10 transition-all cursor-pointer"
-                        title="Önceki Kelime"
-                      >
-                        <i className="fa-solid fa-backward"></i>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setApPlaying(prev => !prev);
-                        }}
-                        className="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-600 border border-indigo-500 text-white hover:scale-105 shadow-lg shadow-indigo-600/20 transition-all cursor-pointer"
-                        style={{ fontSize: '1.4rem' }}
-                      >
-                        <i className={apPlaying ? "fa-solid fa-pause" : "fa-solid fa-play"}></i>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setApIndex(prev => (prev < pool.length - 1 ? prev + 1 : 0));
-                        }}
-                        className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-slate-300 hover:bg-white/10 transition-all cursor-pointer"
-                        title="Sonraki Kelime"
-                      >
-                        <i className="fa-solid fa-forward"></i>
-                      </button>
-                    </div>
-
-                    <p style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', maxWidth: '280px', margin: '0 auto', lineHeight: 1.4 }}>
-                      Kulaklık modunda kelimeler ve Türkçe karşılıkları sırayla seslendirilir. Telefonunuz cebinizdeyken dinleyerek çalışabilirsiniz.
-                    </p>
-                  </div>
-                );
-              })()
-            ) : (
-              <div style={{ padding: '24px', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>Kelimelerim listesi boş.</div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* SUBTAB: PREPOSITION & PHRASAL DRILLS */}
       {subTab === 'prepDrills' && (
@@ -1838,7 +1781,7 @@ const VocabularySection = ({
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
-                      {currentQuestion.options.map((opt) => {
+                      {shuffledDrillOptions.map((opt) => {
                         const isSelected = drillSelected === opt;
                         const isCorrect = currentQuestion.answer === opt;
                         
@@ -2317,7 +2260,10 @@ const VocabularySection = ({
                       <td className="p-3 text-xs text-slate-200" style={{ padding: '12px 16px', fontSize: '0.8rem' }}>{item.turkish}</td>
                       <td className="p-3 text-xs text-center" style={{ padding: '12px 16px', fontSize: '0.8rem', textAlign: 'center' }}>
                         <button
-                          onClick={() => handleToggleWordStatus(item.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleToggleWordStatus(item.id);
+                          }}
                           className="px-2.5 py-0.5 rounded text-[10px] font-bold"
                           style={{
                             padding: '2px 8px',
@@ -2335,7 +2281,10 @@ const VocabularySection = ({
                       </td>
                       <td className="p-3 text-xs text-center" style={{ padding: '12px 16px', fontSize: '0.8rem', textAlign: 'center' }}>
                         <button
-                          onClick={() => handleDeleteFromNotebook(item.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteFromNotebook(item.id);
+                          }}
                           className="text-slate-500 hover:text-rose-400"
                           style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}
                         >

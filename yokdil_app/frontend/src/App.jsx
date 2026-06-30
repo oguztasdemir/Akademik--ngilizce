@@ -328,6 +328,7 @@ function App() {
   const [fontSize, setFontSize] = useState(() => localStorage.getItem('yokdil_font_size') || 'base');
   const [sepiaActive, setSepiaActive] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [spacedRepetitionModalWord, setSpacedRepetitionModalWord] = useState(null);
   
   // Data States
   const [exams, setExams] = useState([]);
@@ -745,7 +746,7 @@ function App() {
 
   // Gamification & Daily Goals Validation Hook
   useEffect(() => {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
     const lastStudyDate = localStorage.getItem('yokdil_last_study_date');
     const savedStreak = localStorage.getItem('yokdil_study_streak');
     
@@ -789,7 +790,7 @@ function App() {
   }, []);
 
   const updateStreakAndDate = () => {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
     const lastStudyDate = localStorage.getItem('yokdil_last_study_date');
     const savedStreak = localStorage.getItem('yokdil_study_streak') || '1';
     let currentStreak = parseInt(savedStreak, 10);
@@ -813,7 +814,7 @@ function App() {
   };
 
   const logStudyActivity = (type, amt = 1) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
     const raw = localStorage.getItem('yokdil_study_history');
     let history = raw ? JSON.parse(raw) : {};
     if (!history[today]) {
@@ -1042,6 +1043,13 @@ function App() {
     const qNums = sortedQNums.slice(startIndex);
     if (qNums.length === 0) return;
     
+    // Clear answers for these questions so they appear unselected for re-solving
+    const newAnswers = { ...answers };
+    qNums.forEach(num => {
+      delete newAnswers[num];
+    });
+    setAnswers(newAnswers);
+    
     setQuizQuestions(qNums);
     setCurrentQuizIndex(qNums[0]);
     setQuizActive(true);
@@ -1219,6 +1227,13 @@ function App() {
   const [aiInput, setAiInput] = useState('');
   const [aiVoiceMode, setAiVoiceMode] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [aiMessages, showAiChat]);
 
   const startVoiceRecognition = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1272,7 +1287,10 @@ function App() {
         botResponse = "YÖKDİL sınavında başarılı olmak için şu 3 taktiğe dikkat et:\n1. **Bağlaçlara çalış:** Cümle tamamlama sorularında zıtlık bağlaçları (although, contrast) ve neden-sonuç bağlaçları (because, since) en çok doğru cevap çıkan yapılardır.\n2. **Kelimeleri cümle içinde öğren:** Kartlardaki örnek cümleler zihninde kalıcı olmasını sağlar.\n3. **Hata Kutunu erit:** Yanlış yaptığın soruları en az iki kere tekrar çöz. 🎯";
       } else if (lowerText.includes("kelime") || lowerText.includes("anlam") || lowerText.includes("çevir")) {
         const cleanWord = lowerText.replace("nedir", "").replace("anlamı", "").replace("ne demek", "").replace("çevir", "").trim();
-        const found = dictionaryList.find(item => item.english.toLowerCase() === cleanWord || item.turkish.toLowerCase().includes(cleanWord));
+        const found = dictionaryList.find(item => {
+          if (!item || !item.english || !item.turkish) return false;
+          return item.english.toLowerCase() === cleanWord || item.turkish.toLowerCase().includes(cleanWord);
+        });
         if (found) {
           botResponse = `**${found.english}**: "${found.turkish}" anlamına gelir. Bu kelimeyi YÖKDİL Akademik Kelime Defterine kaydederek aralıklı tekrar (Leitner) yöntemiyle çalışabilirsin! 📚`;
         } else {
@@ -2094,10 +2112,9 @@ function App() {
                     onClick={() => {
                       const wordsInNotebook = notebook || [];
                       if (wordsInNotebook.length > 0) {
-                        const word = wordsInNotebook[0];
-                        alert(`Kelime: ${word.english}\nAnlamı: ${word.turkish}`);
+                        setSpacedRepetitionModalWord(wordsInNotebook[0]);
                       } else {
-                        alert(`Kelime: mitigate\nAnlamı: hafifletmek, azaltmak`);
+                        setSpacedRepetitionModalWord({ english: 'mitigate', turkish: 'hafifletmek, azaltmak' });
                       }
                     }}
                     className="btn-primary"
@@ -2940,6 +2957,54 @@ function App() {
           </div>
         </div>
       )}
+      {spacedRepetitionModalWord && (
+        <div 
+          className="auth-modal-overlay" 
+          style={{ zIndex: 100000 }} 
+          onClick={() => setSpacedRepetitionModalWord(null)}
+        >
+          <div 
+            className="auth-modal-card text-center" 
+            style={{ 
+              maxWidth: '380px', 
+              padding: '24px', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: '16px', 
+              background: 'rgba(15, 23, 42, 0.95)', 
+              border: '1px solid rgba(99, 102, 241, 0.3)' 
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '-10px -10px 0 0' }}>
+              <button 
+                onClick={() => setSpacedRepetitionModalWord(null)}
+                style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div style={{ padding: '10px 0' }}>
+              <span style={{ fontSize: '0.64rem', fontWeight: 'bold', textTransform: 'uppercase', color: '#a5b4fc', letterSpacing: '0.05em' }}>KELİME VE ANLAMI</span>
+              <h3 style={{ fontSize: '1.8rem', fontWeight: '800', color: 'white', margin: '8px 0 2px 0' }}>
+                {spacedRepetitionModalWord.english}
+              </h3>
+              <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#34d399', marginTop: '12px' }}>
+                {spacedRepetitionModalWord.turkish}
+              </div>
+            </div>
+
+            <button
+              onClick={() => setSpacedRepetitionModalWord(null)}
+              className="btn-primary"
+              style={{ width: '100%', padding: '12px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer' }}
+            >
+              Tamam
+            </button>
+          </div>
+        </div>
+      )}
       {/* Floating AI Chatbot Widget */}
       {selectedCategory && (
         <div className="ai-chat-widget">
@@ -2978,6 +3043,7 @@ function App() {
                     {renderMarkdown(msg.text)}
                   </div>
                 ))}
+                <div ref={messagesEndRef} />
               </div>
 
               {/* Quick Prompt Suggesters */}
