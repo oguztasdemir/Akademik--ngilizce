@@ -6,6 +6,7 @@ import {
 
 // Import Modular Components
 import MascotOwl from './components/MascotOwl';
+import MascotPet from './components/MascotPet';
 import Confetti from './components/Confetti';
 import TranslationPopover from './components/TranslationPopover';
 import Sidebar from './components/Sidebar';
@@ -37,6 +38,39 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (
     ? 'http://localhost:5000'
     : window.location.origin
 );
+
+const ROOM_BACKGROUNDS = {
+  cozy: {
+    name: 'Cozy Cam 🏠',
+    gradient: 'linear-gradient(135deg, rgba(30,41,59,0.5), rgba(15,23,42,0.6))',
+    border: 'rgba(255,255,255,0.05)'
+  },
+  library: {
+    name: '📚 Kütüphane',
+    gradient: 'linear-gradient(135deg, rgba(69,26,3,0.5) 0%, rgba(30,27,75,0.6) 100%)',
+    border: 'rgba(217,119,6,0.15)'
+  },
+  science: {
+    name: '🔬 Fen Lab',
+    gradient: 'linear-gradient(135deg, rgba(2,44,34,0.5) 0%, rgba(15,23,42,0.6) 100%)',
+    border: 'rgba(16,185,129,0.15)'
+  },
+  history: {
+    name: '🏛️ Antik Harabeler',
+    gradient: 'linear-gradient(135deg, rgba(124,45,18,0.5) 0%, rgba(76,29,149,0.6) 100%)',
+    border: 'rgba(249,115,22,0.15)'
+  },
+  medical: {
+    name: '🏥 Sağlık Lab',
+    gradient: 'linear-gradient(135deg, rgba(15,118,110,0.5) 0%, rgba(15,23,42,0.6) 100%)',
+    border: 'rgba(13,148,136,0.15)'
+  },
+  space: {
+    name: '🚀 Uzay İstasyonu',
+    gradient: 'linear-gradient(135deg, rgba(49,16,132,0.5) 0%, rgba(3,0,30,0.6) 100%)',
+    border: 'rgba(139,92,246,0.15)'
+  }
+};
 
 const parseInlineMarkdown = (text) => {
   if (!text) return '';
@@ -351,6 +385,32 @@ function App() {
   const [ownedOutfits, setOwnedOutfits] = useState(() => JSON.parse(localStorage.getItem('yokdil_owned_outfits') || '[]'));
   const [activeOutfits, setActiveOutfits] = useState(() => JSON.parse(localStorage.getItem('yokdil_active_outfits') || '[]'));
   const [streakFreezeActive, setStreakFreezeActive] = useState(() => localStorage.getItem('yokdil_streak_freeze') === 'true');
+  const [petXp, setPetXp] = useState(() => parseInt(localStorage.getItem('yokdil_pet_xp') || '0', 10));
+  const [petLevel, setPetLevel] = useState(() => parseInt(localStorage.getItem('yokdil_pet_level') || '1', 10));
+  const [petConfig, setPetConfig] = useState(() => {
+    const saved = localStorage.getItem('yokdil_custom_pet');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return {
+          name: 'Bilge',
+          background: 'cozy',
+          color: '',
+          ...parsed
+        };
+      } catch (e) {}
+    }
+    return {
+      animalId: 'chick',
+      hat: 'none',
+      glasses: 'none',
+      clothing: 'none',
+      item: 'none',
+      name: 'Bilge',
+      background: 'cozy',
+      color: ''
+    };
+  });
   
   // Word stats for spacing repetition algorithm
   const [wordStats, setWordStats] = useState(() => JSON.parse(localStorage.getItem('yokdil_word_stats') || '{}'));
@@ -440,6 +500,69 @@ function App() {
   useEffect(() => {
     localStorage.setItem('yokdil_exam_date', yokdilExamDate);
   }, [yokdilExamDate]);
+
+  useEffect(() => {
+    const loadConfig = () => {
+      const saved = localStorage.getItem('yokdil_custom_pet');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setPetConfig({
+            name: 'Bilge',
+            background: 'cozy',
+            color: '',
+            ...parsed
+          });
+        } catch (e) {}
+      }
+      setPetXp(parseInt(localStorage.getItem('yokdil_pet_xp') || '0', 10));
+      setPetLevel(parseInt(localStorage.getItem('yokdil_pet_level') || '1', 10));
+    };
+    window.addEventListener('storage', loadConfig);
+    window.addEventListener('custom-pet-updated', loadConfig);
+    return () => {
+      window.removeEventListener('storage', loadConfig);
+      window.removeEventListener('custom-pet-updated', loadConfig);
+    };
+  }, []);
+
+  // Smart mascot speech / vocabulary reminder generator
+  useEffect(() => {
+    const speechOptions = [
+      "YÖKDİL sınavına her gün biraz çalışarak hazırlanabilirsin! 🚀",
+      "Bugünkü hedeflerini tamamlamayı unutma! Kristaller seni bekliyor. 💎",
+      "Düzenli kelime çalışmak, paragraf sorularını çözmenin anahtarıdır. 🔑",
+      "Gramer kurallarına çalıştıktan sonra mutlaka bol soru çöz. 📝",
+      "Yanlış yaptığın soruları 'Hata Kutusu' sekmesinde tekrar inceleyebilirsin! 🔍"
+    ];
+
+    const generateSpeech = () => {
+      // If quiz is active, don't override the quiz feedback speech
+      if (quizActive) return;
+
+      if (notebook && notebook.length > 0) {
+        // 50% chance to remind a word, 50% general advice
+        if (Math.random() > 0.5) {
+          const randomIndex = Math.floor(Math.random() * notebook.length);
+          const randomWord = notebook[randomIndex];
+          setMascotSpeech(`Hey! Defterindeki "${randomWord.english}" kelimesinin anlamı neydi hatırlıyor musun? 🤔`);
+          setMascotState('thinking');
+          return;
+        }
+      }
+
+      // Default random advice
+      const randomOption = speechOptions[Math.floor(Math.random() * speechOptions.length)];
+      setMascotSpeech(randomOption);
+      setMascotState('neutral');
+    };
+
+    // Run initially and then every 45 seconds
+    generateSpeech();
+    const interval = setInterval(generateSpeech, 45000);
+
+    return () => clearInterval(interval);
+  }, [notebook, quizActive]);
 
   const getOutfitEmoji = () => {
     switch (activeOutfit) {
@@ -790,6 +913,31 @@ function App() {
     }
   }, []);
 
+  const awardPetXP = (amount) => {
+    setPetXp(prevXp => {
+      let newXp = prevXp + amount;
+      let newLevel = petLevel;
+      
+      while (newXp >= 100) {
+        newXp -= 100;
+        newLevel += 1;
+      }
+      
+      if (newLevel !== petLevel) {
+        setPetLevel(newLevel);
+        localStorage.setItem('yokdil_pet_level', String(newLevel));
+        triggerConfetti();
+        setTimeout(() => {
+          alert(`🎉 Tebrikler! Evcil hayvanınız Seviye ${newLevel}'e ulaştı! 🎉`);
+        }, 150);
+      }
+      
+      localStorage.setItem('yokdil_pet_xp', String(newXp));
+      window.dispatchEvent(new Event('custom-pet-updated'));
+      return newXp;
+    });
+  };
+
   const updateStreakAndDate = () => {
     const todayStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
     const lastStudyDate = localStorage.getItem('yokdil_last_study_date');
@@ -823,6 +971,9 @@ function App() {
     }
     history[today][type] = (history[today][type] || 0) + amt;
     localStorage.setItem('yokdil_study_history', JSON.stringify(history));
+    if (type === 'paragraphs') {
+      awardPetXP(15);
+    }
   };
 
   const incrementDailyQuestions = () => {
@@ -835,6 +986,7 @@ function App() {
       return newVal;
     });
     logStudyActivity('questions');
+    awardPetXP(10);
     updateStreakAndDate();
   };
 
@@ -848,6 +1000,7 @@ function App() {
       return newVal;
     });
     logStudyActivity('words');
+    awardPetXP(5);
     updateStreakAndDate();
   };
 
@@ -2051,38 +2204,52 @@ function App() {
                   </div>
 
                   {/* Right Side: Bilge Baykuş Study Buddy Mascot */}
-                  <div className="glass-card" style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px',
-                    padding: '16px 20px',
-                    borderRadius: '18px',
-                    minWidth: '280px',
-                    flex: '0.8',
-                    border: '1px solid rgba(255, 255, 255, 0.05)',
-                    background: 'rgba(255,255,255,0.01)'
-                  }}>
-                    {/* Animated Owl Emoji Icon */}
-                    <div style={{
-                      fontSize: '2.4rem',
-                      animation: 'float 3s ease-in-out infinite',
+                  <div 
+                    className="glass-card" 
+                    style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      background: 'rgba(99, 102, 241, 0.12)',
-                      width: '60px',
-                      height: '60px',
-                      borderRadius: '50%',
-                      border: '1px solid rgba(99, 102, 241, 0.25)',
-                      boxShadow: '0 0 15px rgba(99, 102, 241, 0.25)',
-                      flexShrink: 0
-                    }}>
-                      🦉
+                      gap: '16px',
+                      padding: '16px 20px',
+                      borderRadius: '18px',
+                      minWidth: '280px',
+                      flex: '0.8',
+                      border: `1px solid ${ROOM_BACKGROUNDS[petConfig.background]?.border || 'rgba(255, 255, 255, 0.05)'}`,
+                      background: ROOM_BACKGROUNDS[petConfig.background]?.gradient || 'rgba(255,255,255,0.01)',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <MascotPet 
+                        state={mascotState} 
+                        speech={null} 
+                        customConfig={petConfig} 
+                        size={64} 
+                        isFloating={false} 
+                      />
                     </div>
-                    {/* Speech Bubble */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', textAlign: 'left' }}>
-                      <span style={{ fontSize: '0.64rem', fontWeight: 'bold', color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Çalışma Arkadaşı (Bilge Baykuş)</span>
-                      <p style={{ fontSize: '0.76rem', color: '#e2e8f0', margin: 0, fontStyle: 'italic', lineHeight: '1.4' }}>
+                    {/* Name, Speech & XP progression */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', textAlign: 'left', flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
+                        <span style={{ fontSize: '0.78rem', fontWeight: '900', color: 'white' }}>
+                          {petConfig.name || 'Bilge'}
+                        </span>
+                        <span style={{ fontSize: '0.58rem', fontWeight: 'bold', color: '#fbbf24', background: 'rgba(251,191,36,0.1)', padding: '2px 6px', borderRadius: '8px' }}>
+                          Seviye {petLevel}
+                        </span>
+                      </div>
+                      
+                      {/* XP Bar */}
+                      <div style={{ width: '100%', margin: '2px 0 4px 0' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.55rem', fontWeight: 'bold', color: '#cbd5e1', marginBottom: '2px' }}>
+                          <span>XP: {petXp} / 100</span>
+                        </div>
+                        <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', width: `${petXp}%`, background: 'linear-gradient(90deg, #fbbf24, #f59e0b)', borderRadius: '2px', transition: 'width 0.4s ease' }} />
+                        </div>
+                      </div>
+
+                      <p style={{ fontSize: '0.7rem', color: '#e2e8f0', margin: 0, fontStyle: 'italic', lineHeight: '1.3', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                         {(() => {
                           const solvedAll = dailyQuestionsSolved >= 20 && dailyWordsStudied >= 10 && dailyLecturesStudied >= 1;
                           if (solvedAll) return "İnanılmazsın! Bugünün tüm hedeflerini tamamladın. Yarın da bu seriyi devam ettirelim! 🔥";

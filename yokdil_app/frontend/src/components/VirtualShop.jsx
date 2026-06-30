@@ -8,22 +8,64 @@ import MascotPet, {
   ACCESSORY_ITEMS 
 } from './MascotPet';
 
+const ROOM_BACKGROUNDS = {
+  cozy: {
+    name: 'Cozy Cam 🏠',
+    gradient: 'linear-gradient(135deg, rgba(30,41,59,0.9), rgba(15,23,42,0.95))',
+    border: 'rgba(255,255,255,0.06)'
+  },
+  library: {
+    name: '📚 Kütüphane',
+    gradient: 'linear-gradient(135deg, #451a03 0%, #1e1b4b 100%)',
+    border: 'rgba(217,119,6,0.15)'
+  },
+  science: {
+    name: '🔬 Fen Lab',
+    gradient: 'linear-gradient(135deg, #022c22 0%, #0f172a 100%)',
+    border: 'rgba(16,185,129,0.15)'
+  },
+  history: {
+    name: '🏛️ Antik Harabeler',
+    gradient: 'linear-gradient(135deg, #7c2d12 0%, #4c1d95 100%)',
+    border: 'rgba(249,115,22,0.15)'
+  },
+  medical: {
+    name: '🏥 Sağlık Lab',
+    gradient: 'linear-gradient(135deg, #0f766e 0%, #0f172a 100%)',
+    border: 'rgba(13,148,136,0.15)'
+  },
+  space: {
+    name: '🚀 Uzay İstasyonu',
+    gradient: 'linear-gradient(135deg, #311084 0%, #03001e 100%)',
+    border: 'rgba(139,92,246,0.15)'
+  }
+};
+
 const VirtualShop = ({ activeTab }) => {
-  const [shopTab, setShopTab] = useState('animals'); // 'animals', 'hats', 'glasses', 'clothing', 'items'
+  const [shopTab, setShopTab] = useState('animals');
   const [searchTerm, setSearchTerm] = useState('');
   const [petConfig, setPetConfig] = useState({
     animalId: 'chick',
     hat: 'none',
     glasses: 'none',
     clothing: 'none',
-    item: 'none'
+    item: 'none',
+    name: 'Bilge',
+    background: 'cozy',
+    color: ''
   });
 
   useEffect(() => {
     const saved = localStorage.getItem('yokdil_custom_pet');
     if (saved) {
       try {
-        setPetConfig(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        setPetConfig({
+          name: 'Bilge',
+          background: 'cozy',
+          color: '',
+          ...parsed
+        });
       } catch (e) {
         console.error(e);
       }
@@ -71,11 +113,49 @@ const VirtualShop = ({ activeTab }) => {
 
       <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'stretch' }}>
         {/* Left Side: Dynamic Live Preview */}
-        <div className="glass-card" style={{ flex: '1', minWidth: '280px', maxWidth: '340px', padding: '24px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(99,102,241,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
+        <div 
+          className="glass-card" 
+          style={{ 
+            flex: '1', 
+            minWidth: '280px', 
+            maxWidth: '340px', 
+            padding: '24px', 
+            borderRadius: '24px', 
+            border: `1px solid ${ROOM_BACKGROUNDS[petConfig.background || 'cozy']?.border || 'rgba(255,255,255,0.05)'}`, 
+            background: ROOM_BACKGROUNDS[petConfig.background || 'cozy']?.gradient || 'rgba(99,102,241,0.02)', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            gap: '20px',
+            transition: 'all 0.3s ease'
+          }}
+        >
           <span style={{ fontSize: '0.64rem', fontWeight: '800', color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Canlı Önizleme</span>
           
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '20px 0' }}>
             <MascotPet state="happy" customConfig={petConfig} size={110} isFloating={false} />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
+            <label style={{ fontSize: '0.68rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Arkadaşının İsmi</label>
+            <input 
+              type="text" 
+              value={petConfig.name || 'Bilge'} 
+              onChange={(e) => updateConfig('name', e.target.value)} 
+              placeholder="Arkadaşına isim ver..." 
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '12px',
+                padding: '8px 12px',
+                fontSize: '0.78rem',
+                color: 'white',
+                outline: 'none',
+                textAlign: 'center',
+                fontWeight: '800'
+              }}
+            />
           </div>
 
           <div style={{ width: '100%', textAlign: 'center', background: 'rgba(255,255,255,0.02)', padding: '14px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.04)' }}>
@@ -97,6 +177,7 @@ const VirtualShop = ({ activeTab }) => {
             <button onClick={() => setShopTab('clothing')} style={tabStyle(shopTab === 'clothing')}>👕 Kıyafetler</button>
             <button onClick={() => setShopTab('items')} style={tabStyle(shopTab === 'items')}>🪄 Eşyalar</button>
             <button onClick={() => setShopTab('colors')} style={tabStyle(shopTab === 'colors')}>🎨 Renk</button>
+            <button onClick={() => setShopTab('rooms')} style={tabStyle(shopTab === 'rooms')}>🏠 Odalar</button>
           </div>
 
           {/* Tab Content: Animals */}
@@ -369,6 +450,40 @@ const VirtualShop = ({ activeTab }) => {
                   );
                 })}
               </div>
+            </div>
+          )}
+
+          {/* Tab Content: Rooms */}
+          {shopTab === 'rooms' && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '10px' }}>
+              {Object.entries(ROOM_BACKGROUNDS).map(([key, bg]) => {
+                const isSelected = (petConfig.background || 'cozy') === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => updateConfig('background', key)}
+                    className="glass-card flex flex-col items-center justify-center p-3 transition-all hover:scale-[1.02]"
+                    style={{
+                      borderRadius: '16px',
+                      border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.05)',
+                      background: isSelected ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,42,0.3)',
+                      cursor: 'pointer',
+                      gap: '8px'
+                    }}
+                  >
+                    <div style={{
+                      width: '100%',
+                      height: '40px',
+                      borderRadius: '8px',
+                      background: bg.gradient,
+                      border: `1px solid ${bg.border}`
+                    }} />
+                    <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1' }}>
+                      {bg.name}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
