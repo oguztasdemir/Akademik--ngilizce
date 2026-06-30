@@ -129,6 +129,10 @@ const Sidebar = ({
           <i className="fa-solid fa-chart-line"></i>
           <span>Performans</span>
         </button>
+        <button style={getSidebarItemStyle('shop')} onClick={() => { setActiveTab('shop'); setQuizActive(false); }}>
+          <i className="fa-solid fa-shirt"></i>
+          <span>Evcil Hayvan</span>
+        </button>
         <button style={getSidebarItemStyle('settings')} onClick={() => { setActiveTab('settings'); setQuizActive(false); }}>
           <i className="fa-solid fa-gear"></i>
           <span>Ayarlar</span>

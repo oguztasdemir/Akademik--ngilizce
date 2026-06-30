@@ -18,6 +18,7 @@ import MistakeInbox from './components/MistakeInbox';
 import ParagraphsSection from './components/ParagraphsSection';
 import AuthModal from './components/AuthModal';
 import MinigamesSection from './components/MinigamesSection';
+import VirtualShop from './components/VirtualShop';
 
 import fallbackExamsFen from './components/exams_db_fen.json';
 import fallbackExamsSosyal from './components/exams_db_sosyal.json';
@@ -2882,6 +2883,11 @@ function App() {
               playCorrectSound={playCorrectSound}
               playIncorrectSound={playIncorrectSound}
               logStudyActivity={logStudyActivity}
+            />
+
+            {/* TAB 7.8: VIRTUAL SHOP (PET CUSTOMIZER) */}
+            <VirtualShop 
+              activeTab={activeTab} 
             />
 
             {/* TAB 8: SETTINGS SECTION */}

@@ -1,152 +1,256 @@
-import React from 'react';
-import { ShoppingBag, Award, Zap, HelpCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import MascotOwl from './MascotOwl';
+import { 
+  ANIMAL_CATALOG, 
+  ACCESSORY_HATS, 
+  ACCESSORY_GLASSES, 
+  ACCESSORY_CLOTHES, 
+  ACCESSORY_ITEMS 
+} from './MascotPet';
 
-const VirtualShop = ({ 
-  activeTab, 
-  gems, 
-  setGems, 
-  ownedOutfits, 
-  setOwnedOutfits, 
-  activeOutfits, 
-  setActiveOutfits,
-  streakFreezeActive,
-  setStreakFreezeActive
-}) => {
+const VirtualShop = ({ activeTab }) => {
+  const [shopTab, setShopTab] = useState('animals'); // 'animals', 'hats', 'glasses', 'clothing', 'items'
+  const [searchTerm, setSearchTerm] = useState('');
+  const [petConfig, setPetConfig] = useState({
+    animalId: 'chick',
+    hat: 'none',
+    glasses: 'none',
+    clothing: 'none',
+    item: 'none'
+  });
+
+  useEffect(() => {
+    const saved = localStorage.getItem('yokdil_custom_pet');
+    if (saved) {
+      try {
+        setPetConfig(JSON.parse(saved));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
+  const updateConfig = (key, value) => {
+    const newConfig = { ...petConfig, [key]: value };
+    setPetConfig(newConfig);
+    localStorage.setItem('yokdil_custom_pet', JSON.stringify(newConfig));
+    // Dispatch events to update MascotOwl on other screens instantly
+    window.dispatchEvent(new Event('custom-pet-updated'));
+  };
+
   if (activeTab !== 'shop') return null;
 
-  const shopItems = [
-    {
-      id: 'streak_freeze',
-      title: 'Seri Dondurucu',
-      description: 'Çalışmayı kaçırdığın bir günde çalışma serini sıfırlanmaktan korur.',
-      cost: 100,
-      icon: <Zap className="h-6 w-6 text-amber-500" />,
-      type: 'powerup'
-    },
-    {
-      id: 'glasses',
-      title: 'Bilge Gözlüğü',
-      description: 'Baykuşunuzun daha entelektüel görünmesini sağlayan yuvarlak çerçeveli gözlük.',
-      cost: 150,
-      icon: <Award className="h-6 w-6 text-blue-400" />,
-      type: 'cosmetic'
-    },
-    {
-      id: 'robe',
-      title: 'Mezuniyet Cübbesi',
-      description: 'Akademisyen baykuşunuza yakışacak şık bir mezuniyet cübbesi.',
-      cost: 250,
-      icon: <ShoppingBag className="h-6 w-6 text-purple-400" />,
-      type: 'cosmetic'
-    },
-    {
-      id: 'crown',
-      title: 'Kraliyet Tacı',
-      description: 'Soruları taçlandırmak isteyen baykuşunuz için parıldayan altın taç.',
-      cost: 350,
-      icon: <HelpCircle className="h-6 w-6 text-amber-400" />,
-      type: 'cosmetic'
-    }
-  ];
+  // Filter animals based on search
+  const filteredAnimals = ANIMAL_CATALOG.filter(a => 
+    a.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    a.id.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const handleBuyItem = (item) => {
-    if (gems < item.cost) {
-      alert("Yetersiz Kristal! Soru çözerek kristal kazanabilirsiniz.");
-      return;
-    }
-
-    setGems(prev => prev - item.cost);
-    localStorage.setItem('yokdil_gems', (gems - item.cost).toString());
-
-    if (item.id === 'streak_freeze') {
-      setStreakFreezeActive(true);
-      localStorage.setItem('yokdil_streak_freeze', 'true');
-      alert("Seri Dondurucu satın alındı! Seriniz bir günlüğüne güvence altında.");
-    } else {
-      const newOwned = [...ownedOutfits, item.id];
-      setOwnedOutfits(newOwned);
-      localStorage.setItem('yokdil_owned_outfits', JSON.stringify(newOwned));
-      alert(`Tebrikler! ${item.title} gardırobunuza eklendi.`);
-    }
-  };
-
-  const handleToggleOutfit = (id) => {
-    const isActive = activeOutfits.includes(id);
-    let newActive;
-    if (isActive) {
-      newActive = activeOutfits.filter(item => item !== id);
-    } else {
-      newActive = [...activeOutfits, id];
-    }
-    setActiveOutfits(newActive);
-    localStorage.setItem('yokdil_active_outfits', JSON.stringify(newActive));
-  };
+  const tabStyle = (active) => ({
+    padding: '8px 16px',
+    fontSize: '0.75rem',
+    fontWeight: 'bold',
+    borderRadius: '12px',
+    background: active ? 'var(--primary-gradient)' : 'rgba(255,255,255,0.02)',
+    border: active ? 'none' : '1px solid rgba(255,255,255,0.05)',
+    color: active ? '#fff' : 'var(--text-secondary)',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    flex: '1',
+    textAlign: 'center'
+  });
 
   return (
-    <div className="space-y-4 text-left">
-      <div className="section-title flex justify-between items-center" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h2>Sanal Dükkan 💎</h2>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Kazandığınız kristalleri harcayarak koruma alın ve baykuşunuzu giydirin.</p>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(99, 102, 241, 0.1)', padding: '6px 12px', borderRadius: '20px', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
-          <i className="fa-solid fa-gem text-indigo-400"></i>
-          <span style={{ fontWeight: '800', color: 'var(--primary-light)', fontSize: '0.9rem' }}>{gems} Kristal</span>
-        </div>
+    <div className="space-y-6 text-left">
+      <div className="section-title">
+        <h2>Evcil Hayvan & Gardırop 🦄</h2>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+          Kendi akademik çalışma arkadaşınızı tasarlayın! 100 farklı hayvan ve onlarca kıyafet seçeneği tamamen ücretsiz ve kilitsizdir.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
-        {shopItems.map(item => {
-          const isOwned = item.id === 'streak_freeze' ? streakFreezeActive : ownedOutfits.includes(item.id);
-          const isEquipped = item.type === 'cosmetic' && activeOutfits.includes(item.id);
+      <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'stretch' }}>
+        {/* Left Side: Dynamic Live Preview */}
+        <div className="glass-card" style={{ flex: '1', minWidth: '280px', maxWidth: '340px', padding: '24px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(99,102,241,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
+          <span style={{ fontSize: '0.64rem', fontWeight: '800', color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Canlı Önizleme</span>
+          
+          <div style={{ transform: 'scale(1.6)', margin: '40px 0' }}>
+            <MascotOwl state="happy" speech="Harika görünüyorum!" />
+          </div>
 
-          return (
-            <div key={item.id} className="glass-card p-4 border border-white/5 bg-white/1 rounded-2xl flex flex-col justify-between" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '12px' }}>
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <div style={{ padding: '10px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {item.icon}
-                </div>
-                <div>
-                  <h4 style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--text-main)' }}>{item.title}</h4>
-                  <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '2px', lineHeight: '1.3' }}>{item.description}</p>
-                </div>
-              </div>
+          <div style={{ width: '100%', textAlign: 'center', background: 'rgba(255,255,255,0.02)', padding: '14px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.04)' }}>
+            <h4 style={{ fontSize: '0.9rem', fontWeight: '800', color: 'white', margin: '0 0 4px 0' }}>
+              {ANIMAL_CATALOG.find(a => a.id === petConfig.animalId)?.name || 'Bilinmeyen'}
+            </h4>
+            <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', margin: 0 }}>
+              Aktif Çalışma Arkadaşınız
+            </p>
+          </div>
+        </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <i className="fa-solid fa-gem text-indigo-400" style={{ fontSize: '0.75rem' }}></i>
-                  <span style={{ fontWeight: '800', fontSize: '0.8rem', color: 'var(--text-main)' }}>{item.cost}</span>
-                </div>
+        {/* Right Side: Tabbed Catalog Customizer */}
+        <div style={{ flex: '2', minWidth: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Customizer Subtabs */}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', background: 'rgba(255,255,255,0.01)', padding: '6px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.04)' }}>
+            <button onClick={() => setShopTab('animals')} style={tabStyle(shopTab === 'animals')}>🐾 Hayvanlar ({ANIMAL_CATALOG.length})</button>
+            <button onClick={() => setShopTab('hats')} style={tabStyle(shopTab === 'hats')}>🤠 Şapkalar</button>
+            <button onClick={() => setShopTab('glasses')} style={tabStyle(shopTab === 'glasses')}>😎 Gözlükler</button>
+            <button onClick={() => setShopTab('clothing')} style={tabStyle(shopTab === 'clothing')}>👕 Kıyafetler</button>
+            <button onClick={() => setShopTab('items')} style={tabStyle(shopTab === 'items')}>🪄 Eşyalar</button>
+          </div>
 
-                {isOwned ? (
-                  item.type === 'cosmetic' ? (
+          {/* Tab Content: Animals */}
+          {shopTab === 'animals' && (
+            <div className="space-y-4">
+              <input 
+                type="text"
+                placeholder="100 hayvan arasında ara..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  borderRadius: '14px',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  background: 'rgba(255,255,255,0.02)',
+                  color: 'white',
+                  fontSize: '0.82rem',
+                  outline: 'none'
+                }}
+              />
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '10px', maxHeight: '380px', overflowY: 'auto', paddingRight: '4px' }}>
+                {filteredAnimals.map(animal => {
+                  const isSelected = petConfig.animalId === animal.id;
+                  return (
                     <button
-                      onClick={() => handleToggleOutfit(item.id)}
-                      className={`px-3.5 py-1.5 text-[10px] font-bold rounded-lg border transition-all ${
-                        isEquipped 
-                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
-                          : 'bg-white/5 border-white/5 text-slate-300'
-                      }`}
+                      key={animal.id}
+                      onClick={() => updateConfig('animalId', animal.id)}
+                      className="glass-card flex flex-col items-center justify-center transition-all hover:scale-[1.03]"
+                      style={{
+                        padding: '16px 8px',
+                        borderRadius: '16px',
+                        border: isSelected ? '2px solid #fbbf24' : '1px solid rgba(255,255,255,0.05)',
+                        background: isSelected ? 'rgba(251,191,36,0.06)' : 'rgba(15,23,42,0.3)',
+                        cursor: 'pointer',
+                        textAlign: 'center'
+                      }}
                     >
-                      {isEquipped ? 'Çıkar' : 'Giydir'}
+                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: animal.color, marginBottom: '8px', border: '1px solid rgba(255,255,255,0.1)' }} />
+                      <span style={{ fontSize: '0.74rem', fontWeight: '800', color: isSelected ? '#fbbf24' : '#cbd5e1' }}>
+                        {animal.name}
+                      </span>
                     </button>
-                  ) : (
-                    <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-500/20">
-                      Aktif
-                    </span>
-                  )
-                ) : (
-                  <button
-                    onClick={() => handleBuyItem(item)}
-                    className="px-3.5 py-1.5 text-[10px] font-bold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all"
-                  >
-                    Satın Al
-                  </button>
-                )}
+                  );
+                })}
               </div>
             </div>
-          );
-        })}
+          )}
+
+          {/* Tab Content: Hats */}
+          {shopTab === 'hats' && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '10px' }}>
+              {ACCESSORY_HATS.map(hat => {
+                const isSelected = petConfig.hat === hat.id;
+                return (
+                  <button
+                    key={hat.id}
+                    onClick={() => updateConfig('hat', hat.id)}
+                    className="glass-card flex flex-col items-center justify-center p-5 transition-all hover:scale-[1.02]"
+                    style={{
+                      borderRadius: '16px',
+                      border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.05)',
+                      background: isSelected ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,42,0.3)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span style={{ fontSize: '0.78rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1' }}>
+                      {hat.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Tab Content: Glasses */}
+          {shopTab === 'glasses' && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '10px' }}>
+              {ACCESSORY_GLASSES.map(glass => {
+                const isSelected = petConfig.glasses === glass.id;
+                return (
+                  <button
+                    key={glass.id}
+                    onClick={() => updateConfig('glasses', glass.id)}
+                    className="glass-card flex flex-col items-center justify-center p-5 transition-all hover:scale-[1.02]"
+                    style={{
+                      borderRadius: '16px',
+                      border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.05)',
+                      background: isSelected ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,42,0.3)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span style={{ fontSize: '0.78rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1' }}>
+                      {glass.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Tab Content: Clothing */}
+          {shopTab === 'clothing' && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '10px' }}>
+              {ACCESSORY_CLOTHES.map(cloth => {
+                const isSelected = petConfig.clothing === cloth.id;
+                return (
+                  <button
+                    key={cloth.id}
+                    onClick={() => updateConfig('clothing', cloth.id)}
+                    className="glass-card flex flex-col items-center justify-center p-5 transition-all hover:scale-[1.02]"
+                    style={{
+                      borderRadius: '16px',
+                      border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.05)',
+                      background: isSelected ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,42,0.3)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span style={{ fontSize: '0.78rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1' }}>
+                      {cloth.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Tab Content: Held Items */}
+          {shopTab === 'items' && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '10px' }}>
+              {ACCESSORY_ITEMS.map(item => {
+                const isSelected = petConfig.item === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => updateConfig('item', item.id)}
+                    className="glass-card flex flex-col items-center justify-center p-5 transition-all hover:scale-[1.02]"
+                    style={{
+                      borderRadius: '16px',
+                      border: isSelected ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.05)',
+                      background: isSelected ? 'rgba(99,102,241,0.08)' : 'rgba(15,23,42,0.3)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span style={{ fontSize: '0.78rem', fontWeight: 'bold', color: isSelected ? '#a5b4fc' : '#cbd5e1' }}>
+                      {item.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
