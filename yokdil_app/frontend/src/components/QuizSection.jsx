@@ -82,6 +82,7 @@ const QuizSection = ({
   const renderInteractiveQuestion = (text, qNum) => {
     const cleaned = cleanQuestionText(text, qNum);
     const words = cleaned.split(/\s+/);
+    const hasChosenCurrent = answers[currentQuizIndex] !== undefined;
     
     return words.map((word, idx) => {
       const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
@@ -89,6 +90,7 @@ const QuizSection = ({
         <span
           key={idx}
           onClick={(e) => {
+            if (!hasChosenCurrent) return; // Do not translate until answered
             if (handleTextSelection) {
               handleTextSelection({
                 clientX: e.clientX,
@@ -99,13 +101,23 @@ const QuizSection = ({
             }
           }}
           style={{
-            cursor: 'pointer',
+            cursor: hasChosenCurrent ? 'pointer' : 'default',
             padding: '1px 2px',
             borderRadius: '4px',
             display: 'inline-block'
           }}
-          onMouseEnter={(e) => { e.target.style.color = '#818cf8'; e.target.style.background = 'rgba(99,102,241,0.08)'; }}
-          onMouseLeave={(e) => { e.target.style.color = 'inherit'; e.target.style.background = 'transparent'; }}
+          onMouseEnter={(e) => { 
+            if (hasChosenCurrent) {
+              e.target.style.color = '#818cf8'; 
+              e.target.style.background = 'rgba(99,102,241,0.08)'; 
+            }
+          }}
+          onMouseLeave={(e) => { 
+            if (hasChosenCurrent) {
+              e.target.style.color = 'inherit'; 
+              e.target.style.background = 'transparent'; 
+            }
+          }}
         >
           {word}{' '}
         </span>
@@ -121,11 +133,16 @@ const QuizSection = ({
 
   React.useEffect(() => {
     setShowExplanation(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const mainEl = document.querySelector('.app-main');
+    if (mainEl) mainEl.scrollTop = 0;
   }, [currentQuizIndex]);
 
   if (!selectedExam || !quizActive) return null;
 
   const handleDoubleClick = (e) => {
+    const hasChosenCurrent = answers[currentQuizIndex] !== undefined;
+    if (!hasChosenCurrent) return; // Do not translate until answered
     const selection = window.getSelection();
     const text = selection.toString().trim();
     if (text && text.length < 50) {
@@ -167,44 +184,38 @@ const QuizSection = ({
           ></div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: 'rgba(239, 68, 68, 0.08)',
-            border: '1px solid rgba(239, 68, 68, 0.2)',
-            padding: '4px 10px',
-            borderRadius: '12px',
-            color: '#f87171',
-            fontSize: '0.72rem',
-            fontWeight: '800'
-          }}>
-            ⏱️ {formatTime(secondsLeft)}
-          </div>
-          {/* Pacing Coach Badge */}
-          {questionTimeSpent !== undefined && (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: questionTimeSpent > 90 ? 'rgba(239, 68, 68, 0.12)' : questionTimeSpent > 45 ? 'rgba(245, 158, 11, 0.12)' : 'rgba(16, 185, 129, 0.12)',
-              border: `1px solid ${questionTimeSpent > 90 ? '#ef4444' : questionTimeSpent > 45 ? '#fbbf24' : '#10b981'}`,
-              padding: '4px 10px',
-              borderRadius: '12px',
-              color: questionTimeSpent > 90 ? '#f87171' : questionTimeSpent > 45 ? '#fbbf24' : '#34d399',
-              fontSize: '0.72rem',
-              fontWeight: '800'
-            }}>
-              {questionTimeSpent > 90 ? '⚠️ Yavaş (Limit Aşıldı)' : questionTimeSpent > 45 ? '⏱️ Normal' : '⚡ Hızlı'} ({questionTimeSpent}s)
-            </div>
-          )}
-          <button
-            onClick={() => setShowCheatSheet(true)}
-            className="rounded-lg px-2.5 py-1 text-[10px] font-bold border border-indigo-500/20 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 cursor-pointer"
-            title="Gramer Formül Kartları"
-          >
-            📑 Gramer Formülleri
-          </button>
+          {(() => {
+            let correct = 0;
+            let wrong = 0;
+            Object.keys(answers).forEach(qIndex => {
+              const idxNum = parseInt(qIndex);
+              const chosen = answers[idxNum];
+              const correctAns = selectedExam.answers[idxNum - 1];
+              if (chosen !== undefined && correctAns !== undefined) {
+                if (chosen === correctAns) {
+                  correct++;
+                } else {
+                  wrong++;
+                }
+              }
+            });
+            return (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                padding: '4px 10px',
+                borderRadius: '12px',
+                fontSize: '0.72rem',
+                fontWeight: '800'
+              }}>
+                <span style={{ color: '#34d399' }}>🟢 {correct} D</span>
+                <span style={{ color: '#f87171' }}>🔴 {wrong} Y</span>
+              </div>
+            );
+          })()}
           <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>
             {quizQuestions.indexOf(currentQuizIndex) + 1} / {quizQuestions.length}
           </span>
@@ -239,7 +250,12 @@ const QuizSection = ({
         {selectedExam?.questions?.[currentQuizIndex - 1] ? (
           <div>
             <div 
-              onMouseUp={handleTextSelection}
+              onMouseUp={(e) => {
+                const hasChosenCurrent = answers[currentQuizIndex] !== undefined;
+                if (hasChosenCurrent && handleTextSelection) {
+                  handleTextSelection(e);
+                }
+              }}
               onDoubleClick={handleDoubleClick}
               className="duo-question-title"
               style={{ fontSize: fontSize === 'sm' ? '1rem' : fontSize === 'lg' ? '1.35rem' : fontSize === 'xl' ? '1.5rem' : '1.15rem', cursor: 'pointer', lineHeight: '1.6', textAlign: 'left' }}
@@ -331,7 +347,7 @@ const QuizSection = ({
         })}
       </div>
 
-      <div style={{ position: 'relative', minHeight: '120px', marginTop: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', position: 'relative', minHeight: '120px', marginTop: '20px', width: '100%' }}>
         <MascotOwl state={mascotState} speech={mascotSpeech} />
       </div>
 
@@ -344,70 +360,48 @@ const QuizSection = ({
         const barStateClass = isCorrect ? 'state-correct' : 'state-incorrect';
 
         return (
-          <div className={`duo-bottom-bar ${barStateClass}`}>
-            <div className="duo-bottom-bar-content">
-              <div className="duo-bottom-left" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <div className="duo-bottom-icon">
-                    <i className={isCorrect ? "fa-solid fa-check" : "fa-solid fa-xmark"}></i>
-                  </div>
-                  <div>
-                    <div className="duo-bottom-text-title" style={{ fontSize: '1.15rem' }}>
-                      {isCorrect ? "Mükemmel! Doğru Cevap" : "Hatalı Seçim!"}
-                    </div>
-                    <div className="duo-bottom-text-sub">
-                      Doğru Cevap: {selectedExam.answers[currentQuizIndex - 1]}
-                    </div>
-                  </div>
+          <div className={`duo-bottom-bar ${barStateClass}`} style={{ padding: '16px 20px', minHeight: 'auto' }}>
+            <div className="duo-bottom-bar-content" style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '640px', margin: '0 auto', padding: 0 }}>
+              {/* TOP: Status and correct answer */}
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: '900', color: isCorrect ? '#34d399' : '#f87171', marginBottom: '2px' }}>
+                  {isCorrect ? "Mükemmel! Doğru Cevap" : "Hatalı Seçim!"}
                 </div>
-
-                {/* Show explanation trigger only on wrong answers */}
-                {!isCorrect && (
-                  <>
-                    {!showExplanation ? (
-                      <button 
-                        onClick={() => setShowExplanation(true)}
-                        className="btn-secondary"
-                        style={{ marginTop: '12px', padding: '6px 12px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', color: 'white', alignSelf: 'flex-start', borderRadius: '6px' }}
-                      >
-                        🔍 Açıklamayı Gör (Yapay Zeka)
-                      </button>
-                    ) : (
-                      activeExplanation && (
-                        <div className="duo-explanation-sheet active" style={{ display: 'block', marginTop: '16px' }}>
-                          <div style={{ fontWeight: '800', marginBottom: '8px', color: '#F87171', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <i className="fa-solid fa-wand-magic-sparkles"></i> 
-                            <span>Yapay Zeka Gramer Açıklaması</span>
-                          </div>
-                          <div className="prose prose-invert mt-2 text-slate-300">
-                            {renderMarkdown(activeExplanation.explanation)}
-                          </div>
-                          <div className="rounded bg-slate-950/60 p-2.5 border border-white/5" style={{ padding: '10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', backgroundColor: 'rgba(0,0,0,0.3)', marginTop: '8px' }}>
-                            <span style={{ fontWeight: 'bold', color: 'var(--primary-light)', display: 'block', marginBottom: '4px' }}>Çözüm İpucu:</span>
-                            {activeExplanation.takeaway}
-                          </div>
-                        </div>
-                      )
-                    )}
-                  </>
-                )}
+                <div style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 'bold' }}>
+                  Doğru Cevap: {selectedExam.answers[currentQuizIndex - 1]}
+                </div>
               </div>
 
-              <div className="duo-bottom-right" style={{ flexShrink: 0 }}>
-                <button
-                  onClick={() => {
-                    const idxInSess = quizQuestions.indexOf(currentQuizIndex);
-                    if (idxInSess < quizQuestions.length - 1) {
-                      setCurrentQuizIndex(quizQuestions[idxInSess + 1]);
-                    } else {
-                      handleSubmitExam();
-                    }
-                  }}
-                  className="duo-check-btn"
-                  style={{ cursor: 'pointer' }}
-                >
-                  DEVAM ET
-                </button>
+              {/* BOTTOM ROW: Action buttons */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: '12px' }}>
+                <div>
+                  {!isCorrect ? (
+                    <button 
+                      onClick={() => setShowExplanation(true)}
+                      className="btn-secondary"
+                      style={{ padding: '10px 16px', fontSize: '0.8rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', color: 'white', borderRadius: '8px' }}
+                    >
+                      🔍 Açıklamayı Gör
+                    </button>
+                  ) : <div />}
+                </div>
+
+                <div>
+                  <button
+                    onClick={() => {
+                      const idxInSess = quizQuestions.indexOf(currentQuizIndex);
+                      if (idxInSess < quizQuestions.length - 1) {
+                        setCurrentQuizIndex(quizQuestions[idxInSess + 1]);
+                      } else {
+                        handleSubmitExam();
+                      }
+                    }}
+                    className="duo-check-btn"
+                    style={{ cursor: 'pointer', padding: '10px 24px', fontSize: '0.82rem', fontWeight: 'bold', borderRadius: '8px' }}
+                  >
+                    DEVAM ET
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -474,6 +468,70 @@ const QuizSection = ({
               onClick={() => setShowCheatSheet(false)}
               className="btn-primary"
               style={{ width: '100%', padding: '10px', fontSize: '0.78rem', cursor: 'pointer' }}
+            >
+              Anladım, Kapat
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Yapay Zeka Açıklama Modalı */}
+      {showExplanation && activeExplanation && (
+        <div className="auth-modal-overlay" style={{ zIndex: 100001 }} onClick={() => setShowExplanation(false)}>
+          <div 
+            className="auth-modal-card text-left" 
+            style={{ 
+              maxWidth: '600px', 
+              width: '90%',
+              padding: '24px', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: '16px', 
+              background: 'rgba(10, 15, 30, 0.98)', 
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              maxHeight: '85vh',
+              overflow: 'hidden'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header with Close Buttons */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px', width: '100%' }}>
+              <button 
+                onClick={() => setShowExplanation(false)}
+                style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px' }}
+                title="Kapat"
+              >
+                <i className="fa-solid fa-arrow-left"></i>
+              </button>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#F87171', display: 'flex', alignItems: 'center', gap: '8px', margin: 0, flex: 1 }}>
+                <i className="fa-solid fa-wand-magic-sparkles"></i> 
+                <span>Yapay Zeka Gramer Açıklaması</span>
+              </h3>
+              <button 
+                onClick={() => setShowExplanation(false)}
+                style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem', fontWeight: 'bold', padding: '4px' }}
+                title="Kapat"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Scrollable Content */}
+            <div style={{ overflowY: 'auto', paddingRight: '6px', fontSize: '0.88rem', lineHeight: '1.6' }}>
+              <div className="prose prose-invert text-slate-300" style={{ marginBottom: '14px' }}>
+                {renderMarkdown(activeExplanation.explanation)}
+              </div>
+              <div style={{ padding: '14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)', backgroundColor: 'rgba(0,0,0,0.3)', marginTop: '8px' }}>
+                <span style={{ fontWeight: 'bold', color: 'var(--primary-light)', display: 'block', marginBottom: '6px', fontSize: '0.82rem' }}>Çözüm İpucu:</span>
+                <p style={{ margin: 0, fontSize: '0.8rem', color: '#cbd5e1' }}>{activeExplanation.takeaway}</p>
+              </div>
+            </div>
+
+            {/* Footer Close Button */}
+            <button 
+              onClick={() => setShowExplanation(false)}
+              className="btn-primary"
+              style={{ width: '100%', padding: '12px', fontSize: '0.82rem', fontWeight: 'bold', cursor: 'pointer', borderRadius: '10px', marginTop: '4px' }}
             >
               Anladım, Kapat
             </button>

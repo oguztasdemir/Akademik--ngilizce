@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
+import {
   Trophy, TrendingUp, Volume2, Plus, Play, ArrowRight,
   Sun, Moon, Eye, ShieldAlert
 } from 'lucide-react';
@@ -15,11 +15,11 @@ import VocabularySection from './components/VocabularySection';
 import LecturesSection from './components/LecturesSection';
 import PerformanceSection from './components/PerformanceSection';
 import SettingsSection from './components/SettingsSection';
+import PetSection from './components/PetSection';
+import GamesSection from './components/GamesSection';
 import MistakeInbox from './components/MistakeInbox';
 import ParagraphsSection from './components/ParagraphsSection';
 import AuthModal from './components/AuthModal';
-import MinigamesSection from './components/MinigamesSection';
-import VirtualShop from './components/VirtualShop';
 
 import fallbackExamsFen from './components/exams_db_fen.json';
 import fallbackExamsSosyal from './components/exams_db_sosyal.json';
@@ -78,12 +78,12 @@ const parseInlineMarkdown = (text) => {
   const tokens = [];
   let match;
   let lastIdx = 0;
-  
+
   while ((match = regex.exec(text)) !== null) {
     if (match.index > lastIdx) {
       tokens.push(text.substring(lastIdx, match.index));
     }
-    
+
     if (match[1]) { // bold
       tokens.push(<strong key={match.index} className="font-extrabold text-white">{match[2]}</strong>);
     } else if (match[3]) { // italic
@@ -93,11 +93,11 @@ const parseInlineMarkdown = (text) => {
     }
     lastIdx = regex.lastIndex;
   }
-  
+
   if (lastIdx < text.length) {
     tokens.push(text.substring(lastIdx));
   }
-  
+
   return tokens.length > 0 ? tokens : text;
 };
 
@@ -105,27 +105,27 @@ const renderMarkdown = (text) => {
   if (!text) return null;
   const lines = text.split('\n');
   const elements = [];
-  
+
   let inTable = false;
   let tableRows = [];
-  
+
   lines.forEach((line, index) => {
     const trimmedLine = line.trim();
-    
+
     // Parse table row
     if (trimmedLine.startsWith('|')) {
       inTable = true;
       const cells = trimmedLine.split('|').map(c => c.trim()).filter((c, i, arr) => i > 0 && i < arr.length - 1);
-      
+
       // Skip separator row (e.g. |---|---|)
       if (cells.every(c => c.match(/^:+|-+:*$/) || c === '')) {
         return;
       }
-      
+
       tableRows.push(cells);
       return;
     }
-    
+
     // If table ends, flush it
     if (inTable && !trimmedLine.startsWith('|')) {
       inTable = false;
@@ -159,7 +159,7 @@ const renderMarkdown = (text) => {
         tableRows = [];
       }
     }
-    
+
     if (trimmedLine.startsWith('# ')) {
       elements.push(
         <h1 key={index} className="text-xl font-extrabold text-slate-100 mt-6 mb-3 border-b border-white/10 pb-2">
@@ -196,7 +196,7 @@ const renderMarkdown = (text) => {
       );
     }
   });
-  
+
   // Flush final table if file ends with one
   if (inTable && tableRows.length > 0) {
     elements.push(
@@ -226,7 +226,7 @@ const renderMarkdown = (text) => {
       </div>
     );
   }
-  
+
   return <div className="space-y-1">{elements}</div>;
 };
 
@@ -241,14 +241,14 @@ const playCorrectSound = () => {
     gain.connect(ctx.destination);
     osc.type = 'sine';
     const now = ctx.currentTime;
-    
+
     // Melodic positive C5 -> E5 arpeggio
     osc.frequency.setValueAtTime(523.25, now); // C5
     gain.gain.setValueAtTime(0.12, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
     osc.start(now);
     osc.stop(now + 0.12);
-    
+
     const osc2 = ctx.createOscillator();
     const gain2 = ctx.createGain();
     osc2.connect(gain2);
@@ -274,7 +274,7 @@ const playIncorrectSound = () => {
     gain.connect(ctx.destination);
     osc.type = 'sawtooth';
     const now = ctx.currentTime;
-    
+
     // Sad downturned sliding buzz
     osc.frequency.setValueAtTime(150, now);
     osc.frequency.linearRampToValueAtTime(90, now + 0.25);
@@ -347,10 +347,10 @@ function App() {
     if (hash && hash.startsWith('#/') && hash !== '#/landing') {
       const parts = hash.split('/');
       if (parts.length >= 3) {
-        return { 
-          category: parts[1], 
-          tab: parts[2], 
-          quiz: parts[3] === 'quiz' 
+        return {
+          category: parts[1],
+          tab: parts[2],
+          quiz: parts[3] === 'quiz'
         };
       }
     }
@@ -366,7 +366,7 @@ function App() {
   const [sepiaActive, setSepiaActive] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [spacedRepetitionModalWord, setSpacedRepetitionModalWord] = useState(null);
-  
+
   // Data States
   const [exams, setExams] = useState([]);
   const [selectedExam, setSelectedExam] = useState(null);
@@ -377,7 +377,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
-  
+
   // Gamification & Shop States
   const [confetti, setConfetti] = useState([]);
   const [mascotState, setMascotState] = useState('neutral');
@@ -400,7 +400,7 @@ function App() {
           color: '',
           ...parsed
         };
-      } catch (e) {}
+      } catch (e) { }
     }
     return {
       animalId: 'chick',
@@ -413,7 +413,21 @@ function App() {
       color: ''
     };
   });
-  
+
+  const awardPetXp = (amount) => {
+    let nextXp = petXp + amount;
+    let nextLevel = petLevel;
+    if (nextXp >= 100) {
+      nextLevel += Math.floor(nextXp / 100);
+      nextXp = nextXp % 100;
+      alert(`Tebrikler! Evcil hayvanınız yeni bir seviyeye ulaştı: Seviye ${nextLevel}! 🎉🐾`);
+    }
+    setPetXp(nextXp);
+    setPetLevel(nextLevel);
+    localStorage.setItem('yokdil_pet_xp', String(nextXp));
+    localStorage.setItem('yokdil_pet_level', String(nextLevel));
+  };
+
   // Word stats for spacing repetition algorithm
   const [wordStats, setWordStats] = useState(() => JSON.parse(localStorage.getItem('yokdil_word_stats') || '{}'));
   const [questionStats, setQuestionStats] = useState(() => JSON.parse(localStorage.getItem('yokdil_question_stats') || '{}'));
@@ -515,7 +529,7 @@ function App() {
             color: '',
             ...parsed
           });
-        } catch (e) {}
+        } catch (e) { }
       }
       setPetXp(parseInt(localStorage.getItem('yokdil_pet_xp') || '0', 10));
       setPetLevel(parseInt(localStorage.getItem('yokdil_pet_level') || '1', 10));
@@ -596,7 +610,7 @@ function App() {
   const getAchievementTier = (id, value) => {
     let thresholds = [10, 50, 200, 500];
     let names = ["Bronz 🥉", "Gümüş 🥈", "Altın 🥇", "Elmas 💎"];
-    
+
     if (id === 'word_master') {
       thresholds = [5, 25, 100, 300];
     } else if (id === 'grammar_master') {
@@ -616,7 +630,7 @@ function App() {
     const nextTierIndex = tierIndex + 1 < thresholds.length ? tierIndex + 1 : thresholds.length - 1;
     const nextTarget = thresholds[nextTierIndex];
     const prevThreshold = tierIndex >= 0 ? thresholds[tierIndex] : 0;
-    
+
     const progress = value >= nextTarget ? 100 : Math.round(((value - prevThreshold) / (nextTarget - prevThreshold)) * 100);
 
     return {
@@ -689,21 +703,21 @@ function App() {
         },
         body: JSON.stringify({}) // Empty body acts as read-only fetch
       })
-      .then(res => res.json())
-      .then(data => {
-        if (data.syncState) {
-          if (data.syncState.answers) setAnswers(prev => ({ ...prev, ...data.syncState.answers }));
-          if (data.syncState.flagged) setFlagged(prev => ({ ...prev, ...data.syncState.flagged }));
-          if (data.syncState.mistakes) setMistakes(data.syncState.mistakes);
-          if (data.syncState.notebook) setNotebook(data.syncState.notebook);
-          if (data.syncState.wordStats) setWordStats(data.syncState.wordStats);
-          if (data.syncState.questionStats) {
-            setQuestionStats(data.syncState.questionStats);
-            localStorage.setItem('yokdil_question_stats', JSON.stringify(data.syncState.questionStats));
+        .then(res => res.json())
+        .then(data => {
+          if (data.syncState) {
+            if (data.syncState.answers) setAnswers(prev => ({ ...prev, ...data.syncState.answers }));
+            if (data.syncState.flagged) setFlagged(prev => ({ ...prev, ...data.syncState.flagged }));
+            if (data.syncState.mistakes) setMistakes(data.syncState.mistakes);
+            if (data.syncState.notebook) setNotebook(data.syncState.notebook);
+            if (data.syncState.wordStats) setWordStats(data.syncState.wordStats);
+            if (data.syncState.questionStats) {
+              setQuestionStats(data.syncState.questionStats);
+              localStorage.setItem('yokdil_question_stats', JSON.stringify(data.syncState.questionStats));
+            }
           }
-        }
-      })
-      .catch(err => console.error("Error auto-syncing on focus:", err));
+        })
+        .catch(err => console.error("Error auto-syncing on focus:", err));
     };
 
     window.addEventListener('focus', handleFocus);
@@ -875,7 +889,7 @@ function App() {
     const todayStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
     const lastStudyDate = localStorage.getItem('yokdil_last_study_date');
     const savedStreak = localStorage.getItem('yokdil_study_streak');
-    
+
     // Streak logic
     if (savedStreak) {
       const streakVal = parseInt(savedStreak, 10);
@@ -919,12 +933,12 @@ function App() {
     setPetXp(prevXp => {
       let newXp = prevXp + amount;
       let newLevel = petLevel;
-      
+
       while (newXp >= 100) {
         newXp -= 100;
         newLevel += 1;
       }
-      
+
       if (newLevel !== petLevel) {
         setPetLevel(newLevel);
         localStorage.setItem('yokdil_pet_level', String(newLevel));
@@ -933,7 +947,7 @@ function App() {
           alert(`🎉 Tebrikler! Evcil hayvanınız Seviye ${newLevel}'e ulaştı! 🎉`);
         }, 150);
       }
-      
+
       localStorage.setItem('yokdil_pet_xp', String(newXp));
       window.dispatchEvent(new Event('custom-pet-updated'));
       return newXp;
@@ -1034,14 +1048,14 @@ function App() {
           questionStats
         })
       })
-      .then(res => res.json())
-      .then(data => {
-        setIsSyncing(false);
-      })
-      .catch(err => {
-        console.error("Sync error:", err);
-        setIsSyncing(false);
-      });
+        .then(res => res.json())
+        .then(data => {
+          setIsSyncing(false);
+        })
+        .catch(err => {
+          console.error("Sync error:", err);
+          setIsSyncing(false);
+        });
     }, 1500);
 
     return () => clearTimeout(syncTimeout);
@@ -1120,7 +1134,7 @@ function App() {
   const startTopicQuizSession = (topicKey) => {
     let startIdx = 1;
     let endIdx = 80;
-    
+
     if (topicKey === 'vocab') { startIdx = 1; endIdx = 6; }
     else if (topicKey === 'tenses') { startIdx = 7; endIdx = 15; }
     else if (topicKey === 'preps') { startIdx = 16; endIdx = 20; }
@@ -1161,7 +1175,7 @@ function App() {
       questions: collectedQuestions,
       answers: collectedQuestions.map(q => q.correctAnswer)
     });
-    
+
     setCurrentQuizIndex(1);
     setQuizActive(true);
     setPreferTextView(true);
@@ -1174,7 +1188,7 @@ function App() {
     const stats = questionStats[examId] || {};
     const qNums = Array.from({ length: 80 }, (_, i) => i + 1);
     const dirFactor = examQuestionSortDir === 'asc' ? 1 : -1;
-    
+
     if (examQuestionSort === 'wrong') {
       qNums.sort((a, b) => {
         const wA = stats[a]?.wrong || 0;
@@ -1198,14 +1212,14 @@ function App() {
   const startCustomExamSession = (startIndex, sortedQNums) => {
     const qNums = sortedQNums.slice(startIndex);
     if (qNums.length === 0) return;
-    
+
     // Clear answers for these questions so they appear unselected for re-solving
     const newAnswers = { ...answers };
     qNums.forEach(num => {
       delete newAnswers[num];
     });
     setAnswers(newAnswers);
-    
+
     setQuizQuestions(qNums);
     setCurrentQuizIndex(qNums[0]);
     setQuizActive(true);
@@ -1257,16 +1271,16 @@ function App() {
   const handleSaveAnswer = (qIndex, value) => {
     if (!selectedExam) return;
     incrementDailyQuestions();
-    
+
     setIsSyncing(true);
     setTimeout(() => setIsSyncing(false), 800);
 
     const newAnswers = { ...answers, [qIndex]: value };
     setAnswers(newAnswers);
     localStorage.setItem(`answers_${selectedExam.id}`, JSON.stringify(newAnswers));
-    
+
     const isCorrect = value === selectedExam.answers[qIndex - 1];
-    
+
     // Tally correct/incorrect counts per question
     const examIdKey = selectedExam.id;
     const examStats = questionStats[examIdKey] || {};
@@ -1294,7 +1308,7 @@ function App() {
       playIncorrectSound();
       setMascotState('sad');
       setMascotSpeech(`Hata yapmak öğrenmenin parçasıdır! Doğru şık: ${selectedExam.answers[qIndex - 1]}`);
-      
+
       const alreadyExists = mistakes.some(m => m.examId === selectedExam.id && m.qNumber === qIndex);
       if (!alreadyExists) {
         const newMistakes = [...mistakes, { examId: selectedExam.id, qNumber: qIndex }];
@@ -1356,7 +1370,7 @@ function App() {
 
   const handleResetAllProgress = () => {
     if (!window.confirm("DİKKAT: Hesabınızdaki TÜM ilerlemeyi (çözülen sorular, istatistikler, kelimeler, seriler ve hedefler) sıfırlamak istediğinize emin misiniz? Bu işlem geri alınamaz!")) return;
-    
+
     Object.keys(localStorage).forEach(key => {
       if (key.startsWith('answers_') || key.startsWith('flags_') || key.startsWith('yokdil_')) {
         localStorage.removeItem(key);
@@ -1371,7 +1385,7 @@ function App() {
     setDailyQuestionsSolved(0);
     setDailyWordsStudied(0);
     setDailyLecturesStudied(0);
-    
+
     alert("Tüm verileriniz başarıyla sıfırlanmıştır.");
   };
 
@@ -1389,6 +1403,10 @@ function App() {
   const [chatPos, setChatPos] = useState(null);
   const [chatSize, setChatSize] = useState({ width: 380, height: 520 });
   const [activeChatChallenge, setActiveChatChallenge] = useState(null);
+  const [showAiFloatBtn, setShowAiFloatBtn] = useState(() => {
+    return localStorage.getItem('yokdil_ai_float_btn_enabled') !== 'false';
+  });
+  const [floatPos, setFloatPos] = useState(null);
 
   useEffect(() => {
     if (showAiChat && !chatPos) {
@@ -1403,7 +1421,7 @@ function App() {
     if (e.button !== 0) return;
     if (e.target.closest('button') || e.target.closest('i')) return;
     e.preventDefault();
-    
+
     const startX = e.clientX;
     const startY = e.clientY;
     const initialX = chatPos ? chatPos.x : (window.innerWidth - 410);
@@ -1429,7 +1447,7 @@ function App() {
 
   const handleHeaderTouchStart = (e) => {
     if (e.target.closest('button') || e.target.closest('i')) return;
-    
+
     const touch = e.touches[0];
     const startX = touch.clientX;
     const startY = touch.clientY;
@@ -1449,6 +1467,76 @@ function App() {
     const handleTouchEnd = () => {
       document.removeEventListener('touchmove', handleTouchMove);
       document.removeEventListener('touchend', handleTouchEnd);
+    };
+
+    document.addEventListener('touchmove', handleTouchMove);
+    document.addEventListener('touchend', handleTouchEnd);
+  };
+
+  const handleFloatMouseDown = (e) => {
+    if (e.button !== 0) return;
+    if (e.target.closest('.ai-chat-close-float-btn')) return;
+    e.preventDefault();
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const initialX = floatPos ? floatPos.x : (window.innerWidth - 80);
+    const initialY = floatPos ? floatPos.y : (window.innerHeight - 80);
+    let hasMoved = false;
+
+    const handleMouseMove = (moveEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const deltaY = moveEvent.clientY - startY;
+      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+        hasMoved = true;
+      }
+      setFloatPos({
+        x: Math.max(10, Math.min(window.innerWidth - 70, initialX + deltaX)),
+        y: Math.max(10, Math.min(window.innerHeight - 70, initialY + deltaY))
+      });
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      if (!hasMoved) {
+        setShowAiChat(true);
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleFloatTouchStart = (e) => {
+    if (e.target.closest('.ai-chat-close-float-btn')) return;
+
+    const touch = e.touches[0];
+    const startX = touch.clientX;
+    const startY = touch.clientY;
+    const initialX = floatPos ? floatPos.x : (window.innerWidth - 80);
+    const initialY = floatPos ? floatPos.y : (window.innerHeight - 80);
+    let hasMoved = false;
+
+    const handleTouchMove = (moveEvent) => {
+      const currentTouch = moveEvent.touches[0];
+      const deltaX = currentTouch.clientX - startX;
+      const deltaY = currentTouch.clientY - startY;
+      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+        hasMoved = true;
+      }
+      setFloatPos({
+        x: Math.max(10, Math.min(window.innerWidth - 70, initialX + deltaX)),
+        y: Math.max(10, Math.min(window.innerHeight - 70, initialY + deltaY))
+      });
+    };
+
+    const handleTouchEnd = () => {
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+      if (!hasMoved) {
+        setShowAiChat(true);
+      }
     };
 
     document.addEventListener('touchmove', handleTouchMove);
@@ -1549,7 +1637,7 @@ function App() {
       }
 
       const data = await response.json();
-      
+
       setAiMessages(prev => [...prev, { sender: 'bot', text: data.response }]);
       if (data.challenge) {
         setActiveChatChallenge(data.challenge);
@@ -1598,7 +1686,7 @@ function App() {
         try {
           const range = selection.getRangeAt(0);
           rect = range.getBoundingClientRect();
-        } catch (err) {}
+        } catch (err) { }
       }
     }
 
@@ -1670,6 +1758,39 @@ function App() {
     localStorage.setItem('yokdil_notebook', JSON.stringify(newNotebook));
   };
 
+  const handleUpdateWordLeitner = (english, isCorrect, fallbackTurkish = "") => {
+    const cleanWord = english.trim().toLowerCase();
+    const exists = notebook.some(item => (item.english || '').toLowerCase() === cleanWord);
+    
+    let newNotebook;
+    if (exists) {
+      newNotebook = notebook.map(item => {
+        if ((item.english || '').toLowerCase() === cleanWord) {
+          let currentStage = item.leitnerStage || 1;
+          if (isCorrect) {
+            currentStage = Math.min(5, currentStage + 1);
+          } else {
+            currentStage = Math.max(1, currentStage - 1);
+          }
+          const newStatus = currentStage === 5 ? 'learned' : 'learning';
+          return { ...item, leitnerStage: currentStage, status: newStatus };
+        }
+        return item;
+      });
+    } else {
+      const initialStage = isCorrect ? 2 : 1;
+      newNotebook = [...notebook, { 
+        id: Date.now(), 
+        english: english.trim(), 
+        turkish: fallbackTurkish || english, 
+        status: initialStage === 5 ? 'learned' : 'learning',
+        leitnerStage: initialStage
+      }];
+    }
+    setNotebook(newNotebook);
+    localStorage.setItem('yokdil_notebook', JSON.stringify(newNotebook));
+  };
+
   const handleAddCustomWord = (english, turkish) => {
     const cleanEng = english.trim();
     const cleanTr = turkish.trim();
@@ -1697,7 +1818,7 @@ function App() {
         }));
         const existingEngs = new Set(notebook.map(item => (item.english || '').toLowerCase()));
         const uniqueLoaded = loadedWords.filter(item => !existingEngs.has(item.english.toLowerCase()));
-        
+
         if (uniqueLoaded.length === 0) {
           alert("Tüm kelimeler zaten defterinizde ekli!");
           setLoading(false);
@@ -1770,21 +1891,21 @@ function App() {
           questionStats
         })
       })
-      .then(res => res.json())
-      .then(data => {
-        if (data.syncState) {
-          if (data.syncState.answers) setAnswers(data.syncState.answers);
-          if (data.syncState.flagged) setFlagged(data.syncState.flagged);
-          if (data.syncState.mistakes) setMistakes(data.syncState.mistakes);
-          if (data.syncState.notebook) setNotebook(data.syncState.notebook);
-          if (data.syncState.wordStats) setWordStats(data.syncState.wordStats);
-          if (data.syncState.questionStats) {
-            setQuestionStats(data.syncState.questionStats);
-            localStorage.setItem('yokdil_question_stats', JSON.stringify(data.syncState.questionStats));
+        .then(res => res.json())
+        .then(data => {
+          if (data.syncState) {
+            if (data.syncState.answers) setAnswers(data.syncState.answers);
+            if (data.syncState.flagged) setFlagged(data.syncState.flagged);
+            if (data.syncState.mistakes) setMistakes(data.syncState.mistakes);
+            if (data.syncState.notebook) setNotebook(data.syncState.notebook);
+            if (data.syncState.wordStats) setWordStats(data.syncState.wordStats);
+            if (data.syncState.questionStats) {
+              setQuestionStats(data.syncState.questionStats);
+              localStorage.setItem('yokdil_question_stats', JSON.stringify(data.syncState.questionStats));
+            }
           }
-        }
-      })
-      .catch(err => console.error("Initial sync error:", err));
+        })
+        .catch(err => console.error("Initial sync error:", err));
     }
   };
 
@@ -1797,11 +1918,11 @@ function App() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${deviceLinkInfo.token}`
         },
-        body: JSON.stringify({}) 
+        body: JSON.stringify({})
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Veri çekilemedi.');
-      
+
       setToken(deviceLinkInfo.token);
       const newUser = { id: Date.now().toString(), name: deviceLinkInfo.name };
       setCurrentUser(newUser);
@@ -1888,7 +2009,7 @@ function App() {
     let solved = 0;
     let correct = 0;
     let wrong = 0;
-    
+
     const topicStats = {
       vocab: { name: "Kelime Bilgisi (Vocabulary)", solved: 0, correct: 0, total: 6 },
       tenses: { name: "Zamanlar & Pasif (Tenses)", solved: 0, correct: 0, total: 9 },
@@ -1942,7 +2063,7 @@ function App() {
           <div className="landing-gate-logo">
             <i className="fa-solid fa-graduation-cap"></i>
           </div>
-          
+
           <div>
             <h1 className="landing-gate-title">YÖKDİL Akademik Hazırlık</h1>
             <p className="landing-gate-text" style={{ marginTop: '8px' }}>
@@ -1950,44 +2071,75 @@ function App() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '16px', gap: '16px', justifyContent: 'center' }}>
-            <button 
-              type="button" 
-              onClick={() => setAuthMode('login')} 
+          <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '16px', gap: '8px', justifyContent: 'center' }}>
+            <button
+              type="button"
+              onClick={() => setAuthMode('login')}
               style={{
                 background: 'none',
                 border: 'none',
                 color: authMode === 'login' ? 'var(--primary-light)' : 'rgba(255,255,255,0.5)',
                 borderBottom: authMode === 'login' ? '2px solid var(--primary-light)' : 'none',
-                padding: '8px 16px',
-                fontSize: '0.88rem',
+                padding: '8px 12px',
+                fontSize: '0.85rem',
                 fontWeight: 'bold',
                 cursor: 'pointer'
               }}
             >
               Giriş Yap
             </button>
-            <button 
-              type="button" 
-              onClick={() => setAuthMode('register')} 
+            <button
+              type="button"
+              onClick={() => setAuthMode('register')}
               style={{
                 background: 'none',
                 border: 'none',
                 color: authMode === 'register' ? 'var(--primary-light)' : 'rgba(255,255,255,0.5)',
                 borderBottom: authMode === 'register' ? '2px solid var(--primary-light)' : 'none',
-                padding: '8px 16px',
-                fontSize: '0.88rem',
+                padding: '8px 12px',
+                fontSize: '0.85rem',
                 fontWeight: 'bold',
                 cursor: 'pointer'
               }}
             >
               Kayıt Ol
             </button>
+            <button
+              type="button"
+              onClick={() => setAuthMode('guest')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: authMode === 'guest' ? 'var(--primary-light)' : 'rgba(255,255,255,0.5)',
+                borderBottom: authMode === 'guest' ? '2px solid var(--primary-light)' : 'none',
+                padding: '8px 12px',
+                fontSize: '0.85rem',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              Misafir Girişi
+            </button>
           </div>
 
           <form onSubmit={async (e) => {
             e.preventDefault();
-            if (authMode === 'login') {
+            if (authMode === 'guest') {
+              const uName = authUsername.trim();
+              if (!uName) return;
+              try {
+                const res = await fetch(`${BACKEND_URL}/api/auth/guest`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ username: uName })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                handleAuthSuccess(data.token, data.user);
+              } catch (err) {
+                alert("Misafir girişi başarısız: " + err.message);
+              }
+            } else if (authMode === 'login') {
               const uName = authUsername.trim();
               const pass = authPassword;
               if (!uName || !pass) return;
@@ -2027,8 +2179,8 @@ function App() {
             }
           }} className="landing-gate-form" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {authMode === 'register' && (
-              <input 
-                type="text" 
+              <input
+                type="text"
                 required
                 placeholder="Adınız Soyadınız"
                 value={authFullName}
@@ -2036,25 +2188,27 @@ function App() {
                 className="landing-gate-input"
               />
             )}
-            <input 
-              type="text" 
+            <input
+              type="text"
               required
-              placeholder="Kullanıcı Adı"
+              placeholder={authMode === 'guest' ? "Misafir Kullanıcı Adı" : "Kullanıcı Adı"}
               value={authUsername}
               onChange={(e) => setAuthUsername(e.target.value)}
               className="landing-gate-input"
             />
-            <input 
-              type="password" 
-              required
-              placeholder="Şifre"
-              value={authPassword}
-              onChange={(e) => setAuthPassword(e.target.value)}
-              className="landing-gate-input"
-            />
+            {authMode !== 'guest' && (
+              <input
+                type="password"
+                required
+                placeholder="Şifre"
+                value={authPassword}
+                onChange={(e) => setAuthPassword(e.target.value)}
+                className="landing-gate-input"
+              />
+            )}
             {authMode === 'register' && (
-              <input 
-                type="password" 
+              <input
+                type="password"
                 required
                 placeholder="Şifre Tekrar"
                 value={authConfirmPassword}
@@ -2068,12 +2222,12 @@ function App() {
                 <span>Lütfen başka platformlarda kullandığınız şifreleri girmeyiniz. Yeni ve farklı bir şifre belirleyiniz.</span>
               </p>
             )}
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="landing-gate-button"
               style={{ marginTop: '8px' }}
             >
-              {authMode === 'login' ? 'Giriş Yap' : 'Kayıt Ol'}
+              {authMode === 'login' ? 'Giriş Yap' : authMode === 'register' ? 'Kayıt Ol' : 'Misafir Olarak Giriş Yap'}
             </button>
           </form>
         </div>
@@ -2096,10 +2250,10 @@ function App() {
 
   return (
     <div className={`theme-wrapper ${theme} font-size-${fontSize} ${selectedCategory ? 'theme-' + selectedCategory : ''} ${sepiaActive ? 'sepia-filter' : ''} min-h-screen flex items-center justify-center p-0 md:p-4`}>
-      
+
       <Confetti particles={confetti} />
-      
-      <TranslationPopover 
+
+      <TranslationPopover
         show={showPopover}
         position={popoverPosition}
         selectedText={selectedText}
@@ -2112,7 +2266,7 @@ function App() {
       />
 
       <div className="app-container">
-        <Sidebar 
+        <Sidebar
           selectedCategory={selectedCategory}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -2121,7 +2275,7 @@ function App() {
           setQuizActive={setQuizActive}
           onLogout={handleLogout}
         />
-        
+
         <div className="app-content-wrapper">
           {selectedCategory ? (
             <header className="app-header">
@@ -2131,7 +2285,17 @@ function App() {
                   {selectedCategory === 'fen' ? 'Fen' : selectedCategory === 'sosyal' ? 'Sosyal' : 'Sağlık'}
                 </span>
               </div>
-              
+
+              <div className="mobile-header-mascot" onClick={() => { setActiveTab('settings'); setQuizActive(false); }} title="Mascot Odası">
+                <MascotPet
+                  state={mascotState}
+                  speech={null}
+                  customConfig={petConfig}
+                  size={32}
+                  isFloating={false}
+                />
+              </div>
+
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 {isSyncing && (
                   <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
@@ -2154,24 +2318,24 @@ function App() {
                 }}>
                   <span className="streak-flame-animated" style={{ display: 'inline-block' }}>🔥</span> {studyStreak} Gün
                 </div>
-                {currentUser && (
-                  <span className="text-[10px] text-indigo-300 font-bold hidden md:inline">
-                    👤 {currentUser.name}
-                  </span>
-                )}
-                <button className="change-course-btn" id="change-course-btn" onClick={() => { setSelectedCategory(null); setSelectedExam(null); setQuizActive(false); }}>
-                  <i className="fa-solid fa-arrow-right-to-bracket"></i> Alan
-                </button>
-                <button 
-                  className={`header-control-btn ${sepiaActive ? 'bg-amber-500/20 text-amber-400' : 'text-slate-400'}`} 
-                  onClick={() => setSepiaActive(!sepiaActive)} 
-                  title="Okuma Filtresi (Sepya)"
-                >
-                  <Eye className="h-4 w-4" />
-                </button>
                 <button className="header-control-btn" id="theme-toggle-btn" onClick={() => setTheme(theme === 'theme-light' ? 'theme-dark' : 'theme-light')} title="Tema Değiştir">
                   {theme === 'theme-light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
                 </button>
+                <button className="header-control-btn" onClick={() => { setActiveTab('settings'); setQuizActive(false); }} title="Ayarlar" style={{ marginLeft: '2px' }}>
+                  <i className="fa-solid fa-gear" style={{ fontSize: '0.85rem' }}></i>
+                </button>
+                {showAiFloatBtn && (
+                  <button
+                    className="header-control-btn"
+                    onClick={() => {
+                      setShowAiChat(prev => !prev);
+                    }}
+                    title="AI Asistanı Aç/Kapat 🦉"
+                    style={{ marginLeft: '2px', background: 'rgba(99, 102, 241, 0.08)', color: '#818cf8', borderColor: 'rgba(99, 102, 241, 0.2)' }}
+                  >
+                    🦉
+                  </button>
+                )}
               </div>
             </header>
           ) : (
@@ -2189,7 +2353,7 @@ function App() {
           )}
 
           <main className="app-main">
-            
+
             {/* TAB 0: Course selection */}
             {!selectedCategory && (
               <section id="screen-landing" className="app-screen active">
@@ -2270,12 +2434,12 @@ function App() {
                     <div style={{ position: 'relative', width: '64px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <svg width="64" height="64" viewBox="0 0 64 64" style={{ transform: 'rotate(-90deg)' }}>
                         <circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.05)" strokeWidth="4" fill="transparent" />
-                        <circle 
-                          cx="32" 
-                          cy="32" 
-                          r="28" 
-                          stroke="var(--primary-light)" 
-                          strokeWidth="4" 
+                        <circle
+                          cx="32"
+                          cy="32"
+                          r="28"
+                          stroke="var(--primary-light)"
+                          strokeWidth="4"
                           fill="transparent"
                           strokeDasharray="175.9"
                           strokeDashoffset={(() => {
@@ -2287,7 +2451,7 @@ function App() {
                             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                             const percent = Math.max(0, Math.min(100, (days / 120) * 100)); // assume 120 days max range
                             return (175.9 - (175.9 * percent) / 100).toFixed(1);
-                          })()} 
+                          })()}
                           strokeLinecap="round"
                           style={{ transition: 'stroke-dashoffset 0.5s ease' }}
                         />
@@ -2319,8 +2483,8 @@ function App() {
                   </div>
 
                   {/* Right Side: Bilge Baykuş Study Buddy Mascot */}
-                  <div 
-                    className="glass-card" 
+                  <div
+                    className="glass-card"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -2335,12 +2499,12 @@ function App() {
                     }}
                   >
                     <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <MascotPet 
-                        state={mascotState} 
-                        speech={null} 
-                        customConfig={petConfig} 
-                        size={64} 
-                        isFloating={false} 
+                      <MascotPet
+                        state={mascotState}
+                        speech={null}
+                        customConfig={petConfig}
+                        size={56 + Math.min(40, petLevel * 4)}
+                        isFloating={false}
                       />
                     </div>
                     {/* Name & Speech */}
@@ -2568,8 +2732,8 @@ function App() {
                     ].map(ach => {
                       const tier = getAchievementTier(ach.id, ach.value);
                       return (
-                        <div 
-                          key={ach.id} 
+                        <div
+                          key={ach.id}
                           style={{
                             background: tier.completed ? 'rgba(99, 102, 241, 0.06)' : 'rgba(255, 255, 255, 0.01)',
                             border: tier.completed ? '1px solid rgba(99, 102, 241, 0.2)' : '1px solid rgba(255, 255, 255, 0.04)',
@@ -2627,7 +2791,7 @@ function App() {
                       const isActive = activeOutfit === outfit.key;
 
                       return (
-                        <div 
+                        <div
                           key={outfit.key}
                           style={{
                             background: isActive ? 'rgba(99, 102, 241, 0.12)' : 'rgba(255,255,255,0.02)',
@@ -2685,13 +2849,13 @@ function App() {
                   </div>
                   <div className="stat-card full-width">
                     <div className="progress-ring-container">
-                      <div className="circular-progress" style={{ background: `conic-gradient(var(--primary-light) ${stats.solved > 0 ? (stats.correct/stats.solved)*360 : 0}deg, var(--border-color) 0deg)` }}>
-                        <span className="progress-value">{stats.solved > 0 ? Math.round((stats.correct/stats.solved)*100) : 0}%</span>
+                      <div className="circular-progress" style={{ background: `conic-gradient(var(--primary-light) ${stats.solved > 0 ? (stats.correct / stats.solved) * 360 : 0}deg, var(--border-color) 0deg)` }}>
+                        <span className="progress-value">{stats.solved > 0 ? Math.round((stats.correct / stats.solved) * 100) : 0}%</span>
                       </div>
                     </div>
                     <div className="progress-info text-left">
                       <h3>Genel Başarı Oranın</h3>
-                      <p>{stats.solved > 0 ? `Toplam ${stats.solved} soru çözdünüz. Başarı yüzdeniz %${Math.round((stats.correct/stats.solved)*100)}.` : 'Henüz test çözmeye başlamadın.'}</p>
+                      <p>{stats.solved > 0 ? `Toplam ${stats.solved} soru çözdünüz. Başarı yüzdeniz %${Math.round((stats.correct / stats.solved) * 100)}.` : 'Henüz test çözmeye başlamadın.'}</p>
                     </div>
                   </div>
                 </div>
@@ -2716,21 +2880,21 @@ function App() {
                         <h2>YÖKDİL Sınav ve Konu Listesi</h2>
                         <p>Yıllara göre deneme çözün veya konulara göre ayrılmış soru havuzundan pratik yapın.</p>
                       </div>
-                      <a 
-                        href={`${BACKEND_URL}/pdfs/YOKDIL_Temiz_Soru_Kitapcigi.pdf`} 
-                        download="YOKDIL_Temiz_Soru_Kitapcigi.pdf" 
-                        target="_blank" 
+                      <a
+                        href={`${BACKEND_URL}/pdfs/YOKDIL_Temiz_Soru_Kitapcigi.pdf`}
+                        download="YOKDIL_Temiz_Soru_Kitapcigi.pdf"
+                        target="_blank"
                         rel="noreferrer"
                         className="btn-primary flex items-center gap-2"
-                        style={{ 
-                          textDecoration: 'none', 
-                          padding: '10px 18px', 
-                          borderRadius: '12px', 
-                          fontSize: '0.78rem', 
-                          fontWeight: 'bold', 
-                          display: 'inline-flex', 
-                          alignItems: 'center', 
-                          gap: '8px', 
+                        style={{
+                          textDecoration: 'none',
+                          padding: '10px 18px',
+                          borderRadius: '12px',
+                          fontSize: '0.78rem',
+                          fontWeight: 'bold',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
                           background: 'linear-gradient(135deg, #10b981, #059669)',
                           color: '#fff',
                           border: 'none',
@@ -2743,20 +2907,20 @@ function App() {
 
                     {/* Subtabs years vs topics */}
                     <div className="tab-buttons" style={{ marginBottom: '12px' }}>
-                      <button 
+                      <button
                         onClick={() => setSelectedTestTab('years')}
                         className={`tab-btn ${selectedTestTab === 'years' ? 'active' : ''}`}
                       >
                         📅 Yıllara Göre
                       </button>
-                      <button 
+                      <button
                         onClick={() => setSelectedTestTab('topics')}
                         className={`tab-btn ${selectedTestTab === 'topics' ? 'active' : ''}`}
                       >
                         🧬 Konulara Göre
                       </button>
                     </div>
-                    
+
                     {selectedTestTab === 'years' ? (
                       exams && exams.length > 0 ? (
                         <div className="menu-list" style={{ marginTop: '8px' }}>
@@ -2764,9 +2928,9 @@ function App() {
                             const examAns = JSON.parse(localStorage.getItem(`answers_${ex.id}`)) || {};
                             const solvedCount = Object.keys(examAns).length;
                             return (
-                              <div 
-                                key={ex.id} 
-                                className="menu-item" 
+                              <div
+                                key={ex.id}
+                                className="menu-item"
                                 onClick={() => { setSelectedExam(ex); setQuizActive(false); }}
                                 style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '16px 20px' }}
                               >
@@ -2789,7 +2953,7 @@ function App() {
                       // Topics list view
                       <div className="menu-list" style={{ marginTop: '8px' }}>
                         {topicsList.map(topic => (
-                          <button 
+                          <button
                             key={topic.key}
                             onClick={() => startTopicQuizSession(topic.key)}
                             className="menu-item"
@@ -2812,7 +2976,7 @@ function App() {
                         <h2>{selectedExam.name}</h2>
                         <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Sınav içeriğini çalışın ve performans raporunuzu inceleyin.</p>
                       </div>
-                      <button 
+                      <button
                         onClick={() => setSelectedExam(null)}
                         className="btn-secondary"
                         style={{ padding: '8px 16px', fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -2822,16 +2986,48 @@ function App() {
                     </div>
 
                     {/* Sub-Tab Navigation */}
-                    <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '8px', marginBottom: '8px' }}>
-                      <button 
+                    <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.02)', padding: '6px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '16px' }}>
+                      <button
                         onClick={() => setExamDetailTab('list')}
-                        className={`px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${examDetailTab === 'list' ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 hover:text-white'}`}
+                        style={{
+                          flex: 1,
+                          padding: '10px 16px',
+                          fontSize: '0.82rem',
+                          fontWeight: '800',
+                          borderRadius: '8px',
+                          transition: 'all 0.2s ease',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          background: examDetailTab === 'list' ? 'var(--primary-gradient)' : 'transparent',
+                          color: examDetailTab === 'list' ? 'white' : 'var(--text-secondary)',
+                          boxShadow: examDetailTab === 'list' ? '0 4px 12px rgba(79, 70, 229, 0.3)' : 'none',
+                          border: 'none'
+                        }}
                       >
                         📝 Soru Listesi
                       </button>
-                      <button 
+                      <button
                         onClick={() => setExamDetailTab('performance')}
-                        className={`px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${examDetailTab === 'performance' ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 hover:text-white'}`}
+                        style={{
+                          flex: 1,
+                          padding: '10px 16px',
+                          fontSize: '0.82rem',
+                          fontWeight: '800',
+                          borderRadius: '8px',
+                          transition: 'all 0.2s ease',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          background: examDetailTab === 'performance' ? 'var(--primary-gradient)' : 'transparent',
+                          color: examDetailTab === 'performance' ? 'white' : 'var(--text-secondary)',
+                          boxShadow: examDetailTab === 'performance' ? '0 4px 12px rgba(79, 70, 229, 0.3)' : 'none',
+                          border: 'none'
+                        }}
                       >
                         📊 Sınav Performansı
                       </button>
@@ -2841,39 +3037,39 @@ function App() {
                       <>
                         {/* Header Columns */}
                         <div className="glass-card" style={{ padding: '10px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 'bold', fontSize: '0.78rem', borderBottom: '1px solid var(--border-color)', margin: '12px 0 6px 0' }}>
-                          <div 
+                          <div
                             onClick={() => {
                               if (examQuestionSort === 'number') {
-                                  setExamQuestionSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
+                                setExamQuestionSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
                               } else {
-                                  setExamQuestionSort('number');
-                                  setExamQuestionSortDir('asc');
+                                setExamQuestionSort('number');
+                                setExamQuestionSortDir('asc');
                               }
                             }}
                             style={{ flex: 1.5, cursor: 'pointer', userSelect: 'none', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '4px' }}
                           >
                             Soru Numarası {examQuestionSort === 'number' ? (examQuestionSortDir === 'asc' ? '🔼' : '🔽') : '🔹'}
                           </div>
-                          <div 
+                          <div
                             onClick={() => {
                               if (examQuestionSort === 'correct') {
-                                  setExamQuestionSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
+                                setExamQuestionSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
                               } else {
-                                  setExamQuestionSort('correct');
-                                  setExamQuestionSortDir('desc');
+                                setExamQuestionSort('correct');
+                                setExamQuestionSortDir('desc');
                               }
                             }}
                             style={{ flex: 1, cursor: 'pointer', userSelect: 'none', color: '#48BB78', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
                           >
                             Doğru Sayısı {examQuestionSort === 'correct' ? (examQuestionSortDir === 'asc' ? '🔼' : '🔽') : '🔹'}
                           </div>
-                          <div 
+                          <div
                             onClick={() => {
                               if (examQuestionSort === 'wrong') {
-                                  setExamQuestionSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
+                                setExamQuestionSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
                               } else {
-                                  setExamQuestionSort('wrong');
-                                  setExamQuestionSortDir('desc');
+                                setExamQuestionSort('wrong');
+                                setExamQuestionSortDir('desc');
                               }
                             }}
                             style={{ flex: 1, cursor: 'pointer', userSelect: 'none', color: '#F56565', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
@@ -2896,7 +3092,7 @@ function App() {
                           {getSortedQuestionNumbers(selectedExam.id).map((qNum, idx, arr) => {
                             const stats = questionStats[selectedExam.id]?.[qNum] || { correct: 0, wrong: 0 };
                             return (
-                              <div 
+                              <div
                                 key={qNum}
                                 onClick={() => startCustomExamSession(idx, arr)}
                                 className="glass-card"
@@ -2919,7 +3115,7 @@ function App() {
                         let solvedCount = 0;
                         let correctCount = 0;
                         let wrongCount = 0;
-                        
+
                         selectedExam.questions.forEach(q => {
                           const userAns = examAnswers[q.number];
                           if (userAns !== undefined) {
@@ -2929,9 +3125,9 @@ function App() {
                             else wrongCount++;
                           }
                         });
-                        
+
                         const successRate = solvedCount > 0 ? Math.round((correctCount / solvedCount) * 100) : 0;
-                        
+
                         const incorrectQuestions = selectedExam.questions.filter(q => {
                           const userAns = examAnswers[q.number];
                           return userAns !== undefined && userAns !== selectedExam.answers[q.number - 1];
@@ -2978,7 +3174,7 @@ function App() {
                                     const sortedArr = getSortedQuestionNumbers(selectedExam.id);
                                     const idx = sortedArr.indexOf(q.number);
                                     return (
-                                      <button 
+                                      <button
                                         key={q.number}
                                         onClick={() => startCustomExamSession(idx, sortedArr)}
                                         className="btn-secondary"
@@ -3001,7 +3197,7 @@ function App() {
             )}
 
             {/* TAB 2: ACTIVE QUIZ SECTION */}
-            <QuizSection 
+            <QuizSection
               selectedExam={selectedExam}
               quizActive={quizActive}
               setQuizActive={setQuizActive}
@@ -3030,12 +3226,13 @@ function App() {
             />
 
             {/* TAB 3: VOCABULARY SECTION */}
-            <VocabularySection 
+            <VocabularySection
               activeTab={activeTab}
               notebook={notebook}
               vocabPracticeList={vocabPracticeList}
               handleDeleteFromNotebook={handleDeleteFromNotebook}
               handleToggleWordStatus={handleToggleWordStatus}
+              handleUpdateWordLeitner={handleUpdateWordLeitner}
               playSpeechAudio={playSpeechAudio}
               handleLoadAcademicWords={handleLoadAcademicWords}
               handleAddCustomWord={handleAddCustomWord}
@@ -3049,7 +3246,7 @@ function App() {
             />
 
             {/* TAB 3.5: PARAGRAPHS SECTION */}
-            <ParagraphsSection 
+            <ParagraphsSection
               activeTab={activeTab}
               selectedCategory={selectedCategory}
               BACKEND_URL={BACKEND_URL}
@@ -3062,7 +3259,7 @@ function App() {
             />
 
             {/* TAB 4: LECTURES SECTION */}
-            <LecturesSection 
+            <LecturesSection
               activeTab={activeTab}
               lecturesList={lecturesList}
               activeLecture={activeLecture}
@@ -3082,7 +3279,7 @@ function App() {
             />
 
             {/* TAB 5: MISTAKE INBOX SECTION */}
-            <MistakeInbox 
+            <MistakeInbox
               activeTab={activeTab}
               mistakes={mistakes}
               setMistakes={setMistakes}
@@ -3099,7 +3296,7 @@ function App() {
             />
 
             {/* TAB 7: PERFORMANCE SECTION */}
-            <PerformanceSection 
+            <PerformanceSection
               activeTab={activeTab}
               selectedExam={selectedExam}
               exams={exams}
@@ -3112,24 +3309,29 @@ function App() {
               logStudyActivity={logStudyActivity}
             />
 
-            {/* TAB 7.5: MINIGAMES SECTION */}
-            <MinigamesSection
+
+            {/* TAB 7.5: EVCİL HAYVANIM SECTION */}
+            <PetSection
               activeTab={activeTab}
-              notebook={notebook}
-              playSpeechAudio={playSpeechAudio}
-              incrementDailyQuestions={incrementDailyQuestions}
-              playCorrectSound={playCorrectSound}
-              playIncorrectSound={playIncorrectSound}
-              logStudyActivity={logStudyActivity}
+              petXp={petXp}
+              petLevel={petLevel}
+              petConfig={petConfig}
+              setPetConfig={setPetConfig}
             />
 
-            {/* TAB 7.8: VIRTUAL SHOP (PET CUSTOMIZER) */}
-            <VirtualShop 
-              activeTab={activeTab} 
-            />
+            {/* TAB 7.6: MINI OYUNLAR SECTION */}
+            {selectedCategory && activeTab === 'games' && (
+              <section id="screen-games" className="app-screen active">
+                <GamesSection
+                  selectedCategory={selectedCategory}
+                  awardPetXp={awardPetXp}
+                  activeTab={activeTab}
+                />
+              </section>
+            )}
 
             {/* TAB 8: SETTINGS SECTION */}
-            <SettingsSection 
+            <SettingsSection
               activeTab={activeTab}
               fontSize={fontSize}
               setFontSize={setFontSize}
@@ -3157,7 +3359,12 @@ function App() {
               setYokdilExamDate={setYokdilExamDate}
               chatbotName={chatbotName}
               setChatbotName={setChatbotName}
+              setSelectedCategory={setSelectedCategory}
+              setSelectedExam={setSelectedExam}
+              showAiFloatBtn={showAiFloatBtn}
+              setShowAiFloatBtn={setShowAiFloatBtn}
             />
+
 
           </main>
         </div>
@@ -3175,21 +3382,21 @@ function App() {
               <strong>{deviceLinkInfo.name}</strong> profiliyle bağlantı isteği algılandı. Lütfen veri aktarım yönünü seçin:
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', marginTop: '8px' }}>
-              <button 
+              <button
                 onClick={handlePullDeviceData}
                 className="btn-primary"
                 style={{ width: '100%', padding: '12px', fontSize: '0.8rem', cursor: 'pointer' }}
               >
                 📥 Diğer Cihazdaki Verileri Bu Cihaza Al
               </button>
-              <button 
+              <button
                 onClick={handlePushDeviceData}
                 className="btn-secondary"
                 style={{ width: '100%', padding: '12px', fontSize: '0.8rem', cursor: 'pointer', borderColor: 'var(--primary-light)' }}
               >
                 📤 Bu Cihazdaki Verileri Diğer Cihaza Yaz
               </button>
-              <button 
+              <button
                 onClick={() => {
                   setShowDeviceLinkModal(false);
                   setDeviceLinkInfo(null);
@@ -3204,33 +3411,33 @@ function App() {
         </div>
       )}
       {spacedRepetitionModalWord && (
-        <div 
-          className="auth-modal-overlay" 
-          style={{ zIndex: 100000 }} 
+        <div
+          className="auth-modal-overlay"
+          style={{ zIndex: 100000 }}
           onClick={() => setSpacedRepetitionModalWord(null)}
         >
-          <div 
-            className="auth-modal-card text-center" 
-            style={{ 
-              maxWidth: '380px', 
-              padding: '24px', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: '16px', 
-              background: 'rgba(15, 23, 42, 0.95)', 
-              border: '1px solid rgba(99, 102, 241, 0.3)' 
+          <div
+            className="auth-modal-card text-center"
+            style={{
+              maxWidth: '380px',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              background: 'rgba(15, 23, 42, 0.95)',
+              border: '1px solid rgba(99, 102, 241, 0.3)'
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '-10px -10px 0 0' }}>
-              <button 
+              <button
                 onClick={() => setSpacedRepetitionModalWord(null)}
                 style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}
               >
                 ×
               </button>
             </div>
-            
+
             <div style={{ padding: '10px 0' }}>
               <span style={{ fontSize: '0.64rem', fontWeight: 'bold', textTransform: 'uppercase', color: '#a5b4fc', letterSpacing: '0.05em' }}>KELİME VE ANLAMI</span>
               <h3 style={{ fontSize: '1.8rem', fontWeight: '800', color: 'white', margin: '8px 0 2px 0' }}>
@@ -3252,25 +3459,67 @@ function App() {
         </div>
       )}
       {/* Floating AI Chatbot Widget */}
-      {selectedCategory && (
-        <div className="ai-chat-widget">
+      {selectedCategory && showAiFloatBtn && (
+        <div
+          className="ai-chat-widget"
+          style={{
+            position: 'fixed',
+            left: floatPos ? `${floatPos.x}px` : 'auto',
+            top: floatPos ? `${floatPos.y}px` : 'auto',
+            right: floatPos ? 'auto' : '24px',
+            bottom: floatPos ? 'auto' : '24px',
+            zIndex: 9999
+          }}
+        >
           {!showAiChat ? (
-            <button 
-              className="ai-chat-float-btn"
-              onClick={() => setShowAiChat(true)}
-              title="Bilge Çalışma Arkadaşı AI Asistanı 🦉"
-              style={{ overflow: 'hidden', padding: 0 }}
-            >
-              <MascotPet 
-                state="happy" 
-                speech={null} 
-                customConfig={petConfig} 
-                size={48} 
-                isFloating={false} 
-              />
-            </button>
+            <div style={{ position: 'relative' }}>
+              <button
+                className="ai-chat-float-btn"
+                onMouseDown={handleFloatMouseDown}
+                onTouchStart={handleFloatTouchStart}
+                title="Bilge Çalışma Arkadaşı AI Asistanı 🦉 (Sürükleyebilirsiniz)"
+                style={{ overflow: 'hidden', padding: 0 }}
+              >
+                <MascotPet
+                  state="happy"
+                  speech={null}
+                  customConfig={petConfig}
+                  size={48}
+                  isFloating={false}
+                />
+              </button>
+              <button
+                onClick={() => {
+                  setShowAiFloatBtn(false);
+                  localStorage.setItem('yokdil_ai_float_btn_enabled', 'false');
+                }}
+                className="ai-chat-close-float-btn"
+                title="Asistan Butonunu Kapat"
+                style={{
+                  position: 'absolute',
+                  top: '-4px',
+                  right: '-4px',
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  background: 'rgba(239, 68, 68, 0.95)',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  color: 'white',
+                  fontSize: '11px',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                  zIndex: 10001
+                }}
+              >
+                ×
+              </button>
+            </div>
           ) : (
-            <div 
+            <div
               className="ai-chat-window"
               style={{
                 left: chatPos ? `${chatPos.x}px` : 'auto',
@@ -3282,19 +3531,19 @@ function App() {
                 position: 'fixed'
               }}
             >
-              <div 
+              <div
                 className="ai-chat-header"
                 onMouseDown={handleHeaderMouseDown}
                 onTouchStart={handleHeaderTouchStart}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <div style={{ width: '36px', height: '36px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <MascotPet 
-                      state="happy" 
-                      speech={null} 
-                      customConfig={petConfig} 
-                      size={36} 
-                      isFloating={false} 
+                    <MascotPet
+                      state="happy"
+                      speech={null}
+                      customConfig={petConfig}
+                      size={36}
+                      isFloating={false}
                     />
                   </div>
                   <div style={{ textAlign: 'left' }}>
@@ -3302,7 +3551,7 @@ function App() {
                     <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: 'bold' }}>Çevrimiçi | YÖKDİL Koçu</span>
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => setShowAiChat(false)}
                   style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}
                 >
@@ -3312,7 +3561,7 @@ function App() {
 
               <div className="ai-chat-messages">
                 {aiMessages.map((msg, index) => (
-                  <div 
+                  <div
                     key={index}
                     className={`ai-msg ${msg.sender === 'user' ? 'ai-msg-user' : 'ai-msg-bot'}`}
                   >
@@ -3365,7 +3614,7 @@ function App() {
                   <i className={`fa-solid ${isListening ? 'fa-microphone-lines' : 'fa-microphone'}`}></i>
                 </button>
 
-                <input 
+                <input
                   type="text"
                   placeholder="Kelime, gramer veya taktik sor..."
                   value={aiInput}
@@ -3392,7 +3641,7 @@ function App() {
                   <i className={`fa-solid ${aiVoiceMode ? 'fa-volume-high' : 'fa-volume-xmark'}`}></i>
                 </button>
 
-                <button 
+                <button
                   onClick={() => handleSendAiMessage()}
                   className="btn-primary"
                   style={{ padding: '8px 12px', borderRadius: '10px', fontSize: '0.72rem', cursor: 'pointer' }}
@@ -3402,7 +3651,7 @@ function App() {
               </div>
 
               {/* Resize Handle */}
-              <div 
+              <div
                 className="ai-chat-resize-handle"
                 onMouseDown={handleResizeMouseDown}
               />

@@ -350,10 +350,11 @@ const PerformanceSection = ({
                           key={i} 
                           cx={p.x} 
                           cy={p.y} 
-                          r="4" 
+                          r="4.5" 
+                          className="radar-chart-point"
                           fill="#34d399" 
                           stroke="white" 
-                          strokeWidth="1" 
+                          strokeWidth="1.5" 
                           title={`${p.label}: %${Math.round(p.success * 100)}`}
                         />
                       ))}

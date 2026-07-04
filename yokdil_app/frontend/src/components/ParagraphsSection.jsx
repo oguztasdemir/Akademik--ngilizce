@@ -37,6 +37,12 @@ const ParagraphsSection = ({
   const [clozeChecked, setClozeChecked] = useState(false);
   const [clozeScore, setClozeScore] = useState(0);
 
+  // Mobile/Reader Typography adjustment states
+  const [readFontSize, setReadFontSize] = useState(() => localStorage.getItem('yokdil_read_fontsize') || '0.88');
+  const [readLineHeight, setReadLineHeight] = useState(() => localStorage.getItem('yokdil_read_lineheight') || '1.8');
+  const [layoutMode, setLayoutMode] = useState('split'); // 'split' or 'english'
+
+
   useEffect(() => {
     if (activeTab === 'paragraphs' && BACKEND_URL) {
       setLoading(true);
@@ -93,6 +99,42 @@ const ParagraphsSection = ({
       }
     } catch (e) {
       setTranslationText('Çeviri hatası.');
+    }
+  };
+
+  const handleMouseUp = async (e) => {
+    const selection = window.getSelection();
+    const selectedText = selection.toString().trim();
+    
+    // Check if it looks like a phrase (at least two words, maximum 6 words)
+    if (selectedText.length > 2 && selectedText.split(/\s+/).length >= 2 && selectedText.split(/\s+/).length <= 6) {
+      try {
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        
+        setTranslationPos({
+          top: rect.bottom + window.scrollY + 6,
+          left: rect.left + window.scrollX
+        });
+        setTranslatedWord(selectedText);
+        setTranslationText('Kalıp Çeviriliyor...');
+
+        if (incrementDailyWords) incrementDailyWords();
+        
+        const res = await fetch(`${BACKEND_URL}/api/translate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: selectedText })
+        });
+        const data = await res.json();
+        if (data.translation) {
+          setTranslationText(data.translation);
+        } else {
+          setTranslationText('Çeviri bulunamadı.');
+        }
+      } catch (err) {
+        console.error("Selection translate error:", err);
+      }
     }
   };
 
@@ -285,9 +327,11 @@ const ParagraphsSection = ({
           pointerEvents: 'auto',
           maxWidth: '220px',
           textAlign: 'left'
-        }}>
+        }} onClick={(e) => e.stopPropagation()}>
           <div style={{ fontWeight: 'bold', color: '#818cf8', marginBottom: '2px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span>{translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")}</span>
+            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '160px' }}>
+              {translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")}
+            </span>
             <button 
               onClick={() => playSpeechAudio && playSpeechAudio(translatedWord)}
               style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0 }}
@@ -296,6 +340,46 @@ const ParagraphsSection = ({
             </button>
           </div>
           <p style={{ margin: 0, fontSize: '0.7rem', color: '#f8fafc' }}>{translationText}</p>
+          {notebook && handleAddCustomWord && (
+            <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'flex-end' }}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const cleanW = translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim();
+                  if (cleanW && translationText && !translationText.includes('Çeviriliyor') && !translationText.includes('Çeviri hatası')) {
+                    handleAddCustomWord(cleanW, translationText);
+                  }
+                }}
+                disabled={
+                  (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) ||
+                  translationText.includes('Çeviriliyor') || 
+                  translationText.includes('hata') || 
+                  translationText.includes('Mevcut Değil')
+                }
+                style={{
+                  background: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) 
+                    ? 'rgba(16, 185, 129, 0.2)' 
+                    : 'rgba(99, 102, 241, 0.25)',
+                  border: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) 
+                    ? '1px solid #10b981' 
+                    : '1px solid #6366f1',
+                  color: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) 
+                    ? '#34d399' 
+                    : '#a5b4fc',
+                  padding: '3px 6px',
+                  borderRadius: '4px',
+                  fontSize: '0.62rem',
+                  fontWeight: 'bold',
+                  cursor: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) ? 'default' : 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {(notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) 
+                  ? '✓ Defterde' 
+                  : 'Deftere Ekle'}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -418,6 +502,15 @@ const ParagraphsSection = ({
                 </button>
               )}
               <button
+                onClick={() => setLayoutMode(layoutMode === 'split' ? 'english' : 'split')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  layoutMode === 'split' ? 'bg-emerald-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                }`}
+                title="Görünüm Modu (İngilizce - Türkçe Çeviri Yan Yana)"
+              >
+                {layoutMode === 'split' ? '📖 Yan Yana Görünüm' : '📖 Tekli Görünüm'}
+              </button>
+              <button
                 onClick={() => {
                   setClozeMode(!clozeMode);
                   setClozeAnswers({});
@@ -439,12 +532,68 @@ const ParagraphsSection = ({
 
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'stretch' }}>
             {/* Left side: Passage details */}
-            <div className={`glass-card ${focusMode ? 'focus-container' : ''}`} style={{ flex: '1', minWidth: '320px', padding: '24px', borderRadius: '18px', display: 'flex', flexDirection: 'column', gap: '16px', background: focusMode ? 'rgba(8,10,16,0.98)' : 'rgba(11, 15, 26, 0.6)' }}>
+            <div className={`glass-card ${focusMode ? 'focus-container' : ''}`} style={{ flex: layoutMode === 'split' ? '2.5' : '1.5', minWidth: '320px', padding: '24px', borderRadius: '18px', display: 'flex', flexDirection: 'column', gap: '16px', background: focusMode ? 'rgba(8,10,16,0.98)' : 'rgba(11, 15, 26, 0.6)' }}>
               <div style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px' }}>
                 <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Akademik Metin ({selectedPassage.wordCount} Kelime)</span>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'white', margin: '4px 0 0 0' }}>{selectedPassage.title}</h3>
               </div>
-              <div style={{ fontSize: '0.86rem', lineHeight: '1.8', color: '#cbd5e1', textAlign: 'justify', margin: 0 }}>
+              
+              {/* Okuma Modu Ayarları Barı */}
+              <div className="flex items-center justify-between gap-2 py-1 px-2 rounded-lg bg-white/5 border border-white/5 text-xs text-slate-300" style={{ fontSize: '0.72rem' }}>
+                <span style={{ fontWeight: 'bold', color: '#818cf8' }}>Okuma Ayarları:</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <button 
+                    onClick={() => {
+                      const nextVal = Math.max(0.75, parseFloat(readFontSize) - 0.05).toFixed(2);
+                      setReadFontSize(nextVal);
+                      localStorage.setItem('yokdil_read_fontsize', nextVal);
+                    }}
+                    className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all"
+                    title="Yazıyı Küçült"
+                  >
+                    A-
+                  </button>
+                  <span style={{ fontFamily: 'monospace', minWidth: '32px', textAlign: 'center' }}>{Math.round(parseFloat(readFontSize) * 100)}%</span>
+                  <button 
+                    onClick={() => {
+                      const nextVal = Math.min(1.4, parseFloat(readFontSize) + 0.05).toFixed(2);
+                      setReadFontSize(nextVal);
+                      localStorage.setItem('yokdil_read_fontsize', nextVal);
+                    }}
+                    className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all"
+                    title="Yazıyı Büyüt"
+                  >
+                    A+
+                  </button>
+                  
+                  <span style={{ color: 'rgba(255,255,255,0.15)' }}>|</span>
+                  
+                  <button 
+                    onClick={() => {
+                      const nextVal = Math.max(1.4, parseFloat(readLineHeight) - 0.1).toFixed(1);
+                      setReadLineHeight(nextVal);
+                      localStorage.setItem('yokdil_read_lineheight', nextVal);
+                    }}
+                    className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all"
+                    title="Satır Aralığını Azalt"
+                  >
+                    Satır ↕-
+                  </button>
+                  <button 
+                    onClick={() => {
+                      const nextVal = Math.min(2.4, parseFloat(readLineHeight) + 0.1).toFixed(1);
+                      setReadLineHeight(nextVal);
+                      localStorage.setItem('yokdil_read_lineheight', nextVal);
+                    }}
+                    className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all"
+                    title="Satır Aralığını Artır"
+                  >
+                    Satır ↕+
+                  </button>
+                </div>
+              </div>
+
+              <div onMouseUp={handleMouseUp} style={{ fontSize: `${readFontSize}rem`, lineHeight: readLineHeight, color: '#cbd5e1', textAlign: 'justify', margin: 0 }}>
                 {clozeMode ? (
                   <div>
                     <div style={{ marginBottom: '14px', padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: '10px', fontSize: '0.72rem', color: '#a5b4fc', fontWeight: 'bold' }}>
@@ -496,6 +645,20 @@ const ParagraphsSection = ({
                       )}
                     </div>
                   </div>
+                ) : layoutMode === 'split' && selectedPassage.translation ? (
+                  selectedPassage.passage.split('\n').filter(Boolean).map((para, idx) => {
+                    const trPara = (selectedPassage.translation || "").split('\n').filter(Boolean)[idx] || "";
+                    return (
+                      <div key={idx} className="flex flex-col md:flex-row gap-4 md:gap-6 mb-4 border-b border-white/5 pb-3">
+                        <div className="flex-1 text-justify">
+                          {renderInteractivePassage(para)}
+                        </div>
+                        <div className="flex-1 text-justify text-slate-400 italic bg-white/[0.02] p-3.5 rounded-xl border-l-2 border-emerald-500 text-[0.92rem] leading-relaxed">
+                          {trPara}
+                        </div>
+                      </div>
+                    );
+                  })
                 ) : (
                   selectedPassage.passage.split('\n').filter(Boolean).map((para, idx) => (
                     <p key={idx} style={{ marginBottom: '12px' }}>

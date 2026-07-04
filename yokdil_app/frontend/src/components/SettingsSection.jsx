@@ -29,7 +29,11 @@ const SettingsSection = ({
   yokdilExamDate,
   setYokdilExamDate,
   chatbotName,
-  setChatbotName
+  setChatbotName,
+  setSelectedCategory,
+  setSelectedExam,
+  showAiFloatBtn,
+  setShowAiFloatBtn
 }) => {
   const [profileName, setProfileName] = useState(currentUser?.name || '');
   const [profileEmail, setProfileEmail] = useState(currentUser?.email || '');
@@ -418,18 +422,28 @@ const SettingsSection = ({
               <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Okuma Hızı</div>
               <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>İngilizce kelime seslendirme hızı.</div>
             </div>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {[0.5, 0.75, 1.0, 1.25].map(rate => (
-                <button
-                  key={rate}
-                  onClick={() => setSpeechRate(rate)}
-                  className={`px-2.5 py-1 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                    speechRate === rate ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                  }`}
-                >
-                  {rate === 1.0 ? '1x' : `${rate}x`}
-                </button>
-              ))}
+            <div>
+              <select
+                value={speechRate}
+                onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
+                className="duo-input"
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: 'white',
+                  cursor: 'pointer',
+                  outline: 'none'
+                }}
+              >
+                <option value={0.5} style={{ background: '#0d111c' }}>0.50x</option>
+                <option value={0.75} style={{ background: '#0d111c' }}>0.75x</option>
+                <option value={1.0} style={{ background: '#0d111c' }}>1.00x (Normal)</option>
+                <option value={1.25} style={{ background: '#0d111c' }}>1.25x</option>
+              </select>
             </div>
           </div>
 
@@ -439,28 +453,26 @@ const SettingsSection = ({
               <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Çalışma Ses Efektleri</div>
               <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Cevap ses bildirimleri.</div>
             </div>
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div>
               <button
                 onClick={() => {
-                  setSoundEnabled(true);
-                  localStorage.setItem('yokdil_sound_enabled', 'true');
+                  const nextVal = !soundEnabled;
+                  setSoundEnabled(nextVal);
+                  localStorage.setItem('yokdil_sound_enabled', String(nextVal));
                 }}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                  soundEnabled ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                }`}
-              >
-                Açık
-              </button>
-              <button
-                onClick={() => {
-                  setSoundEnabled(false);
-                  localStorage.setItem('yokdil_sound_enabled', 'false');
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                  background: soundEnabled ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                  border: soundEnabled ? '1px solid #10b981' : '1px solid #ef4444',
+                  color: soundEnabled ? '#34d399' : '#f87171'
                 }}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                  !soundEnabled ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                }`}
               >
-                Kapalı
+                {soundEnabled ? 'Açık' : 'Kapalı'}
               </button>
             </div>
           </div>
@@ -471,28 +483,56 @@ const SettingsSection = ({
               <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Otomatik Kelime Seslendirme</div>
               <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Kelimeleri otomatik seslendirir.</div>
             </div>
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div>
               <button
                 onClick={() => {
-                  setAutoPronounceEnabled(true);
-                  localStorage.setItem('yokdil_auto_pronounce', 'true');
+                  const nextVal = !autoPronounceEnabled;
+                  setAutoPronounceEnabled(nextVal);
+                  localStorage.setItem('yokdil_auto_pronounce', String(nextVal));
                 }}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                  autoPronounceEnabled ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                }`}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                  background: autoPronounceEnabled ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                  border: autoPronounceEnabled ? '1px solid #10b981' : '1px solid #ef4444',
+                  color: autoPronounceEnabled ? '#34d399' : '#f87171'
+                }}
               >
-                Açık
+                {autoPronounceEnabled ? 'Açık' : 'Kapalı'}
               </button>
+            </div>
+          </div>
+
+          {/* AI Assistant Button Toggle */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '14px' }}>
+            <div>
+              <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Bilge Baykuş Asistanı</div>
+              <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Ekranda yüzen yapay zeka asistanı butonu.</div>
+            </div>
+            <div>
               <button
                 onClick={() => {
-                  setAutoPronounceEnabled(false);
-                  localStorage.setItem('yokdil_auto_pronounce', 'false');
+                  const nextVal = !showAiFloatBtn;
+                  setShowAiFloatBtn(nextVal);
+                  localStorage.setItem('yokdil_ai_float_btn_enabled', String(nextVal));
                 }}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                  !autoPronounceEnabled ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                }`}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                  background: showAiFloatBtn ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                  border: showAiFloatBtn ? '1px solid #10b981' : '1px solid #ef4444',
+                  color: showAiFloatBtn ? '#34d399' : '#f87171'
+                }}
               >
-                Kapalı
+                {showAiFloatBtn ? 'Açık' : 'Kapalı'}
               </button>
             </div>
           </div>
@@ -536,21 +576,32 @@ const SettingsSection = ({
               <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Soru Çözme Hedefi</div>
               <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Dashboard günlük soru hedefi.</div>
             </div>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {[10, 20, 35, 50].map(val => (
-                <button
-                  key={val}
-                  onClick={() => {
-                    setDailyQuestionGoal(val);
-                    localStorage.setItem('yokdil_goal_target_questions', String(val));
-                  }}
-                  className={`px-2.5 py-1 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                    dailyQuestionGoal === val ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                  }`}
-                >
-                  {val}
-                </button>
-              ))}
+            <div>
+              <select
+                value={dailyQuestionGoal}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value);
+                  setDailyQuestionGoal(val);
+                  localStorage.setItem('yokdil_goal_target_questions', String(val));
+                }}
+                className="duo-input"
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: 'white',
+                  cursor: 'pointer',
+                  outline: 'none'
+                }}
+              >
+                <option value={10} style={{ background: '#0d111c' }}>10 Soru</option>
+                <option value={20} style={{ background: '#0d111c' }}>20 Soru</option>
+                <option value={35} style={{ background: '#0d111c' }}>35 Soru</option>
+                <option value={50} style={{ background: '#0d111c' }}>50 Soru</option>
+              </select>
             </div>
           </div>
 
@@ -560,21 +611,32 @@ const SettingsSection = ({
               <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Kelime Çalışma Hedefi</div>
               <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Dashboard günlük kelime hedefi.</div>
             </div>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {[5, 10, 15, 25].map(val => (
-                <button
-                  key={val}
-                  onClick={() => {
-                    setDailyWordGoal(val);
-                    localStorage.setItem('yokdil_goal_target_words', String(val));
-                  }}
-                  className={`px-2.5 py-1 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                    dailyWordGoal === val ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                  }`}
-                >
-                  {val}
-                </button>
-              ))}
+            <div>
+              <select
+                value={dailyWordGoal}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value);
+                  setDailyWordGoal(val);
+                  localStorage.setItem('yokdil_goal_target_words', String(val));
+                }}
+                className="duo-input"
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: 'white',
+                  cursor: 'pointer',
+                  outline: 'none'
+                }}
+              >
+                <option value={5} style={{ background: '#0d111c' }}>5 Kelime</option>
+                <option value={10} style={{ background: '#0d111c' }}>10 Kelime</option>
+                <option value={15} style={{ background: '#0d111c' }}>15 Kelime</option>
+                <option value={25} style={{ background: '#0d111c' }}>25 Kelime</option>
+              </select>
             </div>
           </div>
         </div>
@@ -615,6 +677,32 @@ const SettingsSection = ({
               Tüm Hesabı Sıfırla
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* CARD 6: ACCOUNT ACTIONS FOR MOBILE/ALL */}
+      <div className="glass-card" style={{ padding: '20px', borderRadius: '18px', display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
+        <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
+          <i className="fa-solid fa-user-gear"></i> Hesap ve Oturum Yönetimi
+        </h3>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <button 
+            onClick={() => {
+              if (setSelectedCategory) setSelectedCategory(null);
+              if (setSelectedExam) setSelectedExam(null);
+            }}
+            className="btn-secondary"
+            style={{ flex: 1, padding: '12px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+          >
+            <i className="fa-solid fa-arrow-right-to-bracket"></i> Alan Değiştir
+          </button>
+          <button 
+            onClick={onLogout}
+            className="btn-secondary"
+            style={{ flex: 1, padding: '12px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', borderColor: '#f87171', color: '#f87171', background: 'rgba(239, 68, 68, 0.03)' }}
+          >
+            <i className="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+          </button>
         </div>
       </div>
     </div>

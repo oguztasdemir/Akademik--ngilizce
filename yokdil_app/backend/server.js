@@ -131,7 +131,7 @@ app.post(['/api/translate', '/api/:category/translate'], async (req, res) => {
     return res.status(400).json({ error: 'Text is required' });
   }
 
-  const cleanWord = text.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+  const cleanWord = text.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
   const dictPath = path.join(getQuestionsDir(req), 'dictionary.json');
   if (fs.existsSync(dictPath)) {
     const dictData = JSON.parse(fs.readFileSync(dictPath, 'utf8'));
@@ -489,6 +489,48 @@ app.post('/api/auth/register', (req, res) => {
   });
 });
 
+// GUEST LOGIN API
+app.post('/api/auth/guest', (req, res) => {
+  const { username } = req.body;
+  if (!username || !username.trim()) {
+    return res.status(400).json({ error: 'Kullanıcı adı gereklidir.' });
+  }
+
+  const cleanUsername = username.trim().toLowerCase();
+  const users = readUsers();
+
+  let user = users.find(u => u.username && u.username.toLowerCase() === cleanUsername);
+
+  if (!user) {
+    user = {
+      id: Date.now().toString(),
+      username: cleanUsername,
+      name: username.trim(),
+      password: bcrypt.hashSync("guest_password_123", 10),
+      answers: {},
+      flagged: {},
+      mistakes: [],
+      notebook: [],
+      gems: 0,
+      ownedOutfits: ["default"],
+      activeOutfits: ["default"],
+      streak: 0
+    };
+    users.push(user);
+    writeUsers(users);
+  }
+
+  const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '30d' });
+  res.json({
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      username: user.username
+    }
+  });
+});
+
 // LOGIN API
 app.post('/api/auth/login', (req, res) => {
   const { username, password } = req.body;
@@ -773,21 +815,33 @@ Uygulama Arayüzü & Özellikleri Kullanım Kılavuzu:
 
 Yapay Zeka Kuralları:
 - Hazır, basmakalıp cevaplar verme. Tıpkı gerçek bir insan, uzman bir YÖKDİL öğretmeni gibi esnek, düşünen ve empati kuran bir doğal dil kullan.
-- Kullanıcının istatistiklerini (örneğin streak veya hata sayısını) sohbetin bağlamına göre doğal bir şekilde cümlelerine serpiştir. (Örnek: "Hata kutunda ${mistakesCount} soru birikmiş, bugün orayı temizlemeye ne dersin?")
+- Kullanıcının istatistiklerini (örneğin streak veya hata sayısını) sohbetin bağlamına göre doğal bir şekilde cümlelerine serpiştir.
 - Arayüzle ilgili bir soru sorulduğunda yukarıdaki kullanım kılavuzunu referans alarak net ve yönlendirici bilgi ver.
 - YÖKDİL Fen Bilimleri sınavı için bağlaç taktikleri, tenses, fizik/kimya/biyoloji/uzay/çevre kelimeleri sorulduğunda rehberlik et.
 - Yanıtlarını Türkçe dilinde ver.
 `;
 
-  // 1.5 Local Chitchat Intents engine (ensures 100% reliable, fast chitchat response and prevents translation mixups)
+  // 1.5 Local Chitchat Intents engine
   const LOCAL_INTENTS = [
     {
-      keywords: ["nasilsin", "keyifler", "ne haber", "iyi misin", "nasil gidiyor"],
-      response: "Çok iyiyim, teşekkür ederim! YÖKDİL hazırlık maratonunda senin gibi çalışkan bir dosta koçluk yapmak beni son derece motive ediyor. Sen nasılsın, bugün çalışmalar nasıl gidiyor? 🦉"
+      keywords: ["merhaba", "selam", "selamlar", "hello", "hey", "merhabalar"],
+      response: "Merhaba! Ben senin bilge çalışma ortağın Bilge Asistan. 🦉 YÖKDİL İngilizce kelimeleri, gramer kuralları veya akademik çeviriler hakkında merak ettiğin her şeyi bana sorabilirsin! Bugün ne çalışıyoruz?"
+    },
+    {
+      keywords: ["nasilsin", "keyifler", "ne haber", "iyi misin", "nasil gidiyor", "ne var ne yok"],
+      response: `Çok iyiyim, teşekkür ederim! 🦉 YÖKDİL hazırlık maratonunda senin gibi kararlı bir dosta koçluk yapmak beni son derece motive ediyor. Bugün Günlük hedeflerini tamamlamaya hazır mısın?`
+    },
+    {
+      keywords: ["gunlerden ne", "hangi gun", "bugun ne", "tarih ne"],
+      response: "Bugün akademik İngilizceni geliştirmek ve YÖKDİL hedeflerine bir adım daha yaklaşmak için harika bir gün! Takvimden bağımsız olarak her gün düzenli kelime çalışmak başarının anahtarıdır. 🗓️🦉"
+    },
+    {
+      keywords: ["hava nasil", "hava durumu", "yagis var mi"],
+      response: "Dışarıdaki hava nasıl olursa olsun, Bilge Asistan odamız her zaman sıcacık ve çalışmaya hazır! 🦉 Bugün yeni bir okuma paragrafı çözerek zihnini ısıtmaya ne dersin?"
     },
     {
       keywords: ["kimsin", "adin ne", "ismin ne", "nesin", "sen kimsin", "tanit"],
-      response: "Ben senin bilge YÖKDİL Fen Bilimleri asistanınım! 🦉 Akademik İngilizce, fen terimleri, dil bilgisi taktikleri ve sınav analizlerinde sana rehberlik etmek için eğitildim. Yanından hiç ayrılmayan çalışma ortağınım!"
+      response: "Ben senin bilge YÖKDİL asistanınım! 🦉 Akademik İngilizce, fen terimleri, dil bilgisi taktikleri ve sınav analizlerinde sana rehberlik etmek için eğitildim. Yanından hiç ayrılmayan çalışma ortağınım!"
     },
     {
       keywords: ["tesekkur", "sagol", "tesekkurler", "sağol"],
@@ -799,7 +853,7 @@ Yapay Zeka Kuralları:
     },
     {
       keywords: ["gorusuruz", "hoscakal", "baybay", "bye", "kactim"],
-      response: "Görüşmek üzere! Bugün harika çalıştın. Serini bozmamak için yarın tekrar görüşmeyi unutma. Kendine çok iyi bak, iyi çalışmalar! 🦉👋"
+      response: `Görüşmek üzere! Bugün harika çalıştın. Serini bozmamak için yarın tekrar görüşmeyi unutma. Kendine çok iyi bak, iyi çalışmalar! 🦉👋`
     }
   ];
 
@@ -811,9 +865,9 @@ Yapay Zeka Kuralları:
     return res.json({ response: matchedIntent.response });
   }
 
-  // 2. Try Generative LLM API Client (Hugging Face Serverless Inference API)
+  // 2. Try Generative LLM API Client (Hugging Face Serverless Inference API - Qwen-1.5B)
   try {
-    const response = await fetch("https://api-inference.huggingface.co/models/Qwen/Qwen2.5-7B-Instruct", {
+    const response = await fetch("https://api-inference.huggingface.co/models/Qwen/Qwen2.5-1.5B-Instruct", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -821,7 +875,7 @@ Yapay Zeka Kuralları:
       body: JSON.stringify({
         inputs: `<|im_start|>system\n${SYSTEM_PROMPT}<|im_end|>\n<|im_start|>user\n${message}<|im_end|>\n<|im_start|>assistant\n`,
         parameters: {
-          max_new_tokens: 280,
+          max_new_tokens: 220,
           temperature: 0.7,
           return_full_text: false
         }
@@ -846,7 +900,7 @@ Yapay Zeka Kuralları:
     console.error("Generative AI connection failed, fallback to local NLP engine:", e);
   }
 
-  // 3. Fail-safe Local NLP Matching Fallback (if API is rate-limited or offline)
+  // 3. Fail-safe Local NLP Matching Fallback
   const dictKeys = Object.keys(dictionary);
   let foundWord = null;
 
@@ -884,12 +938,11 @@ Yapay Zeka Kuralları:
   }
 
   // Try Online Translation Fallback (ONLY if it is explicitly a translation or dictionary query)
-  const isTranslationRequested = tokens.some(t => ['nedir', 'demek', 'anlam', 'anlami', 'tanim', 'cevir', 'translate', 'sozluk'].includes(t)) || 
-                                 (!/[çğışöüÇĞİŞÖÜ]/.test(message) && tokens.length <= 4); // short English phrase/word
+  const isTranslationRequested = tokens.some(t => ['nedir', 'demek', 'anlam', 'anlami', 'tanim', 'cevir', 'translate', 'sozluk'].includes(t));
 
   if (isTranslationRequested) {
     try {
-      const hasTrChars = /[çğışöüÇĞİŞÖÜ]/.test(message) || tokens.some(t => ['nedir', 'demek', 'nasil', 'ne', 'merhaba', 'selam', 'cevir'].includes(t));
+      const hasTrChars = /[çğışöüÇĞİŞÖÜ]/.test(message) || tokens.some(t => ['nedir', 'demek', 'nasil', 'ne', 'cevir'].includes(t));
       const langpair = hasTrChars ? 'tr|en' : 'en|tr';
 
       const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(message)}&langpair=${langpair}`);

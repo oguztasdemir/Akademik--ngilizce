@@ -176,9 +176,16 @@ const MistakeInbox = ({
       {mistakeSection === 'tests' && (
         (activeMistakeIndex === null && !isMarathonMode) ? (
           mistakes.length === 0 ? (
-            <div className="glass-card p-8 border border-white/5 text-center text-slate-500 text-xs rounded-3xl" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-              <ShieldAlert className="h-10 w-14 text-indigo-400 mx-auto mb-2 animate-pulse" />
-              <span>Tebrikler! Çözümlü sınavlarda henüz hiç hata yapmadınız.</span>
+            <div className="glass-card p-12 border border-white/5 text-center rounded-3xl premium-empty-state">
+              <div className="empty-state-illustration animate-float">
+                <i className="fa-solid fa-graduation-cap empty-state-icon" style={{ color: '#818cf8', fontSize: '3rem' }}></i>
+                <div className="empty-state-sparkles">
+                  <span className="sparkle-1">✨</span>
+                  <span className="sparkle-2">✨</span>
+                </div>
+              </div>
+              <h3 className="empty-state-title">Tertemiz Bir Geçmiş!</h3>
+              <p className="empty-state-text">Tebrikler! Çözümlü sınavlarda henüz hiç hata yapmadınız.</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -533,9 +540,16 @@ const MistakeInbox = ({
       {mistakeSection === 'vocabulary' && (
         activeWordIndex === null ? (
           vocabMistakes.length === 0 ? (
-            <div className="glass-card p-8 border border-white/5 text-center text-slate-500 text-xs rounded-3xl" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-              <ShieldAlert className="h-10 w-14 text-indigo-400 mx-auto mb-2 animate-pulse" />
-              <span>Harika! Kelime oyunlarında veya kartlarda henüz hatalı eşleşmeniz yok.</span>
+            <div className="glass-card p-12 border border-white/5 text-center rounded-3xl premium-empty-state">
+              <div className="empty-state-illustration animate-float">
+                <i className="fa-solid fa-book-open-reader empty-state-icon" style={{ color: '#34d399', fontSize: '3rem' }}></i>
+                <div className="empty-state-sparkles">
+                  <span className="sparkle-1">✨</span>
+                  <span className="sparkle-2">✨</span>
+                </div>
+              </div>
+              <h3 className="empty-state-title">Kelime Bilgin Sapasağlam!</h3>
+              <p className="empty-state-text">Harika! Kelime oyunlarında veya kartlarda henüz hatalı eşleşmeniz yok.</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>

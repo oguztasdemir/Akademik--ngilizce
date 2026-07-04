@@ -7,6 +7,7 @@ const VocabularySection = ({
   vocabPracticeList,
   handleDeleteFromNotebook,
   handleToggleWordStatus,
+  handleUpdateWordLeitner,
   playSpeechAudio,
   handleLoadAcademicWords,
   handleAddCustomWord,
@@ -18,7 +19,7 @@ const VocabularySection = ({
   incrementDailyWords,
   autoPronounceEnabled
 }) => {
-  const [subTab, setSubTab] = useState('flashcards'); // 'flashcards', 'matching', 'spelling', 'mcq', 'table'
+  const [subTab, setSubTab] = useState('flashcards'); // 'flashcards', 'matching', 'sentenceBuilder', 'spelling', 'mcq', 'table'
   const [searchQuery, setSearchQuery] = useState('');
 
   // Premium Drawer & Pronunciation Trainer States
@@ -153,8 +154,9 @@ const VocabularySection = ({
   const [flashcardIndex, setFlashcardIndex] = useState(0);
   const [revealMeaning, setRevealMeaning] = useState(false);
   const [flashcardsList, setFlashcardsList] = useState([]);
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchEnd, setTouchEnd] = useState(null);
+  const [cardDragStart, setCardDragStart] = useState({ x: 0, y: 0 });
+  const [cardOffset, setCardOffset] = useState({ x: 0, y: 0 });
+  const [isDraggingCard, setIsDraggingCard] = useState(false);
 
   // Spelling Practice state
   const [spellingIndex, setSpellingIndex] = useState(0);
@@ -499,6 +501,13 @@ const VocabularySection = ({
     const isCorrect = correctTarget === userTarget;
     setSbChecked(true);
     setSbResult(isCorrect ? 'correct' : 'wrong');
+
+    if (recordWordStat) {
+      recordWordStat(currentObj.english, isCorrect);
+    }
+    if (handleUpdateWordLeitner) {
+      handleUpdateWordLeitner(currentObj.english, isCorrect, currentObj.turkish);
+    }
   };
 
   const handleNextSentence = () => {
@@ -569,14 +578,27 @@ const VocabularySection = ({
     }
   };
 
-  // Shuffling flashcards randomly so it is not in order
+  // Prioritizing flashcards: unseen or least seen first, then random tie-breaker
   useEffect(() => {
-    if (pool.length > 0) {
-      const shuffled = [...pool].sort(() => 0.5 - Math.random());
+    if (pool.length > 0 && subTab === 'flashcards' && activeTab === 'vocabulary') {
+      const shuffled = [...pool]
+        .map(w => ({ w, rand: Math.random() }))
+        .sort((a, b) => {
+          const statsA = wordStats[a.w.english.toLowerCase()] || { correct: 0, wrong: 0 };
+          const statsB = wordStats[b.w.english.toLowerCase()] || { correct: 0, wrong: 0 };
+          const totalA = (statsA.correct || 0) + (statsA.wrong || 0);
+          const totalB = (statsB.correct || 0) + (statsB.wrong || 0);
+          
+          if (totalA !== totalB) {
+            return totalA - totalB;
+          }
+          return a.rand - b.rand;
+        })
+        .map(item => item.w);
       setFlashcardsList(shuffled);
       setFlashcardIndex(0);
     }
-  }, [pool]);
+  }, [pool, subTab, activeTab]);
 
   // Keyboard navigation shortcuts (Enter/Space to flip, ArrowRight for next, ArrowLeft for previous)
   useEffect(() => {
@@ -770,6 +792,9 @@ const VocabularySection = ({
     if (recordWordStat) {
       recordWordStat(wordObj.english, isCorrect);
     }
+    if (handleUpdateWordLeitner) {
+      handleUpdateWordLeitner(wordObj.english, isCorrect, wordObj.turkish);
+    }
     
     if (playSpeechAudio && isCorrect) {
       playSpeechAudio(wordObj.english);
@@ -830,6 +855,9 @@ const VocabularySection = ({
     if (recordWordStat) {
       recordWordStat(wordObj.english, isCorrect);
     }
+    if (handleUpdateWordLeitner) {
+      handleUpdateWordLeitner(wordObj.english, isCorrect, wordObj.turkish);
+    }
     if (playSpeechAudio && isCorrect) {
       playSpeechAudio(wordObj.english);
     }
@@ -848,7 +876,6 @@ const VocabularySection = ({
       setMcqFinished(true);
     }
   };
-
   const handleCardFeedback = (isCorrect) => {
     if (incrementDailyWords) incrementDailyWords();
     const wordObj = flashcardsList[flashcardIndex];
@@ -858,6 +885,36 @@ const VocabularySection = ({
     }
     setRevealMeaning(false);
     setFlashcardIndex(prev => (prev + 1) % flashcardsList.length);
+  };
+
+  const handleCardStartDrag = (clientX, clientY) => {
+    setIsDraggingCard(true);
+    setCardDragStart({ x: clientX, y: clientY });
+    setCardOffset({ x: 0, y: 0 });
+  };
+
+  const handleCardMoveDrag = (clientX, clientY) => {
+    if (!isDraggingCard) return;
+    const deltaX = clientX - cardDragStart.x;
+    const deltaY = clientY - cardDragStart.y;
+    setCardOffset({ x: deltaX, y: deltaY });
+  };
+
+  const handleCardEndDrag = () => {
+    if (!isDraggingCard) return;
+    setIsDraggingCard(false);
+    
+    const threshold = 110;
+    if (cardOffset.x > threshold) {
+      handleCardFeedback(false);
+    } else if (cardOffset.x < -threshold) {
+      handleCardFeedback(true);
+    } else {
+      if (Math.abs(cardOffset.x) < 25 && Math.abs(cardOffset.y) < 25) {
+        setRevealMeaning(prev => !prev);
+      }
+    }
+    setCardOffset({ x: 0, y: 0 });
   };
 
   // Search, filter, and sort words
@@ -1051,28 +1108,34 @@ const VocabularySection = ({
         )}
       </div>
 
-      {/* Sub-Tab Navigation Bar */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '6px', 
-        padding: '6px', 
-        background: 'rgba(255, 255, 255, 0.02)', 
-        borderRadius: '14px', 
-        border: '1px solid rgba(255, 255, 255, 0.05)',
-        flexWrap: 'wrap',
-        marginBottom: '16px'
-      }}>
-        <button onClick={() => setSubTab('flashcards')} style={subTab === 'flashcards' ? activeTabStyle : inactiveTabStyle}>📇 Kartlar</button>
-        <button onClick={() => setSubTab('matching')} style={subTab === 'matching' ? activeTabStyle : inactiveTabStyle}>🧩 Eşleştirme</button>
-        <button onClick={() => setSubTab('spelling')} style={subTab === 'spelling' ? activeTabStyle : inactiveTabStyle}>✍️ Yazma Testi</button>
-        <button onClick={() => setSubTab('dictation')} style={subTab === 'dictation' ? activeTabStyle : inactiveTabStyle}>🎧 Dikte (Dinle-Yaz)</button>
-        <button onClick={() => setSubTab('leitner')} style={subTab === 'leitner' ? activeTabStyle : inactiveTabStyle}>📦 Leitner Kutuları</button>
-        <button onClick={() => setSubTab('pronunciation')} style={subTab === 'pronunciation' ? activeTabStyle : inactiveTabStyle}>🎙️ Telaffuz Laboratuvarı</button>
-        <button onClick={() => setSubTab('sentenceBuilder')} style={subTab === 'sentenceBuilder' ? activeTabStyle : inactiveTabStyle}>🧩 Cümle Kurma</button>
-        <button onClick={() => setSubTab('prepDrills')} style={subTab === 'prepDrills' ? activeTabStyle : inactiveTabStyle}>✏️ Edat Sondajı</button>
-        <button onClick={() => setSubTab('duel')} style={subTab === 'duel' ? activeTabStyle : inactiveTabStyle}>⚡ Kelime Düellosu</button>
-        <button onClick={() => setSubTab('mcq')} style={subTab === 'mcq' ? activeTabStyle : inactiveTabStyle}>🎯 Çoktan Seçmeli</button>
-        <button onClick={() => setSubTab('table')} style={subTab === 'table' ? activeTabStyle : inactiveTabStyle}>📊 Kelime Listesi</button>
+      {/* Premium Select Dropdown for Minigames / Sections */}
+      <div style={{ marginBottom: '16px' }}>
+        <select 
+          value={subTab}
+          onChange={(e) => setSubTab(e.target.value)}
+          className="duo-input"
+          style={{
+            width: '100%',
+            padding: '12px 16px',
+            fontSize: '0.85rem',
+            fontWeight: 'bold',
+            borderRadius: '14px',
+            border: '1px solid rgba(99, 102, 241, 0.25)',
+            background: '#0d111c',
+            color: 'white',
+            outline: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.05)'
+          }}
+        >
+          <option value="flashcards">📇 Kelime Kartları (Flashcards)</option>
+          <option value="matching">🧩 Kelime Eşleştirme Oyunu (Matching Game)</option>
+          <option value="sentenceBuilder">📝 Cümle Kurma Oyunu (Sentence Builder)</option>
+          <option value="duel">⚡ Zamana Karşı Kelime Düellosu (Time Attack Duel)</option>
+          <option value="mcq">🎯 Çoktan Seçmeli Test (MCQ Quiz)</option>
+          <option value="spelling">✍️ Kelime Yazma Testi (Spelling Practice)</option>
+          <option value="table">📊 Kelime Listesi & Defter Yönetimi</option>
+        </select>
       </div>
 
       {/* SUBTAB 1: FLASHCARDS LEARNING */}
@@ -1097,28 +1160,78 @@ const VocabularySection = ({
                   {/* Flippable Flashcard Card */}
                   <div 
                     className={`flip-card-container ${revealMeaning ? 'flipped' : ''}`}
+                    onMouseDown={(e) => {
+                      if (e.target.closest('button')) return;
+                      handleCardStartDrag(e.clientX, e.clientY);
+                    }}
+                    onMouseMove={(e) => {
+                      handleCardMoveDrag(e.clientX, e.clientY);
+                    }}
+                    onMouseUp={handleCardEndDrag}
+                    onMouseLeave={handleCardEndDrag}
                     onTouchStart={(e) => {
-                      setTouchEnd(null);
-                      setTouchStart(e.targetTouches[0].clientX);
+                      if (e.target.closest('button')) return;
+                      const touch = e.touches[0];
+                      handleCardStartDrag(touch.clientX, touch.clientY);
                     }}
                     onTouchMove={(e) => {
-                      setTouchEnd(e.targetTouches[0].clientX);
+                      const touch = e.touches[0];
+                      handleCardMoveDrag(touch.clientX, touch.clientY);
                     }}
-                    onTouchEnd={() => {
-                      if (!touchStart || !touchEnd) return;
-                      const distance = touchStart - touchEnd;
-                      const minSwipeDistance = 50;
-                      if (distance > minSwipeDistance) {
-                        setRevealMeaning(false);
-                        setFlashcardIndex(prev => (prev + 1) % flashcardsList.length);
-                        if (incrementDailyWords) incrementDailyWords();
-                      } else if (distance < -minSwipeDistance) {
-                        setRevealMeaning(false);
-                        setFlashcardIndex(prev => (prev - 1 + flashcardsList.length) % flashcardsList.length);
-                      }
+                    onTouchEnd={handleCardEndDrag}
+                    style={{
+                      touchAction: 'none',
+                      userSelect: 'none',
+                      transform: `translate(${cardOffset.x}px, ${cardOffset.y * 0.15}px) rotate(${cardOffset.x * 0.05}deg)`,
+                      transition: isDraggingCard ? 'none' : 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                      cursor: isDraggingCard ? 'grabbing' : 'grab',
+                      position: 'relative'
                     }}
                   >
-                    <div className="flip-card-inner" onClick={() => setRevealMeaning(!revealMeaning)}>
+                    {/* Visual Swipe Indicators */}
+                    {cardOffset.x > 15 && (
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        borderRadius: '20px',
+                        background: `rgba(239, 68, 68, ${Math.min(0.7, cardOffset.x / 140)})`,
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.4rem',
+                        fontWeight: '900',
+                        zIndex: 100,
+                        pointerEvents: 'none'
+                      }}>
+                        TEKRAR ÇALIŞACAĞIM ✕
+                      </div>
+                    )}
+                    {cardOffset.x < -15 && (
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        borderRadius: '20px',
+                        background: `rgba(16, 185, 129, ${Math.min(0.7, -cardOffset.x / 140)})`,
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.6rem',
+                        fontWeight: '900',
+                        zIndex: 100,
+                        pointerEvents: 'none'
+                      }}>
+                        BİLİYORUM ✓
+                      </div>
+                    )}
+                    <div className="flip-card-inner">
                       {/* Front Side */}
                       <div className="flip-card-front">
                         <div className="space-y-2 relative w-full h-full flex flex-col justify-center items-center">
@@ -1171,53 +1284,6 @@ const VocabularySection = ({
                           )}
                         </div>
                       </div>
-                    </div>
-                  </div>
-
-                  {/* Controls & Free Navigation */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <div style={{ display: 'flex', gap: '12px' }}>
-                      <button 
-                        onClick={() => handleCardFeedback(false)}
-                        className="flex-1 py-3 text-xs font-bold rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-all text-center"
-                        style={{ cursor: 'pointer', flex: 1, padding: '12px' }}
-                      >
-                        ✕ Tekrar Çalışacağım
-                      </button>
-                      <button 
-                        onClick={() => handleCardFeedback(true)}
-                        className="flex-1 py-3 text-xs font-bold rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-all text-center"
-                        style={{ cursor: 'pointer', flex: 1, padding: '12px' }}
-                      >
-                        ✓ Biliyorum
-                      </button>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
-                      <button
-                        onClick={() => {
-                          setRevealMeaning(false);
-                          setFlashcardIndex(prev => (prev - 1 + flashcardsList.length) % flashcardsList.length);
-                        }}
-                        className="btn-secondary"
-                        style={{ padding: '8px 16px', fontSize: '0.72rem', cursor: 'pointer' }}
-                      >
-                        ⬅️ Önceki Kart
-                      </button>
-                      <span style={{ fontSize: '0.62rem', color: 'var(--text-secondary)' }}>
-                        İpucu: Enter/Space ile çevir, yön tuşlarıyla geç
-                      </span>
-                      <button
-                        onClick={() => {
-                          setRevealMeaning(false);
-                          setFlashcardIndex(prev => (prev + 1) % flashcardsList.length);
-                          if (incrementDailyWords) incrementDailyWords();
-                        }}
-                        className="btn-secondary"
-                        style={{ padding: '8px 16px', fontSize: '0.72rem', cursor: 'pointer' }}
-                      >
-                        Sonraki Kart ➡️
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -2262,25 +2328,30 @@ const VocabularySection = ({
                       <td className="p-3 text-xs font-bold text-indigo-300" style={{ padding: '12px 16px', fontSize: '0.8rem' }}>{item.english}</td>
                       <td className="p-3 text-xs text-slate-200" style={{ padding: '12px 16px', fontSize: '0.8rem' }}>{item.turkish}</td>
                       <td className="p-3 text-xs text-center" style={{ padding: '12px 16px', fontSize: '0.8rem', textAlign: 'center' }}>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleToggleWordStatus(item.id);
-                          }}
-                          className="px-2.5 py-0.5 rounded text-[10px] font-bold"
-                          style={{
-                            padding: '2px 8px',
-                            borderRadius: '4px',
-                            fontSize: '0.68rem',
-                            fontWeight: '800',
-                            background: item.status === 'learned' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(99, 102, 241, 0.15)',
-                            color: item.status === 'learned' ? '#34d399' : '#a5b4fc',
-                            cursor: 'pointer',
-                            border: 'none'
-                          }}
-                        >
-                          {item.status === 'learned' ? '✓ Öğrendim' : '📖 Çalışıyorum'}
-                        </button>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleWordStatus(item.id);
+                            }}
+                            className="px-2.5 py-0.5 rounded text-[10px] font-bold"
+                            style={{
+                              padding: '2px 8px',
+                              borderRadius: '4px',
+                              fontSize: '0.68rem',
+                              fontWeight: '800',
+                              background: item.status === 'learned' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(99, 102, 241, 0.15)',
+                              color: item.status === 'learned' ? '#34d399' : '#a5b4fc',
+                              cursor: 'pointer',
+                              border: 'none'
+                            }}
+                          >
+                            {item.status === 'learned' ? '✓ Öğrendim' : '📖 Çalışıyorum'}
+                          </button>
+                          <span style={{ fontSize: '0.6rem', color: '#f59e0b', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px' }}>
+                            ⭐ Seviye: {item.leitnerStage || 1} / 5
+                          </span>
+                        </div>
                       </td>
                       <td className="p-3 text-xs text-center" style={{ padding: '12px 16px', fontSize: '0.8rem', textAlign: 'center' }}>
                         <button
