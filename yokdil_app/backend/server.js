@@ -13,6 +13,7 @@ app.use(express.json());
 const pdfsDir = path.join(__dirname, '..', 'pdfs');
 const datasetDir = path.join(__dirname, '..', 'dataset', 'yokdil');
 const lecturesDir = path.join(datasetDir, 'genel', 'lectures');
+const questionsDir = datasetDir;
 
 const getQuestionsDir = (req) => {
   const category = req.params.category || req.query.category || 'fen';
@@ -34,7 +35,7 @@ app.get('/pdfs/YOKDIL_Temiz_Soru_Kitapcigi.pdf', (req, res) => {
 
 // Endpoint to list all exams
 app.get(['/api/exams', '/api/:category/exams'], (req, res) => {
-  const dbPath = path.join(getQuestionsDir(req), 'exams_db.json');
+  const dbPath = path.join(getQuestionsDir(req), 'exams.json');
   if (fs.existsSync(dbPath)) {
     const data = fs.readFileSync(dbPath, 'utf8');
     res.json(JSON.parse(data));
@@ -232,8 +233,8 @@ app.get('/api/local-ip', (req, res) => {
 
 // Endpoint to list academic words database with dynamic exam frequency counts
 app.get(['/api/vocabulary', '/api/:category/vocabulary'], (req, res) => {
-  const vocabPath = path.join(getQuestionsDir(req), 'vocab_db.json');
-  const dbPath = path.join(getQuestionsDir(req), 'exams_db.json');
+  const vocabPath = path.join(getQuestionsDir(req), 'vocab.json');
+  const dbPath = path.join(getQuestionsDir(req), 'exams.json');
   
   if (!fs.existsSync(vocabPath)) {
     return res.status(404).json({ error: 'Vocabulary database not found' });
@@ -271,7 +272,7 @@ app.get(['/api/exams/:examId/explain/:qNumber', '/api/:category/exams/:examId/ex
   const { examId, qNumber } = req.params;
   const qIndex = parseInt(qNumber);
   
-  const dbPath = path.join(getQuestionsDir(req), 'exams_db.json');
+  const dbPath = path.join(getQuestionsDir(req), 'exams.json');
   if (!fs.existsSync(dbPath)) {
     return res.status(404).json({ error: 'Exams database not found' });
   }
