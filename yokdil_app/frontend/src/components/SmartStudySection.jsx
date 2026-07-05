@@ -821,9 +821,6 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
               <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em' }}>
                 {words[currentIdx].word}
               </h2>
-              <span className="badge" style={{ fontSize: '0.68rem', background: 'rgba(99, 102, 241, 0.15)', border: '1px solid rgba(99,102,241,0.3)', color: '#a5b4fc', textTransform: 'uppercase' }}>
-                tür: {words[currentIdx].type}
-              </span>
 
               {/* Options Grid */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '400px', marginTop: '16px' }}>

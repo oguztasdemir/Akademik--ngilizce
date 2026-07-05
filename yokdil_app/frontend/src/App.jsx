@@ -23,17 +23,17 @@ import AuthModal from './components/AuthModal';
 import SmartStudySection from './components/SmartStudySection';
 import CampSection from './components/CampSection';
 
-import fallbackExamsFen from './components/exams_db_fen.json';
-import fallbackExamsSosyal from './components/exams_db_sosyal.json';
-import fallbackExamsSaglik from './components/exams_db_saglik.json';
+import fallbackExamsFen from './dataset/yokdil/fen/exams.json';
+import fallbackExamsSosyal from './dataset/yokdil/sosyal/exams.json';
+import fallbackExamsSaglik from './dataset/yokdil/saglik/exams.json';
 
-import fallbackVocabFen from './components/vocab_db_fen.json';
-import fallbackVocabSosyal from './components/vocab_db_sosyal.json';
-import fallbackVocabSaglik from './components/vocab_db_saglik.json';
+import fallbackVocabFen from './dataset/yokdil/fen/vocab.json';
+import fallbackVocabSosyal from './dataset/yokdil/sosyal/vocab.json';
+import fallbackVocabSaglik from './dataset/yokdil/saglik/vocab.json';
 
-import fallbackDictFen from './components/dictionary_fen.json';
-import fallbackDictSosyal from './components/dictionary_sosyal.json';
-import fallbackDictSaglik from './components/dictionary_saglik.json';
+import fallbackDictFen from './dataset/yokdil/fen/dictionary.json';
+import fallbackDictSosyal from './dataset/yokdil/sosyal/dictionary.json';
+import fallbackDictSaglik from './dataset/yokdil/saglik/dictionary.json';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (
   window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -328,6 +328,20 @@ const getTopicName = (key) => {
   return mapping[key] || "Genel Çalışma";
 };
 
+const safeJsonParse = (key, fallback) => {
+  try {
+    const item = localStorage.getItem(key);
+    if (!item) return fallback;
+    return JSON.parse(item);
+  } catch (e) {
+    console.error(`Error parsing localStorage key "${key}":`, e);
+    try {
+      localStorage.removeItem(key);
+    } catch (_) {}
+    return fallback;
+  }
+};
+
 function App() {
   const [currentUser, setCurrentUser] = useState(() => {
     const local = localStorage.getItem('yokdil_user');
@@ -400,10 +414,10 @@ function App() {
   const [confetti, setConfetti] = useState([]);
   const [mascotState, setMascotState] = useState('neutral');
   const [mascotSpeech, setMascotSpeech] = useState("YÖKDİL'e hazır mısın?");
-  const [mistakes, setMistakes] = useState(() => JSON.parse(localStorage.getItem('yokdil_mistakes') || '[]'));
+  const [mistakes, setMistakes] = useState(() => safeJsonParse('yokdil_mistakes', []));
   const [gems, setGems] = useState(() => parseInt(localStorage.getItem('yokdil_gems') || '0', 10));
-  const [ownedOutfits, setOwnedOutfits] = useState(() => JSON.parse(localStorage.getItem('yokdil_owned_outfits') || '[]'));
-  const [activeOutfits, setActiveOutfits] = useState(() => JSON.parse(localStorage.getItem('yokdil_active_outfits') || '[]'));
+  const [ownedOutfits, setOwnedOutfits] = useState(() => safeJsonParse('yokdil_owned_outfits', []));
+  const [activeOutfits, setActiveOutfits] = useState(() => safeJsonParse('yokdil_active_outfits', []));
   const [streakFreezeActive, setStreakFreezeActive] = useState(() => localStorage.getItem('yokdil_streak_freeze') === 'true');
   const [petXp, setPetXp] = useState(() => parseInt(localStorage.getItem('yokdil_pet_xp') || '0', 10));
   const [petLevel, setPetLevel] = useState(() => parseInt(localStorage.getItem('yokdil_pet_level') || '1', 10));
@@ -450,13 +464,13 @@ function App() {
   };
 
   // Word stats for spacing repetition algorithm
-  const [wordStats, setWordStats] = useState(() => JSON.parse(localStorage.getItem('yokdil_word_stats') || '{}'));
-  const [questionStats, setQuestionStats] = useState(() => JSON.parse(localStorage.getItem('yokdil_question_stats') || '{}'));
+  const [wordStats, setWordStats] = useState(() => safeJsonParse('yokdil_word_stats', {}));
+  const [questionStats, setQuestionStats] = useState(() => safeJsonParse('yokdil_question_stats', {}));
   const [examQuestionSort, setExamQuestionSort] = useState('number'); // 'number', 'wrong', 'correct'
   const [examQuestionSortDir, setExamQuestionSortDir] = useState('asc'); // 'asc', 'desc'
   const [examDetailTab, setExamDetailTab] = useState('list'); // 'list', 'performance'
-  const [lectureProgress, setLectureProgress] = useState(() => JSON.parse(localStorage.getItem('yokdil_lecture_progress') || '{}'));
-  const [grammarNotes, setGrammarNotes] = useState(() => JSON.parse(localStorage.getItem('yokdil_grammar_notes') || '[]'));
+  const [lectureProgress, setLectureProgress] = useState(() => safeJsonParse('yokdil_lecture_progress', {}));
+  const [grammarNotes, setGrammarNotes] = useState(() => safeJsonParse('yokdil_grammar_notes', []));
 
   // User Practice States
   const [answers, setAnswers] = useState({});
@@ -557,7 +571,7 @@ function App() {
   const [dailyLecturesStudied, setDailyLecturesStudied] = useState(0);
   const [dailyQuestionGoal, setDailyQuestionGoal] = useState(parseInt(localStorage.getItem('yokdil_goal_target_questions') || '20', 10));
   const [dailyWordGoal, setDailyWordGoal] = useState(parseInt(localStorage.getItem('yokdil_goal_target_words') || '10', 10));
-  const [purchasedOutfits, setPurchasedOutfits] = useState(() => JSON.parse(localStorage.getItem('yokdil_purchased_outfits') || '["default"]'));
+  const [purchasedOutfits, setPurchasedOutfits] = useState(() => safeJsonParse('yokdil_purchased_outfits', ["default"]));
   const [activeOutfit, setActiveOutfit] = useState(() => localStorage.getItem('yokdil_active_outfit') || 'default');
   const [autoPronounceEnabled, setAutoPronounceEnabled] = useState(localStorage.getItem('yokdil_auto_pronounce') === 'true');
 
@@ -2075,6 +2089,7 @@ function App() {
 
     if (Array.isArray(exams)) {
       exams.forEach(ex => {
+        if (!ex || !ex.id || !ex.answers) return;
         const exAns = JSON.parse(localStorage.getItem(`answers_${ex.id}`)) || {};
         for (let i = 1; i <= 80; i++) {
           const userAns = exAns[i];

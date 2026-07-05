@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "node copy-dataset.cjs",
+    "prebuild": "node copy-dataset.cjs",
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",

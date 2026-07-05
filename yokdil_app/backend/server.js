@@ -11,12 +11,12 @@ app.use(express.json());
 
 // Reference root-level folders
 const pdfsDir = path.join(__dirname, '..', 'pdfs');
-const questionsDir = path.join(__dirname, '..', 'questions');
-const lecturesDir = path.join(questionsDir, 'genel', 'lectures');
+const datasetDir = path.join(__dirname, '..', 'dataset', 'yokdil');
+const lecturesDir = path.join(datasetDir, 'genel', 'lectures');
 
 const getQuestionsDir = (req) => {
   const category = req.params.category || req.query.category || 'fen';
-  return path.join(questionsDir, category);
+  return path.join(datasetDir, category);
 };
 
 // Serve PDF files statically
@@ -80,7 +80,7 @@ app.get('/api/lectures/:id', (req, res) => {
 // Endpoint to get exercises of a specific lecture from the general (genel) folder
 app.get('/api/lectures/:id/exercises', (req, res) => {
   const lectureId = req.params.id;
-  const exercisesPath = path.join(questionsDir, 'genel', 'lecture_exercises.json');
+  const exercisesPath = path.join(datasetDir, 'genel', 'lecture_exercises.json');
   if (fs.existsSync(exercisesPath)) {
     try {
       const data = JSON.parse(fs.readFileSync(exercisesPath, 'utf8'));
@@ -96,7 +96,7 @@ app.get('/api/lectures/:id/exercises', (req, res) => {
 
 // Endpoint to get YÖKDİL reading passages database
 app.get('/api/passages', (req, res) => {
-  const passagesPath = path.join(questionsDir, 'genel', 'reading_passages.json');
+  const passagesPath = path.join(datasetDir, 'genel', 'reading_passages.json');
   if (fs.existsSync(passagesPath)) {
     try {
       const data = JSON.parse(fs.readFileSync(passagesPath, 'utf8'));

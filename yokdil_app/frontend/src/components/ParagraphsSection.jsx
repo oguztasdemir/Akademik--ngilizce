@@ -21,7 +21,12 @@ const ParagraphsSection = ({
   
   // Track completed passages
   const [completedPassages, setCompletedPassages] = useState(() => {
-    return JSON.parse(localStorage.getItem('completed_passages') || '[]');
+    try {
+      return JSON.parse(localStorage.getItem('completed_passages') || '[]');
+    } catch (e) {
+      console.error("Error parsing completed_passages:", e);
+      return [];
+    }
   });
 
   // Translation History State
