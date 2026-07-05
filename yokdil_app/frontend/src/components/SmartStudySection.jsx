@@ -3,70 +3,250 @@ import { Check, AlertCircle, Award, ArrowRight, BookOpen, Edit3, HelpCircle, Tro
 
 const CATEGORY_WORDS = {
   fen: [
-    { word: "evaluate", meaning: "değerlendirmek", type: "verb", sentence: "Scientists evaluate the laboratory results carefully.", translation: "Bilim insanları laboratuvar sonuçlarını dikkatle değerlendirir." },
-    { word: "discover", meaning: "keşfetmek", type: "verb", sentence: "Astronomers discover a new habitable planet.", translation: "Gökbilimciler yaşanabilir yeni bir gezegen keşfetmez." },
-    { word: "reveal", meaning: "açığa çıkarmak", type: "verb", sentence: "The research will reveal the causes of global warming.", translation: "Araştırma, küresel ısınmanın nedenlerini açığa çıkaracak." },
-    { word: "significant", meaning: "önemli, kayda değer", type: "adj", sentence: "There is a significant decrease in carbon emissions.", translation: "Karbon emisyonlarında kayda değer bir düşüş var." },
-    { word: "consequence", meaning: "sonuç", type: "noun", sentence: "Rising sea levels are a direct consequence of melting glaciers.", translation: "Deniz seviyelerinin yükselmesi, eriyen buzulların doğrudan bir sonucudur." },
-    { word: "establish", meaning: "kurmak, saptamak", type: "verb", sentence: "They want to establish a new research institute.", translation: "Yeni bir araştırma enstitüsü kurmak istiyorlar." },
-    { word: "develop", meaning: "gelişmek, geliştirmek", type: "verb", sentence: "Engineers develop efficient solar panels.", translation: "Mühendisler verimli güneş panelleri geliştirir." },
-    { word: "provide", meaning: "sağlamak", type: "verb", sentence: "Forests provide oxygen and habitat for wildlife.", translation: "Ormanlar, yaban hayatı için oksijen ve yaşam alanı sağlar." },
-    { word: "influence", meaning: "etkilemek", type: "verb", sentence: "Solar radiation can influence the Earth's climate.", translation: "Güneş radyasyonu Dünya'nın iklimini etkileyebilir." },
-    { word: "determine", meaning: "belirlemek", type: "verb", sentence: "DNA tests determine the evolutionary origin of the species.", translation: "DNA testleri türlerin evrimsel kökenini belirler." },
-    { word: "absorb", meaning: "emmek, yutmak", type: "verb", sentence: "Oceans absorb a large amount of atmospheric carbon.", translation: "Okyanuslar büyük miktarda atmosferik karbonu emer." },
-    { word: "generate", meaning: "üretmek", type: "verb", sentence: "Wind turbines generate clean electricity.", translation: "Rüzgar türbinleri temiz elektrik üretir." },
-    { word: "conduct", meaning: "yürütmek, yapmak", type: "verb", sentence: "The laboratory will conduct the chemistry experiment.", translation: "Laboratuvar yarın kimya deneyini yürütecek." },
-    { word: "accelerate", meaning: "hızlandırmak", type: "verb", sentence: "Deforestation will accelerate the rate of soil erosion.", translation: "Ormansızlaşma, toprak erozyonu oranını hızlandıracaktır." },
-    { word: "inhibit", meaning: "engellemek, yavaşlatmak", type: "verb", sentence: "Extreme cold can inhibit chemical reactions.", translation: "Aşırı soğuk, kimyasal reaksiyonları engelleyebilir." },
-    { word: "convert", meaning: "dönüştürmek", type: "verb", sentence: "Plants convert solar energy into chemical energy.", translation: "Bitkiler güneş enerjisini kimyasal enerjiye dönüştürür." },
-    { word: "sustain", meaning: "sürdürmek, devam ettirmek", type: "verb", sentence: "Protecting forests is essential to sustain biodiversity.", translation: "Biyoçeşitliliği sürdürmek için ormanları korumak şarttır." },
-    { word: "observe", meaning: "gözlemlemek", type: "verb", sentence: "Astronomers observe distant stars through telescopes.", translation: "Gökbilimciler uzak yıldızları teleskoplarla gözlemler." },
-    { word: "predict", meaning: "tahmin etmek", type: "verb", sentence: "Meteorologists predict a severe storm next week.", translation: "Meteorologlar önümüzdeki hafta şiddetli bir fırtına tahmin ediyor." },
-    { word: "alter", meaning: "değiştirmek", type: "verb", sentence: "Human activities alter the natural balance of ecosystems.", translation: "İnsan faaliyetleri ekosistemlerin doğal dengesini değiştirir." }
+    { 
+      word: "evaluate", 
+      meaning: "değerlendirmek", 
+      type: "verb", 
+      sentence: "Scientists evaluate the laboratory results carefully.", 
+      translation: "Bilim insanları laboratuvar sonuçlarını dikkatle değerlendirir.",
+      synonyms: "assess, appraise, analyze",
+      collocation: "evaluate carefully, evaluate performance",
+      examQuestion: "Scientists need to ________ the laboratory results carefully before drawing a final conclusion.",
+      examOptions: ["evaluate", "discover", "convert", "inhibit"],
+      strategy: "Boşluktan sonra 'the laboratory results' (laboratuvar sonuçları) nesnesi gelmiştir. Akademik dilde verileri veya sonuçları 'değerlendirmek' (evaluate) en sık kullanılan fiildir."
+    },
+    { 
+      word: "discover", 
+      meaning: "keşfetmek", 
+      type: "verb", 
+      sentence: "Astronomers discover a new habitable planet.", 
+      translation: "Gökbilimciler yaşanabilir yeni bir gezegen keşfeder.",
+      synonyms: "find, unearth, detect",
+      collocation: "discover a planet, discover a cure",
+      examQuestion: "Astronomers hope to ________ a new habitable planet in the distant solar system using the new telescope.",
+      examOptions: ["inhibit", "discover", "absorb", "develop"],
+      strategy: "Gökbilimcilerin (astronomers) yeni bir gezegen (a new planet) ile yapacağı en mantıklı eylem onu 'keşfetmektir' (discover)."
+    },
+    { 
+      word: "reveal", 
+      meaning: "açığa çıkarmak", 
+      type: "verb", 
+      sentence: "The research will reveal the causes of global warming.", 
+      translation: "Araştırma, küresel ısınmanın nedenlerini açığa çıkaracak.",
+      synonyms: "disclose, uncover, expose",
+      collocation: "reveal the causes, reveal the truth",
+      examQuestion: "The latest geological research will ________ the hidden causes of volcanic eruptions in the region.",
+      examOptions: ["reveal", "sustain", "conduct", "alter"],
+      strategy: "Gizli nedenleri (hidden causes) 'açığa çıkarmak' veya 'gözler önüne sermek' anlamında 'reveal' fiili tercih edilmelidir."
+    },
+    { 
+      word: "significant", 
+      meaning: "önemli, kayda değer", 
+      type: "adj", 
+      sentence: "There is a significant decrease in carbon emissions.", 
+      translation: "Karbon emisyonlarında kayda değer bir düşüş var.",
+      synonyms: "important, substantial, considerable",
+      collocation: "significant decrease, significant impact",
+      examQuestion: "There is a ________ decrease in carbon emissions due to new green policies enacted by the union.",
+      examOptions: ["significant", "chronic", "independent", "abundant"],
+      strategy: "Boşluktan sonra 'decrease' (düşüş) ismi gelmiştir. Onu niteleyecek en uygun akademik sıfat 'significant' (kayda değer, önemli) sıfatıdır."
+    },
+    { 
+      word: "consequence", 
+      meaning: "sonuç", 
+      type: "noun", 
+      sentence: "Rising sea levels are a direct consequence of melting glaciers.", 
+      translation: "Deniz seviyelerinin yükselmesi, eriyen buzulların doğrudan bir sonucudur.",
+      synonyms: "result, outcome, effect",
+      collocation: "direct consequence, negative consequence",
+      examQuestion: "Rising sea levels are a direct ________ of melting glaciers in polar regions.",
+      examOptions: ["consequence", "disruption", "resistance", "deficit"],
+      strategy: "Eriyen buzulların (melting glaciers) 'doğrudan bir sonucu' anlamını kurmak için 'direct consequence of' kalıbı kullanılmalıdır."
+    },
+    { 
+      word: "establish", 
+      meaning: "kurmak, saptamak", 
+      type: "verb", 
+      sentence: "They want to establish a new research institute.", 
+      translation: "Yeni bir araştırma enstitüsü kurmak istiyorlar.",
+      synonyms: "set up, found, determine",
+      collocation: "establish a relationship, establish an institute",
+      examQuestion: "The university plans to ________ a new research institute dedicated to renewable energy studies.",
+      examOptions: ["establish", "inhibit", "absorb", "accelerate"],
+      strategy: "Bir enstitü (institute), şirket veya vakıf nesne olarak geldiğinde 'kurmak, tesis etmek' anlamında 'establish' fiili kullanılır."
+    },
+    { 
+      word: "develop", 
+      meaning: "gelişmek, geliştirmek", 
+      type: "verb", 
+      sentence: "Engineers develop efficient solar panels.", 
+      translation: "Mühendisler verimli güneş panelleri geliştirir.",
+      synonyms: "improve, advance, create",
+      collocation: "develop technology, develop a method",
+      examQuestion: "Engineers are working to ________ more efficient solar panels to capture solar energy.",
+      examOptions: ["develop", "regulate", "diagnose", "impair"],
+      strategy: "Daha verimli güneş panellerini 'geliştirmek' anlamında 'develop' fiili uygun düşmektedir."
+    },
+    { 
+      word: "provide", 
+      meaning: "sağlamak", 
+      type: "verb", 
+      sentence: "Forests provide oxygen and habitat for wildlife.", 
+      translation: "Ormanlar, yaban hayatı için oksijen ve yaşam alanı sağlar.",
+      synonyms: "supply, offer, afford",
+      collocation: "provide with, provide information",
+      examQuestion: "Forests ________ a natural habitat for wildlife and produce a large amount of oxygen.",
+      examOptions: ["provide", "inhibit", "predict", "convert"],
+      strategy: "Ormanların yaban hayatı için doğal bir yaşam alanı 'sağlaması' (provide) anlamına gelen fiil seçilmelidir."
+    },
+    { 
+      word: "influence", 
+      meaning: "etkilemek", 
+      type: "verb", 
+      sentence: "Solar radiation can influence the Earth's climate.", 
+      translation: "Güneş radyasyonu Dünya'nın iklimini etkileyebilir.",
+      synonyms: "affect, impact, shape",
+      collocation: "directly influence, influence decisions",
+      examQuestion: "Fluctuations in solar radiation can significantly ________ the Earth's delicate climate system.",
+      examOptions: ["influence", "establish", "generate", "conduct"],
+      strategy: "Güneş radyasyonunun iklim sistemini 'etkilemesi' anlamında 'influence' (veya affect) fiili sıklıkla tercih edilir."
+    },
+    { 
+      word: "determine", 
+      meaning: "belirlemek", 
+      type: "verb", 
+      sentence: "DNA tests determine the evolutionary origin of the species.", 
+      translation: "DNA testleri türlerin evrimsel kökenini belirler.",
+      synonyms: "identify, establish, specify",
+      collocation: "determine the cause, determine factors",
+      examQuestion: "DNA tests are used by biologists to ________ the precise evolutionary origin of the species.",
+      examOptions: ["determine", "accelerate", "sustain", "observe"],
+      strategy: "Türlerin evrimsel kökenini 'belirlemek, saptamak' anlamında 'determine' fiili cümle akışına tam uymaktadır."
+    }
   ],
   sosyal: [
-    { word: "dissemination", meaning: "yayma, yayılma", type: "noun", sentence: "The printing press revolutionized the dissemination of knowledge.", translation: "Matbaa, bilginin yayılmasında devrim yaratmıştır." },
-    { word: "migration", meaning: "göç", type: "noun", sentence: "Economic crisis caused a massive urban migration.", translation: "Ekonomik kriz kitlesel bir kentsel göçe neden oldu." },
-    { word: "alleviate", meaning: "hafifletmek", type: "verb", sentence: "Microloans aim to alleviate poverty in rural areas.", translation: "Mikrokrediler kırsal alanlardaki yoksulluğu hafifletmeyi amaçlamaktadır." },
-    { word: "collateral", meaning: "teminat", type: "noun", sentence: "Low-income families often lack collateral for bank loans.", translation: "Düşük gelirli aileler genellikle banka kredileri için teminattan yoksundur." },
-    { word: "entrepreneur", meaning: "girişimci", type: "noun", sentence: "The young entrepreneur started a successful tech startup.", translation: "Genç girişimci başarılı bir teknoloji girişimi başlattı." },
-    { word: "independent", meaning: "bağımsız", type: "adj", sentence: "Many colonies became independent after World War II.", translation: "Birçok sömürge İkinci Dünya Savaşı'ndan sonra bağımsız oldu." },
-    { word: "monopoly", meaning: "tekel", type: "noun", sentence: "The government wants to break the company's monopoly.", translation: "Hükümet şirketin tekelini kırmak istiyor." },
-    { word: "disruption", meaning: "bozulma, aksama", type: "noun", sentence: "The strike caused a major economic disruption.", translation: "Grev büyük bir ekonomik aksamaya neden oldu." },
-    { word: "stabilize", meaning: "dengelemek, sabitlemek", type: "verb", sentence: "Central banks raise interest rates to stabilize the currency.", translation: "Merkez bankaları para birimini dengelemek için faiz oranlarını artırır." },
-    { word: "acquire", meaning: "edinmek, kazanmak", type: "verb", sentence: "Children acquire language naturally through communication.", translation: "Çocuklar dili iletişim yoluyla doğal olarak edinirler." },
-    { word: "reform", meaning: "reform, ıslahat", type: "noun", sentence: "The parliament approved the new educational reform.", translation: "Meclis yeni eğitim reformunu onayladı." },
-    { word: "disputing", meaning: "tartışmak, anlaşmazlık", type: "verb", sentence: "They resolved the border dispute through diplomacy.", translation: "Sınır anlaşmazlığını diplomasi yoluyla çözdüler." },
-    { word: "negotiation", meaning: "müzakere", type: "noun", sentence: "The two nations entered peaceful negotiations.", translation: "İki ülke barışçıl müzakerelere başladı." },
-    { word: "poverty", meaning: "yoksulluk", type: "noun", sentence: "Millions of people are still living in extreme poverty.", translation: "Milyonlarca insan hala aşırı yoksulluk içinde yaşıyor." },
-    { word: "heritage", meaning: "miras", type: "noun", sentence: "Historical monuments are part of our cultural heritage.", translation: "Tarihi anıtlar kültürel mirasımızın bir parçasıdır." },
-    { word: "democratize", meaning: "demokratikleştirmek", type: "verb", sentence: "The internet helps democratize access to education.", translation: "İnternet, eğitime erişimi demokratikleştirmeye yardımcı olur." },
-    { word: "generate", meaning: "üretmek, yaratmak", type: "verb", sentence: "Small businesses generate employment opportunities.", translation: "Küçük işletmeler istihdam fırsatları yaratır." },
-    { word: "sustain", meaning: "sürdürmek", type: "verb", sentence: "They need international support to sustain economic growth.", translation: "Ekonomik büyümeyi sürdürmek için uluslararası desteğe ihtiyaçları var." },
-    { word: "profound", meaning: "derin, büyük", type: "adj", sentence: "The industrial revolution had a profound impact on society.", translation: "Sanayi devriminin toplum üzerinde derin bir etkisi oldu." },
-    { word: "infrastructure", meaning: "altyapı", type: "noun", sentence: "Building transport infrastructure is essential for trade.", translation: "Ticaret için ulaşım altyapısı inşa etmek elzemdir." }
+    { 
+      word: "dissemination", 
+      meaning: "yayma, yayılma", 
+      type: "noun", 
+      sentence: "The printing press revolutionized the dissemination of knowledge.", 
+      translation: "Matbaa, bilginin yayılmasında devrim yaratmıştır.",
+      synonyms: "distribution, spreading, circulation",
+      collocation: "dissemination of information, rapid dissemination",
+      examQuestion: "The internet has revolutionized the rapid ________ of information across the globe.",
+      examOptions: ["dissemination", "monopoly", "poverty", "heritage"],
+      strategy: "Bilginin dünya geneline hızlıca 'yayılması' anlamında 'dissemination of information/knowledge' kalıbı yaygın bir akademik kullanımdır."
+    },
+    { 
+      word: "migration", 
+      meaning: "göç", 
+      type: "noun", 
+      sentence: "Economic crisis caused a massive urban migration.", 
+      translation: "Ekonomik kriz kitlesel bir kentsel göçe neden oldu.",
+      synonyms: "movement, relocation, emigration",
+      collocation: "urban migration, mass migration",
+      examQuestion: "The severe economic crisis in rural areas caused a massive urban ________.",
+      examOptions: ["migration", "collateral", "entrepreneur", "reform"],
+      strategy: "Kırsal alandan şehirlere doğru yaşanan kitlesel 'göç' anlamını karşılayan isim 'migration'dır."
+    },
+    { 
+      word: "alleviate", 
+      meaning: "hafifletmek", 
+      type: "verb", 
+      sentence: "Microloans aim to alleviate poverty in rural areas.", 
+      translation: "Mikrokrediler kırsal alanlardaki yoksulluğu hafifletmeyi amaçlamaktadır.",
+      synonyms: "relieve, ease, mitigate",
+      collocation: "alleviate poverty, alleviate pain",
+      examQuestion: "The new financial support program aims to ________ poverty in rural communities.",
+      examOptions: ["alleviate", "stabilize", "acquire", "sustain"],
+      strategy: "Yoksulluk (poverty) veya acı gibi olumsuz durumları 'hafifletmek, azaltmak' anlamında 'alleviate' (mitigate/ease) kullanılır."
+    },
+    { 
+      word: "collateral", 
+      meaning: "teminat", 
+      type: "noun", 
+      sentence: "Low-income families often lack collateral for bank loans.", 
+      translation: "Düşük gelirli aileler genellikle banka kredileri için teminattan yoksundur.",
+      synonyms: "security, guarantee, pledge",
+      collocation: "provide collateral, lack collateral",
+      examQuestion: "Low-income families often struggle to obtain bank loans because they lack ________.",
+      examOptions: ["collateral", "heritage", "negotiation", "disruption"],
+      strategy: "Banka kredileri için güvence veya 'teminat' gösterilememesi durumunu ifade etmek için 'collateral' ismi kullanılır."
+    },
+    { 
+      word: "entrepreneur", 
+      meaning: "girişimci", 
+      type: "noun", 
+      sentence: "The young entrepreneur started a successful tech startup.", 
+      translation: "Genç girişimci başarılı bir teknoloji girişimi başlattı.",
+      synonyms: "businessman, founder, investor",
+      collocation: "successful entrepreneur, young entrepreneur",
+      examQuestion: "A visionary ________ took a massive financial risk to start the innovative recycling factory.",
+      examOptions: ["entrepreneur", "monopoly", "reform", "poverty"],
+      strategy: "Yenilikçi bir fabrika kurmak için finansal risk alan 'girişimci' kişiyi tanımlayan kelime 'entrepreneur'dür."
+    }
   ],
   saglik: [
-    { word: "regulate", meaning: "düzenlemek", type: "verb", sentence: "Insulin helps regulate glucose in the bloodstream.", translation: "İnsülin, kandaki glikozun düzenlenmesine yardımcı olur." },
-    { word: "resistance", meaning: "direnç", type: "noun", sentence: "The patient developed a resistance to antibiotics.", translation: "Hasta antibiyotiklere karşı direnç geliştirdi." },
-    { word: "prevent", meaning: "önlemek", type: "verb", sentence: "Regular exercise helps prevent heart disease.", translation: "Düzenli egzersiz kalp hastalığını önlemeye yardımcı olur." },
-    { word: "compensate", meaning: "telafi etmek", type: "verb", sentence: "The pancreas produces extra insulin to compensate.", translation: "Pankreas telafi etmek için fazladan insülin üretir." },
-    { word: "diagnose", meaning: "teşhis etmek", type: "verb", sentence: "Doctors use blood tests to diagnose the illness.", translation: "Doktorlar hastalığı teşhis etmek için kan testleri kullanır." },
-    { word: "ingest", meaning: "yutmak, vücuda almak", type: "verb", sentence: "Humans ingest microplastics through contaminated food.", translation: "İnsanlar mikroplastikleri kontamine gıdalar yoluyla vücutlarına alırlar." },
-    { word: "penetrate", meaning: "nüfuz etmek", type: "verb", sentence: "The virus can penetrate cellular membranes.", translation: "Virüs hücresel zarlara nüfuz edebilir." },
-    { word: "trigger", meaning: "tetiklemek", type: "verb", sentence: "Allergens can trigger acute asthma attacks.", translation: "Alerjenler akut astım ataklarını tetikleyebilir." },
-    { word: "disorder", meaning: "bozukluk, hastalık", type: "noun", sentence: "Insomnia is a common sleep disorder.", translation: "Uykusuzluk yaygın bir uyku bozukluğudur." },
-    { word: "impair", meaning: "zarar vermek, bozmak", type: "verb", sentence: "Alcohol consumption can impair coordination and judgment.", translation: "Alkol tüketimi koordinasyonu ve muhakemeyi bozabilir." },
-    { word: "symptom", meaning: "belirti", type: "noun", sentence: "A high fever is a primary symptom of infection.", translation: "Yüksek ateş, enfeksiyonun birincil belirtisidir." },
-    { word: "transmit", meaning: "bulaştırmak, iletmek", type: "verb", sentence: "Mosquitoes can transmit malaria to humans.", translation: "Sivrisinekler sıtmayı insanlara bulaştırabilir." },
-    { word: "absorb", meaning: "emmek", type: "verb", sentence: "The small intestine absorbs nutrients from food.", translation: "İnce bağırsak gıdalardan besinleri emer." },
-    { word: "inhibit", meaning: "baskılamak, engellemek", type: "verb", sentence: "Drugs can inhibit the replication of the virus.", translation: "İlaçlar virüsün çoğalmasını baskılayabilir." },
-    { word: "enhance", meaning: "geliştirmek, artırmak", type: "verb", sentence: "A healthy diet can enhance immune response.", translation: "Sağlıklı bir diyet bağışıklık tepkisini artırabilir." },
-    { word: "contract", meaning: "yakalanmak, kapmak", type: "verb", sentence: "People can contract the virus through direct contact.", translation: "İnsanlar doğrudan temas yoluyla virüsü kapabilir." },
-    { word: "administer", meaning: "vermek, uygulamak", type: "verb", sentence: "Nurses administer medicine to patients daily.", translation: "Hemşireler hastalara günlük olarak ilaç uygular." },
-    { word: "chronic", meaning: "kronik, müzmin", type: "adj", sentence: "Arthritis is a chronic inflammatory joint disease.", translation: "Artrit kronik inflamatuar bir eklem hastalığıdır." },
-    { word: "immune", meaning: "bağışıklık", type: "adj", sentence: "Vaccines stimulate the immune system to produce antibodies.", translation: "Aşılar bağışıklık sistemini antikor üretmesi için uyarır." },
-    { word: "deficit", meaning: "eksiklik", type: "noun", sentence: "Iron deficit can lead to anemia and fatigue.", translation: "Demir eksikliği anemiye ve yorgunluğa yol açabilir." }
+    { 
+      word: "regulate", 
+      meaning: "düzenlemek", 
+      type: "verb", 
+      sentence: "Insulin helps regulate glucose in the bloodstream.", 
+      translation: "İnsülin, kandaki glikozun düzenlenmesine yardımcı olur.",
+      synonyms: "control, adjust, manage",
+      collocation: "regulate hormone levels, regulate blood pressure",
+      examQuestion: "The thyroid gland produces hormones that help ________ the body's metabolic rate.",
+      examOptions: ["regulate", "diagnose", "penetrate", "impair"],
+      strategy: "Vücudun metabolizma hızını veya hormon dengesini 'düzenlemek, kontrol altında tutmak' anlamında 'regulate' fiili kullanılır."
+    },
+    { 
+      word: "resistance", 
+      meaning: "direnç", 
+      type: "noun", 
+      sentence: "The patient developed a resistance to antibiotics.", 
+      translation: "Hasta antibiyotiklere karşı direnç geliştirdi.",
+      synonyms: "immunity, defense, opposition",
+      collocation: "antibiotic resistance, insulin resistance",
+      examQuestion: "Overuse of medication has led many patients to develop a high ________ to standard antibiotics.",
+      examOptions: ["resistance", "symptom", "deficit", "disorder"],
+      strategy: "Antibiyotiklere karşı vücudun veya bakterilerin geliştirdiği 'direnç' anlamını tamamlayan isim 'resistance'tır."
+    },
+    { 
+      word: "prevent", 
+      meaning: "önlemek", 
+      type: "verb", 
+      sentence: "Regular exercise helps prevent heart disease.", 
+      translation: "Düzenli egzersiz kalp hastalığını önlemeye yardımcı olur.",
+      synonyms: "avoid, block, hinder",
+      collocation: "prevent from, prevent disease",
+      examQuestion: "Adopting a balanced diet and exercising regularly can help ________ heart disease.",
+      examOptions: ["prevent", "trigger", "ingest", "enhance"],
+      strategy: "Kalp hastalıklarını veya enfeksiyonları 'önlemek, önüne geçmek' anlamında 'prevent' fiili en uygun seçenektir."
+    },
+    { 
+      word: "compensate", 
+      meaning: "telafi etmek", 
+      type: "verb", 
+      sentence: "The pancreas produces extra insulin to compensate.", 
+      translation: "Pankreas telafi etmek için fazladan insülin üretir.",
+      synonyms: "make up for, offset, balance",
+      collocation: "compensate for, compensate loss",
+      examQuestion: "The heart beats faster to ________ for the lower oxygen carrying capacity of the blood.",
+      examOptions: ["compensate", "regulate", "transmit", "inhibit"],
+      strategy: "Genellikle 'for' edatı ile birlikte kullanılan ve eksikliği 'telafi etmek, dengelemek' anlamına gelen fiil 'compensate'tir."
+    },
+    { 
+      word: "diagnose", 
+      meaning: "teşhis etmek", 
+      type: "verb", 
+      sentence: "Doctors use blood tests to diagnose the illness.", 
+      translation: "Doktorlar hastalığı teşhis etmek için kan testleri kullanır.",
+      synonyms: "identify, detect, determine",
+      collocation: "diagnose early, diagnose with cancer",
+      examQuestion: "Modern medical imaging techniques allow specialists to ________ serious illnesses at an early stage.",
+      examOptions: ["diagnose", "administer", "contract", "absorb"],
+      strategy: "Ciddi hastalıkları erken aşamada 'teşhis etmek, tanımlamak' anlamında 'diagnose' fiili kullanılır."
+    }
   ]
 };
 
@@ -76,13 +256,10 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
   const [phase, setPhase] = useState(1); // 1: Learn, 2: Spell, 3: Fill, 4: Summary
   const [currentIdx, setCurrentIdx] = useState(0);
   const [readWords, setReadWords] = useState({});
-  const [spellInput, setSpellInput] = useState('');
-  const [spellChecked, setSpellChecked] = useState(false);
-  const [spellCorrect, setSpellCorrect] = useState(null);
-  
-  const [fillSelected, setFillSelected] = useState(null);
-  const [fillChecked, setFillChecked] = useState(false);
-  const [fillCorrect, setFillCorrect] = useState(null);
+  const [strategySelected, setStrategySelected] = useState(null);
+  const [strategyChecked, setStrategyChecked] = useState(false);
+  const [strategyCorrect, setStrategyCorrect] = useState(null);
+  const [showStrategyTip, setShowStrategyTip] = useState(false);
 
   // Smart Hint System State
   const [hintLevel, setHintLevel] = useState(0);
@@ -147,22 +324,34 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     }).join(' ');
   };
 
-  // Handler for Phase 3 (Context fill in the blank)
-  const getMeaningOptions = (correctMeaning, activeWords = words) => {
-    const others = activeWords.filter(w => w.meaning !== correctMeaning).map(w => w.meaning);
-    const shuffled = [
-      correctMeaning,
-      others[0] || 'açıklamak',
-      others[1] || 'önlemek',
-      others[2] || 'geliştirmek'
-    ].sort(() => Math.random() - 0.5);
-    return shuffled;
-  };
-
+  // Handler for Phase 2 Options Generation (Meaning or Synonym)
+  const [testType, setTestType] = useState('meaning'); // 'meaning' veya 'synonym'
   const [meaningOptions, setMeaningOptions] = useState([]);
   const [meaningSelected, setMeaningSelected] = useState(null);
   const [meaningChecked, setMeaningChecked] = useState(false);
   const [meaningCorrect, setMeaningCorrect] = useState(null);
+
+  const getTestOptions = (correctVal, typeKey, activeWords = words) => {
+    const getCleanWord = (wordObj) => {
+      if (typeKey === 'meaning') return wordObj.meaning;
+      const syns = wordObj.synonyms ? wordObj.synonyms.split(',').map(s => s.trim()) : [];
+      return syns[0] || 'assess';
+    };
+
+    const cleanCorrect = typeKey === 'meaning' ? correctVal : (correctVal.split(',')[0].trim());
+
+    const others = activeWords
+      .filter(w => getCleanWord(w) !== cleanCorrect)
+      .map(w => getCleanWord(w));
+
+    const shuffled = [
+      cleanCorrect,
+      others[0] || (typeKey === 'meaning' ? 'açıklamak' : 'assess'),
+      others[1] || (typeKey === 'meaning' ? 'önlemek' : 'prevent'),
+      others[2] || (typeKey === 'meaning' ? 'geliştirmek' : 'develop')
+    ].sort(() => Math.random() - 0.5);
+    return shuffled;
+  };
 
   const handleStartStudy = (limit) => {
     setWordLimit(limit);
@@ -176,7 +365,11 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
 
     setStudyWords(activeWords);
     if (activeWords.length > 0) {
-      setMeaningOptions(getMeaningOptions(activeWords[0].meaning, activeWords));
+      const type = Math.random() > 0.5 ? 'synonym' : 'meaning';
+      setTestType(type);
+      const correctVal = type === 'meaning' ? activeWords[0].meaning : activeWords[0].synonyms;
+      const typeKey = type === 'meaning' ? 'meaning' : 'synonyms';
+      setMeaningOptions(getTestOptions(correctVal, typeKey, activeWords));
     }
     setStudyStarted(true);
     setPhase(1);
@@ -192,15 +385,20 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
       // Unlocked next phase
       setPhase(2);
       setCurrentIdx(0);
-      setMeaningOptions(getMeaningOptions(words[0].meaning, words));
+      const type = Math.random() > 0.5 ? 'synonym' : 'meaning';
+      setTestType(type);
+      const correctVal = type === 'meaning' ? words[0].meaning : words[0].synonyms;
+      const typeKey = type === 'meaning' ? 'meaning' : 'synonyms';
+      setMeaningOptions(getTestOptions(correctVal, typeKey, words));
     }
   };
 
-  // Handler for Phase 2 (Meaning Selection)
+  // Handler for Phase 2 (Meaning/Synonym Selection)
   const handleMeaningCheck = (opt) => {
     if (meaningChecked) return;
     setMeaningSelected(opt);
-    const isCorrect = opt === words[currentIdx].meaning;
+    const correctVal = testType === 'meaning' ? words[currentIdx].meaning : words[currentIdx].synonyms.split(',')[0].trim();
+    const isCorrect = opt === correctVal;
     setMeaningCorrect(isCorrect);
     setMeaningChecked(true);
     trackWordStatus(words[currentIdx], isCorrect);
@@ -208,7 +406,8 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
 
   const handleMeaningDontKnow = () => {
     if (meaningChecked) return;
-    setMeaningSelected(words[currentIdx].meaning);
+    const correctVal = testType === 'meaning' ? words[currentIdx].meaning : words[currentIdx].synonyms.split(',')[0].trim();
+    setMeaningSelected(correctVal);
     setMeaningCorrect(false);
     setMeaningChecked(true);
     trackWordStatus(words[currentIdx], false);
@@ -221,10 +420,53 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     const nextIdx = currentIdx + 1;
     if (nextIdx < words.length) {
       setCurrentIdx(nextIdx);
-      setMeaningOptions(getMeaningOptions(words[nextIdx].meaning, words));
+      const type = Math.random() > 0.5 ? 'synonym' : 'meaning';
+      setTestType(type);
+      const correctVal = type === 'meaning' ? words[nextIdx].meaning : words[nextIdx].synonyms;
+      const typeKey = type === 'meaning' ? 'meaning' : 'synonyms';
+      setMeaningOptions(getTestOptions(correctVal, typeKey, words));
     } else {
       setPhase(3);
       setCurrentIdx(0);
+    }
+  };
+
+  // Handler for Phase 3 (Strategy & Cloze Question)
+  const handleStrategyCheck = (opt) => {
+    if (strategyChecked) return;
+    setStrategySelected(opt);
+    const isCorrect = opt === words[currentIdx].word;
+    setStrategyCorrect(isCorrect);
+    setStrategyChecked(true);
+    trackWordStatus(words[currentIdx], isCorrect);
+  };
+
+  const handleStrategyDontKnow = () => {
+    if (strategyChecked) return;
+    setStrategySelected(words[currentIdx].word);
+    setStrategyCorrect(false);
+    setStrategyChecked(true);
+    trackWordStatus(words[currentIdx], false);
+  };
+
+  const handleStrategyNext = () => {
+    setStrategySelected(null);
+    setStrategyChecked(false);
+    setStrategyCorrect(null);
+    setShowStrategyTip(false);
+    const nextIdx = currentIdx + 1;
+    if (nextIdx < words.length) {
+      setCurrentIdx(nextIdx);
+    } else {
+      // Completed all phases (End of Study)
+      setPhase(4);
+      if (awardPetXP) awardPetXP(50); // Give +50 XP
+      if (triggerConfetti) triggerConfetti();
+      
+      // Award crystals (via localStorage)
+      const currentCrystals = parseInt(localStorage.getItem('yokdil_crystals') || '0', 10);
+      localStorage.setItem('yokdil_crystals', String(currentCrystals + 5));
+      window.dispatchEvent(new Event('custom-pet-updated'));
     }
   };
 
@@ -236,6 +478,10 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     setMeaningSelected(null);
     setMeaningChecked(false);
     setMeaningCorrect(null);
+    setStrategySelected(null);
+    setStrategyChecked(false);
+    setStrategyCorrect(null);
+    setShowStrategyTip(false);
   };
 
   if (!studyStarted) {
@@ -364,6 +610,9 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
             <span className={`badge ${phase >= 2 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Edit3 className="h-3 w-3" /> 2. Anlam Testi
             </span>
+            <span className={`badge ${phase >= 3 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <HelpCircle className="h-3 w-3" /> 3. Soru Stratejisi
+            </span>
           </div>
         </div>
  
@@ -371,7 +620,7 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
         <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', marginTop: '16px', overflow: 'hidden' }}>
           <div style={{
             height: '100%',
-            width: `${((phase - 1) * 50) + ((currentIdx + 1) / words.length * 50)}%`,
+            width: `${((phase - 1) * 33.3) + ((currentIdx + 1) / words.length * 33.3)}%`,
             background: 'linear-gradient(90deg, #6366f1 0%, #10b981 100%)',
             transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
           }} />
@@ -383,35 +632,59 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
         <div className="space-y-6">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 1: Kelimeleri İnceleyin ve Tanıyın <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
+              Adım 1: Modadil Akademik Kelime Kartı <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
             </h4>
-            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Kelimeleri okuyarak hafızanıza alın.</span>
+            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Kelimelerin anlam, eş anlam ve collocation yapılarını inceleyin.</span>
           </div>
 
-          <div className="glass-card animate-scale-in" style={{ padding: '24px', borderRadius: '20px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '20px', gap: '8px' }}>
-              <span style={{ fontSize: '0.62rem', color: '#818cf8', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.08em' }}>İNGİLİZCE KELİME</span>
-              <h1 style={{ fontSize: '2.2rem', fontWeight: '900', color: '#818cf8', margin: 0, letterSpacing: '-0.02em', wordBreak: 'break-all' }}>
+          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '24px', gap: '8px' }}>
+              <span style={{ fontSize: '0.62rem', color: '#818cf8', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>İNGİLİZCE KELİME</span>
+              <h1 style={{ fontSize: '2.4rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em', wordBreak: 'break-all' }}>
                 {words[currentIdx].word}
               </h1>
-              <span className="badge" style={{ fontSize: '0.68rem', background: 'rgba(99, 102, 241, 0.12)', border: '1px solid rgba(99,102,241,0.2)', color: '#a5b4fc' }}>
+              <span className="badge" style={{ fontSize: '0.68rem', background: 'rgba(99, 102, 241, 0.15)', border: '1px solid rgba(99,102,241,0.3)', color: '#a5b4fc', textTransform: 'uppercase', fontWeight: '800' }}>
                 {words[currentIdx].type}
               </span>
               
-              <div style={{ margin: '12px 0', height: '1.5px', width: '32px', background: 'rgba(255,255,255,0.08)' }} />
+              <div style={{ margin: '14px 0', height: '1px', width: '48px', background: 'rgba(255,255,255,0.08)' }} />
 
-              <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.08em' }}>TÜRKÇE ANLAMI</span>
-              <h2 style={{ fontSize: '1.48rem', fontWeight: '800', color: '#34d399', margin: 0 }}>
+              <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>TÜRKÇE ANLAMI</span>
+              <h2 style={{ fontSize: '1.58rem', fontWeight: '800', color: '#34d399', margin: 0 }}>
                 {words[currentIdx].meaning}
               </h2>
             </div>
 
-            <div style={{ marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '20px', textAlign: 'center' }}>
-              <span style={{ fontSize: '0.68rem', color: '#818cf8', fontWeight: 'bold', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>Örnek Akademik Cümle (YÖKDİL)</span>
-              <p style={{ fontSize: '0.98rem', color: 'white', lineHeight: 1.6, margin: '0 auto', fontWeight: '500', maxWidth: '440px' }}>
+            {/* Modadil Synonyms & Collocations Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '20px 0' }}>
+              {/* Eş Anlamlılar (Synonyms) */}
+              <div style={{ background: 'rgba(99, 102, 241, 0.04)', border: '1px solid rgba(99, 102, 241, 0.15)', padding: '14px 18px', borderRadius: '16px', textAlign: 'left' }}>
+                <span style={{ fontSize: '0.64rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px' }}>
+                  🔄 EŞ ANLAMLILAR (SYNONYMS)
+                </span>
+                <p style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700', margin: 0 }}>
+                  {words[currentIdx].synonyms || "Yok"}
+                </p>
+              </div>
+
+              {/* Birlikte Kullanılanlar (Collocations) */}
+              <div style={{ background: 'rgba(16, 185, 129, 0.04)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '14px 18px', borderRadius: '16px', textAlign: 'left' }}>
+                <span style={{ fontSize: '0.64rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px' }}>
+                  🔗 COLLOCATIONS / BİRLİKTE KULLANIM
+                </span>
+                <p style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700', margin: 0, fontStyle: 'italic' }}>
+                  {words[currentIdx].collocation || "Yok"}
+                </p>
+              </div>
+            </div>
+
+            {/* Academic Sentence Box */}
+            <div style={{ textAlign: 'center' }}>
+              <span style={{ fontSize: '0.68rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>Örnek Akademik Cümle (YÖKDİL)</span>
+              <p style={{ fontSize: '0.98rem', color: 'white', lineHeight: 1.6, margin: '0 auto', fontWeight: '500', maxWidth: '500px' }}>
                 {words[currentIdx].sentence}
               </p>
-              <p style={{ fontSize: '0.84rem', color: '#94a3b8', fontStyle: 'italic', marginTop: '8px', marginBottom: 0, maxWidth: '440px', marginLeft: 'auto', marginRight: 'auto' }}>
+              <p style={{ fontSize: '0.84rem', color: '#94a3b8', fontStyle: 'italic', marginTop: '8px', marginBottom: 0, maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
                 {words[currentIdx].translation}
               </p>
             </div>
@@ -432,29 +705,31 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
               className="btn-primary"
               style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
             >
-              Okudum, Sıradaki <ArrowRight className="h-4 w-4" />
+              Öğrendim, Sıradaki <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
       )}
 
-      {/* PHASE 2: MEANING SELECTION PRACTICE */}
+      {/* PHASE 2: MEANING / SYNONYM SELECTION PRACTICE */}
       {phase === 2 && (
         <div className="space-y-6">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 2: Kelimenin Anlamını Tahmin Edin <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
+              {testType === 'meaning' ? 'Adım 2: Kelimenin Anlamını Eşleştirin' : 'Adım 2: Kelimenin Eş Anlamlısını Eşleştirin'} <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
             </h4>
-            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>İngilizce kelimenin doğru Türkçe anlamını seçenekler arasından seçin.</span>
+            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+              {testType === 'meaning' ? 'İngilizce kelimenin doğru Türkçe anlamını bulun.' : 'İngilizce kelimenin en yakın anlamlısını (synonym) bulun.'}
+            </span>
           </div>
 
-          <div className="glass-card" style={{ padding: '28px', borderRadius: '20px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center', textAlign: 'center' }}>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>İngilizce Kelime</span>
-              <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: '#818cf8', margin: 0, letterSpacing: '-0.02em' }}>
+              <span style={{ fontSize: '0.62rem', color: '#818cf8', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>SORULAN KELİME</span>
+              <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em' }}>
                 {words[currentIdx].word}
               </h2>
-              <span className="badge" style={{ fontSize: '0.68rem', background: 'rgba(99, 102, 241, 0.12)', border: '1px solid rgba(99,102,241,0.2)', color: '#a5b4fc' }}>
+              <span className="badge" style={{ fontSize: '0.68rem', background: 'rgba(99, 102, 241, 0.15)', border: '1px solid rgba(99,102,241,0.3)', color: '#a5b4fc', textTransform: 'uppercase' }}>
                 tür: {words[currentIdx].type}
               </span>
 
@@ -462,7 +737,8 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '400px', marginTop: '16px' }}>
                 {meaningOptions.map((opt, i) => {
                   const isSelected = meaningSelected === opt;
-                  const isCorrectAnswer = opt === words[currentIdx].meaning;
+                  const correctVal = testType === 'meaning' ? words[currentIdx].meaning : words[currentIdx].synonyms.split(',')[0].trim();
+                  const isCorrectAnswer = opt === correctVal;
                   let bg = 'rgba(255, 255, 255, 0.03)';
                   let border = '1px solid rgba(255, 255, 255, 0.08)';
                   let color = 'white';
@@ -525,11 +801,11 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
                 }}>
                   {meaningCorrect ? (
                     <>
-                      <Check className="h-4 w-4 text-emerald-400" /> Tebrikler! Doğru Anlam. (+10 XP)
+                      <Check className="h-4 w-4 text-emerald-400" /> Tebrikler! Doğru Eşleşme. (+10 XP)
                     </>
                   ) : (
                     <>
-                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru anlam: "{words[currentIdx].meaning}" olmalıydı.
+                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru cevap: "{testType === 'meaning' ? words[currentIdx].meaning : words[currentIdx].synonyms.split(',')[0].trim()}" olmalıydı.
                     </>
                   )}
                 </div>
@@ -559,8 +835,158 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
         </div>
       )}
 
-      {/* PHASE 3: SUMMARY / CELEBRATION */}
+      {/* PHASE 3: STRATEGY & QUESTION PRACTICE */}
       {phase === 3 && (
+        <div className="space-y-6">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
+              Adım 3: Soru Kalıbı ve Modadil Sınav Stratejisi <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
+            </h4>
+            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+              Kelimelerin gerçek YÖKDİL cümlelerinde nasıl sorulduğunu görün.
+            </span>
+          </div>
+
+          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left' }}>
+              <span style={{ fontSize: '0.62rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>YÖKDİL SORU KALIBI</span>
+              <p style={{ fontSize: '1.05rem', color: 'white', lineHeight: 1.6, fontWeight: '500', margin: 0 }}>
+                {words[currentIdx].examQuestion}
+              </p>
+
+              {/* Options Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', width: '100%', marginTop: '16px' }}>
+                {words[currentIdx].examOptions.map((opt, i) => {
+                  const isSelected = strategySelected === opt;
+                  const isCorrectAnswer = opt === words[currentIdx].word;
+                  let bg = 'rgba(255, 255, 255, 0.03)';
+                  let border = '1px solid rgba(255, 255, 255, 0.08)';
+                  let color = 'white';
+
+                  if (strategyChecked) {
+                    if (isCorrectAnswer) {
+                      bg = 'rgba(16, 185, 129, 0.15)';
+                      border = '1.5px solid #10b981';
+                      color = '#a7f3d0';
+                    } else if (isSelected) {
+                      bg = 'rgba(239, 68, 68, 0.15)';
+                      border = '1.5px solid #ef4444';
+                      color = '#fca5a5';
+                    }
+                  } else if (isSelected) {
+                    bg = 'rgba(99, 102, 241, 0.15)';
+                    border = '1.5px solid #6366f1';
+                    color = '#a5b4fc';
+                  }
+
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleStrategyCheck(opt)}
+                      disabled={strategyChecked}
+                      style={{
+                        padding: '14px',
+                        borderRadius: '12px',
+                        background: bg,
+                        border: border,
+                        color: color,
+                        fontSize: '0.92rem',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        cursor: strategyChecked ? 'default' : 'pointer',
+                        transition: 'all 0.2s',
+                        outline: 'none'
+                      }}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Toggle Modadil Strategy Tip Button */}
+              <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <button
+                  onClick={() => setShowStrategyTip(prev => !prev)}
+                  style={{
+                    alignSelf: 'flex-start',
+                    background: 'rgba(245, 158, 11, 0.1)',
+                    border: '1.5px dashed rgba(245, 158, 11, 0.3)',
+                    color: '#f59e0b',
+                    padding: '8px 16px',
+                    borderRadius: '10px',
+                    fontSize: '0.78rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  💡 Modadil Soru Çözüm Stratejisini Gör {showStrategyTip ? '▲' : '▼'}
+                </button>
+
+                {showStrategyTip && (
+                  <div className="glass-card animate-scale-in" style={{ padding: '16px 20px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.2)', color: '#fef3c7', fontSize: '0.86rem', lineHeight: 1.5 }}>
+                    <strong style={{ color: '#fbbf24', display: 'block', marginBottom: '4px' }}>Taktik Rehberi:</strong>
+                    {words[currentIdx].strategy}
+                  </div>
+                )}
+              </div>
+
+              {/* Correct / Incorrect Feedback Box */}
+              {strategyChecked && (
+                <div className={`glass-card animate-scale-in`} style={{
+                  padding: '12px 24px',
+                  borderRadius: '12px',
+                  background: strategyCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                  border: strategyCorrect ? '1.5px solid rgba(16, 185, 129, 0.3)' : '1.5px solid rgba(239, 68, 68, 0.3)',
+                  color: strategyCorrect ? '#a7f3d0' : '#fca5a5',
+                  marginTop: '12px',
+                  fontSize: '0.82rem',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  {strategyCorrect ? (
+                    <>
+                      <Check className="h-4 w-4 text-emerald-400" /> Tebrikler! Doğru Seçim. (+10 XP)
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru cevap: "{words[currentIdx].word}" olmalıydı.
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', flexWrap: 'wrap', gap: '12px' }}>
+            {!strategyChecked ? (
+              <button
+                onClick={handleStrategyDontKnow}
+                className="btn-secondary"
+                style={{ padding: '10px 16px', fontSize: '0.8rem', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
+              >
+                Bilmiyorum 🤷‍♂️
+              </button>
+            ) : (
+              <button
+                onClick={handleStrategyNext}
+                className="btn-primary"
+                style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}
+              >
+                Sıradaki Soru <ArrowRight className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* PHASE 4: SUMMARY / CELEBRATION */}
+      {phase === 4 && (
         <div className="space-y-6 text-center py-8">
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
             <div style={{
@@ -580,10 +1006,10 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
           </div>
 
           <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0 }}>
-            Tebrikler! Kelime Kampını Tamamladınız! 🎉
+            Tebrikler! Modadil Kelime Kampını Tamamladınız! 🎉
           </h2>
           <p style={{ fontSize: '0.94rem', color: '#94a3b8', maxWidth: '480px', margin: '12px auto 0 auto', lineHeight: 1.6 }}>
-            Seçtiğiniz akademik kelimeleri; anlam okuma ve çoktan seçmeli anlam eşleştirme aşamalarından geçerek hafızanıza kazıdınız.
+            Seçtiğiniz akademik kelimeleri; anlam okuma, çoktan seçmeli eşleştirme ve Modadil YÖKDİL soru stratejileri aşamalarından geçerek hafızanıza kazıdınız.
           </p>
 
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', margin: '28px 0', flexWrap: 'wrap' }}>
