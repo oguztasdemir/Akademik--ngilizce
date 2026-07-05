@@ -324,33 +324,55 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     }).join(' ');
   };
 
-  // Handler for Phase 2 Options Generation (Meaning or Synonym)
-  const [testType, setTestType] = useState('meaning'); // 'meaning' veya 'synonym'
+  // Phase 2: Meaning Selection State
   const [meaningOptions, setMeaningOptions] = useState([]);
   const [meaningSelected, setMeaningSelected] = useState(null);
   const [meaningChecked, setMeaningChecked] = useState(false);
   const [meaningCorrect, setMeaningCorrect] = useState(null);
 
-  const getTestOptions = (correctVal, typeKey, activeWords = words) => {
-    const getCleanWord = (wordObj) => {
-      if (typeKey === 'meaning') return wordObj.meaning;
-      const syns = wordObj.synonyms ? wordObj.synonyms.split(',').map(s => s.trim()) : [];
-      return syns[0] || 'assess';
-    };
+  // Phase 3: Synonym Selection State
+  const [synonymOptions, setSynonymOptions] = useState([]);
+  const [synonymSelected, setSynonymSelected] = useState(null);
+  const [synonymChecked, setSynonymChecked] = useState(false);
+  const [synonymCorrect, setSynonymCorrect] = useState(null);
 
-    const cleanCorrect = typeKey === 'meaning' ? correctVal : (correctVal.split(',')[0].trim());
+  // Phase 4: Cloze (Sentence Blank Fill) State
+  const [clozeOptions, setClozeOptions] = useState([]);
+  const [clozeSelected, setClozeSelected] = useState(null);
+  const [clozeChecked, setClozeChecked] = useState(false);
+  const [clozeCorrect, setClozeCorrect] = useState(null);
 
-    const others = activeWords
-      .filter(w => getCleanWord(w) !== cleanCorrect)
-      .map(w => getCleanWord(w));
-
-    const shuffled = [
-      cleanCorrect,
-      others[0] || (typeKey === 'meaning' ? 'açıklamak' : 'assess'),
-      others[1] || (typeKey === 'meaning' ? 'önlemek' : 'prevent'),
-      others[2] || (typeKey === 'meaning' ? 'geliştirmek' : 'develop')
+  const getMeaningOptions = (correctMeaning, activeWords = words) => {
+    const others = activeWords.filter(w => w.meaning !== correctMeaning).map(w => w.meaning);
+    return [
+      correctMeaning,
+      others[0] || 'açıklamak',
+      others[1] || 'önlemek',
+      others[2] || 'geliştirmek'
     ].sort(() => Math.random() - 0.5);
-    return shuffled;
+  };
+
+  const getSynonymOptions = (correctSynonymStr, activeWords = words) => {
+    const cleanCorrect = correctSynonymStr ? correctSynonymStr.split(',')[0].trim() : 'assess';
+    const others = activeWords
+      .map(w => w.synonyms ? w.synonyms.split(',')[0].trim() : '')
+      .filter(s => s && s !== cleanCorrect);
+    return [
+      cleanCorrect,
+      others[0] || 'assess',
+      others[1] || 'prevent',
+      others[2] || 'develop'
+    ].sort(() => Math.random() - 0.5);
+  };
+
+  const getClozeOptions = (correctWord, activeWords = words) => {
+    const others = activeWords.filter(w => w.word !== correctWord).map(w => w.word);
+    return [
+      correctWord,
+      others[0] || 'evaluate',
+      others[1] || 'discover',
+      others[2] || 'reveal'
+    ].sort(() => Math.random() - 0.5);
   };
 
   const handleStartStudy = (limit) => {
@@ -365,11 +387,7 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
 
     setStudyWords(activeWords);
     if (activeWords.length > 0) {
-      const type = Math.random() > 0.5 ? 'synonym' : 'meaning';
-      setTestType(type);
-      const correctVal = type === 'meaning' ? activeWords[0].meaning : activeWords[0].synonyms;
-      const typeKey = type === 'meaning' ? 'meaning' : 'synonyms';
-      setMeaningOptions(getTestOptions(correctVal, typeKey, activeWords));
+      setMeaningOptions(getMeaningOptions(activeWords[0].meaning, activeWords));
     }
     setStudyStarted(true);
     setPhase(1);
@@ -385,20 +403,15 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
       // Unlocked next phase
       setPhase(2);
       setCurrentIdx(0);
-      const type = Math.random() > 0.5 ? 'synonym' : 'meaning';
-      setTestType(type);
-      const correctVal = type === 'meaning' ? words[0].meaning : words[0].synonyms;
-      const typeKey = type === 'meaning' ? 'meaning' : 'synonyms';
-      setMeaningOptions(getTestOptions(correctVal, typeKey, words));
+      setMeaningOptions(getMeaningOptions(words[0].meaning, words));
     }
   };
 
-  // Handler for Phase 2 (Meaning/Synonym Selection)
+  // Handler for Phase 2 (Meaning Selection)
   const handleMeaningCheck = (opt) => {
     if (meaningChecked) return;
     setMeaningSelected(opt);
-    const correctVal = testType === 'meaning' ? words[currentIdx].meaning : words[currentIdx].synonyms.split(',')[0].trim();
-    const isCorrect = opt === correctVal;
+    const isCorrect = opt === words[currentIdx].meaning;
     setMeaningCorrect(isCorrect);
     setMeaningChecked(true);
     trackWordStatus(words[currentIdx], isCorrect);
@@ -406,8 +419,7 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
 
   const handleMeaningDontKnow = () => {
     if (meaningChecked) return;
-    const correctVal = testType === 'meaning' ? words[currentIdx].meaning : words[currentIdx].synonyms.split(',')[0].trim();
-    setMeaningSelected(correctVal);
+    setMeaningSelected(words[currentIdx].meaning);
     setMeaningCorrect(false);
     setMeaningChecked(true);
     trackWordStatus(words[currentIdx], false);
@@ -420,18 +432,82 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     const nextIdx = currentIdx + 1;
     if (nextIdx < words.length) {
       setCurrentIdx(nextIdx);
-      const type = Math.random() > 0.5 ? 'synonym' : 'meaning';
-      setTestType(type);
-      const correctVal = type === 'meaning' ? words[nextIdx].meaning : words[nextIdx].synonyms;
-      const typeKey = type === 'meaning' ? 'meaning' : 'synonyms';
-      setMeaningOptions(getTestOptions(correctVal, typeKey, words));
+      setMeaningOptions(getMeaningOptions(words[nextIdx].meaning, words));
     } else {
       setPhase(3);
+      setCurrentIdx(0);
+      setSynonymOptions(getSynonymOptions(words[0].synonyms, words));
+    }
+  };
+
+  // Handler for Phase 3 (Synonym Selection)
+  const handleSynonymCheck = (opt) => {
+    if (synonymChecked) return;
+    setSynonymSelected(opt);
+    const correctVal = words[currentIdx].synonyms ? words[currentIdx].synonyms.split(',')[0].trim() : '';
+    const isCorrect = opt === correctVal;
+    setSynonymCorrect(isCorrect);
+    setSynonymChecked(true);
+    trackWordStatus(words[currentIdx], isCorrect);
+  };
+
+  const handleSynonymDontKnow = () => {
+    if (synonymChecked) return;
+    const correctVal = words[currentIdx].synonyms ? words[currentIdx].synonyms.split(',')[0].trim() : '';
+    setSynonymSelected(correctVal);
+    setSynonymCorrect(false);
+    setSynonymChecked(true);
+    trackWordStatus(words[currentIdx], false);
+  };
+
+  const handleSynonymNext = () => {
+    setSynonymSelected(null);
+    setSynonymChecked(false);
+    setSynonymCorrect(null);
+    const nextIdx = currentIdx + 1;
+    if (nextIdx < words.length) {
+      setCurrentIdx(nextIdx);
+      setSynonymOptions(getSynonymOptions(words[nextIdx].synonyms, words));
+    } else {
+      setPhase(4);
+      setCurrentIdx(0);
+      setClozeOptions(getClozeOptions(words[0].word, words));
+    }
+  };
+
+  // Handler for Phase 4 (Cloze Blank Fill)
+  const handleClozeCheck = (opt) => {
+    if (clozeChecked) return;
+    setClozeSelected(opt);
+    const isCorrect = opt === words[currentIdx].word;
+    setClozeCorrect(isCorrect);
+    setClozeChecked(true);
+    trackWordStatus(words[currentIdx], isCorrect);
+  };
+
+  const handleClozeDontKnow = () => {
+    if (clozeChecked) return;
+    setClozeSelected(words[currentIdx].word);
+    setClozeCorrect(false);
+    setClozeChecked(true);
+    trackWordStatus(words[currentIdx], false);
+  };
+
+  const handleClozeNext = () => {
+    setClozeSelected(null);
+    setClozeChecked(false);
+    setClozeCorrect(null);
+    const nextIdx = currentIdx + 1;
+    if (nextIdx < words.length) {
+      setCurrentIdx(nextIdx);
+      setClozeOptions(getClozeOptions(words[nextIdx].word, words));
+    } else {
+      setPhase(5);
       setCurrentIdx(0);
     }
   };
 
-  // Handler for Phase 3 (Strategy & Cloze Question)
+  // Handler for Phase 5 (Strategy & Cloze Question)
   const handleStrategyCheck = (opt) => {
     if (strategyChecked) return;
     setStrategySelected(opt);
@@ -458,8 +534,8 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     if (nextIdx < words.length) {
       setCurrentIdx(nextIdx);
     } else {
-      // Completed all phases (End of Study)
-      setPhase(4);
+      // Completed all phases (End of Study -> Phase 6)
+      setPhase(6);
       if (awardPetXP) awardPetXP(50); // Give +50 XP
       if (triggerConfetti) triggerConfetti();
       
@@ -475,9 +551,19 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     setPhase(1);
     setCurrentIdx(0);
     setReadWords({});
+    
     setMeaningSelected(null);
     setMeaningChecked(false);
     setMeaningCorrect(null);
+    
+    setSynonymSelected(null);
+    setSynonymChecked(false);
+    setSynonymCorrect(null);
+    
+    setClozeSelected(null);
+    setClozeChecked(false);
+    setClozeCorrect(null);
+
     setStrategySelected(null);
     setStrategyChecked(false);
     setStrategyCorrect(null);
@@ -603,15 +689,21 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
             <h3 style={{ fontSize: '1.38rem', fontWeight: '900', color: 'white', margin: '4px 0 0 0' }}>Kelime Öğrenim Kampı ({wordLimit} Kelime)</h3>
           </div>
           
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <span className={`badge ${phase >= 1 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <BookOpen className="h-3 w-3" /> 1. Öğren
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <span className={`badge ${phase >= 1 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
+              📖 1. Öğren
             </span>
-            <span className={`badge ${phase >= 2 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Edit3 className="h-3 w-3" /> 2. Anlam Testi
+            <span className={`badge ${phase >= 2 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
+              🧠 2. Anlam
             </span>
-            <span className={`badge ${phase >= 3 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <HelpCircle className="h-3 w-3" /> 3. Soru Stratejisi
+            <span className={`badge ${phase >= 3 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
+              🔄 3. Eş Anlam
+            </span>
+            <span className={`badge ${phase >= 4 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
+              📝 4. Boşluk Doldurma
+            </span>
+            <span className={`badge ${phase >= 5 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
+              💡 5. Soru Taktikleri
             </span>
           </div>
         </div>
@@ -620,7 +712,7 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
         <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', marginTop: '16px', overflow: 'hidden' }}>
           <div style={{
             height: '100%',
-            width: `${((phase - 1) * 33.3) + ((currentIdx + 1) / words.length * 33.3)}%`,
+            width: `${((phase - 1) * 20) + ((currentIdx + 1) / words.length * 20)}%`,
             background: 'linear-gradient(90deg, #6366f1 0%, #10b981 100%)',
             transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
           }} />
@@ -711,15 +803,15 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
         </div>
       )}
 
-      {/* PHASE 2: MEANING / SYNONYM SELECTION PRACTICE */}
+      {/* PHASE 2: MEANING SELECTION PRACTICE */}
       {phase === 2 && (
         <div className="space-y-6">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              {testType === 'meaning' ? 'Adım 2: Kelimenin Anlamını Eşleştirin' : 'Adım 2: Kelimenin Eş Anlamlısını Eşleştirin'} <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
+              Adım 2: Kelimenin Anlamını Eşleştirin <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
             </h4>
             <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-              {testType === 'meaning' ? 'İngilizce kelimenin doğru Türkçe anlamını bulun.' : 'İngilizce kelimenin en yakın anlamlısını (synonym) bulun.'}
+              İngilizce kelimenin doğru Türkçe anlamını bulun.
             </span>
           </div>
 
@@ -737,8 +829,7 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '400px', marginTop: '16px' }}>
                 {meaningOptions.map((opt, i) => {
                   const isSelected = meaningSelected === opt;
-                  const correctVal = testType === 'meaning' ? words[currentIdx].meaning : words[currentIdx].synonyms.split(',')[0].trim();
-                  const isCorrectAnswer = opt === correctVal;
+                  const isCorrectAnswer = opt === words[currentIdx].meaning;
                   let bg = 'rgba(255, 255, 255, 0.03)';
                   let border = '1px solid rgba(255, 255, 255, 0.08)';
                   let color = 'white';
@@ -784,7 +875,7 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
                 })}
               </div>
 
-              {/* Correct / Incorrect Feedback Box */}
+              {/* Feedback Box */}
               {meaningChecked && (
                 <div className={`glass-card animate-scale-in`} style={{
                   padding: '12px 24px',
@@ -805,7 +896,7 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
                     </>
                   ) : (
                     <>
-                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru cevap: "{testType === 'meaning' ? words[currentIdx].meaning : words[currentIdx].synonyms.split(',')[0].trim()}" olmalıydı.
+                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru cevap: "{words[currentIdx].meaning}" olmalıydı.
                     </>
                   )}
                 </div>
@@ -828,19 +919,265 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
                 className="btn-primary"
                 style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}
               >
-                Sıradaki Kelime <ArrowRight className="h-4 w-4" />
+                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
               </button>
             )}
           </div>
         </div>
       )}
 
-      {/* PHASE 3: STRATEGY & QUESTION PRACTICE */}
+      {/* PHASE 3: SYNONYM SELECTION PRACTICE */}
       {phase === 3 && (
         <div className="space-y-6">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 3: Soru Kalıbı ve Modadil Sınav Stratejisi <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
+              Adım 3: Eş Anlam Eşleştirin <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
+            </h4>
+            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+              İngilizce kelimenin en yakın anlamlısını (synonym) seçeneklerden bulun.
+            </span>
+          </div>
+
+          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center', textAlign: 'center' }}>
+              <span style={{ fontSize: '0.62rem', color: '#818cf8', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>SORULAN KELİME</span>
+              <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em' }}>
+                {words[currentIdx].word}
+              </h2>
+
+              {/* Options Grid */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '400px', marginTop: '16px' }}>
+                {synonymOptions.map((opt, i) => {
+                  const isSelected = synonymSelected === opt;
+                  const correctVal = words[currentIdx].synonyms ? words[currentIdx].synonyms.split(',')[0].trim() : '';
+                  const isCorrectAnswer = opt === correctVal;
+                  let bg = 'rgba(255, 255, 255, 0.03)';
+                  let border = '1px solid rgba(255, 255, 255, 0.08)';
+                  let color = 'white';
+
+                  if (synonymChecked) {
+                    if (isCorrectAnswer) {
+                      bg = 'rgba(16, 185, 129, 0.15)';
+                      border = '1.5px solid #10b981';
+                      color = '#a7f3d0';
+                    } else if (isSelected) {
+                      bg = 'rgba(239, 68, 68, 0.15)';
+                      border = '1.5px solid #ef4444';
+                      color = '#fca5a5';
+                    }
+                  } else if (isSelected) {
+                    bg = 'rgba(99, 102, 241, 0.15)';
+                    border = '1.5px solid #6366f1';
+                    color = '#a5b4fc';
+                  }
+
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleSynonymCheck(opt)}
+                      disabled={synonymChecked}
+                      style={{
+                        padding: '14px 20px',
+                        borderRadius: '12px',
+                        background: bg,
+                        border: border,
+                        color: color,
+                        fontSize: '0.94rem',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        cursor: synonymChecked ? 'default' : 'pointer',
+                        transition: 'all 0.2s',
+                        outline: 'none'
+                      }}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Feedback Box */}
+              {synonymChecked && (
+                <div className={`glass-card animate-scale-in`} style={{
+                  padding: '12px 24px',
+                  borderRadius: '12px',
+                  background: synonymCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                  border: synonymCorrect ? '1.5px solid rgba(16, 185, 129, 0.3)' : '1.5px solid rgba(239, 68, 68, 0.3)',
+                  color: synonymCorrect ? '#a7f3d0' : '#fca5a5',
+                  marginTop: '12px',
+                  fontSize: '0.82rem',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  {synonymCorrect ? (
+                    <>
+                      <Check className="h-4 w-4 text-emerald-400" /> Tebrikler! Eş Anlam Doğru. (+10 XP)
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru eş anlamlısı: "{words[currentIdx].synonyms.split(',')[0].trim()}" olmalıydı.
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', flexWrap: 'wrap', gap: '12px' }}>
+            {!synonymChecked ? (
+              <button
+                onClick={handleSynonymDontKnow}
+                className="btn-secondary"
+                style={{ padding: '10px 16px', fontSize: '0.8rem', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
+              >
+                Bilmiyorum 🤷‍♂️
+              </button>
+            ) : (
+              <button
+                onClick={handleSynonymNext}
+                className="btn-primary"
+                style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}
+              >
+                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* PHASE 4: CLOZE / SENTENCE FILL PRACTICE */}
+      {phase === 4 && (
+        <div className="space-y-6">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
+              Adım 4: Cümle Boşluk Doldurma <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
+            </h4>
+            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+              Cümle içindeki boşluğa gelebilecek en uygun kelimeyi seçin.
+            </span>
+          </div>
+
+          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'center' }}>
+              <span style={{ fontSize: '0.62rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>AKADEMİK CÜMLE</span>
+              
+              <p style={{ fontSize: '1.18rem', color: 'white', lineHeight: 1.6, fontWeight: '500', margin: '8px 0', wordBreak: 'break-word' }}>
+                {words[currentIdx].sentence.replace(new RegExp(`\\b${words[currentIdx].word}\\b`, 'gi'), '________')}
+              </p>
+
+              <span style={{ fontSize: '0.84rem', color: '#94a3b8', fontStyle: 'italic', display: 'block', marginBottom: '12px' }}>
+                Çevirisi: {words[currentIdx].translation}
+              </span>
+
+              {/* Options Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', width: '100%', maxWidth: '500px', margin: '16px auto 0 auto' }}>
+                {clozeOptions.map((opt, i) => {
+                  const isSelected = clozeSelected === opt;
+                  const isCorrectAnswer = opt === words[currentIdx].word;
+                  let bg = 'rgba(255, 255, 255, 0.03)';
+                  let border = '1px solid rgba(255, 255, 255, 0.08)';
+                  let color = 'white';
+
+                  if (clozeChecked) {
+                    if (isCorrectAnswer) {
+                      bg = 'rgba(16, 185, 129, 0.15)';
+                      border = '1.5px solid #10b981';
+                      color = '#a7f3d0';
+                    } else if (isSelected) {
+                      bg = 'rgba(239, 68, 68, 0.15)';
+                      border = '1.5px solid #ef4444';
+                      color = '#fca5a5';
+                    }
+                  } else if (isSelected) {
+                    bg = 'rgba(99, 102, 241, 0.15)';
+                    border = '1.5px solid #6366f1';
+                    color = '#a5b4fc';
+                  }
+
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleClozeCheck(opt)}
+                      disabled={clozeChecked}
+                      style={{
+                        padding: '12px',
+                        borderRadius: '10px',
+                        background: bg,
+                        border: border,
+                        color: color,
+                        fontSize: '0.88rem',
+                        fontWeight: 'bold',
+                        cursor: clozeChecked ? 'default' : 'pointer',
+                        transition: 'all 0.2s',
+                        outline: 'none'
+                      }}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Feedback Box */}
+              {clozeChecked && (
+                <div className={`glass-card animate-scale-in`} style={{
+                  padding: '12px 24px',
+                  borderRadius: '12px',
+                  background: clozeCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                  border: clozeCorrect ? '1.5px solid rgba(16, 185, 129, 0.3)' : '1.5px solid rgba(239, 68, 68, 0.3)',
+                  color: clozeCorrect ? '#a7f3d0' : '#fca5a5',
+                  marginTop: '12px',
+                  fontSize: '0.82rem',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  alignSelf: 'center'
+                }}>
+                  {clozeCorrect ? (
+                    <>
+                      <Check className="h-4 w-4 text-emerald-400" /> Harika! Cümle tamamlandı. (+10 XP)
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru kelime: "{words[currentIdx].word}" olmalıydı.
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', flexWrap: 'wrap', gap: '12px' }}>
+            {!clozeChecked ? (
+              <button
+                onClick={handleClozeDontKnow}
+                className="btn-secondary"
+                style={{ padding: '10px 16px', fontSize: '0.8rem', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
+              >
+                Bilmiyorum 🤷‍♂️
+              </button>
+            ) : (
+              <button
+                onClick={handleClozeNext}
+                className="btn-primary"
+                style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}
+              >
+                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* PHASE 5: STRATEGY & QUESTION PRACTICE */}
+      {phase === 5 && (
+        <div className="space-y-6">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
+              Adım 5: YÖKDİL Sınav Sorusu ve Çözüm Stratejisi <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
             </h4>
             <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
               Kelimelerin gerçek YÖKDİL cümlelerinde nasıl sorulduğunu görün.
@@ -985,8 +1322,8 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
         </div>
       )}
 
-      {/* PHASE 4: SUMMARY / CELEBRATION */}
-      {phase === 4 && (
+      {/* PHASE 6: SUMMARY / CELEBRATION */}
+      {phase === 6 && (
         <div className="space-y-6 text-center py-8">
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
             <div style={{
@@ -1009,7 +1346,7 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
             Tebrikler! Modadil Kelime Kampını Tamamladınız! 🎉
           </h2>
           <p style={{ fontSize: '0.94rem', color: '#94a3b8', maxWidth: '480px', margin: '12px auto 0 auto', lineHeight: 1.6 }}>
-            Seçtiğiniz akademik kelimeleri; anlam okuma, çoktan seçmeli eşleştirme ve Modadil YÖKDİL soru stratejileri aşamalarından geçerek hafızanıza kazıdınız.
+            Seçtiğiniz akademik kelimeleri; anlam okuma, Türkçe anlam eşleştirme, eş anlam bulma, cümle boşluk doldurma ve sınav soru taktikleri aşamalarını başarıyla tamamlayarak hafızanıza kazıdınız.
           </p>
 
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', margin: '28px 0', flexWrap: 'wrap' }}>

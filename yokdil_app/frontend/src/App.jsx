@@ -21,6 +21,7 @@ import MistakeInbox from './components/MistakeInbox';
 import ParagraphsSection from './components/ParagraphsSection';
 import AuthModal from './components/AuthModal';
 import SmartStudySection from './components/SmartStudySection';
+import CampSection from './components/CampSection';
 
 import fallbackExamsFen from './components/exams_db_fen.json';
 import fallbackExamsSosyal from './components/exams_db_sosyal.json';
@@ -3491,7 +3492,19 @@ function App() {
                 />
               </section>
             )}
-
+ 
+            {/* TAB 7.56: 60-DAY CAMP SECTION */}
+            {selectedCategory && activeTab === 'camp' && (
+              <section id="screen-camp" className="app-screen active animate-fade-in">
+                <CampSection
+                  selectedCategory={selectedCategory}
+                  awardPetXP={awardPetXP}
+                  triggerConfetti={triggerConfetti}
+                  examsDb={{ fen: fallbackExamsFen, sosyal: fallbackExamsSosyal, saglik: fallbackExamsSaglik }}
+                />
+              </section>
+            )}
+ 
             {/* TAB 7.6: MINI OYUNLAR SECTION */}
             {selectedCategory && activeTab === 'games' && (
               <section id="screen-games" className="app-screen active">

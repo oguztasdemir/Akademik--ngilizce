@@ -92,6 +92,13 @@ const Sidebar = ({
             <span>Akıllı Çalışma</span>
           </button>
           <button 
+            className={`sidebar-nav-item nav-camp ${activeTab === 'camp' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('camp'); setQuizActive(false); }}
+          >
+            <i className="fa-solid fa-calendar-days"></i>
+            <span>60 Günlük Kamp</span>
+          </button>
+          <button 
             className={`sidebar-nav-item nav-games ${activeTab === 'games' ? 'active' : ''}`}
             onClick={() => { setActiveTab('games'); setQuizActive(false); }}
           >
@@ -184,6 +191,13 @@ const Sidebar = ({
               >
                 <i className="fa-solid fa-graduation-cap" style={{ color: '#818cf8' }}></i>
                 <span>Akıllı Çalışma</span>
+              </button>
+              <button 
+                className="mobile-more-item"
+                onClick={() => { setActiveTab('camp'); setQuizActive(false); setShowMoreMenu(false); }}
+              >
+                <i className="fa-solid fa-calendar-days" style={{ color: '#10b981' }}></i>
+                <span>60 Günlük Kamp</span>
               </button>
 
               <button 

@@ -182,8 +182,8 @@ body {
 
     .app-container {
         max-width: 100% !important;
-        max-height: 100vh !important;
-        height: 100vh !important;
+        max-height: 100dvh !important;
+        height: 100dvh !important;
         width: 100vw !important;
         border: none !important;
         border-radius: 0 !important;
@@ -366,6 +366,8 @@ body {
 
 /* Header */
 .app-header {
+    position: sticky;
+    top: 0;
     background-color: var(--bg-header);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -374,7 +376,7 @@ body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
-    z-index: 10;
+    z-index: 100;
 }
 
 .logo {
