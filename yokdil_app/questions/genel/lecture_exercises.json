@@ -8014,5 +8014,115 @@
       "answer": "to",
       "explanation": "'The first' gibi niteleyicilerden sonra relative clause kısaltması 'to + V1' ile yapılır."
     }
+  ],
+  "09_Modals_Semi_Modals": [
+    {
+      "sentence": "The laboratory door was locked, so the research team ---- left early.",
+      "options": [
+        "must have",
+        "should have",
+        "can"
+      ],
+      "answer": "must have",
+      "explanation": "Geçmişe yönelik güçlü bir çıkarım söz konusudur ('Laboratuvar kapısı kilitliydi, bu yüzden ekip erken çıkmış olmalı')."
+    },
+    {
+      "sentence": "The clinical trials ---- completed last month, but the funding was delayed.",
+      "options": [
+        "should have been",
+        "must have been",
+        "could be"
+      ],
+      "answer": "should have been",
+      "explanation": "Geçmişte yapılması gerekip de yapılmayan bir işi belirtmek için 'should have been V3' kullanılır."
+    }
+  ],
+  "10_Conditionals_Wish_Clauses": [
+    {
+      "sentence": "We will not achieve the desired results ---- we increase the budget.",
+      "options": [
+        "if",
+        "unless",
+        "in case"
+      ],
+      "answer": "unless",
+      "explanation": "Olumsuz koşul bildirmek için '-medikçe/mezse' anlamına gelen 'unless' kullanılır."
+    },
+    {
+      "sentence": "The emergency alarm will sound ---- a fire breaks out in the building.",
+      "options": [
+        "unless",
+        "in case",
+        "if"
+      ],
+      "answer": "if",
+      "explanation": "Olası bir durumun sonucunu şart koşmak için 'if' (eğer) bağlacı uygundur."
+    }
+  ],
+  "11_Noun_Clauses_Subjunctives": [
+    {
+      "sentence": "The study demonstrates ---- climate change accelerates species extinction.",
+      "options": [
+        "that",
+        "whether",
+        "what"
+      ],
+      "answer": "that",
+      "explanation": "Bilimsel bir gerçeği ('iklim değişikliğinin türlerin yok oluşunu hızlandırdığını') bildirmek için 'that' clause kullanılır."
+    },
+    {
+      "sentence": "It is mandatory that every employee ---- protective equipment in the lab.",
+      "options": [
+        "wear",
+        "wears",
+        "wore"
+      ],
+      "answer": "wear",
+      "explanation": "Zorunluluk bildiren sıfatlardan ('mandatory') sonra gelen 'that' cümleciğinde subjunctive kuralı gereği fiil yalın kullanılır."
+    }
+  ],
+  "12_Gerunds_Infinitives": [
+    {
+      "sentence": "The laboratory team decided ---- the experiment until next month.",
+      "options": [
+        "to postpone",
+        "postponing",
+        "postpone"
+      ],
+      "answer": "to postpone",
+      "explanation": "'decide' fiili kendisinden sonra mastar ('to infinitive') alır."
+    },
+    {
+      "sentence": "The new filter is highly effective at ---- carbon dioxide emissions.",
+      "options": [
+        "to reduce",
+        "reducing",
+        "reduce"
+      ],
+      "answer": "reducing",
+      "explanation": "'at' edatından (preposition) sonra gelen fiil daima 'V-ing' (gerund) takısı alır."
+    }
+  ],
+  "13_Adjectives_Adverbs_Comparisons": [
+    {
+      "sentence": "The new drug was proved to be ---- effective than the traditional treatment.",
+      "options": [
+        "as",
+        "more",
+        "the most"
+      ],
+      "answer": "more",
+      "explanation": "Cümlede 'than' ipucu bulunduğundan karşılaştırma yapısı 'more ... than' kullanılmalıdır."
+    },
+    {
+      "sentence": "The temperature of the reaction decreased ---- after adding the catalyst.",
+      "options": [
+        "significant",
+        "significantly",
+        "significance"
+      ],
+      "answer": "significantly",
+      "explanation": "Fiili ('decreased') nitelemek için zarf ('significantly') kullanılması gerekir."
+    }
   ]
 }

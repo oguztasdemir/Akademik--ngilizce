@@ -1,6 +1,125 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, HelpCircle, Check, Eye, Trash2, ArrowRight, Star, RefreshCw, CheckCircle, Sparkles, Mic, Volume2, X } from 'lucide-react';
 
+
+const ALL_SENTENCES = {
+  "evaluate": { en: "Scientists evaluate the laboratory results carefully.", tr: "Bilim insanları laboratuvar sonuçlarını dikkatle değerlendirir." },
+  "discover": { en: "Astronomers discover a new habitable planet.", tr: "Gökbilimciler yaşanabilir yeni bir gezegen keşfeder." },
+  "reveal": { en: "The research will reveal the causes of global warming.", tr: "Araştırma, küresel ısınmanın nedenlerini açığa çıkaracak." },
+  "significant": { en: "There is a significant decrease in carbon emissions.", tr: "Karbon emisyonlarında kayda değer bir düşüş var." },
+  "consequence": { en: "Rising sea levels are a direct consequence of melting glaciers.", tr: "Deniz seviyelerinin yükselmesi, eriyen buzulların doğrudan bir sonucudur." },
+  "establish": { en: "They want to establish a new research institute.", tr: "Yeni bir araştırma enstitüsü kurmak istiyorlar." },
+  "develop": { en: "Engineers develop efficient solar panels.", tr: "Mühendisler verimli güneş panelleri geliştirir." },
+  "provide": { en: "Forests provide oxygen and habitat for wildlife.", tr: "Ormanlar, yaban hayatı için oksijen ve yaşam alanı sağlar." },
+  "influence": { en: "Solar radiation can influence the Earth's climate.", tr: "Güneş radyasyonu Dünya'nın iklimini etkileyebilir." },
+  "determine": { en: "DNA tests determine the evolutionary origin of the species.", tr: "DNA testleri türlerin evrimsel kökenini belirler." },
+  "absorb": { en: "Oceans absorb a large amount of atmospheric carbon.", tr: "Okyanuslar büyük miktarda atmosferik karbonu emer." },
+  "generate": { en: "Wind turbines generate clean electricity.", tr: "Rüzgar türbinleri temiz elektrik üretir." },
+  "conduct": { en: "The laboratory will conduct the chemistry experiment.", tr: "Laboratuvar kimya deneyini yürütecek." },
+  "accelerate": { en: "Deforestation will accelerate the rate of soil erosion.", tr: "Ormansızlaşma, toprak erozyonu oranını hızlandıracaktır." },
+  "inhibit": { en: "Extreme cold can inhibit chemical reactions.", tr: "Aşırı soğuk, kimyasal reaksiyonları engelleyebilir." },
+  "convert": { en: "Plants convert solar energy into chemical energy.", tr: "Bitkiler güneş enerjisini kimyasal enerjiye dönüştürür." },
+  "sustain": { en: "Protecting forests is essential to sustain biodiversity.", tr: "Biyoçeşitliliği sürdürmek için ormanları korumak şarttır." },
+  "observe": { en: "Astronomers observe distant stars through telescopes.", tr: "Gökbilimciler uzak yıldızları teleskoplarla gözlemler." },
+  "predict": { en: "Meteorologists predict a severe storm next week.", tr: "Meteorologlar önümüzdeki hafta fırtına tahmin ediyor." },
+  "alter": { en: "Human activities alter the natural balance of ecosystems.", tr: "İnsan faaliyetleri ekosistemlerin dengesini değiştirir." },
+  "dissemination": { en: "The printing press revolutionized the dissemination of knowledge.", tr: "Matbaa, bilginin yayılmasında devrim yaratmıştır." },
+  "migration": { en: "Economic crisis caused a massive urban migration.", tr: "Ekonomik kriz kitlesel bir kentsel göçe neden oldu." },
+  "alleviate": { en: "Microloans aim to alleviate poverty in rural areas.", tr: "Mikrokrediler kırsal alanlardaki yoksulluğu hafifletmeyi amaçlar." },
+  "collateral": { en: "Low-income families often lack collateral for bank loans.", tr: "Düşük gelirli aileler genellikle banka kredileri için teminattan yoksundur." },
+  "entrepreneur": { en: "The young entrepreneur started a successful tech startup.", tr: "Genç girişimci başarılı bir teknoloji girişimi başlattı." },
+  "independent": { en: "Many colonies became independent after World War II.", tr: "Birçok sömürge İkinci Dünya Savaşı'ndan sonra bağımsız oldu." },
+  "monopoly": { en: "The government wants to break the company's monopoly.", tr: "Hükümet şirketin tekelini kırmak istiyor." },
+  "disruption": { en: "The strike caused a major economic disruption.", tr: "Grev büyük bir ekonomik aksamaya neden oldu." },
+  "stabilize": { en: "Central banks raise interest rates to stabilize the currency.", tr: "Merkez bankaları para birimini dengelemek için faiz oranlarını artırır." },
+  "acquire": { en: "Children acquire language naturally through communication.", tr: "Çocuklar dili iletişim yoluyla doğal olarak edinirler." },
+  "reform": { en: "The parliament approved the new educational reform.", tr: "Meclis yeni eğitim reformunu onayladı." },
+  "disputing": { en: "They resolved the border dispute through diplomacy.", tr: "Sınır anlaşmazlığını diplomasi yoluyla çözdüler." },
+  "negotiation": { en: "The two nations entered peaceful negotiations.", tr: "İki ülke barışçıl müzakerelere başladı." },
+  "poverty": { en: "Millions of people are still living in extreme poverty.", tr: "Millions of people are still living in extreme poverty." },
+  "heritage": { en: "Historical monuments are part of our cultural heritage.", tr: "Tarihi anıtlar kültürel mirasımızın bir parçasıdır." },
+  "democratize": { en: "The internet helps democratize access to education.", tr: "İnternet, eğitime erişimi demokratikleştirmeye yardımcı olur." },
+  "profound": { en: "The industrial revolution had a profound impact on society.", tr: "Sanayi devriminin toplum üzerinde derin bir etkisi oldu." },
+  "infrastructure": { en: "Building transport infrastructure is essential for trade.", tr: "Ticaret için ulaşım altyapısı inşa etmek elzemdir." },
+  "regulate": { en: "Insulin helps regulate glucose in the bloodstream.", tr: "İnsülin, kandaki glikozun düzenlenmesine yardımcı olur." },
+  "resistance": { en: "The patient developed a resistance to antibiotics.", tr: "Hasta antibiyotiklere karşı direnç geliştirdi." },
+  "prevent": { en: "Regular exercise helps prevent heart disease.", tr: "Düzenli egzersiz kalp hastalığını önlemeye yardımcı olur." },
+  "compensate": { en: "The pancreas produces extra insulin to compensate.", tr: "Pankreas telafi etmek için fazladan insülin üretir." },
+  "diagnose": { en: "Doctors use blood tests to diagnose the illness.", tr: "Doktorlar hastalığı teşhis etmek için kan testleri kullanır." },
+  "ingest": { en: "Humans ingest microplastics through contaminated food.", tr: "İnsanlar mikroplastikleri gıdalar yoluyla vücutlarına alırlar." },
+  "penetrate": { en: "The virus can penetrate cellular membranes.", tr: "Virüs hücresel zarlara nüfuz edebilir." },
+  "trigger": { en: "Allergens can trigger acute asthma attacks.", tr: "Alerjenler akut astım ataklarını tetikleyebilir." },
+  "disorder": { en: "Insomnia is a common sleep disorder.", tr: "Uykusuzluk yaygın bir uyku bozukluğudur." },
+  "impair": { en: "Alcohol consumption can impair coordination and judgment.", tr: "Alkol tüketimi koordinasyonu ve muhakemeyi bozabilir." },
+  "symptom": { en: "A high fever is a primary symptom of infection.", tr: "Yüksek ateş, enfeksiyonun birincil belirtisidir." },
+  "transmit": { en: "Mosquitoes can transmit malaria to humans.", tr: "Sivrisinekler sıtmayı insanlara bulaştırabilir." },
+  "enhance": { en: "A healthy diet can enhance immune response.", tr: "Sağlıklı bir diyet bağışıklık tepkisini artırabilir." },
+  "contract": { en: "People can contract the virus through direct contact.", tr: "İnsanlar doğrudan temas yoluyla virüsü kapabilir." },
+  "administer": { en: "Nurses administer medicine to patients daily.", tr: "Hemşireler hastalara günlük olarak ilaç uygular." },
+  "chronic": { en: "Arthritis is a chronic inflammatory joint disease.", tr: "Artrit kronik inflamatuar bir eklem hastalığıdır." },
+  "immune": { en: "Vaccines stimulate the immune system to produce antibodies.", tr: "Aşılar bağışıklık sistemini antikor üretmesi için uyarır." },
+  "deficit": { en: "Iron deficit can lead to anemia and fatigue.", tr: "Demir eksikliği anemiye ve yorgunluğa yol açabilir." }
+};
+
+const SYNONYM_MAP = {
+  "evaluate": "assess",
+  "discover": "find / detect",
+  "reveal": "disclose / show",
+  "significant": "important / vital",
+  "consequence": "result / outcome",
+  "establish": "set up / found",
+  "develop": "improve / evolve",
+  "provide": "supply / give",
+  "influence": "affect / impact",
+  "determine": "identify / decide",
+  "absorb": "soak up / take in",
+  "generate": "produce / create",
+  "conduct": "carry out / perform",
+  "accelerate": "speed up / hasten",
+  "inhibit": "hinder / prevent",
+  "convert": "transform / change",
+  "sustain": "maintain / keep up",
+  "observe": "watch / monitor",
+  "predict": "foresee / anticipate",
+  "alter": "modify / change",
+  "dissemination": "distribution / spread",
+  "migration": "movement / relocation",
+  "alleviate": "ease / relieve",
+  "collateral": "guarantee / security",
+  "entrepreneur": "businessman / founder",
+  "independent": "autonomous / free",
+  "monopoly": "exclusive control",
+  "disruption": "disturbance / interruption",
+  "stabilize": "steady / balance",
+  "acquire": "gain / obtain",
+  "reform": "improvement / reorganization",
+  "disputing": "arguing / debating",
+  "negotiation": "discussion / bargaining",
+  "poverty": "destitution / penury",
+  "heritage": "legacy / inheritance",
+  "democratize": "make democratic",
+  "profound": "deep / intense",
+  "infrastructure": "base / framework",
+  "regulate": "control / adjust",
+  "resistance": "opposition / defiance",
+  "prevent": "avoid / stop",
+  "compensate": "make up for / offset",
+  "diagnose": "identify / determine",
+  "ingest": "consume / swallow",
+  "penetrate": "pierce / enter",
+  "trigger": "activate / spark",
+  "disorder": "illness / condition",
+  "impair": "damage / weaken",
+  "symptom": "sign / indication",
+  "transmit": "pass on / send",
+  "enhance": "improve / boost",
+  "contract": "catch / acquire",
+  "administer": "give / execute",
+  "chronic": "long-term / persistent",
+  "immune": "resistant / exempt",
+  "deficit": "shortage / shortfall"
+};
+
 const VocabularySection = ({
   activeTab,
   notebook,
@@ -173,6 +292,7 @@ const VocabularySection = ({
   const [mcqScore, setMcqScore] = useState(0);
   const [mcqList, setMcqList] = useState([]);
   const [mcqFinished, setMcqFinished] = useState(false);
+  const [mcqMode, setMcqMode] = useState('turkish'); // 'turkish', 'synonym'
 
   // Word List filter states
   const [filterStatus, setFilterStatus] = useState('all');
@@ -510,6 +630,20 @@ const VocabularySection = ({
     }
   };
 
+  const handleSbDontKnow = () => {
+    if (sbChecked) return;
+    const currentObj = sbList[sbIndex];
+    if (!currentObj) return;
+    
+    const correctWords = currentObj.sentence_en.split(/\s+/).map(w => w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")).filter(Boolean);
+    setSbSelected(correctWords);
+    setSbChecked(true);
+    setSbResult('wrong');
+    if (recordWordStat) {
+      recordWordStat(currentObj.english, false);
+    }
+  };
+
   const handleNextSentence = () => {
     setSbChecked(false);
     setSbResult(null);
@@ -801,6 +935,18 @@ const VocabularySection = ({
     }
   };
 
+  const handleSpellingDontKnow = () => {
+    if (spellingChecked) return;
+    const wordObj = spellingList[spellingIndex];
+    if (!wordObj) return;
+    setSpellingInput(wordObj.english);
+    setSpellingChecked(true);
+    setSpellingResult('wrong');
+    if (recordWordStat) {
+      recordWordStat(wordObj.english, false);
+    }
+  };
+
   const handleNextSpelling = () => {
     setSpellingInput('');
     setSpellingChecked(false);
@@ -977,7 +1123,27 @@ const VocabularySection = ({
   };
 
   // Button style generator for Matching game (Strict high-contrast, rounded table rows/cells look)
-  const getMatchBtnStyle = (isMatched, isActive, isErr) => {
+  const getMatchBtnStyle = (isMatched, isActive, isErr, side) => {
+    let defaultBg = 'rgba(255, 255, 255, 0.03)';
+    let defaultBorder = '1px solid rgba(255, 255, 255, 0.08)';
+    let defaultColor = '#e2e8f0';
+
+    if (side === 'left') {
+      defaultBg = 'rgba(99, 102, 241, 0.05)';
+      defaultBorder = '1px solid rgba(99, 102, 241, 0.2)';
+      defaultColor = '#c7d2fe'; // Light Indigo
+    } else if (side === 'right') {
+      if (matchMode === 'synonym') {
+        defaultBg = 'rgba(139, 92, 246, 0.05)';
+        defaultBorder = '1px solid rgba(139, 92, 246, 0.2)';
+        defaultColor = '#ddd6fe'; // Light Purple
+      } else {
+        defaultBg = 'rgba(16, 185, 129, 0.05)';
+        defaultBorder = '1px solid rgba(16, 185, 129, 0.2)';
+        defaultColor = '#a7f3d0'; // Light Emerald
+      }
+    }
+
     let base = {
       width: '100%',
       padding: '12px 14px',
@@ -987,9 +1153,9 @@ const VocabularySection = ({
       textAlign: 'center',
       transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
       cursor: 'pointer',
-      border: '1px solid rgba(255, 255, 255, 0.08)',
-      background: 'rgba(255, 255, 255, 0.03)',
-      color: '#e2e8f0',
+      border: defaultBorder,
+      background: defaultBg,
+      color: defaultColor,
       minHeight: '46px',
       display: 'flex',
       alignItems: 'center',
@@ -1134,6 +1300,10 @@ const VocabularySection = ({
           <option value="duel">⚡ Zamana Karşı Kelime Düellosu (Time Attack Duel)</option>
           <option value="mcq">🎯 Çoktan Seçmeli Test (MCQ Quiz)</option>
           <option value="spelling">✍️ Kelime Yazma Testi (Spelling Practice)</option>
+          <option value="dictation">🎧 Dikte Pratiği (Dinle & Yaz)</option>
+          <option value="pronunciation">🎙️ Telaffuz Laboratuvarı</option>
+          <option value="prepDrills">✏️ Edat & Phrasal Verb Pratiği</option>
+          <option value="leitner">📦 Leitner Sistemi (Aralıklı Tekrar)</option>
           <option value="table">📊 Kelime Listesi & Defter Yönetimi</option>
         </select>
       </div>
@@ -1365,7 +1535,7 @@ const VocabularySection = ({
                   <button
                     key={item.id}
                     onClick={() => handleMatchSelect(item, 'left')}
-                    style={getMatchBtnStyle(isMatched, isActive, isErr)}
+                    style={getMatchBtnStyle(isMatched, isActive, isErr, 'left')}
                   >
                     {item.text}
                   </button>
@@ -1387,7 +1557,7 @@ const VocabularySection = ({
                   <button
                     key={item.id}
                     onClick={() => handleMatchSelect(item, 'right')}
-                    style={getMatchBtnStyle(isMatched, isActive, isErr)}
+                    style={getMatchBtnStyle(isMatched, isActive, isErr, 'right')}
                   >
                     {item.text}
                   </button>
@@ -1461,24 +1631,36 @@ const VocabularySection = ({
                     </div>
                   )}
 
-                  <div className="flex justify-end" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <div className="flex justify-between items-center" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                     {!spellingChecked ? (
-                      <button
-                        onClick={handleCheckSpelling}
-                        disabled={!spellingInput.trim()}
-                        className="btn-primary"
-                        style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
-                      >
-                        Kontrol Et
-                      </button>
+                      <>
+                        <button
+                          onClick={handleSpellingDontKnow}
+                          className="btn-secondary"
+                          style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
+                        >
+                          Bilmiyorum 🤷‍♂️
+                        </button>
+                        <button
+                          onClick={handleCheckSpelling}
+                          disabled={!spellingInput.trim()}
+                          className="btn-primary"
+                          style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                        >
+                          Kontrol Et
+                        </button>
+                      </>
                     ) : (
-                      <button
-                        onClick={handleNextSpelling}
-                        className="btn-primary"
-                        style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
-                      >
-                        {spellingIndex < spellingList.length - 1 ? 'Sonraki Kelime ➡️' : 'Pratiği Bitir 🏁'}
-                      </button>
+                      <>
+                        <div />
+                        <button
+                          onClick={handleNextSpelling}
+                          className="btn-primary"
+                          style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                        >
+                          {spellingIndex < spellingList.length - 1 ? 'Sonraki Kelime ➡️' : 'Pratiği Bitir 🏁'}
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>
@@ -1774,7 +1956,7 @@ const VocabularySection = ({
                     </div>
                   )}
 
-                  <div className="flex justify-between items-center" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div className="flex justify-between items-center flex-wrap gap-3" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                     <button
                       onClick={() => setSbSelected([])}
                       disabled={sbChecked || sbSelected.length === 0}
@@ -1785,14 +1967,23 @@ const VocabularySection = ({
                     </button>
 
                     {!sbChecked ? (
-                      <button
-                        onClick={handleCheckSentence}
-                        disabled={sbSelected.length === 0}
-                        className="btn-primary"
-                        style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
-                      >
-                        Kontrol Et
-                      </button>
+                      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                        <button
+                          onClick={handleSbDontKnow}
+                          className="btn-secondary"
+                          style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
+                        >
+                          Bilmiyorum 🤷‍♂️
+                        </button>
+                        <button
+                          onClick={handleCheckSentence}
+                          disabled={sbSelected.length === 0}
+                          className="btn-primary"
+                          style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
+                        >
+                          Kontrol Et
+                        </button>
+                      </div>
                     ) : (
                       <button
                         onClick={handleNextSentence}
@@ -2169,7 +2360,10 @@ const VocabularySection = ({
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {mcqOptions.map((opt) => {
                       const isSelected = mcqSelected === opt;
-                      const isCorrectAnswer = opt === currentWord.turkish;
+                      const correctVal = mcqMode === 'synonym'
+                        ? (SYNONYM_MAP[(currentWord.english || '').toLowerCase().trim()] || currentWord.turkish)
+                        : currentWord.turkish;
+                      const isCorrectAnswer = opt === correctVal;
                       return (
                         <button
                           key={opt}
@@ -2228,14 +2422,39 @@ const VocabularySection = ({
       {subTab === 'table' && (
         <div className="space-y-4">
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <input 
-              type="text"
-              placeholder="Kelime ara (İngilizce veya Türkçe)..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="duo-input"
-              style={{ flex: 1, minWidth: '180px', padding: '10px 14px', fontSize: '0.8rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.01)', color: 'white', outline: 'none' }}
-            />
+            <div style={{ position: 'relative', flex: 1, minWidth: '180px' }}>
+              <input 
+                type="text"
+                placeholder="Kelime ara (İngilizce veya Türkçe)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="duo-input"
+                style={{ width: '100%', padding: '10px 36px 10px 14px', fontSize: '0.8rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.01)', color: 'white', outline: 'none' }}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: '#94a3b8',
+                    cursor: 'pointer',
+                    fontSize: '0.85rem',
+                    padding: '2px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  title="Aramayı Temizle"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
             
             <select 
               value={filterStatus}
@@ -2296,9 +2515,9 @@ const VocabularySection = ({
           )}
 
           {/* Word Table */}
-          <div className="glass-card border border-white/5 rounded-2xl overflow-hidden vocab-table-card">
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-left" style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div className="glass-card border border-white/5 rounded-2xl overflow-hidden vocab-table-card" style={{ maxWidth: '100%' }}>
+            <div className="overflow-x-auto" style={{ overflowX: 'auto', width: '100%', WebkitOverflowScrolling: 'touch' }}>
+              <table className="w-full border-collapse text-left" style={{ width: '100%', minWidth: '500px', borderCollapse: 'collapse' }}>
                 <thead>
                   <tr className="border-b border-white/5 bg-white/2" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255, 255, 255, 0.02)' }}>
                     <th 
@@ -2325,8 +2544,8 @@ const VocabularySection = ({
                         if (incrementDailyWords) incrementDailyWords();
                       }}
                     >
-                      <td className="p-3 text-xs font-bold text-indigo-300" style={{ padding: '12px 16px', fontSize: '0.8rem' }}>{item.english}</td>
-                      <td className="p-3 text-xs text-slate-200" style={{ padding: '12px 16px', fontSize: '0.8rem' }}>{item.turkish}</td>
+                      <td className="p-3 text-xs font-bold text-indigo-300" style={{ padding: '12px 16px', fontSize: '0.8rem' }}>{item.english || item.word}</td>
+                      <td className="p-3 text-xs text-slate-200" style={{ padding: '12px 16px', fontSize: '0.8rem' }}>{item.turkish || item.meaning}</td>
                       <td className="p-3 text-xs text-center" style={{ padding: '12px 16px', fontSize: '0.8rem', textAlign: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
                           <button

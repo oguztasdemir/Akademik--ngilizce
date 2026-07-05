@@ -85,6 +85,13 @@ const Sidebar = ({
             <span>Evcil Hayvanım</span>
           </button>
           <button 
+            className={`sidebar-nav-item nav-smart-study ${activeTab === 'smart-study' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('smart-study'); setQuizActive(false); }}
+          >
+            <i className="fa-solid fa-graduation-cap"></i>
+            <span>Akıllı Çalışma</span>
+          </button>
+          <button 
             className={`sidebar-nav-item nav-games ${activeTab === 'games' ? 'active' : ''}`}
             onClick={() => { setActiveTab('games'); setQuizActive(false); }}
           >
@@ -169,6 +176,14 @@ const Sidebar = ({
               >
                 <i className="fa-solid fa-paw" style={{ color: '#fb923c' }}></i>
                 <span>Evcil Hayvanım</span>
+              </button>
+
+              <button 
+                className="mobile-more-item"
+                onClick={() => { setActiveTab('smart-study'); setQuizActive(false); setShowMoreMenu(false); }}
+              >
+                <i className="fa-solid fa-graduation-cap" style={{ color: '#818cf8' }}></i>
+                <span>Akıllı Çalışma</span>
               </button>
 
               <button 

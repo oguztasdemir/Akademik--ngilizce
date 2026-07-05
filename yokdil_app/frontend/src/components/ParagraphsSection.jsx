@@ -14,9 +14,6 @@ const ParagraphsSection = ({
 }) => {
   const [passages, setPassages] = useState([]);
   const [selectedPassage, setSelectedPassage] = useState(null);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [checkedQuestions, setCheckedQuestions] = useState({});
-  const [score, setScore] = useState(0);
   const [translatedWord, setTranslatedWord] = useState(null);
   const [translationText, setTranslationText] = useState('');
   const [translationPos, setTranslationPos] = useState(null);
@@ -27,20 +24,19 @@ const ParagraphsSection = ({
     return JSON.parse(localStorage.getItem('completed_passages') || '[]');
   });
 
-  // Focus Mode States
-  const [focusMode, setFocusMode] = useState(false);
-  const [synonymSwapperActive, setSynonymSwapperActive] = useState(false);
-
-  // Cloze Test States
-  const [clozeMode, setClozeMode] = useState(false);
-  const [clozeAnswers, setClozeAnswers] = useState({});
-  const [clozeChecked, setClozeChecked] = useState(false);
-  const [clozeScore, setClozeScore] = useState(0);
-
+  // Translation History State
+  const [translationHistory, setTranslationHistory] = useState([]);
+  // Drag selection states
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartIdx, setDragStartIdx] = useState(null);
+  const [dragEndIdx, setDragEndIdx] = useState(null);
+  const [dragOrigin, setDragOrigin] = useState(null); // 'en' or 'tr'
+  const [dragSentenceIdx, setDragSentenceIdx] = useState(0);
   // Mobile/Reader Typography adjustment states
   const [readFontSize, setReadFontSize] = useState(() => localStorage.getItem('yokdil_read_fontsize') || '0.88');
   const [readLineHeight, setReadLineHeight] = useState(() => localStorage.getItem('yokdil_read_lineheight') || '1.8');
-  const [layoutMode, setLayoutMode] = useState('split'); // 'split' or 'english'
+
+  const [currentHighlight, setCurrentHighlight] = useState(null);
 
 
   useEffect(() => {
@@ -70,14 +66,24 @@ const ParagraphsSection = ({
 
   if (activeTab !== 'paragraphs') return null;
 
-  const handleWordClick = async (event, rawWord) => {
-    event.stopPropagation();
+  const handleWordClick = async (targetRectOrEvent, rawWord, dragRange = null, origin = 'en', sIdx = 0) => {
+    if (targetRectOrEvent && typeof targetRectOrEvent.stopPropagation === 'function') {
+      targetRectOrEvent.stopPropagation();
+    }
     const cleanWord = rawWord.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
     if (!cleanWord) return;
 
     if (incrementDailyWords) incrementDailyWords();
 
-    const rect = event.target.getBoundingClientRect();
+    let rect;
+    if (targetRectOrEvent && typeof targetRectOrEvent.getBoundingClientRect === 'function') {
+      rect = targetRectOrEvent.getBoundingClientRect();
+    } else if (targetRectOrEvent && targetRectOrEvent.bottom !== undefined) {
+      rect = targetRectOrEvent;
+    } else {
+      rect = { bottom: 200, left: 200 };
+    }
+
     setTranslationPos({
       top: rect.bottom + window.scrollY + 6,
       left: rect.left + window.scrollX
@@ -94,6 +100,25 @@ const ParagraphsSection = ({
       const data = await res.json();
       if (data.translation) {
         setTranslationText(data.translation);
+
+        if (dragRange) {
+          setCurrentHighlight({
+            start: dragRange.start,
+            end: dragRange.end,
+            origin: origin,
+            english: origin === 'en' ? rawWord : data.translation,
+            turkish: origin === 'en' ? data.translation : rawWord,
+            sentenceIdx: sIdx
+          });
+        }
+
+        // Add to history
+        setTranslationHistory(prev => {
+          const keyWord = origin === 'en' ? cleanWord : data.translation.toLowerCase();
+          const trWord = origin === 'en' ? data.translation : cleanWord;
+          const filtered = prev.filter(item => item.english.toLowerCase() !== keyWord);
+          return [{ english: keyWord, turkish: trWord }, ...filtered].slice(0, 10);
+        });
       } else {
         setTranslationText('Çeviri bulunamadı.');
       }
@@ -102,69 +127,38 @@ const ParagraphsSection = ({
     }
   };
 
-  const handleMouseUp = async (e) => {
-    const selection = window.getSelection();
-    const selectedText = selection.toString().trim();
+  const handleDragEnd = async (event) => {
+    if (!isDragging) return;
+    setIsDragging(false);
     
-    // Check if it looks like a phrase (at least two words, maximum 6 words)
-    if (selectedText.length > 2 && selectedText.split(/\s+/).length >= 2 && selectedText.split(/\s+/).length <= 6) {
-      try {
-        const range = selection.getRangeAt(0);
-        const rect = range.getBoundingClientRect();
-        
-        setTranslationPos({
-          top: rect.bottom + window.scrollY + 6,
-          left: rect.left + window.scrollX
-        });
-        setTranslatedWord(selectedText);
-        setTranslationText('Kalıp Çeviriliyor...');
-
-        if (incrementDailyWords) incrementDailyWords();
-        
-        const res = await fetch(`${BACKEND_URL}/api/translate`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: selectedText })
-        });
-        const data = await res.json();
-        if (data.translation) {
-          setTranslationText(data.translation);
-        } else {
-          setTranslationText('Çeviri bulunamadı.');
+    if (dragStartIdx !== null && dragEndIdx !== null) {
+      const start = Math.min(dragStartIdx, dragEndIdx);
+      const end = Math.max(dragStartIdx, dragEndIdx);
+      
+      const passageText = dragOrigin === 'tr' ? (selectedPassage.translation || "") : selectedPassage.passage;
+      const passageWords = passageText.split(/\s+/);
+      const selectedPhraseWords = [];
+      for (let i = start; i <= end; i++) {
+        if (passageWords[i] !== undefined) {
+          selectedPhraseWords.push(passageWords[i]);
         }
-      } catch (err) {
-        console.error("Selection translate error:", err);
+      }
+      
+      const selectedPhrase = selectedPhraseWords.join(' ');
+      if (selectedPhrase.trim().length >= 2 || (start === end && selectedPhrase.trim().length > 0)) {
+        const spanId = dragOrigin === 'tr' ? `tr-word-span-${dragEndIdx}` : `word-span-${dragEndIdx}`;
+        const endSpan = document.getElementById(spanId);
+        const rect = endSpan ? endSpan.getBoundingClientRect() : { bottom: event.clientY, left: event.clientX };
+        handleWordClick(rect, selectedPhrase, { start, end }, dragOrigin || 'en', dragSentenceIdx);
       }
     }
-  };
-
-  const handleSelectOption = (qId, option) => {
-    if (checkedQuestions[qId]) return;
-    setSelectedAnswers(prev => ({ ...prev, [qId]: option }));
-  };
-
-  const handleCheckQuestion = (qObj) => {
-    if (checkedQuestions[qObj.id]) return;
-    if (!selectedAnswers[qObj.id]) return;
-
-    if (incrementDailyQuestions) incrementDailyQuestions();
-
-    const isCorrect = selectedAnswers[qObj.id] === qObj.answer;
-    const nextChecked = { ...checkedQuestions, [qObj.id]: true };
-    setCheckedQuestions(nextChecked);
     
-    if (isCorrect) {
-      setScore(prev => prev + 1);
-    }
-
-    // If all questions are answered, mark passage as completed
-    if (selectedPassage) {
-      const allAnswered = selectedPassage.questions.every(q => q.id === qObj.id || nextChecked[q.id]);
-      if (allAnswered && !completedPassages.includes(selectedPassage.id)) {
-        setCompletedPassages(prev => [...prev, selectedPassage.id]);
-      }
-    }
+    setDragStartIdx(null);
+    setDragEndIdx(null);
+    setDragOrigin(null);
   };
+
+
 
   const SYNONYM_MAP = {
     "evaluate": "assess",
@@ -179,44 +173,300 @@ const ParagraphsSection = ({
     "determine": "decide"
   };
 
-  // Helper to tokenize passage sentences into clickable word tags
-  const renderInteractivePassage = (text) => {
-    const words = text.split(/\s+/);
-    return words.map((word, idx) => {
-      const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase();
-      const synonym = SYNONYM_MAP[cleanWord];
-      const shouldSwap = synonymSwapperActive && synonym;
-      const displayWord = shouldSwap ? `${synonym} [${word}]` : word;
-      
-      return (
-        <React.Fragment key={idx}>
-          <span
-            onClick={(e) => handleWordClick(e, shouldSwap ? synonym : word)}
-            style={{
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-              padding: '1px 2px',
-              borderRadius: '4px',
-              display: 'inline',
-              color: shouldSwap ? '#f59e0b' : 'inherit',
-              fontWeight: shouldSwap ? '800' : 'normal',
-              borderBottom: shouldSwap ? '1px dashed #f59e0b' : 'none'
-            }}
-            title={shouldSwap ? `Orijinal: ${word}` : ''}
-            onMouseEnter={(e) => { 
-              e.target.style.color = '#818cf8'; 
-              e.target.style.background = 'rgba(99,102,241,0.08)'; 
-            }}
-            onMouseLeave={(e) => { 
-              e.target.style.color = shouldSwap ? '#f59e0b' : 'inherit'; 
-              e.target.style.background = 'transparent'; 
-            }}
-          >
-            {displayWord}
-          </span>
-          {' '}
-        </React.Fragment>
-      );
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  const checkEnglishWordMatch = (wordWithPunctuation, englishTranslation) => {
+    if (!englishTranslation) return false;
+    const cleanWord = wordWithPunctuation.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()']/g, "");
+    const cleanH = englishTranslation.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()']/g, "").trim();
+
+    if (cleanH.includes(' ')) {
+      const phraseWords = cleanH.split(/\s+/);
+      return phraseWords.some(pw => {
+        if (cleanWord === pw) return true;
+        if (cleanWord.startsWith(pw) || pw.startsWith(cleanWord)) {
+          return cleanWord.length >= 3 && pw.length >= 3;
+        }
+        return false;
+      });
+    }
+
+    if (cleanWord === cleanH) return true;
+    if (cleanWord.startsWith(cleanH) || cleanH.startsWith(cleanWord)) {
+      return cleanWord.length >= 3 && cleanH.length >= 3;
+    }
+    return false;
+  };
+
+  const checkTurkishWordMatch = (wordWithPunctuation, turkishTranslation) => {
+    if (!turkishTranslation) return false;
+    const cleanWord = wordWithPunctuation.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()']/g, "");
+    const cleanH = turkishTranslation.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()']/g, "").trim();
+
+    if (cleanH.includes(' ')) {
+      const phraseWords = cleanH.split(/\s+/);
+      return phraseWords.some(pw => {
+        if (cleanWord === pw) return true;
+        if (cleanWord.startsWith(pw) || pw.startsWith(cleanWord)) {
+          return cleanWord.length >= 3 && pw.length >= 3;
+        }
+        return false;
+      });
+    }
+
+    if (cleanWord === cleanH) return true;
+    if (cleanWord.startsWith(cleanH) || cleanH.startsWith(cleanWord)) {
+      return cleanWord.length >= 3 && cleanH.length >= 3;
+    }
+
+    if (cleanH.length >= 4 && cleanWord.length >= 4) {
+      const rootH = cleanH.substring(0, 3);
+      const rootWord = cleanWord.substring(0, 3);
+      if (rootH === rootWord) {
+        return Math.abs(cleanWord.length - cleanH.length) <= 3;
+      }
+    }
+    return false;
+  };
+
+  const renderHighlightText = (text, highlightObj) => {
+    if (!highlightObj || !highlightObj.turkish || highlightObj.turkish.length < 2) return text;
+    
+    const turkishTranslation = highlightObj.turkish;
+    if (turkishTranslation.includes('Çeviri bulunamadı') || turkishTranslation.includes('Mevcut Değil')) return text;
+
+    // Split text into tokens by spaces to preserve exact layout
+    const parts = text.split(/(\s+)/);
+
+    return parts.map((part, idx) => {
+      if (part.trim() === '') return part;
+
+      // Isolate punctuation from word characters (supports Turkish characters and hyphenated words)
+      const matchWord = part.match(/^([a-zA-Z0-9çğıöşüÇĞİÖŞÜ'-]+)(.*)$/);
+      if (!matchWord) return part;
+
+      const wordOnly = matchWord[1];
+      const punctuation = matchWord[2];
+      const cleanWord = wordOnly.toLowerCase().trim();
+      const cleanH = turkishTranslation.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()']/g, "").trim();
+
+      let isMatch = false;
+
+      // Multi-word phrase matches: check if the phrase contains this word
+      if (cleanH.includes(' ')) {
+        const phraseWords = cleanH.split(/\s+/);
+        isMatch = phraseWords.some(pw => {
+          if (cleanWord === pw) return true;
+          if (cleanWord.startsWith(pw) || pw.startsWith(cleanWord)) {
+            return cleanWord.length >= 3 && pw.length >= 3;
+          }
+          return false;
+        });
+      } else {
+        // Single word matches
+        if (cleanWord === cleanH) isMatch = true;
+        else if (cleanWord.startsWith(cleanH) || cleanH.startsWith(cleanWord)) {
+          isMatch = cleanWord.length >= 3 && cleanH.length >= 3;
+        } else if (cleanH.length >= 4 && cleanWord.length >= 4) {
+          // Fuzzy root match for Turkish vowel drops / suffix changes (e.g. keşif -> keşfi)
+          const rootH = cleanH.substring(0, 3);
+          const rootWord = cleanWord.substring(0, 3);
+          if (rootH === rootWord) {
+            isMatch = Math.abs(cleanWord.length - cleanH.length) <= 3;
+          }
+        }
+      }
+
+      if (isMatch) {
+        return (
+          <React.Fragment key={idx}>
+            <span 
+              style={{ 
+                background: 'rgba(16, 185, 129, 0.35)', 
+                border: '1px solid #10b981', 
+                color: 'white', 
+                padding: '2px 4px', 
+                borderRadius: '4px', 
+                fontWeight: 'bold',
+                boxShadow: '0 0 8px rgba(16, 185, 129, 0.4)',
+                transition: 'all 0.3s',
+                display: 'inline'
+              }}
+            >
+              {wordOnly}
+            </span>
+            {punctuation}
+          </React.Fragment>
+        );
+      }
+
+      return part;
+    });
+  };
+
+  // Helper to tokenize passage sentences into clickable word tags (English)
+  const renderInteractivePassage = (text, startWordOffset) => {
+    const sentences = text.split(/(?<=[.?!])\s+/);
+    let wordIdxCounter = startWordOffset;
+
+    return sentences.flatMap((sentence, sIdx) => {
+      const sentenceWords = sentence.split(/\s+/).filter(Boolean);
+      const sentenceStartIdx = wordIdxCounter;
+      wordIdxCounter += sentenceWords.length;
+
+      return sentenceWords.map((word, wIdx) => {
+        const globalIdx = sentenceStartIdx + wIdx;
+        
+        // 1. Check if currently dragging
+        let isHighlighted = false;
+        if (dragStartIdx !== null && dragEndIdx !== null && dragOrigin === 'en') {
+          const min = Math.min(dragStartIdx, dragEndIdx);
+          const max = Math.max(dragStartIdx, dragEndIdx);
+          isHighlighted = globalIdx >= min && globalIdx <= max;
+        }
+        
+        // 2. Check if part of the current highlight
+        let isSavedHighlight = false;
+        if (currentHighlight) {
+          if (currentHighlight.origin === 'en') {
+            isSavedHighlight = globalIdx >= currentHighlight.start && globalIdx <= currentHighlight.end;
+          } else if (currentHighlight.origin === 'tr') {
+            isSavedHighlight = sIdx === currentHighlight.sentenceIdx && checkEnglishWordMatch(word, currentHighlight.english);
+          }
+        }
+        
+        let style = {
+          cursor: 'pointer',
+          transition: 'all 0.15s ease',
+          padding: '2px 3px',
+          borderRadius: '4px',
+          display: 'inline',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          MozUserSelect: 'none',
+          msUserSelect: 'none'
+        };
+
+        if (isHighlighted) {
+          style.background = 'rgba(99, 102, 241, 0.4)';
+          style.color = '#a5b4fc';
+          style.border = '1px dashed #818cf8';
+        } else if (isSavedHighlight) {
+          style.background = 'rgba(99, 102, 241, 0.25)';
+          style.border = '1px solid #818cf8';
+          style.color = '#e0e7ff';
+          style.fontWeight = 'bold';
+        }
+
+        return (
+          <React.Fragment key={`${sIdx}-${wIdx}`}>
+            <span
+              id={`word-span-${globalIdx}`}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+                setDragStartIdx(globalIdx);
+                setDragEndIdx(globalIdx);
+                setDragOrigin('en');
+                setDragSentenceIdx(sIdx);
+              }}
+              onMouseEnter={() => {
+                if (isDragging && dragOrigin === 'en') {
+                  setDragEndIdx(globalIdx);
+                }
+              }}
+              style={style}
+            >
+              {word}
+            </span>
+            {' '}
+          </React.Fragment>
+        );
+      });
+    });
+  };
+
+  // Helper to tokenize comparison sentences into clickable word tags (Turkish)
+  const renderInteractiveTurkishPassage = (text, startWordOffset) => {
+    const sentences = text.split(/(?<=[.?!])\s+/);
+    let wordIdxCounter = startWordOffset;
+
+    return sentences.flatMap((sentence, sIdx) => {
+      const sentenceWords = sentence.split(/\s+/).filter(Boolean);
+      const sentenceStartIdx = wordIdxCounter;
+      wordIdxCounter += sentenceWords.length;
+
+      return sentenceWords.map((word, wIdx) => {
+        const globalIdx = sentenceStartIdx + wIdx;
+        
+        // 1. Check if currently dragging
+        let isHighlighted = false;
+        if (dragStartIdx !== null && dragEndIdx !== null && dragOrigin === 'tr') {
+          const min = Math.min(dragStartIdx, dragEndIdx);
+          const max = Math.max(dragStartIdx, dragEndIdx);
+          isHighlighted = globalIdx >= min && globalIdx <= max;
+        }
+        
+        // 2. Check if part of the current highlight
+        let isSavedHighlight = false;
+        if (currentHighlight) {
+          if (currentHighlight.origin === 'tr') {
+            isSavedHighlight = globalIdx >= currentHighlight.start && globalIdx <= currentHighlight.end;
+          } else if (currentHighlight.origin === 'en') {
+            isSavedHighlight = sIdx === currentHighlight.sentenceIdx && checkTurkishWordMatch(word, currentHighlight.turkish);
+          }
+        }
+        
+        let style = {
+          cursor: 'pointer',
+          transition: 'all 0.15s ease',
+          padding: '2px 3px',
+          borderRadius: '4px',
+          display: 'inline',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          MozUserSelect: 'none',
+          msUserSelect: 'none'
+        };
+
+        if (isHighlighted) {
+          style.background = 'rgba(16, 185, 129, 0.4)';
+          style.color = '#a7f3d0';
+          style.border = '1px dashed #10b981';
+        } else if (isSavedHighlight) {
+          style.background = 'rgba(16, 185, 129, 0.25)';
+          style.border = '1px solid #10b981';
+          style.color = '#ecfdf5';
+          style.fontWeight = 'bold';
+        }
+
+        return (
+          <React.Fragment key={`${sIdx}-${wIdx}`}>
+            <span
+              id={`tr-word-span-${globalIdx}`}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+                setDragStartIdx(globalIdx);
+                setDragEndIdx(globalIdx);
+                setDragOrigin('tr');
+                setDragSentenceIdx(sIdx);
+              }}
+              onMouseEnter={() => {
+                if (isDragging && dragOrigin === 'tr') {
+                  setDragEndIdx(globalIdx);
+                }
+              }}
+              style={style}
+            >
+              {word}
+            </span>
+            {' '}
+          </React.Fragment>
+        );
+      });
     });
   };
 
@@ -308,40 +558,43 @@ const ParagraphsSection = ({
   };
 
   return (
-    <div style={{ position: 'relative' }} onClick={() => setTranslatedWord(null)}>
-      {/* Translation Popover Bubble */}
-      {translatedWord && translationPos && (
-        <div style={{
-          position: 'absolute',
-          top: `${translationPos.top}px`,
-          left: `${translationPos.left}px`,
-          background: 'rgba(15, 23, 42, 0.95)',
-          backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(99, 102, 241, 0.3)',
-          padding: '8px 12px',
-          borderRadius: '8px',
-          color: '#e2e8f0',
-          fontSize: '0.72rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-          zIndex: 1000,
-          pointerEvents: 'auto',
-          maxWidth: '220px',
-          textAlign: 'left'
-        }} onClick={(e) => e.stopPropagation()}>
-          <div style={{ fontWeight: 'bold', color: '#818cf8', marginBottom: '2px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '160px' }}>
-              {translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")}
-            </span>
+    <div style={{ position: 'relative' }} onClick={(e) => {
+      if (e.target.id && e.target.id.startsWith('word-span-')) {
+        return;
+      }
+      setTranslatedWord(null);
+    }}>
+      {/* Translation Sidebar Card (Fixed to Bottom-Right) */}
+      {translatedWord && (
+        <div 
+          className="translation-sidebar-card"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div style={{ fontWeight: 'bold', color: '#818cf8', fontSize: '1rem', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>
+                {translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")}
+              </span>
+              <button 
+                onClick={() => playSpeechAudio && playSpeechAudio(translatedWord)}
+                style={{ background: 'rgba(99,102,241,0.1)', border: 'none', color: '#818cf8', cursor: 'pointer', padding: '6px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                title="Sesli Oku"
+              >
+                <Volume2 className="h-4 w-4" />
+              </button>
+            </div>
             <button 
-              onClick={() => playSpeechAudio && playSpeechAudio(translatedWord)}
-              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0 }}
+              onClick={() => setTranslatedWord(null)}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0 4px', fontSize: '1.2rem', fontWeight: 'bold', lineHeight: 1 }}
             >
-              <Volume2 className="h-3 w-3" />
+              ×
             </button>
           </div>
-          <p style={{ margin: 0, fontSize: '0.7rem', color: '#f8fafc' }}>{translationText}</p>
+          <p style={{ margin: '0 0 12px 0', fontSize: '0.82rem', color: '#f8fafc', lineHeight: 1.5 }}>
+            {translationText}
+          </p>
           {notebook && handleAddCustomWord && (
-            <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -366,9 +619,9 @@ const ParagraphsSection = ({
                   color: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) 
                     ? '#34d399' 
                     : '#a5b4fc',
-                  padding: '3px 6px',
-                  borderRadius: '4px',
-                  fontSize: '0.62rem',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  fontSize: '0.72rem',
                   fontWeight: 'bold',
                   cursor: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) ? 'default' : 'pointer',
                   transition: 'all 0.2s'
@@ -404,11 +657,9 @@ const ParagraphsSection = ({
                   key={p.id}
                   onClick={() => {
                     setSelectedPassage(p);
-                    setSelectedAnswers({});
-                    setCheckedQuestions({});
-                    setScore(0);
-                    setClozeMode(false);
-                    setClozeChecked(false);
+                    setTranslatedWord(null);
+                    setTranslationText('');
+                    setCurrentHighlight(null);
                   }}
                   className="glass-card flex items-center justify-between hover:bg-white/2"
                   style={{
@@ -471,7 +722,7 @@ const ParagraphsSection = ({
             <button
               onClick={() => {
                 setSelectedPassage(null);
-                setFocusMode(false);
+                setCurrentHighlight(null);
               }}
               className="btn-secondary"
               style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
@@ -479,293 +730,184 @@ const ParagraphsSection = ({
               ← Paragraf Listesine Dön
             </button>
 
-            {/* Focus Options */}
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <button
-                onClick={() => setFocusMode(!focusMode)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  focusMode ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
-                }`}
-                title="Odaklanma Modu (Karanlık Mod & Dikkat Dağıtıcıları Gizleme)"
-              >
-                👁️ Odaklanma Modu
-              </button>
-              {focusMode && (
-                <button
-                  onClick={() => setSynonymSwapperActive(!synonymSwapperActive)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    synonymSwapperActive ? 'bg-orange-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
-                  }`}
-                  title="Eşanlamlı Kelime Değiştirici (Synonym Swapper)"
-                >
-                  🔄 Eşanlamlı Değiştirici
-                </button>
-              )}
-              <button
-                onClick={() => setLayoutMode(layoutMode === 'split' ? 'english' : 'split')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  layoutMode === 'split' ? 'bg-emerald-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
-                }`}
-                title="Görünüm Modu (İngilizce - Türkçe Çeviri Yan Yana)"
-              >
-                {layoutMode === 'split' ? '📖 Yan Yana Görünüm' : '📖 Tekli Görünüm'}
-              </button>
-              <button
-                onClick={() => {
-                  setClozeMode(!clozeMode);
-                  setClozeAnswers({});
-                  setClozeChecked(false);
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  clozeMode ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10'
-                }`}
-                title="Cloze Test Modu (Boşluk Doldurma)"
-              >
-                ✏️ Cloze Test Modu
-              </button>
-            </div>
-
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>
-              Doğru Sayısı: {score} / 3
+            <span style={{ fontSize: '0.74rem', color: '#10b981', fontWeight: 'bold', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', padding: '4px 10px', borderRadius: '8px' }}>
+              📖 İngilizce - Türkçe Karşılaştırmalı Okuma
             </span>
           </div>
-
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'stretch' }}>
-            {/* Left side: Passage details */}
-            <div className={`glass-card ${focusMode ? 'focus-container' : ''}`} style={{ flex: layoutMode === 'split' ? '2.5' : '1.5', minWidth: '320px', padding: '24px', borderRadius: '18px', display: 'flex', flexDirection: 'column', gap: '16px', background: focusMode ? 'rgba(8,10,16,0.98)' : 'rgba(11, 15, 26, 0.6)' }}>
-              <div style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px' }}>
-                <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Akademik Metin ({selectedPassage.wordCount} Kelime)</span>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'white', margin: '4px 0 0 0' }}>{selectedPassage.title}</h3>
-              </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            
+            {/* The Unified Double-Page Book Card */}
+            <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)' }}>
               
-              {/* Okuma Modu Ayarları Barı */}
-              <div className="flex items-center justify-between gap-2 py-1 px-2 rounded-lg bg-white/5 border border-white/5 text-xs text-slate-300" style={{ fontSize: '0.72rem' }}>
-                <span style={{ fontWeight: 'bold', color: '#818cf8' }}>Okuma Ayarları:</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <button 
-                    onClick={() => {
-                      const nextVal = Math.max(0.75, parseFloat(readFontSize) - 0.05).toFixed(2);
-                      setReadFontSize(nextVal);
-                      localStorage.setItem('yokdil_read_fontsize', nextVal);
-                    }}
-                    className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all"
-                    title="Yazıyı Küçült"
-                  >
-                    A-
-                  </button>
-                  <span style={{ fontFamily: 'monospace', minWidth: '32px', textAlign: 'center' }}>{Math.round(parseFloat(readFontSize) * 100)}%</span>
-                  <button 
-                    onClick={() => {
-                      const nextVal = Math.min(1.4, parseFloat(readFontSize) + 0.05).toFixed(2);
-                      setReadFontSize(nextVal);
-                      localStorage.setItem('yokdil_read_fontsize', nextVal);
-                    }}
-                    className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all"
-                    title="Yazıyı Büyüt"
-                  >
-                    A+
-                  </button>
-                  
-                  <span style={{ color: 'rgba(255,255,255,0.15)' }}>|</span>
-                  
-                  <button 
-                    onClick={() => {
-                      const nextVal = Math.max(1.4, parseFloat(readLineHeight) - 0.1).toFixed(1);
-                      setReadLineHeight(nextVal);
-                      localStorage.setItem('yokdil_read_lineheight', nextVal);
-                    }}
-                    className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all"
-                    title="Satır Aralığını Azalt"
-                  >
-                    Satır ↕-
-                  </button>
-                  <button 
-                    onClick={() => {
-                      const nextVal = Math.min(2.4, parseFloat(readLineHeight) + 0.1).toFixed(1);
-                      setReadLineHeight(nextVal);
-                      localStorage.setItem('yokdil_read_lineheight', nextVal);
-                    }}
-                    className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all"
-                    title="Satır Aralığını Artır"
-                  >
-                    Satır ↕+
-                  </button>
+              {/* Book Header */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '16px', marginBottom: '24px' }}>
+                <div>
+                  <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Akademik Metin Analizi ({selectedPassage.wordCount} Kelime)</span>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'white', margin: '4px 0 0 0' }}>{selectedPassage.title}</h3>
+                </div>
+                
+                {/* Okuma Modu Ayarları Barı */}
+                <div className="flex items-center gap-3 py-1 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-slate-300" style={{ fontSize: '0.72rem' }}>
+                  <span style={{ fontWeight: 'bold', color: '#818cf8' }}>Yazı Boyutu:</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <button 
+                      onClick={() => {
+                        const nextVal = Math.max(0.75, parseFloat(readFontSize) - 0.05).toFixed(2);
+                        setReadFontSize(nextVal);
+                        localStorage.setItem('yokdil_read_fontsize', nextVal);
+                      }}
+                      className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all cursor-pointer"
+                    >
+                      A-
+                    </button>
+                    <span style={{ fontFamily: 'monospace', minWidth: '32px', textAlign: 'center' }}>{Math.round(parseFloat(readFontSize) * 100)}%</span>
+                    <button 
+                      onClick={() => {
+                        const nextVal = Math.min(1.4, parseFloat(readFontSize) + 0.05).toFixed(2);
+                        setReadFontSize(nextVal);
+                        localStorage.setItem('yokdil_read_fontsize', nextVal);
+                      }}
+                      className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 active:scale-95 text-xs font-bold transition-all cursor-pointer"
+                    >
+                      A+
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div onMouseUp={handleMouseUp} style={{ fontSize: `${readFontSize}rem`, lineHeight: readLineHeight, color: '#cbd5e1', textAlign: 'justify', margin: 0 }}>
-                {clozeMode ? (
-                  <div>
-                    <div style={{ marginBottom: '14px', padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: '10px', fontSize: '0.72rem', color: '#a5b4fc', fontWeight: 'bold' }}>
-                      ✏️ Metindeki boş bırakılmış yerlere en uygun düşen akademik kelimeleri seçin.
-                    </div>
-                    {renderClozePassage(selectedPassage.passage)}
+              {/* Book Content - Side-by-Side Paragraph-aligned Book Reader */}
+              <div 
+                onMouseUp={handleDragEnd} 
+                onMouseLeave={() => {
+                  if (isDragging) {
+                    setIsDragging(false);
+                    setDragStartIdx(null);
+                    setDragEndIdx(null);
+                  }
+                }}
+                style={{ 
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none',
+                  MozUserSelect: 'none',
+                  msUserSelect: 'none'
+                }}
+              >
+                {(() => {
+                  const enParas = selectedPassage.passage.split('\n').filter(Boolean);
+                  const trParas = (selectedPassage.translation || "").split('\n').filter(Boolean);
+                  let wordOffset = 0;
+                  let trWordOffset = 0;
 
-                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      {!clozeChecked ? (
-                        <button
-                          onClick={() => {
-                            let correctCount = 0;
-                            let totalTargets = 0;
-                            const words = selectedPassage.passage.split(/\s+/);
-                            words.forEach(word => {
-                              const clean = word.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-                              if (CLOZE_TARGETS.includes(clean)) {
-                                const ans = clozeAnswers[totalTargets];
-                                if (ans === clean) correctCount++;
-                                totalTargets++;
-                              }
-                            });
-                            setClozeChecked(true);
-                            setClozeScore(correctCount);
-                            if (incrementDailyQuestions) incrementDailyQuestions();
-                          }}
-                          className="btn-primary"
-                          style={{ padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}
-                        >
-                          Cevapları Kontrol Et
-                        </button>
-                      ) : (
-                        <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#34d399' }}>
-                          Cloze Test Skoru: {clozeScore} / {selectedPassage.passage.split(/\s+/).map(w => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")).filter(clean => CLOZE_TARGETS.includes(clean)).length} Doğru!
-                        </div>
-                      )}
-                      {clozeChecked && (
-                        <button
-                          onClick={() => {
-                            setClozeAnswers({});
-                            setClozeChecked(false);
-                            setClozeScore(0);
-                          }}
-                          className="btn-secondary"
-                          style={{ padding: '6px 12px', fontSize: '0.72rem', cursor: 'pointer' }}
-                        >
-                          Yeniden Başlat
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ) : layoutMode === 'split' && selectedPassage.translation ? (
-                  selectedPassage.passage.split('\n').filter(Boolean).map((para, idx) => {
-                    const trPara = (selectedPassage.translation || "").split('\n').filter(Boolean)[idx] || "";
+                  return enParas.map((para, idx) => {
+                    const currentOffset = wordOffset;
+                    const wordCount = para.split(/\s+/).length;
+                    wordOffset += wordCount;
+
+                    const trPara = trParas[idx] || "";
+                    const trOffset = trWordOffset;
+                    const trWordCount = trPara.split(/\s+/).length;
+                    trWordOffset += trWordCount;
+
                     return (
-                      <div key={idx} className="flex flex-col md:flex-row gap-4 md:gap-6 mb-4 border-b border-white/5 pb-3">
-                        <div className="flex-1 text-justify">
-                          {renderInteractivePassage(para)}
+                      <div key={idx} className="comparative-grid-row">
+                        
+                        {/* Left Page (English) */}
+                        <div className="comparative-column" style={{ fontSize: `${readFontSize}rem`, lineHeight: readLineHeight, color: '#e2e8f0', textAlign: 'justify' }}>
+                          <span style={{ display: 'block', fontSize: '0.62rem', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase', marginBottom: '6px', opacity: 0.8 }}>[Paragraf {idx + 1}]</span>
+                          {renderInteractivePassage(para, currentOffset)}
                         </div>
-                        <div className="flex-1 text-justify text-slate-400 italic bg-white/[0.02] p-3.5 rounded-xl border-l-2 border-emerald-500 text-[0.92rem] leading-relaxed">
-                          {trPara}
+
+                        {/* Middle Visual Spine line */}
+                        <div className="hidden md:block" style={{ width: '1px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.03), rgba(255,255,255,0.08), rgba(255,255,255,0.03))' }} />
+
+                        {/* Right Page (Turkish) */}
+                        <div className="comparative-column" style={{ fontSize: `${readFontSize}rem`, lineHeight: readLineHeight, color: '#94a3b8', textAlign: 'justify', fontStyle: 'italic' }}>
+                          <span style={{ display: 'block', fontSize: '0.62rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', marginBottom: '6px', opacity: 0.8 }}>[Türkçe Karşılaştırma]</span>
+                          {renderInteractiveTurkishPassage(trPara, trOffset)}
                         </div>
+
                       </div>
                     );
-                  })
-                ) : (
-                  selectedPassage.passage.split('\n').filter(Boolean).map((para, idx) => (
-                    <p key={idx} style={{ marginBottom: '12px' }}>
-                      {renderInteractivePassage(para)}
-                    </p>
-                  ))
-                )}
+                  });
+                })()}
               </div>
-              <div style={{ marginTop: 'auto', background: 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.1)', padding: '10px 14px', borderRadius: '10px', fontSize: '0.68rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                💡 <span style={{ textAlign: 'left' }}>Paragraf içerisindeki herhangi bir kelimeye tıklayarak Türkçe çevirisini anında görebilirsiniz.</span>
+
+              <div style={{ background: 'rgba(99,102,241,0.03)', border: '1px solid rgba(99,102,241,0.08)', padding: '12px 18px', borderRadius: '12px', fontSize: '0.7rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '8px', marginTop: '24px' }}>
+                💡 <span style={{ textAlign: 'left' }}>Çevirmek istediğiniz kelimeye tıklayabilir veya farenizle sürükleyip bırakarak kelime gruplarını doğrudan kalıp olarak çevirebilirsiniz.</span>
               </div>
             </div>
 
-            {/* Right side: Questions */}
-            <div style={{ flex: '1', minWidth: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {selectedPassage.questions.map((q, qIdx) => {
-                const isChecked = checkedQuestions[q.id];
-                const selectedOpt = selectedAnswers[q.id];
-                return (
-                  <div key={q.id} className="glass-card" style={{ padding: '20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'left' }}>
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-                      <span style={{
-                        background: 'rgba(99,102,241,0.15)',
-                        border: '1px solid rgba(99,102,241,0.25)',
-                        color: '#a5b4fc',
-                        width: '22px',
-                        height: '22px',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.7rem',
-                        fontWeight: 'bold',
-                        flexShrink: 0
-                      }}>
-                        {qIdx + 1}
-                      </span>
-                      <h4 style={{ fontSize: '0.8rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: '1.4' }}>{q.question}</h4>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '14px' }}>
-                      {q.options.map((opt) => {
-                        let btnStyle = {
-                          width: '100%',
-                          padding: '10px 14px',
-                          borderRadius: '8px',
-                          fontSize: '0.74rem',
-                          textAlign: 'left',
-                          border: '1px solid rgba(255,255,255,0.05)',
-                          background: 'rgba(255,255,255,0.02)',
-                          color: '#94a3b8',
-                          cursor: isChecked ? 'default' : 'pointer',
-                          transition: 'all 0.2s ease'
-                        };
-
-                        if (isChecked) {
-                          if (opt === q.answer) {
-                            btnStyle.background = 'rgba(16, 185, 129, 0.15)';
-                            btnStyle.border = '1px solid #10b981';
-                            btnStyle.color = '#34d399';
-                          } else if (opt === selectedOpt) {
-                            btnStyle.background = 'rgba(239, 68, 68, 0.15)';
-                            btnStyle.border = '1px solid #ef4444';
-                            btnStyle.color = '#f87171';
-                          }
-                        } else if (opt === selectedOpt) {
-                          btnStyle.background = 'rgba(99, 102, 241, 0.15)';
-                          btnStyle.border = '1px solid #6366f1';
-                          btnStyle.color = '#a5b4fc';
-                        }
-
-                        return (
-                          <button
-                            key={opt}
-                            disabled={isChecked}
-                            onClick={() => handleSelectOption(q.id, opt)}
-                            style={btnStyle}
-                          >
-                            {opt}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {!isChecked && (
-                      <button
-                        disabled={!selectedOpt}
-                        onClick={() => handleCheckQuestion(q)}
-                        className="btn-primary"
-                        style={{
-                          width: '100%',
-                          padding: '8px',
-                          fontSize: '0.72rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '6px',
-                          cursor: selectedOpt ? 'pointer' : 'not-allowed',
-                          opacity: selectedOpt ? 1.0 : 0.5
-                        }}
-                      >
-                        Cevabı Kontrol Et <HelpCircle className="h-4 w-4" />
-                      </button>
-                    )}
+            {/* Bottom Row: Translation History & Mark Completed Button */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              
+              {/* Translation History Box */}
+              {translationHistory.length > 0 && (
+                <div className="glass-card" style={{ padding: '24px', borderRadius: '20px', border: '1px solid rgba(251, 146, 60, 0.15)', textAlign: 'left', background: 'rgba(15, 23, 42, 0.3)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                    <h4 style={{ fontSize: '0.85rem', fontWeight: '800', color: '#fb923c', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      📖 Bu Okuma Metninden Çevrilen Kelimeler ({translationHistory.length})
+                    </h4>
+                    <button 
+                      onClick={() => setTranslationHistory([])}
+                      className="btn-secondary" 
+                      style={{ padding: '4px 10px', fontSize: '0.65rem', cursor: 'pointer' }}
+                    >
+                      Geçmişi Temizle
+                    </button>
                   </div>
-                );
-              })}
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '10px', maxHeight: '160px', overflowY: 'auto', paddingRight: '4px' }}>
+                    {translationHistory.map((item, index) => (
+                      <div key={index} style={{ fontSize: '0.72rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '8px 12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                        <span style={{ fontWeight: 'bold', color: '#e2e8f0' }}>{item.english}</span>
+                        <span style={{ color: '#34d399', fontWeight: 'bold' }}>{item.turkish}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Mark as Completed Button */}
+              <button
+                onClick={() => {
+                  const isAlreadyCompleted = completedPassages.includes(selectedPassage.id);
+                  if (!isAlreadyCompleted) {
+                    const newList = [...completedPassages, selectedPassage.id];
+                    setCompletedPassages(newList);
+                    localStorage.setItem('completed_passages', JSON.stringify(newList));
+                    
+                    // Award XP and log activity
+                    if (awardPetXp) awardPetXp(120);
+                    if (logStudyActivity) {
+                      logStudyActivity('reading', 120, `Okuma: ${selectedPassage.title}`);
+                    }
+                  }
+                  setSelectedPassage(null);
+                  setCurrentHighlight(null);
+                }}
+                className="btn-primary"
+                style={{
+                  padding: '16px',
+                  borderRadius: '16px',
+                  fontWeight: '800',
+                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  background: completedPassages.includes(selectedPassage.id) 
+                    ? 'rgba(16, 185, 129, 0.15)' 
+                    : 'linear-gradient(135deg, #10b981, #059669)',
+                  border: completedPassages.includes(selectedPassage.id) ? '1px solid #10b981' : 'none',
+                  color: completedPassages.includes(selectedPassage.id) ? '#34d399' : 'white',
+                  boxShadow: completedPassages.includes(selectedPassage.id) ? 'none' : '0 4px 15px rgba(16, 185, 129, 0.3)',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {completedPassages.includes(selectedPassage.id) ? '✓ Okuma Çalışması Tamamlandı' : 'Okumayı Bitir ve Seviye XP Kazan! ⚡'}
+              </button>
             </div>
           </div>
         </div>

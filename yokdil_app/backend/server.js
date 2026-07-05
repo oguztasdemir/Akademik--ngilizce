@@ -136,19 +136,19 @@ app.post(['/api/translate', '/api/:category/translate'], async (req, res) => {
   if (fs.existsSync(dictPath)) {
     const dictData = JSON.parse(fs.readFileSync(dictPath, 'utf8'));
     
-    // Check 1: Direct Match
+    // Check 1: Direct English -> Turkish Match
     if (dictData[cleanWord]) {
       return res.json({ word: text, translation: dictData[cleanWord], source: 'local_dict' });
     }
     
-    // Check 2: Lemma / Conjugation Match
+    // Check 2: English Lemma Match
     let lemmas = [cleanWord];
     if (cleanWord.endsWith('s')) lemmas.push(cleanWord.slice(0, -1));
-    if (cleanWord.endsWith('d')) lemmas.push(cleanWord.slice(0, -1)); // placed -> place
-    if (cleanWord.endsWith('ed')) lemmas.push(cleanWord.slice(0, -2)); // wanted -> want
-    if (cleanWord.endsWith('ing')) lemmas.push(cleanWord.slice(0, -3)); // going -> go
-    if (cleanWord.endsWith('ies')) lemmas.push(cleanWord.slice(0, -3) + 'y'); // studies -> study
-    if (cleanWord.endsWith('ied')) lemmas.push(cleanWord.slice(0, -3) + 'y'); // studied -> study
+    if (cleanWord.endsWith('d')) lemmas.push(cleanWord.slice(0, -1));
+    if (cleanWord.endsWith('ed')) lemmas.push(cleanWord.slice(0, -2));
+    if (cleanWord.endsWith('ing')) lemmas.push(cleanWord.slice(0, -3));
+    if (cleanWord.endsWith('ies')) lemmas.push(cleanWord.slice(0, -3) + 'y');
+    if (cleanWord.endsWith('ied')) lemmas.push(cleanWord.slice(0, -3) + 'y');
 
     for (const lem of lemmas) {
       if (dictData[lem]) {
@@ -156,9 +156,33 @@ app.post(['/api/translate', '/api/:category/translate'], async (req, res) => {
       }
     }
 
-    // Check 3: External Translation API Fallback (MyMemory API)
+    // Check 3: Reverse Turkish -> English Match
+    let reverseMatch = null;
+    for (const [en, tr] of Object.entries(dictData)) {
+      const trMeanings = tr.toLowerCase().split(/[;,]/).map(s => s.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ""));
+      if (trMeanings.includes(cleanWord) || trMeanings.some(m => m.startsWith(cleanWord) || cleanWord.startsWith(m))) {
+        reverseMatch = en;
+        break;
+      }
+    }
+    if (reverseMatch) {
+      return res.json({ word: text, translation: reverseMatch, source: 'local_dict_reverse' });
+    }
+
+    // Check 4: External Translation API Fallback with dynamic langpair
+    const hasTurkish = /[ğüşıöçĞÜŞİÖÇ]/i.test(cleanWord);
+    let langpair = 'en|tr';
+    if (hasTurkish) {
+      langpair = 'tr|en';
+    } else {
+      const isVal = Object.values(dictData).some(v => v.toLowerCase().includes(cleanWord));
+      if (isVal) {
+        langpair = 'tr|en';
+      }
+    }
+
     try {
-      const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanWord)}&langpair=en|tr`);
+      const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanWord)}&langpair=${langpair}`);
       const resData = await response.json();
       const translation = resData?.responseData?.translatedText || resData?.matches?.[0]?.translation;
       if (translation && !translation.toLowerCase().includes("mymemory")) {
@@ -168,7 +192,7 @@ app.post(['/api/translate', '/api/:category/translate'], async (req, res) => {
       console.error("External translation failed:", e);
     }
 
-    // Check 4: Return fallback note
+    // Check 5: Return fallback note
     return res.json({ 
       word: text, 
       translation: `[Çeviri Mevcut Değil] - '${text}' kelimesi YÖKDİL akademik kelime defterine eklenmiştir.`, 

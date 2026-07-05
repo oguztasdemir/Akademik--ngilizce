@@ -20,6 +20,7 @@ import GamesSection from './components/GamesSection';
 import MistakeInbox from './components/MistakeInbox';
 import ParagraphsSection from './components/ParagraphsSection';
 import AuthModal from './components/AuthModal';
+import SmartStudySection from './components/SmartStudySection';
 
 import fallbackExamsFen from './components/exams_db_fen.json';
 import fallbackExamsSosyal from './components/exams_db_sosyal.json';
@@ -327,8 +328,17 @@ const getTopicName = (key) => {
 };
 
 function App() {
-  // Authentication & Cloud Sync states
-  const [currentUser, setCurrentUser] = useState(() => JSON.parse(localStorage.getItem('yokdil_user') || 'null'));
+  const [currentUser, setCurrentUser] = useState(() => {
+    const local = localStorage.getItem('yokdil_user');
+    if (local && local !== 'null') {
+      try {
+        return JSON.parse(local);
+      } catch (e) {}
+    }
+    const defaultUser = { name: 'user', username: 'user', id: '1' };
+    localStorage.setItem('yokdil_user', JSON.stringify(defaultUser));
+    return defaultUser;
+  });
   const [token, setToken] = useState(() => localStorage.getItem('yokdil_token') || 'null');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [loginName, setLoginName] = useState('');
@@ -340,6 +350,7 @@ function App() {
   const [authFullName, setAuthFullName] = useState('');
   const [deviceLinkInfo, setDeviceLinkInfo] = useState(null);
   const [showDeviceLinkModal, setShowDeviceLinkModal] = useState(false);
+  const [customAlert, setCustomAlert] = useState(null); // { title: string, message: string, type: 'success' | 'info' | 'error' }
 
   // Navigation & Config States
   const getInitialHashState = () => {
@@ -389,6 +400,7 @@ function App() {
   const [streakFreezeActive, setStreakFreezeActive] = useState(() => localStorage.getItem('yokdil_streak_freeze') === 'true');
   const [petXp, setPetXp] = useState(() => parseInt(localStorage.getItem('yokdil_pet_xp') || '0', 10));
   const [petLevel, setPetLevel] = useState(() => parseInt(localStorage.getItem('yokdil_pet_level') || '1', 10));
+  const [pendingLevelUp, setPendingLevelUp] = useState(null);
   const [petConfig, setPetConfig] = useState(() => {
     const saved = localStorage.getItem('yokdil_custom_pet');
     if (saved) {
@@ -417,10 +429,12 @@ function App() {
   const awardPetXp = (amount) => {
     let nextXp = petXp + amount;
     let nextLevel = petLevel;
-    if (nextXp >= 100) {
-      nextLevel += Math.floor(nextXp / 100);
-      nextXp = nextXp % 100;
-      alert(`Tebrikler! Evcil hayvanınız yeni bir seviyeye ulaştı: Seviye ${nextLevel}! 🎉🐾`);
+    let reqXp = nextLevel * 200;
+    while (nextXp >= reqXp) {
+      nextXp -= reqXp;
+      nextLevel += 1;
+      setPendingLevelUp({ oldLevel: petLevel, newLevel: nextLevel });
+      reqXp = nextLevel * 200;
     }
     setPetXp(nextXp);
     setPetLevel(nextLevel);
@@ -450,8 +464,34 @@ function App() {
   const [examSubmitted, setExamSubmitted] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
   const timerIntervalRef = useRef(null);
+  const examDateInputRef = useRef(null);
 
   const [questionTimeSpent, setQuestionTimeSpent] = useState(0);
+
+  useEffect(() => {
+    const nativeAlert = window.alert;
+    window.alert = (msg) => {
+      if (!msg) return;
+      const isError = msg.toLowerCase().includes('hatalı') || 
+                      msg.toLowerCase().includes('yanlış') || 
+                      msg.toLowerCase().includes('yetersiz') || 
+                      msg.toLowerCase().includes('başarısız') ||
+                      msg.toLowerCase().includes('hata');
+      const isSuccess = msg.toLowerCase().includes('tebrikler') || 
+                        msg.toLowerCase().includes('doğru') || 
+                        msg.toLowerCase().includes('başarılı') || 
+                        msg.toLowerCase().includes('harika');
+      
+      setCustomAlert({
+        title: isSuccess ? '🎉 Tebrikler!' : (isError ? '⚠️ Hata / Uyarı' : 'ℹ️ Bilgi'),
+        message: msg,
+        type: isError ? 'error' : (isSuccess ? 'success' : 'info')
+      });
+    };
+    return () => {
+      window.alert = nativeAlert;
+    };
+  }, []);
 
   useEffect(() => {
     let interval = null;
@@ -475,7 +515,12 @@ function App() {
     { id: "05_Active_Passive_Voice", title: "05. Etken ve Edilgen Çatı (Active & Passive Voice)", description: "Akademik makalelerde sıkça kullanılan edilgen (passive) anlatımlar ve causatives (ettirgen) yapılar." },
     { id: "06_Conjunctions_Contrast", title: "06. Zıtlık Bağlaçları (Conjunctions of Contrast)", description: "YÖKDİL sınavının en önemli konusu: Zıtlık bildiren bağlaçlar (although, despite, but, however vb.)." },
     { id: "07_Conjunctions_Cause_Effect", title: "07. Sebep-Sonuç Bağlaçları (Conjunctions of Cause & Effect)", description: "Nedensellik ve sonuç bildiren bağlaçlar (because, therefore, thus, since, as a result vb.)." },
-    { id: "08_Relative_Clauses", title: "08. Sıfat Cümlecikleri & Kısaltmalar (Relative Clauses)", description: "İsimleri niteleyen sıfat cümlecikleri (who, which, that, whose) ve kısaltma (reduction) kuralları." }
+    { id: "08_Relative_Clauses", title: "08. Sıfat Cümlecikleri & Kısaltmalar (Relative Clauses)", description: "İsimleri niteleyen sıfat cümlecikleri (who, which, that, whose) ve kısaltma (reduction) kuralları." },
+    { id: "09_Modals_Semi_Modals", title: "09. Kip Belirteçleri (Modals & Semi-Modals)", description: "Kabiliyet, gereklilik, olasılık ve tavsiye bildiren yapılar (must, should, might, would rather, must have V3 vb.)." },
+    { id: "10_Conditionals_Wish_Clauses", title: "10. Koşul Cümleleri & Keşkeler (Conditionals & Wish Clauses)", description: "Koşul belirten yapılar (Type 0, 1, 2, 3, Mixed Conditionals), wish clauses ve as if/as though kullanımları." },
+    { id: "11_Noun_Clauses_Subjunctives", title: "11. İsim Cümlecikleri & Dilek Kipi (Noun Clauses & Subjunctives)", description: "Cümlede isim görevi gören yan cümlecikler (that, whether, wh- clauses) ve subjunctive yapılar." },
+    { id: "12_Gerunds_Infinitives", title: "12. Fiilimsiler (Gerunds & Infinitives)", description: "Fiillerden sonra to V1 veya V-ing gelme kuralları, akademik fiil kalıpları ve kısaltmalar." },
+    { id: "13_Adjectives_Adverbs_Comparisons", title: "13. Sıfatlar, Zarflar & Karşılaştırmalar (Adjectives, Adverbs & Comparisons)", description: "Sıfat ve zarfların cümle içi görevleri, karşılaştırma kalıpları (as...as, more...than, double comparatives)." }
   ];
 
   // Lectures States
@@ -763,11 +808,12 @@ function App() {
     fetch(`${BACKEND_URL}/api/${category}/exams`)
       .then(res => res.json())
       .then(data => {
-        setExams(data);
+        setExams(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch(err => {
         console.error("Error fetching exams:", err);
+        setExams([]);
         setLoading(false);
       });
 
@@ -1147,18 +1193,20 @@ function App() {
     else if (topicKey === 'reading') { startIdx = 66; endIdx = 80; }
 
     let collectedQuestions = [];
-    exams.forEach(ex => {
-      ex.questions.forEach(q => {
-        if (q.number >= startIdx && q.number <= endIdx) {
-          collectedQuestions.push({
-            ...q,
-            examId: ex.id,
-            examName: ex.name,
-            correctAnswer: ex.answers[q.number - 1]
-          });
-        }
+    if (Array.isArray(exams)) {
+      exams.forEach(ex => {
+        ex.questions.forEach(q => {
+          if (q.number >= startIdx && q.number <= endIdx) {
+            collectedQuestions.push({
+              ...q,
+              examId: ex.id,
+              examName: ex.name,
+              correctAnswer: ex.answers[q.number - 1]
+            });
+          }
+        });
       });
-    });
+    }
 
     if (collectedQuestions.length === 0) {
       alert("Bu konu için soru bulunamadı.");
@@ -2018,28 +2066,30 @@ function App() {
       reading: { name: "Cümle/Paragraf (Reading/Clauses)", solved: 0, correct: 0, total: 44 }
     };
 
-    exams.forEach(ex => {
-      const exAns = JSON.parse(localStorage.getItem(`answers_${ex.id}`)) || {};
-      for (let i = 1; i <= 80; i++) {
-        const userAns = exAns[i];
-        let tKey = "reading";
-        if (i >= 1 && i <= 6) tKey = "vocab";
-        else if (i >= 7 && i <= 15) tKey = "tenses";
-        else if (i >= 16 && i <= 20) tKey = "preps";
-        else if (i >= 21 && i <= 36) tKey = "conjs";
+    if (Array.isArray(exams)) {
+      exams.forEach(ex => {
+        const exAns = JSON.parse(localStorage.getItem(`answers_${ex.id}`)) || {};
+        for (let i = 1; i <= 80; i++) {
+          const userAns = exAns[i];
+          let tKey = "reading";
+          if (i >= 1 && i <= 6) tKey = "vocab";
+          else if (i >= 7 && i <= 15) tKey = "tenses";
+          else if (i >= 16 && i <= 20) tKey = "preps";
+          else if (i >= 21 && i <= 36) tKey = "conjs";
 
-        if (userAns) {
-          solved++;
-          topicStats[tKey].solved++;
-          if (userAns === ex.answers[i - 1]) {
-            correct++;
-            topicStats[tKey].correct++;
-          } else {
-            wrong++;
+          if (userAns) {
+            solved++;
+            topicStats[tKey].solved++;
+            if (userAns === ex.answers[i - 1]) {
+              correct++;
+              topicStats[tKey].correct++;
+            } else {
+              wrong++;
+            }
           }
         }
-      }
-    });
+      });
+    }
 
     const totalSolved = solved;
     const score = totalSolved > 0 ? Math.round((correct / totalSolved) * 100) : 0;
@@ -2252,6 +2302,70 @@ function App() {
     <div className={`theme-wrapper ${theme} font-size-${fontSize} ${selectedCategory ? 'theme-' + selectedCategory : ''} ${sepiaActive ? 'sepia-filter' : ''} min-h-screen flex items-center justify-center p-0 md:p-4`}>
 
       <Confetti particles={confetti} />
+
+      {customAlert && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(15, 23, 42, 0.75)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          animation: 'fadeIn 0.25s ease-out'
+        }} onClick={() => setCustomAlert(null)}>
+          <div 
+            style={{
+              background: 'rgba(30, 41, 59, 0.95)',
+              border: '1.5px solid rgba(99, 102, 241, 0.4)',
+              padding: '24px 32px',
+              borderRadius: '24px',
+              maxWidth: '420px',
+              width: '90%',
+              textAlign: 'center',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(99, 102, 241, 0.2)',
+              color: '#e2e8f0',
+              animation: 'scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 style={{ 
+              fontSize: '1.25rem', 
+              fontWeight: '800', 
+              color: customAlert.type === 'error' ? '#f87171' : '#a5b4fc',
+              marginBottom: '12px',
+              marginTop: 0
+            }}>
+              {customAlert.title}
+            </h3>
+            <p style={{ 
+              fontSize: '0.88rem', 
+              color: '#f8fafc', 
+              lineHeight: 1.6,
+              marginBottom: '20px'
+            }}>
+              {customAlert.message}
+            </p>
+            <button
+              onClick={() => setCustomAlert(null)}
+              className="btn-primary"
+              style={{
+                width: '100%',
+                padding: '12px',
+                borderRadius: '12px',
+                fontWeight: 'bold',
+                fontSize: '0.85rem'
+              }}
+            >
+              Tamam
+            </button>
+          </div>
+        </div>
+      )}
 
       <TranslationPopover
         show={showPopover}
@@ -2466,19 +2580,39 @@ function App() {
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      <span style={{ fontSize: '0.64rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em' }}>YÖKDİL Geri Sayım ⏰</span>
+                    <div 
+                      style={{ display: 'flex', flexDirection: 'column', gap: '4px', cursor: 'pointer' }}
+                      onClick={() => {
+                        if (examDateInputRef.current) {
+                          try {
+                            examDateInputRef.current.showPicker();
+                          } catch (e) {
+                            examDateInputRef.current.click();
+                          }
+                        }
+                      }}
+                      title="Sınav tarihini belirlemek veya değiştirmek için tıklayın"
+                    >
+                      <span style={{ fontSize: '0.64rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em' }}>YÖKDİL Geri Sayım ⏰ (Tıkla Seç)</span>
                       <p style={{ fontSize: '0.72rem', color: '#cbd5e1', margin: 0, lineHeight: 1.4 }}>
                         {yokdilExamDate ? (
                           <>
-                            Hedef Sınav Tarihi: <strong>{new Date(yokdilExamDate).toLocaleDateString('tr-TR')}</strong>. Başarılar dileriz!
+                            Hedef Sınav Tarihi: <strong>{new Date(yokdilExamDate).toLocaleDateString('tr-TR')}</strong>. Değiştirmek için tıklayın.
                           </>
                         ) : (
                           <>
-                            Henüz sınav tarihi seçmediniz. Ayarlar sekmesinden belirleyebilirsiniz.
+                            <span style={{ color: '#fca5a5', fontWeight: 'bold' }}>Henüz sınav tarihi seçmediniz.</span> Seçmek için buraya tıklayın!
                           </>
                         )}
                       </p>
+                      <input
+                        type="date"
+                        ref={examDateInputRef}
+                        value={yokdilExamDate}
+                        onChange={(e) => setYokdilExamDate(e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ position: 'absolute', opacity: 0, width: 0, height: 0, pointerEvents: 'none' }}
+                      />
                     </div>
                   </div>
 
@@ -3319,6 +3453,17 @@ function App() {
               setPetConfig={setPetConfig}
             />
 
+            {/* TAB 7.55: SMART STUDY SECTION */}
+            {selectedCategory && activeTab === 'smart-study' && (
+              <section id="screen-smart-study" className="app-screen active animate-fade-in">
+                <SmartStudySection
+                  selectedCategory={selectedCategory}
+                  awardPetXP={awardPetXP}
+                  triggerConfetti={triggerConfetti}
+                />
+              </section>
+            )}
+
             {/* TAB 7.6: MINI OYUNLAR SECTION */}
             {selectedCategory && activeTab === 'games' && (
               <section id="screen-games" className="app-screen active">
@@ -3454,6 +3599,61 @@ function App() {
               style={{ width: '100%', padding: '12px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer' }}
             >
               Tamam
+            </button>
+          </div>
+        </div>
+      )}
+      {pendingLevelUp && !quizActive && (
+        <div className="auth-modal-overlay" style={{ zIndex: 100002 }} onClick={() => setPendingLevelUp(null)}>
+          <div 
+            className="auth-modal-card text-center" 
+            style={{ 
+              maxWidth: '400px', 
+              padding: '32px 24px', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: '20px', 
+              background: 'rgba(15, 23, 42, 0.98)', 
+              border: '2px solid #fb923c',
+              boxShadow: '0 0 30px rgba(251, 146, 96, 0.25)',
+              position: 'relative'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ fontSize: '3rem' }}>🎉🏆</div>
+            
+            <div>
+              <span style={{ fontSize: '0.64rem', fontWeight: 'bold', textTransform: 'uppercase', color: '#fb923c', letterSpacing: '0.1em' }}>TEBRİKLER! SEVİYE ATLADINIZ</span>
+              <h3 style={{ fontSize: '1.6rem', fontWeight: '900', color: 'white', margin: '8px 0 4px 0' }}>
+                Yeni Büyüme Evresi! 🚀
+              </h3>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                Evcil hayvanınız akademik kelimeleri öğrendikçe büyüyor!
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', margin: '10px 0' }}>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '0.62rem', color: 'var(--text-secondary)', display: 'block' }}>Eski Seviye</span>
+                <span style={{ fontSize: '1.8rem', fontWeight: '900', color: '#94a3b8' }}>{pendingLevelUp.oldLevel}</span>
+              </div>
+              <div style={{ fontSize: '1.5rem', color: '#fb923c' }}>➡️</div>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '0.62rem', color: '#fb923c', display: 'block', fontWeight: 'bold' }}>Yeni Seviye</span>
+                <span style={{ fontSize: '2.2rem', fontWeight: '900', color: '#fb923c', textShadow: '0 0 10px rgba(251, 146, 60, 0.4)' }}>{pendingLevelUp.newLevel}</span>
+              </div>
+            </div>
+
+            <div style={{ fontSize: '0.78rem', color: '#cbd5e1', background: 'rgba(251, 146, 60, 0.1)', border: '1px solid rgba(251, 146, 60, 0.2)', padding: '10px 14px', borderRadius: '10px', textAlign: 'left' }}>
+              🐾 Evcil hayvanınızın boyutu büyüdü ve gücü arttı! Customization odasından yeni aşamasını kontrol edebilirsiniz.
+            </div>
+
+            <button 
+              onClick={() => setPendingLevelUp(null)}
+              className="btn-primary"
+              style={{ width: '100%', padding: '12px', fontSize: '0.82rem', fontWeight: 'bold', cursor: 'pointer', borderRadius: '10px', background: 'linear-gradient(135deg, #fb923c, #f97316)', border: 'none', color: 'white' }}
+            >
+              Harika, Devam Et!
             </button>
           </div>
         </div>

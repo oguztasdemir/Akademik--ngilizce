@@ -76,57 +76,27 @@ const SettingsSection = ({
 
   if (activeTab !== 'settings') return null;
 
-  const handleUpdateProfile = async (e) => {
+  const handleUpdateProfile = (e) => {
     e.preventDefault();
     setUpdateSuccess('');
     setUpdateError('');
 
-    if (changePasswordEnabled) {
-      if (!profilePassword || profilePassword.length < 4) {
-        setUpdateError('Yeni şifre en az 4 karakter olmalıdır.');
-        return;
-      }
-      if (profilePassword !== confirmPassword) {
-        setUpdateError('Yeni şifreler uyuşmuyor.');
-        return;
-      }
+    if (!profileName.trim()) {
+      setUpdateError('İsim alanı boş bırakılamaz.');
+      return;
     }
 
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/user/profile`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name: profileName,
-          username: profileUsername,
-          email: profileEmail,
-          password: changePasswordEnabled ? profilePassword : undefined
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Profil güncellenemedi.');
-      
-      const updatedUser = {
-        ...currentUser,
-        name: profileName,
-        username: profileUsername,
-        email: profileEmail
-      };
-      if (setCurrentUser) {
-        setCurrentUser(updatedUser);
-      }
-      localStorage.setItem('yokdil_user', JSON.stringify(updatedUser));
-      
-      setUpdateSuccess('Profiliniz başarıyla güncellendi.');
-      setProfilePassword('');
-      setConfirmPassword('');
-      setChangePasswordEnabled(false);
-    } catch (err) {
-      setUpdateError(err.message);
+    const updatedUser = {
+      ...currentUser,
+      name: profileName,
+      username: profileUsername || 'user'
+    };
+    
+    if (setCurrentUser) {
+      setCurrentUser(updatedUser);
     }
+    localStorage.setItem('yokdil_user', JSON.stringify(updatedUser));
+    setUpdateSuccess('Profiliniz başarıyla güncellendi.');
   };
 
   const handleDeleteAccount = async () => {
@@ -160,170 +130,60 @@ const SettingsSection = ({
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '20px' }}>
         
-        {/* CARD 1: HESAP VE BULUT SENKRONİZASYONU */}
+        {/* CARD 1: HESAP VE PROFIL AYARLARI */}
         <div className="glass-card" style={{ padding: '24px', borderRadius: '18px', border: '1px solid rgba(255, 255, 255, 0.05)', background: 'rgba(15, 23, 42, 0.3)', backdropFilter: 'blur(10px)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '12px' }}>
-            <i className="fa-solid fa-user-gear" style={{ color: '#818cf8' }}></i> Profil ve Bulut Hesabı
+            <i className="fa-solid fa-user-gear" style={{ color: '#818cf8' }}></i> Profil ve Hesap Ayarları
           </h3>
-          
-          {currentUser ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-main)' }}>{currentUser.name}</div>
-                  <div style={{ fontSize: '0.7rem', color: 'rgba(99, 102, 241, 0.8)', fontWeight: '600', marginTop: '2px' }}>
-                    @{currentUser.username || 'profil'} • Aktif Profil
-                  </div>
-                </div>
-                <button 
-                  onClick={onLogout}
-                  className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-white/5 border border-white/5 text-slate-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
-                >
-                  <i className="fa-solid fa-right-from-bracket"></i> Çıkış Yap
-                </button>
-              </div>
-
-              {/* Profile Update Form */}
-              <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '10px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', padding: '14px', borderRadius: '12px' }}>
-                <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '6px', marginBottom: '4px' }}>
-                  ⚙️ Bilgileri Güncelle
-                </div>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>İsim Soyisim</label>
-                  <input
-                    type="text"
-                    value={profileName}
-                    onChange={(e) => setProfileName(e.target.value)}
-                    placeholder="Adı Soyadı"
-                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Kullanıcı Adı</label>
-                  <input
-                    type="text"
-                    value={profileUsername}
-                    onChange={(e) => setProfileUsername(e.target.value)}
-                    placeholder="kullaniciadi"
-                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '4px 0' }}>
-                  <input
-                    type="checkbox"
-                    id="change-password-toggle"
-                    checked={changePasswordEnabled}
-                    onChange={(e) => {
-                      setChangePasswordEnabled(e.target.checked);
-                      if(!e.target.checked) {
-                        setProfilePassword('');
-                        setConfirmPassword('');
-                      }
-                    }}
-                    style={{ cursor: 'pointer' }}
-                  />
-                  <label htmlFor="change-password-toggle" style={{ fontSize: '0.72rem', fontWeight: 'bold', color: 'var(--text-main)', cursor: 'pointer' }}>
-                    🔒 Şifre Değiştirmek İstiyorum
-                  </label>
-                </div>
-
-                {changePasswordEnabled && (
-                  <>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Yeni Şifre</label>
-                      <input
-                        type="password"
-                        value={profilePassword}
-                        onChange={(e) => setProfilePassword(e.target.value)}
-                        placeholder="Yeni Şifre"
-                        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
-                      />
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Yeni Şifre (Tekrar)</label>
-                      <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="Yeni Şifre (Tekrar)"
-                        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
-                      />
-                    </div>
-                  </>
-                )}
-
-                {updateSuccess && <div style={{ fontSize: '0.66rem', color: '#34d399', fontWeight: 'bold' }}>{updateSuccess}</div>}
-                {updateError && <div style={{ fontSize: '0.66rem', color: '#f87171', fontWeight: 'bold' }}>{updateError}</div>}
-
-                <button
-                  type="submit"
-                  className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all cursor-pointer border-none mt-2"
-                >
-                  Bilgileri Kaydet
-                </button>
-              </form>
-
-              {/* QR Code Section */}
-              <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', padding: '14px', border: '1px solid rgba(255,255,255,0.04)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>💻📱 Cihaz Eşleme (QR)</div>
-                    <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', marginTop: '2px' }}>Verilerinizi telefona aktarın.</div>
-                  </div>
-                  <button 
-                    onClick={handleGenerateQR}
-                    disabled={qrLoading}
-                    className="px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/20 transition-all cursor-pointer"
-                  >
-                    {qrLoading ? '...' : showQR ? 'Kapat' : 'Göster'}
-                  </button>
-                </div>
-                {showQR && (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
-                    <div style={{ padding: '8px', background: '#fff', borderRadius: '10px', display: 'inline-block' }}>
-                      <img 
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(`http://${localIp}:5173/#/link-device?token=${token}&name=${currentUser.name}`)}`}
-                        alt="Sync QR Code"
-                        style={{ display: 'block', width: '140px', height: '140px' }}
-                      />
-                    </div>
-                    <p style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', lineHeight: 1.3, margin: 0 }}>
-                      Telefonunuzla aynı yerel ağa (Wi-Fi) bağlanıp bu QR kodu okutun.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px' }}>
-                <div>
-                  <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Kalıcı Hesap Silme</div>
-                  <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Tüm verilerinizi buluttan kalıcı olarak siler.</div>
-                </div>
-                <button 
-                  onClick={handleDeleteAccount}
-                  className="px-3 py-1.5 text-[10px] font-bold rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 cursor-pointer transition-all"
-                >
-                  Hesabı Sil
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-main)' }}>Bulut Senkronizasyonu</div>
-                <div style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', marginTop: '2px' }}>Giriş yaparak ilerlemenizi kaydedin.</div>
+                <div style={{ fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-main)' }}>{currentUser.name}</div>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(99, 102, 241, 0.8)', fontWeight: '600', marginTop: '2px' }}>
+                  @{currentUser.username || 'user'} • Aktif Profil
+                </div>
               </div>
-              <button 
-                onClick={onOpenAuthModal}
-                className="px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-md cursor-pointer"
-              >
-                Giriş Yap
-              </button>
             </div>
-          )}
+
+            {/* Profile Update Form */}
+            <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '10px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', padding: '14px', borderRadius: '12px' }}>
+              <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '6px', marginBottom: '4px' }}>
+                ⚙️ Bilgileri Güncelle
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>İsim Soyisim</label>
+                <input
+                  type="text"
+                  value={profileName}
+                  onChange={(e) => setProfileName(e.target.value)}
+                  placeholder="Adı Soyadı"
+                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <label style={{ fontSize: '0.66rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Kullanıcı Adı</label>
+                <input
+                  type="text"
+                  value={profileUsername}
+                  onChange={(e) => setProfileUsername(e.target.value)}
+                  placeholder="kullaniciadi"
+                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.75rem', color: 'white', outline: 'none' }}
+                />
+              </div>
+
+              {updateSuccess && <div style={{ fontSize: '0.66rem', color: '#34d399', fontWeight: 'bold' }}>{updateSuccess}</div>}
+              {updateError && <div style={{ fontSize: '0.66rem', color: '#f87171', fontWeight: 'bold' }}>{updateError}</div>}
+
+              <button
+                type="submit"
+                className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all cursor-pointer border-none mt-2"
+              >
+                Bilgileri Kaydet
+              </button>
+            </form>
+          </div>
         </div>
 
         {/* CARD 2: GÖRÜNÜM VE ARAYÜZ */}

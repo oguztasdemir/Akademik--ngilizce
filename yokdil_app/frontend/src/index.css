@@ -3825,6 +3825,8 @@ body.light-theme .setting-item {
     min-height: 200px;
     cursor: pointer;
     -webkit-perspective: 1000px;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
 }
 
 .flip-card-inner {
@@ -3857,22 +3859,20 @@ body.light-theme .setting-item {
     align-items: center;
     padding: 24px 16px;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
 }
 
 .flip-card-front {
     background: rgba(18, 24, 41, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.05);
     color: var(--text-main);
+    transform: rotateY(0deg);
 }
 
 .flip-card-back {
     background: rgba(99, 102, 241, 0.08);
     border: 1px solid rgba(99, 102, 241, 0.35);
     color: var(--text-main);
-    transform: rotateY(180deg) translate3d(0, 0, 0);
-    -webkit-transform: rotateY(180deg) translate3d(0, 0, 0);
+    transform: rotateY(180deg);
 }
 
 /* --- Mascot Blinking Animation --- */
@@ -4493,4 +4493,75 @@ body.light-theme .setting-item {
     fill: #34d399 !important;
     stroke: #ffffff !important;
     filter: drop-shadow(0 0 8px #34d399) !important;
+}
+
+/* Comparative Reading Layout styling */
+.comparative-grid-row {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 20px;
+    align-items: stretch;
+}
+
+.comparative-column {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .comparative-grid-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+}
+
+/* Translation Sidebar Card (Fixed to bottom-right) */
+.translation-sidebar-card {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 340px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(99, 102, 241, 0.45);
+    padding: 18px;
+    border-radius: 16px;
+    color: #e2e8f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(99, 102, 241, 0.15);
+    z-index: 1000;
+    text-align: left;
+    animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .translation-sidebar-card {
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+    }
+}
+
+/* Custom Modal Animation keyframes */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.9) translateY(10px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
 }

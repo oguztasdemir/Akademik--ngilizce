@@ -178,8 +178,13 @@ const MascotPet = ({ state, speech, customConfig, size = 80, isFloating = false 
       }
       const cleanText = speech.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "");
       const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'en-US';
-      utterance.rate = 0.9;
+      const isTurkish = /[ğüşıöçĞÜŞİÖÇ]/i.test(cleanText) || 
+                        cleanText.includes("Tebrikler") || 
+                        cleanText.includes("Sınav") || 
+                        cleanText.includes("tarih") || 
+                        cleanText.includes("merhaba");
+      utterance.lang = isTurkish ? 'tr-TR' : 'en-US';
+      utterance.rate = 0.95;
       synth.speak(utterance);
     } catch (err) {
       console.error(err);
@@ -212,6 +217,7 @@ const MascotPet = ({ state, speech, customConfig, size = 80, isFloating = false 
       )}
       <div 
         className={`duo-mascot-container ${animClass}`} 
+        onClick={handleSpeak}
         style={{ 
           width: `${size}px`, 
           height: `${size}px`,
@@ -219,7 +225,8 @@ const MascotPet = ({ state, speech, customConfig, size = 80, isFloating = false 
           bottom: isFloating ? '110px' : 'auto',
           right: isFloating ? '25px' : 'auto',
           zIndex: isFloating ? 999 : 1,
-          animation: isFloating ? undefined : 'none'
+          animation: isFloating ? undefined : 'none',
+          cursor: speech ? 'pointer' : 'default'
         }}
       >
         <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">

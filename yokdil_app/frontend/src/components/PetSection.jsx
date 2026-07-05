@@ -160,13 +160,13 @@ const PetSection = ({ activeTab, petXp, petLevel, petConfig, setPetConfig }) => 
               <div style={{
                 background: 'linear-gradient(90deg, #3b82f6, #6366f1)',
                 height: '100%',
-                width: `${petXp}%`,
+                width: `${Math.min(100, Math.max(0, (petXp / (petLevel * 200)) * 100))}%`,
                 transition: 'width 0.3s ease-out'
               }} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.66rem', color: '#818cf8', fontWeight: 'bold', marginTop: '4px' }}>
               <span>{petXp} XP</span>
-              <span>100 XP (Sonraki Seviye)</span>
+              <span>{petLevel * 200} XP (Sonraki Seviye)</span>
             </div>
           </div>
         </div>
