@@ -1466,45 +1466,75 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
             </h4>
           </div>
 
-          <div className="glass-card animate-scale-in" style={{ padding: '16px 20px', borderRadius: '20px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '14px', gap: '4px' }}>
+          <div className="glass-card animate-scale-in" style={{ 
+            padding: '16px 20px', 
+            borderRadius: '20px', 
+            background: 'rgba(15, 23, 42, 0.45)', 
+            border: '1.5px solid rgba(16, 185, 129, 0.15)',
+            minHeight: '410px',
+            maxHeight: '410px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            overflow: 'hidden'
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '8px', gap: '2px' }}>
               
               <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>İNGİLİZCE KELİME</span>
-              <h1 style={{ fontSize: '1.9rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em' }}>
+              <h1 style={{ 
+                fontSize: studyWords[currentIdx].word.length > 15 ? '1.4rem' : (studyWords[currentIdx].word.length > 10 ? '1.6rem' : '1.9rem'), 
+                fontWeight: '900', 
+                color: 'white', 
+                margin: 0, 
+                letterSpacing: '-0.02em',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                maxWidth: '100%'
+              }}>
                 {studyWords[currentIdx].word}
               </h1>
               
-              <div style={{ margin: '8px 0', height: '1px', width: '48px', background: 'rgba(255,255,255,0.08)' }} />
+              <div style={{ margin: '6px 0', height: '1px', width: '48px', background: 'rgba(255,255,255,0.08)' }} />
 
               <span style={{ fontSize: '0.62rem', color: '#a5b4fc', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>TÜRKÇE ANLAMI</span>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#a5b4fc', margin: 0 }}>
+              <h2 style={{ 
+                fontSize: studyWords[currentIdx].tr.length > 25 ? '1.0rem' : (studyWords[currentIdx].tr.length > 15 ? '1.12rem' : '1.25rem'), 
+                fontWeight: '800', 
+                color: '#a5b4fc', 
+                margin: 0,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                maxWidth: '100%'
+              }}>
                 {studyWords[currentIdx].tr}
               </h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '12px 0' }}>
-              <div style={{ background: 'rgba(99, 102, 241, 0.04)', border: '1px solid rgba(99, 102, 241, 0.15)', padding: '8px 12px', borderRadius: '12px' }}>
-                <span style={{ fontSize: '0.64rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '8px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '8px 0' }}>
+              <div style={{ background: 'rgba(99, 102, 241, 0.04)', border: '1px solid rgba(99, 102, 241, 0.15)', padding: '6px 12px', borderRadius: '10px', overflow: 'hidden' }}>
+                <span style={{ fontSize: '0.62rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   🔄 EŞ ANLAMLILAR (SYNONYMS)
                 </span>
-                <p style={{ fontSize: '0.85rem', color: 'white', fontWeight: '700', margin: 0 }}>
+                <p style={{ fontSize: '0.8rem', color: 'white', fontWeight: '700', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {studyWords[currentIdx].synonyms || "Yok"}
                 </p>
               </div>
 
-              <div style={{ background: 'rgba(16, 185, 129, 0.04)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '8px 12px', borderRadius: '12px' }}>
-                <span style={{ fontSize: '0.64rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
-                  🔗 COLLOCATIONS / BİRLİKTE KULLANIM
+              <div style={{ background: 'rgba(16, 185, 129, 0.04)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '6px 12px', borderRadius: '10px', overflow: 'hidden' }}>
+                <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  🔗 COLLOCATIONS
                 </span>
-                <p style={{ fontSize: '0.85rem', color: 'white', fontWeight: '700', margin: 0, fontStyle: 'italic' }}>
-                  {studyWords[currentIdx].collocation || `${studyWords[currentIdx].word} carefully, direct ${studyWords[currentIdx].word}`}
+                <p style={{ fontSize: '0.8rem', color: 'white', fontWeight: '700', margin: 0, fontStyle: 'italic', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {studyWords[currentIdx].collocation || `${studyWords[currentIdx].word} carefully`}
                 </p>
               </div>
             </div>
 
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '6px' }}>
-                <span style={{ fontSize: '0.64rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase' }}>
+            <div style={{ textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '4px' }}>
+                <span style={{ fontSize: '0.62rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase' }}>
                   Örnek Akademik Cümle (YÖKDİL)
                 </span>
                 {studyWords[currentIdx].sentences && (
@@ -1515,8 +1545,8 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
                       border: '1px solid rgba(251, 191, 36, 0.3)',
                       borderRadius: '6px',
                       color: '#fbbf24',
-                      padding: '2px 8px',
-                      fontSize: '0.62rem',
+                      padding: '1px 6px',
+                      fontSize: '0.58rem',
                       cursor: 'pointer',
                       fontWeight: 'bold',
                       transition: 'all 0.2s'
@@ -1526,14 +1556,16 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
                   </button>
                 )}
               </div>
-              <p style={{ fontSize: '0.9rem', color: 'white', lineHeight: 1.5, margin: '0 auto 4px auto', fontWeight: '500', maxWidth: '500px' }}>
-                {studyWords[currentIdx].sentences ? studyWords[currentIdx].sentences[sentenceIdx].en : studyWords[currentIdx].en}
-              </p>
-              {(studyWords[currentIdx].sentences ? studyWords[currentIdx].sentences[sentenceIdx].tr : studyWords[currentIdx].en_tr) && (
-                <p style={{ fontSize: '0.8rem', color: '#94a3b8', fontStyle: 'italic', margin: '0 auto', maxWidth: '500px', background: 'rgba(255,255,255,0.02)', padding: '6px 10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.04)' }}>
-                  {studyWords[currentIdx].sentences ? studyWords[currentIdx].sentences[sentenceIdx].tr : studyWords[currentIdx].en_tr}
+              <div style={{ maxHeight: '110px', overflowY: 'auto', paddingRight: '4px' }}>
+                <p style={{ fontSize: '0.82rem', color: 'white', lineHeight: 1.4, margin: '0 auto 4px auto', fontWeight: '500', maxWidth: '500px' }}>
+                  {studyWords[currentIdx].sentences ? studyWords[currentIdx].sentences[sentenceIdx].en : studyWords[currentIdx].en}
                 </p>
-              )}
+                {(studyWords[currentIdx].sentences ? studyWords[currentIdx].sentences[sentenceIdx].tr : studyWords[currentIdx].en_tr) && (
+                  <p style={{ fontSize: '0.74rem', color: '#94a3b8', fontStyle: 'italic', margin: '0 auto', maxWidth: '500px', background: 'rgba(255,255,255,0.02)', padding: '4px 8px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.04)' }}>
+                    {studyWords[currentIdx].sentences ? studyWords[currentIdx].sentences[sentenceIdx].tr : studyWords[currentIdx].en_tr}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
