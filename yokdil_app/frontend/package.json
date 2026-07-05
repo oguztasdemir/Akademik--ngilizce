@@ -6,7 +6,7 @@
   "scripts": {
     "predev": "node copy-dataset.cjs",
     "prebuild": "node copy-dataset.cjs",
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"

@@ -8,6 +8,27 @@ const campModules = import.meta.glob('../dataset/yokdil/**/*.json');
 const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb }) => {
   // Camp State Management
   const [progress, setProgress] = useState(null);
+  const [totalCampDays, setTotalCampDays] = useState(60);
+
+  // Dynamic camp days loader
+  useEffect(() => {
+    const loadPlanData = async () => {
+      const category = selectedCategory || 'fen';
+      const planKey = `../dataset/yokdil/${category}/kamp_plan.json`;
+      const loadPlan = campModules[planKey];
+      if (loadPlan) {
+        try {
+          const planMod = await loadPlan();
+          const planData = planMod.default || planMod;
+          setTotalCampDays(Object.keys(planData).length);
+        } catch (e) {
+          console.error("Plan yüklenirken hata oluştu:", e);
+        }
+      }
+    };
+    loadPlanData();
+  }, [selectedCategory]);
+
   const [campType, setCampType] = useState('vocabulary'); // 'vocabulary' or 'grammar'
   const [grammarProgress, setGrammarProgress] = useState(null);
   const [activeGrammarDay, setActiveGrammarDay] = useState(null);
@@ -24,6 +45,11 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
   const [activeDayWords, setActiveDayWords] = useState({});
   const [allWordsDb, setAllWordsDb] = useState({});
   const [selectedDay, setSelectedDay] = useState(1);
+  const [sentenceIdx, setSentenceIdx] = useState(0);
+
+  useEffect(() => {
+    setSentenceIdx(0);
+  }, [currentIdx, phase]);
 
   // Question/Test States
   const [meaningOptions, setMeaningOptions] = useState([]);
@@ -625,7 +651,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
     let nextDay = progress.currentDay;
     if (isPassed) {
       if (todayNum === progress.currentDay) {
-        nextDay = Math.min(60, todayNum + 1);
+        nextDay = Math.min(totalCampDays, todayNum + 1);
       }
       if (awardPetXP) awardPetXP(40);
       if (triggerConfetti) triggerConfetti();
@@ -929,7 +955,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
             <div>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>Günlük Kamp</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {Array.from({ length: 60 }).map((_, i) => {
+                {Array.from({ length: totalCampDays }).map((_, i) => {
                   const dayNum = i + 1;
                   const completedObj = completedDaysMap[dayNum];
                   const isCompleted = !!completedObj;
@@ -1188,23 +1214,22 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
       <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)', minHeight: '520px' }}>
         
         {/* Grammar Flow Header and Progress */}
-        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '18px', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-            <div>
-              <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em' }}>GÜN #{selectedDay} DİLBİLGİSİ ÇALIŞMASI</span>
-              <h3 style={{ fontSize: '1.38rem', fontWeight: '900', color: 'white', margin: '4px 0 0 0' }}>{activeGrammarDay?.title}</h3>
+        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px', marginBottom: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+              <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>GÜN #{selectedDay} DİLBİLGİSİ KAMPI</span>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '900', color: 'white', margin: 0 }}>{activeGrammarDay?.title}</h3>
             </div>
-            {/* Step indicators removed */}
-          </div>
-
-          {/* Grammar Progress Bar */}
-          <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', marginTop: '16px', overflow: 'hidden' }}>
-            <div style={{
-              height: '100%',
-              width: `${phase === 3 ? 100 : (phase === 1 ? 33 : 33 + ((grammarIdx + 1) / (grammarQuestions.length || 5) * 66))}%`,
-              background: 'linear-gradient(90deg, #10b981 0%, #6366f1 100%)',
-              transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-            }} />
+            
+            {/* Grammar Progress Bar */}
+            <div style={{ flex: 1, minWidth: '150px', maxWidth: '350px', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', overflow: 'hidden' }}>
+              <div style={{
+                height: '100%',
+                width: `${phase === 3 ? 100 : (phase === 1 ? 33 : 33 + ((grammarIdx + 1) / (grammarQuestions.length || 5) * 66))}%`,
+                background: 'linear-gradient(90deg, #10b981 0%, #6366f1 100%)',
+                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }} />
+            </div>
           </div>
         </div>
 
@@ -1410,96 +1435,109 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
 
   // Vocabulary Study Flow View
   return (
-    <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)', minHeight: '520px' }}>
+    <div className="glass-card" style={{ padding: '16px 20px', borderRadius: '20px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)' }}>
       
       {/* Flow Header and Progress */}
-      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '18px', marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-          <div>
-            <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em' }}>GÜN #{selectedDay} KAMP ÇALIŞMASI</span>
-            <h3 style={{ fontSize: '1.38rem', fontWeight: '900', color: 'white', margin: '4px 0 0 0' }}>Kelime Kampı ({studyWords.length} Kelime)</h3>
+      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '8px', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+            <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>GÜN #{selectedDay} KAMP ÇALIŞMASI</span>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: '900', color: 'white', margin: 0 }}>Kelime Kampı ({studyWords.length} Kelime)</h3>
           </div>
-          {/* Step indicators removed */}
-        </div>
-
-        {/* Dynamic Progress Bar */}
-        <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', marginTop: '16px', overflow: 'hidden' }}>
-          <div style={{
-            height: '100%',
-            width: `${phase === 5 ? 100 : (((phase - 1) * 25) + ((currentIdx + 1) / studyWords.length * 25))}%`,
-            background: 'linear-gradient(90deg, #10b981 0%, #6366f1 100%)',
-            transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-          }} />
+          
+          {/* Dynamic Progress Bar */}
+          <div style={{ flex: 1, minWidth: '150px', maxWidth: '350px', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', overflow: 'hidden' }}>
+            <div style={{
+              height: '100%',
+              width: `${phase === 5 ? 100 : (((phase - 1) * 25) + ((currentIdx + 1) / studyWords.length * 25))}%`,
+              background: 'linear-gradient(90deg, #10b981 0%, #6366f1 100%)',
+              transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+            }} />
+          </div>
         </div>
       </div>
 
       {/* PHASE 1: LEARN CARD */}
       {phase === 1 && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
               Adım 1: Modadil Akademik Kelime Kartı <span style={{ color: '#10b981' }}>({currentIdx + 1}/{studyWords.length})</span>
             </h4>
           </div>
 
-          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '24px', gap: '8px' }}>
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '4px' }}>
-                <span className="badge" style={{ background: 'rgba(99, 102, 241, 0.12)', color: '#a5b4fc', border: '1px solid rgba(99, 102, 241, 0.25)', fontSize: '0.68rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
-                  {studyWords[currentIdx].type === 'noun' ? 'İsim (Noun)' : 
-                   studyWords[currentIdx].type === 'verb' ? 'Fiil (Verb)' : 
-                   studyWords[currentIdx].type === 'adjective' ? 'Sıfat (Adj)' : 
-                   studyWords[currentIdx].type === 'adverb' ? 'Zarf (Adv)' : 'Kelime'}
-                </span>
-              </div>
+          <div className="glass-card animate-scale-in" style={{ padding: '16px 20px', borderRadius: '20px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '14px', gap: '4px' }}>
               
               <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>İNGİLİZCE KELİME</span>
-              <h1 style={{ fontSize: '2.4rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em' }}>
+              <h1 style={{ fontSize: '1.9rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em' }}>
                 {studyWords[currentIdx].word}
               </h1>
               
-              <div style={{ margin: '14px 0', height: '1px', width: '48px', background: 'rgba(255,255,255,0.08)' }} />
+              <div style={{ margin: '8px 0', height: '1px', width: '48px', background: 'rgba(255,255,255,0.08)' }} />
 
               <span style={{ fontSize: '0.62rem', color: '#a5b4fc', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>TÜRKÇE ANLAMI</span>
-              <h2 style={{ fontSize: '1.58rem', fontWeight: '800', color: '#a5b4fc', margin: 0 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#a5b4fc', margin: 0 }}>
                 {studyWords[currentIdx].tr}
               </h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '20px 0' }}>
-              <div style={{ background: 'rgba(99, 102, 241, 0.04)', border: '1px solid rgba(99, 102, 241, 0.15)', padding: '14px 18px', borderRadius: '16px' }}>
-                <span style={{ fontSize: '0.64rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '12px 0' }}>
+              <div style={{ background: 'rgba(99, 102, 241, 0.04)', border: '1px solid rgba(99, 102, 241, 0.15)', padding: '8px 12px', borderRadius: '12px' }}>
+                <span style={{ fontSize: '0.64rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
                   🔄 EŞ ANLAMLILAR (SYNONYMS)
                 </span>
-                <p style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700', margin: 0 }}>
+                <p style={{ fontSize: '0.85rem', color: 'white', fontWeight: '700', margin: 0 }}>
                   {studyWords[currentIdx].synonyms || "Yok"}
                 </p>
               </div>
 
-              <div style={{ background: 'rgba(16, 185, 129, 0.04)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '14px 18px', borderRadius: '16px' }}>
-                <span style={{ fontSize: '0.64rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+              <div style={{ background: 'rgba(16, 185, 129, 0.04)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '8px 12px', borderRadius: '12px' }}>
+                <span style={{ fontSize: '0.64rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
                   🔗 COLLOCATIONS / BİRLİKTE KULLANIM
                 </span>
-                <p style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700', margin: 0, fontStyle: 'italic' }}>
+                <p style={{ fontSize: '0.85rem', color: 'white', fontWeight: '700', margin: 0, fontStyle: 'italic' }}>
                   {studyWords[currentIdx].collocation || `${studyWords[currentIdx].word} carefully, direct ${studyWords[currentIdx].word}`}
                 </p>
               </div>
             </div>
 
             <div style={{ textAlign: 'center' }}>
-              <span style={{ fontSize: '0.68rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>Örnek Akademik Cümle (YÖKDİL)</span>
-              <p style={{ fontSize: '0.98rem', color: 'white', lineHeight: 1.6, margin: '0 auto 8px auto', fontWeight: '500', maxWidth: '500px' }}>
-                {studyWords[currentIdx].en}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '6px' }}>
+                <span style={{ fontSize: '0.64rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                  Örnek Akademik Cümle (YÖKDİL)
+                </span>
+                {studyWords[currentIdx].sentences && (
+                  <button 
+                    onClick={() => setSentenceIdx(prev => (prev + 1) % studyWords[currentIdx].sentences.length)}
+                    style={{
+                      background: 'rgba(251, 191, 36, 0.1)',
+                      border: '1px solid rgba(251, 191, 36, 0.3)',
+                      borderRadius: '6px',
+                      color: '#fbbf24',
+                      padding: '2px 8px',
+                      fontSize: '0.62rem',
+                      cursor: 'pointer',
+                      fontWeight: 'bold',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    🔄 Cümleyi Değiştir ({sentenceIdx + 1}/5)
+                  </button>
+                )}
+              </div>
+              <p style={{ fontSize: '0.9rem', color: 'white', lineHeight: 1.5, margin: '0 auto 4px auto', fontWeight: '500', maxWidth: '500px' }}>
+                {studyWords[currentIdx].sentences ? studyWords[currentIdx].sentences[sentenceIdx].en : studyWords[currentIdx].en}
               </p>
-              {studyWords[currentIdx].en_tr && (
-                <p style={{ fontSize: '0.86rem', color: '#94a3b8', fontStyle: 'italic', margin: '0 auto', maxWidth: '500px', background: 'rgba(255,255,255,0.02)', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.04)' }}>
-                  {studyWords[currentIdx].en_tr}
+              {(studyWords[currentIdx].sentences ? studyWords[currentIdx].sentences[sentenceIdx].tr : studyWords[currentIdx].en_tr) && (
+                <p style={{ fontSize: '0.8rem', color: '#94a3b8', fontStyle: 'italic', margin: '0 auto', maxWidth: '500px', background: 'rgba(255,255,255,0.02)', padding: '6px 10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.04)' }}>
+                  {studyWords[currentIdx].sentences ? studyWords[currentIdx].sentences[sentenceIdx].tr : studyWords[currentIdx].en_tr}
                 </p>
               )}
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px' }}>
             <button
               onClick={() => setCurrentIdx(prev => Math.max(0, prev - 1))}
               disabled={currentIdx === 0}
@@ -1522,21 +1560,21 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
 
       {/* PHASE 2: MEANING PRACTICE */}
       {phase === 2 && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
               Adım 2: Kelimenin Anlamını Eşleştirin <span style={{ color: '#10b981' }}>({currentIdx + 1}/{studyWords.length})</span>
             </h4>
           </div>
 
-          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center', textAlign: 'center' }}>
+          <div className="glass-card animate-scale-in" style={{ padding: '16px 20px', borderRadius: '20px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', textAlign: 'center' }}>
               <span style={{ fontSize: '0.62rem', color: '#10b981', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>SORULAN KELİME</span>
-              <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'white', margin: 0 }}>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0 }}>
                 {studyWords[currentIdx].word}
               </h2>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '400px', marginTop: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '400px', marginTop: '10px' }}>
                 {meaningOptions.map((opt, i) => {
                   const isSelected = meaningSelected === opt;
                   const isCorrectAnswer = opt === studyWords[currentIdx].tr;
@@ -1566,12 +1604,12 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
                       onClick={() => handleMeaningCheck(opt)}
                       disabled={meaningChecked}
                       style={{
-                        padding: '14px 20px',
-                        borderRadius: '12px',
+                        padding: '10px 16px',
+                        borderRadius: '10px',
                         background: bg,
                         border: border,
                         color: color,
-                        fontSize: '0.94rem',
+                        fontSize: '0.88rem',
                         fontWeight: 'bold',
                         cursor: meaningChecked ? 'default' : 'pointer',
                         transition: 'all 0.2s'
@@ -1585,13 +1623,13 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
 
               {meaningChecked && (
                 <div className="glass-card animate-scale-in" style={{
-                  padding: '12px 24px',
-                  borderRadius: '12px',
+                  padding: '10px 20px',
+                  borderRadius: '10px',
                   background: meaningCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
                   border: meaningCorrect ? '1.5px solid rgba(16, 185, 129, 0.3)' : '1.5px solid rgba(239, 68, 68, 0.3)',
                   color: meaningCorrect ? '#a7f3d0' : '#fca5a5',
-                  marginTop: '12px',
-                  fontSize: '0.82rem',
+                  marginTop: '8px',
+                  fontSize: '0.8rem',
                   fontWeight: 'bold',
                   display: 'flex',
                   alignItems: 'center',
@@ -1611,12 +1649,12 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '14px' }}>
             {meaningChecked && (
               <button
                 onClick={handleMeaningNext}
                 className="btn-primary"
-                style={{ padding: '10px 24px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ padding: '8px 20px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
               >
                 Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
               </button>
@@ -1627,21 +1665,21 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
 
       {/* PHASE 3: SYNONYM PRACTICE */}
       {phase === 3 && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
               Adım 3: Eş Anlamlıyı Bulun <span style={{ color: '#10b981' }}>({currentIdx + 1}/{studyWords.length})</span>
             </h4>
           </div>
 
-          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center', textAlign: 'center' }}>
+          <div className="glass-card animate-scale-in" style={{ padding: '16px 20px', borderRadius: '20px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', textAlign: 'center' }}>
               <span style={{ fontSize: '0.62rem', color: '#10b981', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>SORULAN KELİME</span>
-              <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'white', margin: 0 }}>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0 }}>
                 {studyWords[currentIdx].word}
               </h2>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '400px', marginTop: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '400px', marginTop: '10px' }}>
                 {synonymOptions.map((opt, i) => {
                   const isSelected = synonymSelected === opt;
                   const cleanCorrect = studyWords[currentIdx].synonyms.split(',')[0].trim();
@@ -1672,12 +1710,12 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
                       onClick={() => handleSynonymCheck(opt)}
                       disabled={synonymChecked}
                       style={{
-                        padding: '14px 20px',
-                        borderRadius: '12px',
+                        padding: '10px 16px',
+                        borderRadius: '10px',
                         background: bg,
                         border: border,
                         color: color,
-                        fontSize: '0.94rem',
+                        fontSize: '0.88rem',
                         fontWeight: 'bold',
                         cursor: synonymChecked ? 'default' : 'pointer',
                         transition: 'all 0.2s'
@@ -1691,13 +1729,13 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
 
               {synonymChecked && (
                 <div className="glass-card animate-scale-in" style={{
-                  padding: '12px 24px',
-                  borderRadius: '12px',
+                  padding: '10px 20px',
+                  borderRadius: '10px',
                   background: synonymCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
                   border: synonymCorrect ? '1.5px solid rgba(16, 185, 129, 0.3)' : '1.5px solid rgba(239, 68, 68, 0.3)',
                   color: synonymCorrect ? '#a7f3d0' : '#fca5a5',
-                  marginTop: '12px',
-                  fontSize: '0.82rem',
+                  marginTop: '8px',
+                  fontSize: '0.8rem',
                   fontWeight: 'bold',
                   display: 'flex',
                   alignItems: 'center',
@@ -1717,12 +1755,12 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '14px' }}>
             {synonymChecked && (
               <button
                 onClick={handleSynonymNext}
                 className="btn-primary"
-                style={{ padding: '10px 24px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ padding: '8px 20px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
               >
                 Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
               </button>
@@ -1733,33 +1771,33 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
 
       {/* PHASE 4: MULTIPLE CHOICE PRACTICE */}
       {phase === 4 && studyWords && studyWords.length > 0 && studyWords[currentIdx] && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
               Adım 4: Çoktan Seçmeli Kelime Bulma (Multiple Choice) <span style={{ color: '#10b981' }}>({currentIdx + 1}/{studyWords.length})</span>
             </h4>
           </div>
 
-          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center', textAlign: 'center' }}>
+          <div className="glass-card animate-scale-in" style={{ padding: '16px 20px', borderRadius: '20px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', textAlign: 'center' }}>
               <span style={{ fontSize: '0.62rem', color: '#10b981', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>SORULAN TANIM VE ANLAMLAR</span>
               
-              <div style={{ background: 'rgba(99, 102, 241, 0.03)', border: '1px solid rgba(99, 102, 241, 0.15)', padding: '16px 20px', borderRadius: '16px', width: '100%', maxWidth: '500px' }}>
-                <span style={{ fontSize: '0.64rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+              <div style={{ background: 'rgba(99, 102, 241, 0.03)', border: '1px solid rgba(99, 102, 241, 0.15)', padding: '10px 14px', borderRadius: '12px', width: '100%', maxWidth: '500px' }}>
+                <span style={{ fontSize: '0.64rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
                   🇹🇷 TÜRKÇE ANLAMI
                 </span>
-                <p style={{ fontSize: '1.25rem', color: 'white', fontWeight: '800', margin: '0 0 14px 0' }}>
+                <p style={{ fontSize: '1.1rem', color: 'white', fontWeight: '800', margin: '0 0 8px 0' }}>
                   {studyWords[currentIdx].tr}
                 </p>
-                <span style={{ fontSize: '0.64rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                <span style={{ fontSize: '0.64rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
                   🔄 EŞ ANLAMLILAR (SYNONYMS)
                 </span>
-                <p style={{ fontSize: '1.1rem', color: '#cbd5e1', fontWeight: '700', margin: 0, fontStyle: 'italic' }}>
+                <p style={{ fontSize: '0.95rem', color: '#cbd5e1', fontWeight: '700', margin: 0, fontStyle: 'italic' }}>
                   {studyWords[currentIdx].synonyms || 'Yok'}
                 </p>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', width: '100%', maxWidth: '500px', marginTop: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', width: '100%', maxWidth: '500px', marginTop: '10px' }}>
                 {clozeOptions.map((opt, i) => {
                   const isSelected = clozeSelected === opt;
                   const isCorrectAnswer = opt === studyWords[currentIdx].word;
@@ -1789,12 +1827,12 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
                       onClick={() => handleClozeCheck(opt)}
                       disabled={clozeChecked}
                       style={{
-                        padding: '12px',
-                        borderRadius: '10px',
+                        padding: '10px',
+                        borderRadius: '8px',
                         background: bg,
                         border: border,
                         color: color,
-                        fontSize: '0.88rem',
+                        fontSize: '0.85rem',
                         fontWeight: 'bold',
                         cursor: clozeChecked ? 'default' : 'pointer',
                         transition: 'all 0.2s'

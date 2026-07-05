@@ -36,8 +36,12 @@ import fallbackDictSosyal from './dataset/yokdil/sosyal/dictionary.json';
 import fallbackDictSaglik from './dataset/yokdil/saglik/dictionary.json';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (
-  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:5000'
+  window.location.hostname === 'localhost' || 
+  window.location.hostname === '127.0.0.1' || 
+  window.location.hostname.startsWith('192.168.') || 
+  window.location.hostname.startsWith('10.') || 
+  window.location.hostname.startsWith('172.')
+    ? `${window.location.protocol}//${window.location.hostname}:5000`
     : window.location.origin
 );
 
