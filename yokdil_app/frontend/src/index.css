@@ -211,6 +211,14 @@ body {
         padding: 30px 20px;
         z-index: 20;
         flex-shrink: 0;
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, border-right 0.3s ease;
+    }
+
+    .sidebar-collapsed .app-sidebar-desktop {
+        width: 0 !important;
+        padding: 30px 0 !important;
+        border-right: none !important;
+        overflow: hidden !important;
     }
 
     .sidebar-logo {
@@ -4564,4 +4572,14 @@ body.light-theme .setting-item {
 @keyframes scaleIn {
     from { transform: scale(0.9) translateY(10px); opacity: 0; }
     to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.desktop-sidebar-toggle-btn {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .desktop-sidebar-toggle-btn {
+        display: flex !important;
+    }
 }

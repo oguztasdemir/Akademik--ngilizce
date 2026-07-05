@@ -373,6 +373,12 @@ function App() {
   const [activeTab, setActiveTab] = useState(initialHashState.tab);
   const [selectedTestTab, setSelectedTestTab] = useState('years'); // 'years', 'topics'
   const [theme, setTheme] = useState(() => localStorage.getItem('yokdil_theme') || 'theme-dark');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => localStorage.getItem('yokdil_sidebar_collapsed') === 'true');
+
+  useEffect(() => {
+    localStorage.setItem('yokdil_sidebar_collapsed', String(sidebarCollapsed));
+  }, [sidebarCollapsed]);
+
   const [fontSize, setFontSize] = useState(() => localStorage.getItem('yokdil_font_size') || 'base');
   const [sepiaActive, setSepiaActive] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -2379,7 +2385,7 @@ function App() {
         setShowPopover={setShowPopover}
       />
 
-      <div className="app-container">
+      <div className={`app-container ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
         <Sidebar
           selectedCategory={selectedCategory}
           activeTab={activeTab}
@@ -2393,11 +2399,33 @@ function App() {
         <div className="app-content-wrapper">
           {selectedCategory ? (
             <header className="app-header">
-              <div className="logo" onClick={() => setSelectedCategory(null)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <i className="fa-solid fa-graduation-cap brain-icon"></i>
-                <span id="app-logo-title" className="font-heading">
-                  {selectedCategory === 'fen' ? 'Fen' : selectedCategory === 'sosyal' ? 'Sosyal' : 'Sağlık'}
-                </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <button
+                  className="desktop-sidebar-toggle-btn"
+                  onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                  title={sidebarCollapsed ? "Sol Paneli Aç" : "Sol Paneli Kapat"}
+                  style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '10px',
+                    width: '36px',
+                    height: '36px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--text-main)',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <i className={`fa-solid ${sidebarCollapsed ? 'fa-indent' : 'fa-outdent'}`} style={{ fontSize: '1rem' }}></i>
+                </button>
+
+                <div className="logo" onClick={() => setSelectedCategory(null)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <i className="fa-solid fa-graduation-cap brain-icon"></i>
+                  <span id="app-logo-title" className="font-heading">
+                    {selectedCategory === 'fen' ? 'Fen' : selectedCategory === 'sosyal' ? 'Sosyal' : 'Sağlık'}
+                  </span>
+                </div>
               </div>
 
               <div className="mobile-header-mascot" onClick={() => { setActiveTab('settings'); setQuizActive(false); }} title="Mascot Odası">
