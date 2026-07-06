@@ -1,0 +1,653 @@
+{
+  "day": 18,
+  "words": [
+    {
+      "word": "PROPONENT",
+      "type": "n",
+      "turkish": "Savunucu, taraftar",
+      "sentence_en": "He is one of the leading proponents of capital punishment.",
+      "sentence_tr": "O, idam cezasının önde gelen savunucularındandır.",
+      "synonyms": [
+        "Advocate",
+        "defender",
+        "exponent"
+      ],
+      "antonyms": [
+        "Rival",
+        "opponent"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He is one of the leading ________s of capital punishment."
+    },
+    {
+      "word": "SURMOUNT",
+      "type": "v",
+      "turkish": "Üstesinden gelmek",
+      "sentence_en": "They managed to surmount all objections to their plans.",
+      "sentence_tr": "Planlarına karşı olan tüm itirazların üstesinden gelmeyi başardılar.",
+      "synonyms": [
+        "Overcome",
+        "conquer"
+      ],
+      "antonyms": [
+        "Fail"
+      ],
+      "other_forms": "Surmountable (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They managed to ________ all objections to their plans."
+    },
+    {
+      "word": "INTUITION",
+      "type": "n",
+      "turkish": "Sezgi",
+      "sentence_en": "I can't explain how I knew - I just had an intuition that you'd been involved in an accident.",
+      "sentence_tr": "Nasıl bildiğimi açıklayamam, yalnızca bir kazaya karıştığına dair sezgim vardı.",
+      "synonyms": [
+        "Instinctive knowledge"
+      ],
+      "antonyms": [],
+      "other_forms": "Intuitive (adj), intuit (v), intuitively (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I can't explain how I knew - I just had an ________ that you'd been involved in an accident."
+    },
+    {
+      "word": "INTIMACY",
+      "type": "n",
+      "turkish": "Yakınlık, samimiyet",
+      "sentence_en": "Intimacy between teachers and students is not recommended.",
+      "sentence_tr": "Öğretmen ve öğrenciler arasında samimiyet pek önerilmez.",
+      "synonyms": [
+        "Closeness",
+        "sincerity"
+      ],
+      "antonyms": [
+        "Distance"
+      ],
+      "other_forms": "Intimate (adj), intimately (adv), intimate (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "________ between teachers and students is not recommended."
+    },
+    {
+      "word": "FERTILE",
+      "type": "adj",
+      "turkish": "Verimli, üretken",
+      "sentence_en": "The soil is very fertile in this area.",
+      "sentence_tr": "Bu bölgede topraklar çok verimlidir.",
+      "synonyms": [
+        "Productive",
+        "rich",
+        "fruitful",
+        "prolific"
+      ],
+      "antonyms": [
+        "Unproductive",
+        "fruitless"
+      ],
+      "other_forms": "Fertility (n), fertilize (v) ---PAGE_128--- 121 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The soil is very ________ in this area."
+    },
+    {
+      "word": "RETAIN",
+      "type": "v",
+      "turkish": "Tutmak, alıkoymak, muhafaza etmek",
+      "sentence_en": "He managed to retain his dignity throughout the performance.",
+      "sentence_tr": "Gösteri boyunca ağırbaşlılığını korudu.",
+      "synonyms": [
+        "Keep",
+        "maintain",
+        "preserve",
+        "hold"
+      ],
+      "antonyms": [
+        "Release"
+      ],
+      "other_forms": "Retainer (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "He managed to ________ his dignity throughout the performance."
+    },
+    {
+      "word": "ODD",
+      "type": "adj",
+      "turkish": "Garip, tuhaf",
+      "sentence_en": "Her father was an odd man.",
+      "sentence_tr": "Babası garip bir adamdı.",
+      "synonyms": [
+        "Strange",
+        "weird",
+        "peculiar"
+      ],
+      "antonyms": [
+        "Usual",
+        "normal",
+        "logical"
+      ],
+      "other_forms": "Oddity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Her father was an ________ man."
+    },
+    {
+      "word": "LUCRATIVE",
+      "type": "adj",
+      "turkish": "Karlı, kazançlı, yararlı",
+      "sentence_en": "The merger proved to be very lucrative for both companies.",
+      "sentence_tr": "Ortaklık her iki şirket için de faydalı oldu.",
+      "synonyms": [
+        "Profitable",
+        "remunerative"
+      ],
+      "antonyms": [],
+      "other_forms": "Lucratively (adv), lucrativeness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The merger proved to be very ________ for both companies."
+    },
+    {
+      "word": "LAY",
+      "type": "v",
+      "turkish": "Koymak",
+      "sentence_en": "She laid the baby on the bed and made her sleep.",
+      "sentence_tr": "Bebeği yatağa koydu ve uyuttu.",
+      "synonyms": [
+        "Put down"
+      ],
+      "antonyms": [
+        "Lift up"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She laid the baby on the bed and made her sleep. (________)"
+    },
+    {
+      "word": "CONSUME",
+      "type": "v",
+      "turkish": "Tüketmek",
+      "sentence_en": "He consumes vast quantities of chips with every meal.",
+      "sentence_tr": "Her öğünde çok fazla miktarda cips tüketiyor.",
+      "synonyms": [
+        "Use up",
+        "deplete",
+        "expend"
+      ],
+      "antonyms": [
+        "Produce",
+        "manufacture"
+      ],
+      "other_forms": "Consumption (n), consumer (n) ---PAGE_129--- 122 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "He ________s vast quantities of chips with every meal."
+    },
+    {
+      "word": "EXPLICIT",
+      "type": "adj",
+      "turkish": "Açık, yalın",
+      "sentence_en": "I gave her very explicit directions how to get here.",
+      "sentence_tr": "Buraya nasıl geleceğini çok açık bir şekilde anlattım.",
+      "synonyms": [
+        "Clear",
+        "unambiguous"
+      ],
+      "antonyms": [
+        "Implicit",
+        "vague",
+        "ambigious"
+      ],
+      "other_forms": "Explicitly (adv), explicitness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I gave her very ________ directions how to get here."
+    },
+    {
+      "word": "UNANIMOUSLY",
+      "type": "adv",
+      "turkish": "Oy birliğiyle",
+      "sentence_en": "All four proposals to the committee were unanimously approved.",
+      "sentence_tr": "Komiteye sunulan 4 teklifin tümü oybirliğiyle kabul edildi.",
+      "synonyms": [
+        "Collectively"
+      ],
+      "antonyms": [],
+      "other_forms": "Unanimous (adj), unanimity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "All four proposals to the committee were ________ approved."
+    },
+    {
+      "word": "VENTURE",
+      "type": "n",
+      "turkish": "Tehlikeli iş",
+      "sentence_en": "His most recent business venture ended in bankruptcy.",
+      "sentence_tr": "En son iş macerası iflasla sonuçlandı.",
+      "synonyms": [
+        "Business enterprise"
+      ],
+      "antonyms": [],
+      "other_forms": "Venture (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "His most recent business ________ ended in bankruptcy."
+    },
+    {
+      "word": "VICE VERSA",
+      "type": "n",
+      "turkish": "Tam tersi",
+      "sentence_en": "Andy doesn't trust Kate, and vice versa",
+      "sentence_tr": "Andy Kate’e güvenmiyor, Kate de Andy’ye.",
+      "synonyms": [
+        "Conversely",
+        "reversely"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Andy doesn't trust Kate, and ________"
+    },
+    {
+      "word": "VICIOUS CYCLE",
+      "type": "n",
+      "turkish": "Kısır döngü",
+      "sentence_en": "Many people get trapped in a vicious cycle of dieting and weight gain.",
+      "sentence_tr": "Birçok insan kilo alma ve diyet yapma döngüsüne kısılıp kalıyor.",
+      "synonyms": [
+        "Vicious circle ---PAGE_130--- 123 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Many people get trapped in a ________ of dieting and weight gain."
+    },
+    {
+      "word": "WAGE",
+      "type": "v",
+      "turkish": "Yürütmek, yapmak",
+      "sentence_en": "We have been waging a desperate campaign against the drug addicts.",
+      "sentence_tr": "Uyuşturucu bağımlılarına karşı müthiş bir kampanya yürütüyoruz.",
+      "synonyms": [
+        "Conduct",
+        "carry on"
+      ],
+      "antonyms": [],
+      "other_forms": "Wage (n : haftalık)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We have been waging a desperate campaign against the drug addicts. (________)"
+    },
+    {
+      "word": "WARD OFF",
+      "type": "v",
+      "turkish": "Önlemek",
+      "sentence_en": "In the winter I take vitamin C to ward off colds.",
+      "sentence_tr": "Kışın soğuk algınlığını önlemek için C vitamini alırım.",
+      "synonyms": [
+        "Prevent",
+        "hinder"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "In the winter I take vitamin C to ________ colds."
+    },
+    {
+      "word": "SANE",
+      "type": "adj",
+      "turkish": "Aklı başında",
+      "sentence_en": "It was a sane decision and one we all respected.",
+      "sentence_tr": "Akıllıca ve hepimizin s aygı duyduğu bir karardı.",
+      "synonyms": [
+        "Plausible",
+        "sensible",
+        "sound",
+        "reasonable"
+      ],
+      "antonyms": [
+        "Insane"
+      ],
+      "other_forms": "Sanity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It was a ________ decision and one we all respected."
+    },
+    {
+      "word": "ASYLUM",
+      "type": "n",
+      "turkish": "Sığınak, barınak, akıl hastanesi, iltica",
+      "sentence_en": "He was seeking for political asylum.",
+      "sentence_tr": "Siyasi iltica arayışındaydı.",
+      "synonyms": [
+        "Shelter",
+        "protection"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He was seeking for political ________."
+    },
+    {
+      "word": "APPRAISE",
+      "type": "v",
+      "turkish": "Değerlendirmek, değer biçmek",
+      "sentence_en": "The experts will appraise the individuals’ needs.",
+      "sentence_tr": "Uzmanlar bireylerin ihtiyaçlarını değerlendirecek.",
+      "synonyms": [
+        "Assess",
+        "evaluate",
+        "estimate",
+        "value",
+        "rate"
+      ],
+      "antonyms": [
+        "Undervalue",
+        "discard"
+      ],
+      "other_forms": "Appraisal (n) ---PAGE_131--- 124 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The experts will ________ the individuals’ needs."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "proponent   a"
+        },
+        {
+          "id": 2,
+          "word": "surmount   b"
+        },
+        {
+          "id": 3,
+          "word": "intuition   c"
+        },
+        {
+          "id": 4,
+          "word": "intimacy   d"
+        },
+        {
+          "id": 5,
+          "word": "fertile   e"
+        },
+        {
+          "id": 1,
+          "word": "retain   a"
+        },
+        {
+          "id": 2,
+          "word": "odd   b"
+        },
+        {
+          "id": 3,
+          "word": "lucrative   c"
+        },
+        {
+          "id": 4,
+          "word": "lay   d"
+        },
+        {
+          "id": 5,
+          "word": "consume   e"
+        },
+        {
+          "id": 1,
+          "word": "explicit   a"
+        },
+        {
+          "id": 2,
+          "word": "unanimously   b"
+        },
+        {
+          "id": 3,
+          "word": "venture   c"
+        },
+        {
+          "id": 4,
+          "word": "vice versa   d"
+        },
+        {
+          "id": 5,
+          "word": "vicious cycle   e"
+        },
+        {
+          "id": 1,
+          "word": "wage   a"
+        },
+        {
+          "id": 2,
+          "word": "ward off   b"
+        },
+        {
+          "id": 3,
+          "word": "sane   c"
+        },
+        {
+          "id": 4,
+          "word": "asylum   d"
+        },
+        {
+          "id": 5,
+          "word": "appraise   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "instinctive knowledge"
+        },
+        {
+          "key": "b",
+          "def": "closeness, sincerity"
+        },
+        {
+          "key": "c",
+          "def": "productive, rich , fruitful, prolific"
+        },
+        {
+          "key": "d",
+          "def": "overcome, conquer"
+        },
+        {
+          "key": "e",
+          "def": "advocate, defender, exponent"
+        },
+        {
+          "key": "a",
+          "def": "use up, deplete, expend"
+        },
+        {
+          "key": "b",
+          "def": "profitable, remunerative"
+        },
+        {
+          "key": "c",
+          "def": "keep, maintain, preserve, hold"
+        },
+        {
+          "key": "d",
+          "def": "put down"
+        },
+        {
+          "key": "e",
+          "def": "strange, weird, peculiar"
+        },
+        {
+          "key": "a",
+          "def": "conversely, reversely"
+        },
+        {
+          "key": "b",
+          "def": "business enterprise"
+        },
+        {
+          "key": "c",
+          "def": "vicious circle"
+        },
+        {
+          "key": "d",
+          "def": "clear, unambiguous"
+        },
+        {
+          "key": "e",
+          "def": "collectively"
+        },
+        {
+          "key": "a",
+          "def": "prevent, hinder"
+        },
+        {
+          "key": "b",
+          "def": "shelter, protection"
+        },
+        {
+          "key": "c",
+          "def": "assess, evaluate, e stimate, value, rate"
+        },
+        {
+          "key": "d",
+          "def": "conduct, carry on"
+        },
+        {
+          "key": "e",
+          "def": "plausible, sensible, sound, reasonable"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "proponent   a"
+        },
+        {
+          "id": 2,
+          "word": "surmount   b"
+        },
+        {
+          "id": 3,
+          "word": "intimacy   c"
+        },
+        {
+          "id": 4,
+          "word": "fertile   d"
+        },
+        {
+          "id": 5,
+          "word": "retain   e"
+        },
+        {
+          "id": 1,
+          "word": "odd   a"
+        },
+        {
+          "id": 2,
+          "word": "lay   b"
+        },
+        {
+          "id": 3,
+          "word": "consume   c"
+        },
+        {
+          "id": 4,
+          "word": "explicit   d"
+        },
+        {
+          "id": 5,
+          "word": "appraise   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "release"
+        },
+        {
+          "key": "b",
+          "def": "distance"
+        },
+        {
+          "key": "c",
+          "def": "rival, opponent"
+        },
+        {
+          "key": "d",
+          "def": "unproductive, fruitless"
+        },
+        {
+          "key": "e",
+          "def": "fail"
+        },
+        {
+          "key": "a",
+          "def": "produce, manufacture"
+        },
+        {
+          "key": "b",
+          "def": "implicit, vague, ambigious"
+        },
+        {
+          "key": "c",
+          "def": "undervalue, discard"
+        },
+        {
+          "key": "d",
+          "def": "lift up"
+        },
+        {
+          "key": "e",
+          "def": "usual, normal, logical"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “unambigious” ve Türkçesi “açık, yalın” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "vague",
+          "B": "unanimous",
+          "C": "explicit",
+          "D": "sane",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Phrasal verb olarak eş anlamlısı “use up” ve Türkçesi “tüketmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "manufacture",
+          "B": "lay",
+          "C": "retain",
+          "D": "surmount",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “advocate” ve Türkçesi “savunucu, taraftar” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "proponent",
+          "B": "instinct",
+          "C": "sincerity",
+          "D": "fertility",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “shelter” ve Türkçesi “sığınak, barınak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "sanity",
+          "B": "appraisal",
+          "C": "fertility",
+          "D": "asylum",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “overcome” ve Türkçesi “üstesinden gelmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "maintain",
+          "B": "surmount",
+          "C": "deplete",
+          "D": "discard",
+          "E": "retain"
+        }
+      }
+    ]
+  }
+}

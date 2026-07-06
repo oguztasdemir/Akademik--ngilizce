@@ -1,0 +1,685 @@
+{
+  "day": 11,
+  "words": [
+    {
+      "word": "SEVERE",
+      "type": "adj",
+      "turkish": "Ciddi, sert, önemli",
+      "sentence_en": "This is a school for children with severe learning difficulties.",
+      "sentence_tr": "Bu okul ciddi öğrenme zorlukları çeken çocuklar içindir.",
+      "synonyms": [
+        "Serious",
+        "acute"
+      ],
+      "antonyms": [
+        "Mild",
+        "flexible"
+      ],
+      "other_forms": "Severity (n), severely (adv)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "This is a school for children with ________ learning difficulties."
+    },
+    {
+      "word": "WITHOLD",
+      "type": "v",
+      "turkish": "Tutmak, vermemek, korumak, saklamak",
+      "sentence_en": "During the trial, the prosecution was accused of withholding crucial evidence from the defence.",
+      "sentence_tr": "Duruşma esnasında davacı, savunmadan çok önemli delilleri saklamakla suçlandı.",
+      "synonyms": [
+        "Reserve",
+        "hold back"
+      ],
+      "antonyms": [
+        "Release",
+        "give"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "During the trial, the prosecution was accused of withholding crucial evidence from the defence. (________)"
+    },
+    {
+      "word": "WITHSTAND",
+      "type": "v",
+      "turkish": "Karşı koymak, dayanmak",
+      "sentence_en": "They have designed a bridge to withstand earthquakes.",
+      "sentence_tr": "Depreme dayanabilecek bir köprü tasarladılar.",
+      "synonyms": [
+        "Stand against",
+        "resist",
+        "oppose"
+      ],
+      "antonyms": [
+        "Concede",
+        "submit"
+      ],
+      "other_forms": "",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "They have designed a bridge to ________ earthquakes."
+    },
+    {
+      "word": "RIVAL",
+      "type": "n",
+      "turkish": "Rakip",
+      "sentence_en": "The companies produce rival versions of the toy.",
+      "sentence_tr": "Firmalar oyuncağın rakip versiyonlarını üretiyor.",
+      "synonyms": [
+        "Opponent",
+        "competitor"
+      ],
+      "antonyms": [],
+      "other_forms": "Rival (v), rivalry (n), rival (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The companies produce ________ versions of the toy."
+    },
+    {
+      "word": "ZEST",
+      "type": "n",
+      "turkish": "Keyif, neşe, heves",
+      "sentence_en": "It's wonderful to see the children's zest for life.",
+      "sentence_tr": "Çocukların yaşama heveslerini görmek harika.",
+      "synonyms": [
+        "Excitement",
+        "enthusiasm",
+        "eagerness",
+        "smack"
+      ],
+      "antonyms": [],
+      "other_forms": "Zestful (adj), zestfully (adv) ---PAGE_79--- 72 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It's wonderful to see the children's ________ for life."
+    },
+    {
+      "word": "VINTAGE",
+      "type": "adj",
+      "turkish": "Eski",
+      "sentence_en": "Vintage toys are sought-after by most people.",
+      "sentence_tr": "Çoğu insan eski oyuncakların peşinde koşmaktadır.",
+      "synonyms": [
+        "Old",
+        "antique"
+      ],
+      "antonyms": [
+        "New",
+        "recent"
+      ],
+      "other_forms": "Vintage (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "________ toys are sought-after by most people."
+    },
+    {
+      "word": "VERIFY",
+      "type": "v",
+      "turkish": "Doğrulamak",
+      "sentence_en": "Are you able to verify your account/allegation/report/theory?",
+      "sentence_tr": "İfadeni/İddianı/İhbarını/Teorini doğrulayabilir misin?",
+      "synonyms": [
+        "Confirm",
+        "validate"
+      ],
+      "antonyms": [
+        "Subvert",
+        "misrepresent"
+      ],
+      "other_forms": "Verification (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Are you able to ________ your account/allegation/report/theory?"
+    },
+    {
+      "word": "VERMIN",
+      "type": "n",
+      "turkish": "Zararlı hayvan, parazit",
+      "sentence_en": "Flies, lice, rats, foxes and cockroaches can all be described as vermin.",
+      "sentence_tr": "Sinek, bit, fare ve hamam böceğinin tümü parazit olarak nitelendirilebilir.",
+      "synonyms": [
+        "Parasites",
+        "pest"
+      ],
+      "antonyms": [],
+      "other_forms": "Verminous (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Flies, lice, rats, foxes and cockroaches can all be described as ________."
+    },
+    {
+      "word": "UNILATERAL",
+      "type": "adj",
+      "turkish": "Tek taraflı",
+      "sentence_en": "The party leader has actually declared her support for unilateral nuclear disarmament.",
+      "sentence_tr": "Parti lideri tek taraflı nükleer silahsızlanmaya desteğini bilfiiil açıkladı.",
+      "synonyms": [
+        "One-sided"
+      ],
+      "antonyms": [
+        "Multilateral"
+      ],
+      "other_forms": "Unilaterally (adv), unilateralism (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The party leader has actually declared her support for ________ nuclear disarmament."
+    },
+    {
+      "word": "VACUUM",
+      "type": "n",
+      "turkish": "Boşluk, hava boşluğu",
+      "sentence_en": "Edison knew that he had to create a vacuum inside the lightbulb.",
+      "sentence_tr": "Edison ampulun içinde bir hava boşluğu bırakması gerektiğini biliyordu.",
+      "synonyms": [
+        "Empty space"
+      ],
+      "antonyms": [
+        "Occupied"
+      ],
+      "other_forms": "Vacuum (v) ---PAGE_80--- 73 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Edison knew that he had to create a ________ inside the lightbulb."
+    },
+    {
+      "word": "ACQUIRE",
+      "type": "v",
+      "turkish": "Elde etmek",
+      "sentence_en": "He began to acquire a reputation during the 16th century.",
+      "sentence_tr": "O 16. yüzyılda ün kazanmaya başladı.",
+      "synonyms": [
+        "Gain",
+        "obtain",
+        "earn",
+        "win",
+        "attain",
+        "achieve",
+        "get"
+      ],
+      "antonyms": [
+        "Lose",
+        "surrender",
+        "miss"
+      ],
+      "other_forms": "Acquirable (adj), acquisition (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He began to ________ a reputation during the 16th century."
+    },
+    {
+      "word": "ADOPT",
+      "type": "v",
+      "turkish": "Benimsemek, kabul etmek, evlat edinmek",
+      "sentence_en": "They've adopted a baby girl.",
+      "sentence_tr": "Onlar, küçük bir kız çoçuğu evlat edindi.",
+      "synonyms": [
+        "Assume",
+        "approve",
+        "accept",
+        "foster",
+        "support"
+      ],
+      "antonyms": [
+        "Reject",
+        "deny",
+        "abandon"
+      ],
+      "other_forms": "Adoption (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "They've ________ed a baby girl."
+    },
+    {
+      "word": "CLUMSY",
+      "type": "adj",
+      "turkish": "Beceriksiz, yeteneksiz, sakar",
+      "sentence_en": "That's the third glass you've smashed this week, - you're so clumsy!",
+      "sentence_tr": "Bu, bu hafta kırdığın üçüncü bardak, çok sakarsın!",
+      "synonyms": [
+        "Awkward",
+        "unskilled"
+      ],
+      "antonyms": [
+        "Talented",
+        "gifted"
+      ],
+      "other_forms": "Clumsily (adv), clumsiness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "That's the third glass you've smashed this week, - you're so ________!"
+    },
+    {
+      "word": "EXCAVATE",
+      "type": "v",
+      "turkish": "Kazmak",
+      "sentence_en": "Tintagel Castle, the reputed birthplace of King Arthur, is being excavated for the first time.",
+      "sentence_tr": "Kral Arthur’un ünlü doğum yeri olan Tintagel kalesi ilk kez kazılıyor.",
+      "synonyms": [
+        "Dig",
+        "dig up"
+      ],
+      "antonyms": [
+        "Inter",
+        "bury"
+      ],
+      "other_forms": "Excavation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Tintagel Castle, the reputed birthplace of King Arthur, is being ________d for the first time."
+    },
+    {
+      "word": "ENLIGHTEN",
+      "type": "v",
+      "turkish": "Aydınlatmak",
+      "sentence_en": "I don't understand this. Could you enlighten me on this issue?",
+      "sentence_tr": "Bunu anlamadım. Beni bu konuda aydınlatabilir misin?",
+      "synonyms": [
+        "Shed light on",
+        "illuminate"
+      ],
+      "antonyms": [
+        "Darken"
+      ],
+      "other_forms": "Enlightened (adj), enlightenment (n) ---PAGE_81--- 74 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I don't understand this. Could you ________ me on this issue?"
+    },
+    {
+      "word": "DIVERGE",
+      "type": "v",
+      "turkish": "Sapmak, yön değiştirmek",
+      "sentence_en": "They walked along the road together until they reached the village, but then their paths diverged.",
+      "sentence_tr": "Köye ulaşana kadar yol boyunca beraber yürüdüler ancak daha sonra yolları ayrıldı.",
+      "synonyms": [
+        "Deviate",
+        "move away"
+      ],
+      "antonyms": [
+        "Join",
+        "converge"
+      ],
+      "other_forms": "Divergence (n), divergent (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They walked along the road together until they reached the village, but then their paths ________d."
+    },
+    {
+      "word": "RAMPANT",
+      "type": "adj",
+      "turkish": "Yaygın, aşırı boyutlara varmış, her tarafa yayılmış",
+      "sentence_en": "Disease is quite rampant in overcrowded cities.",
+      "sentence_tr": "Kalabalık şehirlerde hastalık oldukça yaygın.",
+      "synonyms": [
+        "Widespread",
+        "increasing",
+        "prevalent"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Disease is quite ________ in overcrowded cities."
+    },
+    {
+      "word": "PERPLEX",
+      "type": "v",
+      "turkish": "Şaşırtmak, kafasını karıştırmak",
+      "sentence_en": "The disease has continued to perplex doctors.",
+      "sentence_tr": "Hastalık doktorları şaşırtmaya devam ediyor.",
+      "synonyms": [
+        "Bewilder",
+        "confuse",
+        "astonish"
+      ],
+      "antonyms": [],
+      "other_forms": "Perplexing (adj), perplexity (n) REBEL against (v) Türkçe Karşılığı : Ayaklanmak, isyan etmek, karşı gelmek Örnek Cümle : The people rebelled against the new government. Çevirisi : İnsanlar yeni hükümete karşı ayaklandılar. Eş ya da Yakın Anlamlılar : Revolt, rise up Diğer Halleri : Rebellious (adj), rebellion (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The disease has continued to ________ doctors."
+    },
+    {
+      "word": "MASSIVE",
+      "type": "adj",
+      "turkish": "Büyük, kocaman",
+      "sentence_en": "They've got a massive house.",
+      "sentence_tr": "Devasa bir evleri var.",
+      "synonyms": [
+        "Huge",
+        "immense"
+      ],
+      "antonyms": [
+        "Small",
+        "slight"
+      ],
+      "other_forms": "Massively (adv), massiveness (n) ---PAGE_82--- 75 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "They've got a ________ house."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "severe   a"
+        },
+        {
+          "id": 2,
+          "word": "withold   b"
+        },
+        {
+          "id": 3,
+          "word": "withstand   c"
+        },
+        {
+          "id": 4,
+          "word": "rival   d"
+        },
+        {
+          "id": 5,
+          "word": "zest   e"
+        },
+        {
+          "id": 1,
+          "word": "vintage   a"
+        },
+        {
+          "id": 2,
+          "word": "verify   b"
+        },
+        {
+          "id": 3,
+          "word": "vermin   c"
+        },
+        {
+          "id": 4,
+          "word": "unilateral   d"
+        },
+        {
+          "id": 5,
+          "word": "vacuum   e"
+        },
+        {
+          "id": 1,
+          "word": "acquire   a"
+        },
+        {
+          "id": 2,
+          "word": "adopt   b"
+        },
+        {
+          "id": 3,
+          "word": "clumsy   c"
+        },
+        {
+          "id": 4,
+          "word": "excavate   d"
+        },
+        {
+          "id": 5,
+          "word": "enlighten   e"
+        },
+        {
+          "id": 1,
+          "word": "diverge   a"
+        },
+        {
+          "id": 2,
+          "word": "rampant   b"
+        },
+        {
+          "id": 3,
+          "word": "perplex   c"
+        },
+        {
+          "id": 4,
+          "word": "rebel   d"
+        },
+        {
+          "id": 5,
+          "word": "massive   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "excitement, ent husiasm, eagerness"
+        },
+        {
+          "key": "b",
+          "def": "stand against, resist, oppose"
+        },
+        {
+          "key": "c",
+          "def": "serious, acute"
+        },
+        {
+          "key": "d",
+          "def": "opponent, c ompetitor"
+        },
+        {
+          "key": "e",
+          "def": "reserve, hold back"
+        },
+        {
+          "key": "a",
+          "def": "one"
+        },
+        {
+          "key": "b",
+          "def": "parasites, pest"
+        },
+        {
+          "key": "c",
+          "def": "empty space"
+        },
+        {
+          "key": "d",
+          "def": "old, antique"
+        },
+        {
+          "key": "e",
+          "def": "confirm, validate"
+        },
+        {
+          "key": "a",
+          "def": "assume, approve , accept, foster"
+        },
+        {
+          "key": "b",
+          "def": "dig, dig up"
+        },
+        {
+          "key": "c",
+          "def": "shed light on, illuminate"
+        },
+        {
+          "key": "d",
+          "def": "gain, obtain, earn, win, attain, achieve"
+        },
+        {
+          "key": "e",
+          "def": "awkward, unskilled"
+        },
+        {
+          "key": "a",
+          "def": "bewilder, confuse, astonish"
+        },
+        {
+          "key": "b",
+          "def": "revolt, rise up"
+        },
+        {
+          "key": "c",
+          "def": "huge, immense"
+        },
+        {
+          "key": "d",
+          "def": "widespread, increasing, prevalent"
+        },
+        {
+          "key": "e",
+          "def": "deviate, move away"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "severe   a"
+        },
+        {
+          "id": 2,
+          "word": "withold   b"
+        },
+        {
+          "id": 3,
+          "word": "withstand   c"
+        },
+        {
+          "id": 4,
+          "word": "vintage   d"
+        },
+        {
+          "id": 1,
+          "word": "verify   a"
+        },
+        {
+          "id": 2,
+          "word": "unilateral   b"
+        },
+        {
+          "id": 3,
+          "word": "vacuum   c"
+        },
+        {
+          "id": 4,
+          "word": "acquire   d"
+        },
+        {
+          "id": 5,
+          "word": "adopt   e"
+        },
+        {
+          "id": 1,
+          "word": "clumsy   a"
+        },
+        {
+          "id": 2,
+          "word": "excavate   b"
+        },
+        {
+          "id": 3,
+          "word": "enlighten   c"
+        },
+        {
+          "id": 4,
+          "word": "diverge   d"
+        },
+        {
+          "id": 5,
+          "word": "massive   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "concede, submit"
+        },
+        {
+          "key": "b",
+          "def": "new, recent"
+        },
+        {
+          "key": "c",
+          "def": "mild, flexible"
+        },
+        {
+          "key": "d",
+          "def": "release, give"
+        },
+        {
+          "key": "a",
+          "def": "reject, deny, abandon"
+        },
+        {
+          "key": "b",
+          "def": "occupied"
+        },
+        {
+          "key": "c",
+          "def": "subvert, misrepresent"
+        },
+        {
+          "key": "d",
+          "def": "lose, surrender, miss"
+        },
+        {
+          "key": "e",
+          "def": "multilateral"
+        },
+        {
+          "key": "a",
+          "def": "darken"
+        },
+        {
+          "key": "b",
+          "def": "join, converge"
+        },
+        {
+          "key": "c",
+          "def": "small, slight"
+        },
+        {
+          "key": "d",
+          "def": "inter, bury"
+        },
+        {
+          "key": "e",
+          "def": "talented, gifted"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “opponent” ve Türkçesi “rakip” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "zest",
+          "B": "vintage",
+          "C": "rival",
+          "D": "vermin",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “confirm” ve Türkçesi “doğrulamak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "oppose",
+          "B": "release",
+          "C": "subvert",
+          "D": "obtain",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "“Benimsemek, kabul etmek, evlat edinmek” gibi farklı anlamları olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "adopt",
+          "B": "achieve",
+          "C": "enlighten",
+          "D": "diverge",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Genellikle “against” edatı ile kullanılan, Eş anlamlısı “rise up” ve Türkçesi “isyan etmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "diverge",
+          "B": "attain",
+          "C": "illuminate",
+          "D": "rebel",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “illuminate” ve Türkçesi “aydınlatmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "revolt",
+          "B": "shed light on",
+          "C": "converge",
+          "D": "acquire",
+          "E": "perplex"
+        }
+      }
+    ]
+  }
+}

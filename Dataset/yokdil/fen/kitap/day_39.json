@@ -1,0 +1,707 @@
+{
+  "day": 39,
+  "words": [
+    {
+      "word": "ALLEGE",
+      "type": "v",
+      "turkish": "İddia etmek, suçlamak",
+      "sentence_en": "The men allege that the police forced them to make false confessions.",
+      "sentence_tr": "Adamlar polislerin kendilerini yanlış ifade vermeye zorladığını iddia ediyor.",
+      "synonyms": [
+        "Claim",
+        "assert",
+        "charge"
+      ],
+      "antonyms": [
+        "Refute",
+        "deny",
+        "disprove"
+      ],
+      "other_forms": "Allegation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The men ________ that the police forced them to make false confessions."
+    },
+    {
+      "word": "CENSUS",
+      "type": "n",
+      "turkish": "Nüfus sayımı",
+      "sentence_en": "We have a census in this country every ten years.",
+      "sentence_tr": "Bu ülkede her on yılda bir nüfus sayımı yapılır.",
+      "synonyms": [
+        "Counting",
+        "demography"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We have a ________ in this country every ten years."
+    },
+    {
+      "word": "BETRAY",
+      "type": "v",
+      "turkish": "İhanet etmek",
+      "sentence_en": "He was accused of betraying his country during the war.",
+      "sentence_tr": "Ülkesine savaşta ihanet etmekle suçlandı.",
+      "synonyms": [
+        "Deceive",
+        "to be disloyal"
+      ],
+      "antonyms": [
+        "To be loyal",
+        "to be honest",
+        "to be frank"
+      ],
+      "other_forms": "Betrayal (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He was accused of ________ing his country during the war."
+    },
+    {
+      "word": "BOOM",
+      "type": "v",
+      "turkish": "Artmak",
+      "sentence_en": "The textile industry is booming.",
+      "sentence_tr": "Tekstil sektörü gelişiyor.",
+      "synonyms": [
+        "Boost",
+        "increase",
+        "expand",
+        "develop"
+      ],
+      "antonyms": [
+        "Decrease",
+        "abate",
+        "subside"
+      ],
+      "other_forms": "Boom (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The textile industry is ________ing."
+    },
+    {
+      "word": "ERECT",
+      "type": "v",
+      "turkish": "Dikmek, inşa etmek",
+      "sentence_en": "The soldiers have erected barricades to protect themselves.",
+      "sentence_tr": "Askerler kendilerini korumak için barikatlar diktiler.",
+      "synonyms": [
+        "Build up",
+        "put up"
+      ],
+      "antonyms": [
+        "Eradicate",
+        "collapse"
+      ],
+      "other_forms": "Erection (n) ---PAGE_275--- 268 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The soldiers have ________ed barricades to protect themselves."
+    },
+    {
+      "word": "ELUDE",
+      "type": "v",
+      "turkish": "-den sıyrılmak, kurtulmak",
+      "sentence_en": "They eluded the police.",
+      "sentence_tr": "Polisten kurtuldular.",
+      "synonyms": [
+        "Escape",
+        "evade",
+        "avoid"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They ________d the police."
+    },
+    {
+      "word": "EMBEZZLE",
+      "type": "v",
+      "turkish": "Zimmetine geçirmek",
+      "sentence_en": "She embezzled thousands of dollars from the charity.",
+      "sentence_tr": "O, vakıftan binlerce doları zimmetine geçirdi.",
+      "synonyms": [
+        "Steal"
+      ],
+      "antonyms": [
+        "Donate",
+        "give away"
+      ],
+      "other_forms": "Embezzlement (n), embezzler (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She ________d thousands of dollars from the charity."
+    },
+    {
+      "word": "ELICIT",
+      "type": "v",
+      "turkish": "Almak, elde etmek, ortaya çıkarmak",
+      "sentence_en": "They were able to elicit the support of the public.",
+      "sentence_tr": "Onlar halkın desteğini almayı başardılar.",
+      "synonyms": [
+        "Obtain",
+        "get",
+        "extract",
+        "evoke",
+        "draw out"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They were able to ________ the support of the public."
+    },
+    {
+      "word": "COMPRISE",
+      "type": "v",
+      "turkish": "Oluşmak",
+      "sentence_en": "The book comprises 350 pages.",
+      "sentence_tr": "Kitap 350 sayfadan oluşuyor.",
+      "synonyms": [
+        "Consist of",
+        "be composed of",
+        "be made up of"
+      ],
+      "antonyms": [],
+      "other_forms": "Comprisable (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The book ________s 350 pages."
+    },
+    {
+      "word": "COMPROMISE",
+      "type": "v",
+      "turkish": "Uzlaşmak",
+      "sentence_en": "The two sides reached a compromise by bargaining.",
+      "sentence_tr": "İki taraf pazarlık yaparak anlaşmaya vardı.",
+      "synonyms": [
+        "Agree on sth."
+      ],
+      "antonyms": [
+        "Disagree"
+      ],
+      "other_forms": "Compromiser (n), compromisingly (adv) ---PAGE_276--- 269 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The two sides reached a ________ by bargaining."
+    },
+    {
+      "word": "CONSOLE",
+      "type": "v",
+      "turkish": "Teselli etmek, rahatlatmak",
+      "sentence_en": "Andy tried to console her, but she kept saying it was all her own fault.",
+      "sentence_tr": "Andy onu teselli etmeye çalıştı fakat o herşeyin kendi suçu olduğunu söylemeye devam etti.",
+      "synonyms": [
+        "Comfort"
+      ],
+      "antonyms": [
+        "Distress",
+        "hurt"
+      ],
+      "other_forms": "Consolation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Andy tried to ________ her, but she kept saying it was all her own fault."
+    },
+    {
+      "word": "CONSTITUTE",
+      "type": "v",
+      "turkish": "Oluşturmak",
+      "sentence_en": "The under-18s constitute nearly 25% of the town's population.",
+      "sentence_tr": "18 yaş altındakiler kasaba nüfusunun yaklaşık % 25’ini oluşturuyor.",
+      "synonyms": [
+        "Compose",
+        "make up",
+        "form"
+      ],
+      "antonyms": [
+        "Destroy",
+        "collapse"
+      ],
+      "other_forms": "Constitution (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The under-18s ________ nearly 25% of the town's population."
+    },
+    {
+      "word": "COURAGEOUS",
+      "type": "adj",
+      "turkish": "Cesur, cesaretli",
+      "sentence_en": "It was a courageous decision to resign.",
+      "sentence_tr": "İstifa etmesi cesur bir karardı.",
+      "synonyms": [
+        "Brave",
+        "bold",
+        "daring"
+      ],
+      "antonyms": [
+        "Coward",
+        "timid",
+        "fearful"
+      ],
+      "other_forms": "Courage (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It was a ________ decision to resign."
+    },
+    {
+      "word": "DEPICT",
+      "type": "v",
+      "turkish": "Göstermek, anlatmak",
+      "sentence_en": "Her paintings depict the lives of ordinary people in the last century.",
+      "sentence_tr": "Onun resimleri geçen yüzyıldaki sıradan insanların hayatlarını anlatmaktadır.",
+      "synonyms": [
+        "Show",
+        "represent",
+        "draw"
+      ],
+      "antonyms": [
+        "Hide"
+      ],
+      "other_forms": "Depiction (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Her paintings ________ the lives of ordinary people in the last century."
+    },
+    {
+      "word": "IMPOSE",
+      "type": "v",
+      "turkish": "Empoze etmek",
+      "sentence_en": "Very high taxes have recently been imposed on cigarettes.",
+      "sentence_tr": "Son zamanlarda sigaraya çok yüksek oranda vergi konuldu.",
+      "synonyms": [
+        "Place on",
+        "lay upon"
+      ],
+      "antonyms": [
+        "Remove",
+        "lift"
+      ],
+      "other_forms": "Imposition (n) ---PAGE_277--- 270 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Very high taxes have recently been ________d on cigarettes."
+    },
+    {
+      "word": "INFERIOR",
+      "type": "adj",
+      "turkish": "Aşağı, alt derece",
+      "sentence_en": "These products are inferior to those we bought last year.",
+      "sentence_tr": "Bu ürünler geçen yıl aldıklarımıza göre daha kötü.",
+      "synonyms": [
+        "Low",
+        "subordinate"
+      ],
+      "antonyms": [
+        "Superior",
+        "excellent"
+      ],
+      "other_forms": "Inferiority (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "These products are ________ to those we bought last year."
+    },
+    {
+      "word": "GROUNDLESS",
+      "type": "adj",
+      "turkish": "Yersiz, dayanaksız, asılsız",
+      "sentence_en": "My fears turned out to be groundless.",
+      "sentence_tr": "Korkularım yersiz çıktı.",
+      "synonyms": [
+        "Baseless",
+        "without basis"
+      ],
+      "antonyms": [
+        "Well-founded"
+      ],
+      "other_forms": "Ground (n), ground (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "My fears turned out to be ________."
+    },
+    {
+      "word": "INTRUDE",
+      "type": "v",
+      "turkish": "İzinsiz girmek",
+      "sentence_en": "I didn't realise your husband was here, Dr Jones - I hope I'm not intruding.",
+      "sentence_tr": "Eşinizin burada olduğunu farketmedim Dr. Jones, umarım bölmüyorumdur.",
+      "synonyms": [
+        "Infringe"
+      ],
+      "antonyms": [],
+      "other_forms": "Intrusion (n), intruder (n), intrusive (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I didn't realise your husband was here, Dr Jones - I hope I'm not intruding. (________)"
+    },
+    {
+      "word": "IRRELEVANT",
+      "type": "adj",
+      "turkish": "ilgisiz, alakasız",
+      "sentence_en": "These documents are largely irrelevant to the present investigation.",
+      "sentence_tr": "Bu dökümanlar şu anki araştırma ile büyük ölçüde alakasız.",
+      "synonyms": [
+        "Impertinent"
+      ],
+      "antonyms": [
+        "Relevant"
+      ],
+      "other_forms": "Irrelevance (n), irrelevantly (adv)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "These documents are largely ________ to the present investigation."
+    },
+    {
+      "word": "LATENT",
+      "type": "adj",
+      "turkish": "Gizli",
+      "sentence_en": "We're trying to bring out the latent talents that many people possess without realising it.",
+      "sentence_tr": "Birçok insanın fark etmediği gizli yeteneklerini açığa çıkartmaya çalışıyoruz.",
+      "synonyms": [
+        "Hidden",
+        "concealed"
+      ],
+      "antonyms": [
+        "Visible",
+        "apparent"
+      ],
+      "other_forms": "Latency (n) ---PAGE_278--- 271 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We're trying to bring out the ________ talents that many people possess without realising it."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "allege   a"
+        },
+        {
+          "id": 2,
+          "word": "census   b"
+        },
+        {
+          "id": 3,
+          "word": "betray   c"
+        },
+        {
+          "id": 4,
+          "word": "boom   d"
+        },
+        {
+          "id": 5,
+          "word": "erect   e"
+        },
+        {
+          "id": 1,
+          "word": "elude   a"
+        },
+        {
+          "id": 2,
+          "word": "embezzle   b"
+        },
+        {
+          "id": 3,
+          "word": "elicit   c"
+        },
+        {
+          "id": 4,
+          "word": "comprise   d"
+        },
+        {
+          "id": 5,
+          "word": "compromise   e"
+        },
+        {
+          "id": 1,
+          "word": "console   a"
+        },
+        {
+          "id": 2,
+          "word": "constitute   b"
+        },
+        {
+          "id": 3,
+          "word": "courageous   c"
+        },
+        {
+          "id": 4,
+          "word": "depict   d"
+        },
+        {
+          "id": 5,
+          "word": "impose   e"
+        },
+        {
+          "id": 1,
+          "word": "inferior   a"
+        },
+        {
+          "id": 2,
+          "word": "groundless   b"
+        },
+        {
+          "id": 3,
+          "word": "intrude   c"
+        },
+        {
+          "id": 4,
+          "word": "irrelevant   d"
+        },
+        {
+          "id": 5,
+          "word": "latent   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "build up, put up"
+        },
+        {
+          "key": "b",
+          "def": "deceive, to be disloyal"
+        },
+        {
+          "key": "c",
+          "def": "claim, assert, charge"
+        },
+        {
+          "key": "d",
+          "def": "boost, increase , expand, develop"
+        },
+        {
+          "key": "e",
+          "def": "counting, demography"
+        },
+        {
+          "key": "a",
+          "def": "obtain, get, extract, evoke, draw out"
+        },
+        {
+          "key": "b",
+          "def": "consist of, be compos ed of, be made up of"
+        },
+        {
+          "key": "c",
+          "def": "agree on sth"
+        },
+        {
+          "key": "d",
+          "def": "steal"
+        },
+        {
+          "key": "e",
+          "def": "escape, evade, avoid"
+        },
+        {
+          "key": "a",
+          "def": "show, represent, draw"
+        },
+        {
+          "key": "b",
+          "def": "brave, bold, daring"
+        },
+        {
+          "key": "c",
+          "def": "place on, lay upon"
+        },
+        {
+          "key": "d",
+          "def": "comfort"
+        },
+        {
+          "key": "e",
+          "def": "compose, make up, form"
+        },
+        {
+          "key": "a",
+          "def": "baseless, without basis"
+        },
+        {
+          "key": "b",
+          "def": "impertinent"
+        },
+        {
+          "key": "c",
+          "def": "hidden, concealed"
+        },
+        {
+          "key": "d",
+          "def": "low, subordinate"
+        },
+        {
+          "key": "e",
+          "def": "infringe"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "allege   a"
+        },
+        {
+          "id": 2,
+          "word": "betray   b"
+        },
+        {
+          "id": 3,
+          "word": "boom   c"
+        },
+        {
+          "id": 4,
+          "word": "erect   d"
+        },
+        {
+          "id": 5,
+          "word": "elude   e"
+        },
+        {
+          "id": 1,
+          "word": "embezzle   a"
+        },
+        {
+          "id": 2,
+          "word": "compromise   b"
+        },
+        {
+          "id": 3,
+          "word": "console   c"
+        },
+        {
+          "id": 4,
+          "word": "constitute   d"
+        },
+        {
+          "id": 5,
+          "word": "courageous   e"
+        },
+        {
+          "id": 1,
+          "word": "depict   a"
+        },
+        {
+          "id": 2,
+          "word": "impose   b"
+        },
+        {
+          "id": 3,
+          "word": "inferior   c"
+        },
+        {
+          "id": 4,
+          "word": "groundless   d"
+        },
+        {
+          "id": 5,
+          "word": "latent   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "to be loyal, to be honest, to be frank"
+        },
+        {
+          "key": "b",
+          "def": "eradicate, collapse"
+        },
+        {
+          "key": "c",
+          "def": "escape, evade, avoid"
+        },
+        {
+          "key": "d",
+          "def": "refute, deny, disprove"
+        },
+        {
+          "key": "e",
+          "def": "decrease, abate, subside"
+        },
+        {
+          "key": "a",
+          "def": "coward, timid, fearful"
+        },
+        {
+          "key": "b",
+          "def": "distress, hurt"
+        },
+        {
+          "key": "c",
+          "def": "donate, give away"
+        },
+        {
+          "key": "d",
+          "def": "destroy, collapse"
+        },
+        {
+          "key": "e",
+          "def": "disagree"
+        },
+        {
+          "key": "a",
+          "def": "superior, excellent"
+        },
+        {
+          "key": "b",
+          "def": "well"
+        },
+        {
+          "key": "c",
+          "def": "visible, apparent"
+        },
+        {
+          "key": "d",
+          "def": "remove, lift"
+        },
+        {
+          "key": "e",
+          "def": "hide"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “claim” ve Türkçesi “iddia etmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "elude",
+          "B": "betray",
+          "C": "allege",
+          "D": "erect",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “deceive” ve Türkçesi “ihanet etmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "comprise",
+          "B": "decrease",
+          "C": "embezzle",
+          "D": "eradicate",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Zıt anlamlısı “donate” ve Türkçesi “zimmetine geçirmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "embezzle",
+          "B": "depict",
+          "C": "comfort",
+          "D": "console",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Zıt anlamlısı “destroy” ve Türkçesi “oluşturmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "collapse",
+          "B": "impose",
+          "C": "intrude",
+          "D": "constitute",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Zıt anlamlısı “excellent” ve Türkçesi “aşağı, alt derece” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "groundless",
+          "B": "inferior",
+          "C": "relevant",
+          "D": "superior",
+          "E": "concealed"
+        }
+      }
+    ]
+  }
+}

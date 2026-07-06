@@ -1,0 +1,682 @@
+{
+  "day": 34,
+  "words": [
+    {
+      "word": "STIFF",
+      "type": "adj",
+      "turkish": "Sert, katı",
+      "sentence_en": "This hair spray has made my hair stiff.",
+      "sentence_tr": "Bu sprey saçımı sertleştirdi.",
+      "synonyms": [
+        "Firm",
+        "rigid",
+        "inflexible",
+        "severe"
+      ],
+      "antonyms": [
+        "Flexible"
+      ],
+      "other_forms": "Stiff (n), stiffen (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This hair spray has made my hair ________."
+    },
+    {
+      "word": "INTIMIDATE",
+      "type": "v",
+      "turkish": "Korkutmak, göz dağı vermek, sindirmek",
+      "sentence_en": "They were intimidated into accepting a pay cut by the threat of losing their jobs.",
+      "sentence_tr": "İşlerini kaybetme tehdidiyle korkutularak maaşlarındaki kesintiyi kabul ettiler.",
+      "synonyms": [
+        "Scare",
+        "frighten",
+        "threaten"
+      ],
+      "antonyms": [
+        "Encourage",
+        "relieve"
+      ],
+      "other_forms": "intimidated (adj), intimidation (n), intimidating (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They were ________d into accepting a pay cut by the threat of losing their jobs."
+    },
+    {
+      "word": "INTERMITTENT",
+      "type": "adj",
+      "turkish": "Aralıklı",
+      "sentence_en": "Although she made intermittent movie appearances, she was essentially a stage actress.",
+      "sentence_tr": "Ara ara sinemada görünse de esasında bir sahne sanatçısıydı.",
+      "synonyms": [
+        "Periodic"
+      ],
+      "antonyms": [
+        "Continuous"
+      ],
+      "other_forms": "Intermittently (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Although she made ________ movie appearances, she was essentially a stage actress."
+    },
+    {
+      "word": "PROSPECT",
+      "type": "n",
+      "turkish": "Olasılık, beklenti",
+      "sentence_en": "Is there any prospect of the weather improving?",
+      "sentence_tr": "Havanın düzelme ihtimali var mı?",
+      "synonyms": [
+        "Chance",
+        "likelihood",
+        "hope",
+        "expectation"
+      ],
+      "antonyms": [],
+      "other_forms": "Prospective (adj)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "Is there any ________ of the weather improving?"
+    },
+    {
+      "word": "PHASE",
+      "type": "n",
+      "turkish": "Safha, evre",
+      "sentence_en": "The project is only in the initial phase as yet, but it's quite promising.",
+      "sentence_tr": "Proje henüz şimdilik ilk aşamada, ancak gelecek vadediyor.",
+      "synonyms": [
+        "Stage",
+        "period"
+      ],
+      "antonyms": [],
+      "other_forms": "Phase (v) ---PAGE_240--- 233 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The project is only in the initial ________ as yet, but it's quite promising."
+    },
+    {
+      "word": "GENEROUS",
+      "type": "adj",
+      "turkish": "Cömert",
+      "sentence_en": "It was most generous of you to lend me the money.",
+      "sentence_tr": "Bana ödünç para vermen gayet cömertce bir davranıştı.",
+      "synonyms": [
+        "Open-handed"
+      ],
+      "antonyms": [
+        "Mean",
+        "stingy"
+      ],
+      "other_forms": "Generosity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It was most ________ of you to lend me the money."
+    },
+    {
+      "word": "FASCINATE",
+      "type": "v",
+      "turkish": "Büyülemek",
+      "sentence_en": "Anything to do with aeroplanes and flying fascinates him.",
+      "sentence_tr": "Uçaklarla ve uçuşla ilgili herşey onu büyülüyor.",
+      "synonyms": [
+        "Charm"
+      ],
+      "antonyms": [
+        "Bore"
+      ],
+      "other_forms": "Fascinating (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Anything to do with aeroplanes and flying ________s him."
+    },
+    {
+      "word": "IGNORE",
+      "type": "v",
+      "turkish": "Önemsememek, aldırmamak",
+      "sentence_en": "How can the government ignore the wishes of the majority?",
+      "sentence_tr": "Hükümet çoğunluğun isteklerini nasıl görmezden gelebilir?",
+      "synonyms": [
+        "Disregard",
+        "overlook"
+      ],
+      "antonyms": [
+        "Notice",
+        "recognize"
+      ],
+      "other_forms": "Ignorance (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "How can the government ________ the wishes of the majority?"
+    },
+    {
+      "word": "INFINITE",
+      "type": "adj",
+      "turkish": "Sonsuz, sınırsız, bitmez, tükenmez",
+      "sentence_en": "The universe is theoretically infinite.",
+      "sentence_tr": "Evren teorik olarak sınırsızdır.",
+      "synonyms": [
+        "Unlimited",
+        "endless"
+      ],
+      "antonyms": [
+        "Limited",
+        "restricted"
+      ],
+      "other_forms": "Infinitely adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The universe is theoretically ________."
+    },
+    {
+      "word": "CONCEIVE",
+      "type": "v",
+      "turkish": "Algılamak, düşünmek, tasavvur etmek",
+      "sentence_en": "I just cannot even conceive of that quantity of money together.",
+      "sentence_tr": "O miktarda parayı birarada düşünemiyorum.",
+      "synonyms": [
+        "Imagine",
+        "think of",
+        "visualize",
+        "perceive"
+      ],
+      "antonyms": [],
+      "other_forms": "Conceivable (adj) ---PAGE_241--- 234 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I just cannot even ________ of that quantity of money together."
+    },
+    {
+      "word": "DEFICIENCY",
+      "type": "n",
+      "turkish": "Eksiklik",
+      "sentence_en": "Pregnant women often suffer from iron deficiency.",
+      "sentence_tr": "Hamile kadınlar demir eksikliğinden dolayı sıkıntı yaşarlar.",
+      "synonyms": [
+        "Inadequacy",
+        "insufficiency",
+        "lack"
+      ],
+      "antonyms": [
+        "Abundance",
+        "plenty",
+        "profusion"
+      ],
+      "other_forms": "Deficit (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Pregnant women often suffer from iron ________."
+    },
+    {
+      "word": "DEFINITE",
+      "type": "adj",
+      "turkish": "Kesin, belirgin",
+      "sentence_en": "The date for the meeting is now definite: 5th March.",
+      "sentence_tr": "Artık toplantının tarihi belli: 5 Mart.",
+      "synonyms": [
+        "Specific",
+        "particular",
+        "exact",
+        "precise"
+      ],
+      "antonyms": [
+        "Vague",
+        "ambiguous"
+      ],
+      "other_forms": "Definitive (adj), definitely (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The date for the meeting is now ________: 5th March."
+    },
+    {
+      "word": "CONSIDERABLE",
+      "type": "adj",
+      "turkish": "Büyük, önemli derecede",
+      "sentence_en": "The fire caused considerable damage to the church.",
+      "sentence_tr": "Yangın kilisede ciddi hasara sebep oldu.",
+      "synonyms": [
+        "Significant",
+        "substantial",
+        "great"
+      ],
+      "antonyms": [
+        "Insignificant",
+        "triffling"
+      ],
+      "other_forms": "Considerably (adv)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The fire caused ________ damage to the church."
+    },
+    {
+      "word": "EPIDEMIC",
+      "type": "adj",
+      "turkish": "Salgın",
+      "sentence_en": "Poverty in this country has reached epidemic proportions.",
+      "sentence_tr": "Bu ülkedeki fakirlik salgın boyutlarına ulaştı.",
+      "synonyms": [
+        "Prevalent",
+        "widespread",
+        "rampant"
+      ],
+      "antonyms": [],
+      "other_forms": "Epidemic (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Poverty in this country has reached ________ proportions."
+    },
+    {
+      "word": "EXCLUDE",
+      "type": "v",
+      "turkish": "-ın dışında bırakmak, hariç bırakmak, dışlamak",
+      "sentence_en": "Microbes must, as far as possible, be excluded from the operation theater during an operation.",
+      "sentence_tr": "Ameliyat esnasında, ameliyathane mikroplardan mümkün olduğu kadar arındırılmalıdır.",
+      "synonyms": [
+        "Rule out",
+        "keep out",
+        "leave out"
+      ],
+      "antonyms": [
+        "Include"
+      ],
+      "other_forms": "Exclusion (n) ---PAGE_242--- 235 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Microbes must, as far as possible, be ________d from the operation theater during an operation."
+    },
+    {
+      "word": "EXHORT",
+      "type": "v",
+      "turkish": "Tavsiye etmek, uyarmak",
+      "sentence_en": "The manager of the prison exhorted the prisoners not to riot.",
+      "sentence_tr": "Hapishane müdürü mahkumları kargaşa çıkarmamaları konusunda uyardı.",
+      "synonyms": [
+        "Encourage",
+        "stimulate",
+        "warn"
+      ],
+      "antonyms": [],
+      "other_forms": "Exhortation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The manager of the prison ________ed the prisoners not to riot."
+    },
+    {
+      "word": "DWINDLE",
+      "type": "v",
+      "turkish": "Azalmak",
+      "sentence_en": "The community has dwindled to a tenth of its former size in the last two years.",
+      "sentence_tr": "Toplum, son iki yıl içinde önceki büyüklüğünün onda birine düştü.",
+      "synonyms": [
+        "Decrease",
+        "diminish",
+        "alleviate"
+      ],
+      "antonyms": [
+        "Grow",
+        "increase"
+      ],
+      "other_forms": "Dwindling (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The community has ________d to a tenth of its former size in the last two years."
+    },
+    {
+      "word": "DEVASTATE",
+      "type": "v",
+      "turkish": "Yıkmak, tahrip etmek",
+      "sentence_en": "The villages of thousands of people were devastated.",
+      "sentence_tr": "Binlerce insanın köyleri yıkılmıştı.",
+      "synonyms": [
+        "Destroy",
+        "wreck",
+        "ruin"
+      ],
+      "antonyms": [
+        "Build up",
+        "erect",
+        "restore"
+      ],
+      "other_forms": "Devastating (adj), devastated (adj), devastation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The villages of thousands of people were ________d."
+    },
+    {
+      "word": "SPAN",
+      "type": "n",
+      "turkish": "Aralık, mesafe",
+      "sentence_en": "People in this region have an average life span of seventy years.",
+      "sentence_tr": "Bu bölgenin insanlarının ortalama yetmiş yıllık yaşam süreleri var.",
+      "synonyms": [
+        "Distance",
+        "length"
+      ],
+      "antonyms": [],
+      "other_forms": "Span (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "People in this region have an average life ________ of seventy years."
+    },
+    {
+      "word": "TURMOIL",
+      "type": "n",
+      "turkish": "Karışıklık, kargaşa, telaşe",
+      "sentence_en": "The whole region is in turmoil.",
+      "sentence_tr": "Bütün bölge karışıklık içinde.",
+      "synonyms": [
+        "Disorder",
+        "chaos ---PAGE_243--- 236 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The whole region is in ________."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "stiff   a"
+        },
+        {
+          "id": 2,
+          "word": "intimidate   b"
+        },
+        {
+          "id": 3,
+          "word": "intermittent   c"
+        },
+        {
+          "id": 4,
+          "word": "prospect   d"
+        },
+        {
+          "id": 5,
+          "word": "phase   e"
+        },
+        {
+          "id": 1,
+          "word": "generous   a"
+        },
+        {
+          "id": 2,
+          "word": "fascinate   b"
+        },
+        {
+          "id": 3,
+          "word": "ignore   c"
+        },
+        {
+          "id": 4,
+          "word": "infinite   d"
+        },
+        {
+          "id": 5,
+          "word": "conceive   e"
+        },
+        {
+          "id": 1,
+          "word": "deficiency   a"
+        },
+        {
+          "id": 2,
+          "word": "definite   b"
+        },
+        {
+          "id": 3,
+          "word": "considerable   c"
+        },
+        {
+          "id": 4,
+          "word": "epidemic   d"
+        },
+        {
+          "id": 5,
+          "word": "exclude   e"
+        },
+        {
+          "id": 1,
+          "word": "exhort   a"
+        },
+        {
+          "id": 2,
+          "word": "dwindle   b"
+        },
+        {
+          "id": 3,
+          "word": "devastate   c"
+        },
+        {
+          "id": 4,
+          "word": "span   d"
+        },
+        {
+          "id": 5,
+          "word": "turmoil   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "periodic"
+        },
+        {
+          "key": "b",
+          "def": "chance, likelihood, hope, expectation"
+        },
+        {
+          "key": "c",
+          "def": "stage, period"
+        },
+        {
+          "key": "d",
+          "def": "scare, frighten, threaten"
+        },
+        {
+          "key": "e",
+          "def": "firm, rigid, inflexible, severe"
+        },
+        {
+          "key": "a",
+          "def": "imagine, think of, v isualize, perceive"
+        },
+        {
+          "key": "b",
+          "def": "disregard, overlook"
+        },
+        {
+          "key": "c",
+          "def": "open"
+        },
+        {
+          "key": "d",
+          "def": "unlimited, endless"
+        },
+        {
+          "key": "e",
+          "def": "charm"
+        },
+        {
+          "key": "a",
+          "def": "specific, particular, exact, precise"
+        },
+        {
+          "key": "b",
+          "def": "prevalent, widespread, rampant"
+        },
+        {
+          "key": "c",
+          "def": "rule out, keep out, leave out"
+        },
+        {
+          "key": "d",
+          "def": "inadequacy, insufficiency, lack"
+        },
+        {
+          "key": "e",
+          "def": "significant, sub stantial, great"
+        },
+        {
+          "key": "a",
+          "def": "distance, length"
+        },
+        {
+          "key": "b",
+          "def": "destroy, wreck, ruin"
+        },
+        {
+          "key": "c",
+          "def": "disorder, chaos"
+        },
+        {
+          "key": "d",
+          "def": "encourage, sti mulate, warn"
+        },
+        {
+          "key": "e",
+          "def": "decrease, diminish, alleviate"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "stiff   a"
+        },
+        {
+          "id": 2,
+          "word": "intimidate   b"
+        },
+        {
+          "id": 3,
+          "word": "intermittent   c"
+        },
+        {
+          "id": 4,
+          "word": "generous   d"
+        },
+        {
+          "id": 1,
+          "word": "fascinate   a"
+        },
+        {
+          "id": 2,
+          "word": "ignore   b"
+        },
+        {
+          "id": 3,
+          "word": "infinite   c"
+        },
+        {
+          "id": 4,
+          "word": "deficiency   d"
+        },
+        {
+          "id": 1,
+          "word": "definite   a"
+        },
+        {
+          "id": 2,
+          "word": "considerable   b"
+        },
+        {
+          "id": 3,
+          "word": "dwindle   c"
+        },
+        {
+          "id": 4,
+          "word": "devastate   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "mean, stingy"
+        },
+        {
+          "key": "b",
+          "def": "continuous"
+        },
+        {
+          "key": "c",
+          "def": "encourage, relieve"
+        },
+        {
+          "key": "d",
+          "def": "flexible"
+        },
+        {
+          "key": "a",
+          "def": "limited, restricted"
+        },
+        {
+          "key": "b",
+          "def": "abundance, plenty, profusion"
+        },
+        {
+          "key": "c",
+          "def": "bore"
+        },
+        {
+          "key": "d",
+          "def": "notice, recognize"
+        },
+        {
+          "key": "a",
+          "def": "insignificant, triffling"
+        },
+        {
+          "key": "b",
+          "def": "vague, ambiguous"
+        },
+        {
+          "key": "c",
+          "def": "build up, erect, restore"
+        },
+        {
+          "key": "d",
+          "def": "grow, increase"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “scare” ve Türkçesi “korkutmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "recognize",
+          "B": "conceive",
+          "C": "discourage",
+          "D": "intimidate",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Zıt anlamlısı “continuous” ve Türkçesi “aralıklı” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "rigid",
+          "B": "flexible",
+          "C": "intermittent",
+          "D": "stingy",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “likelihood” ve Türkçesi “olasılık, beklenti” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "phase",
+          "B": "exclusion",
+          "C": "abundance",
+          "D": "ignorance",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “disregard” ve Türkçesi “önemsememek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "recognize",
+          "B": "ignore",
+          "C": "charm",
+          "D": "exclude",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “substantial” ve Türkçesi “önemli derecede, çok” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "considerable",
+          "B": "prevalent",
+          "C": "insignificant",
+          "D": "dwindling",
+          "E": "precise"
+        }
+      }
+    ]
+  }
+}

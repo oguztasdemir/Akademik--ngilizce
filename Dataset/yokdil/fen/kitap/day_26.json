@@ -1,0 +1,643 @@
+{
+  "day": 26,
+  "words": [
+    {
+      "word": "PROLIFIC",
+      "type": "adj",
+      "turkish": "Verimli, üretken, bereketli",
+      "sentence_en": "He was probably the most prolific songwriter of his generation.",
+      "sentence_tr": "Belki de kendi jenerasyonunun en üretken şarkı yazarıydı.",
+      "synonyms": [
+        "Productive",
+        "fertile",
+        "fruitful"
+      ],
+      "antonyms": [
+        "Futile"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He was probably the most ________ songwriter of his generation."
+    },
+    {
+      "word": "PRIVILEGED",
+      "type": "adj",
+      "turkish": "Ayrıcalıklı, imtiyazlı",
+      "sentence_en": "I am privileged to work with the pioneers of silicon technology.",
+      "sentence_tr": "Silikon teknolojisinin öncüleri ile çalışmak benim için bir ayrıcalık.",
+      "synonyms": [
+        "Special"
+      ],
+      "antonyms": [],
+      "other_forms": "Privilege (n), privilege (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I am ________ to work with the pioneers of silicon technology."
+    },
+    {
+      "word": "HAMPER",
+      "type": "v",
+      "turkish": "Engellemek",
+      "sentence_en": "Fierce storms have been hampering rescue efforts.",
+      "sentence_tr": "Şiddetli fırtınalar kurtarma operasyonlarını engelliyor.",
+      "synonyms": [
+        "Prevent",
+        "hinder",
+        "impede"
+      ],
+      "antonyms": [
+        "Facilitate"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Fierce storms have been ________ing rescue efforts."
+    },
+    {
+      "word": "GRIEVANCE",
+      "type": "n",
+      "turkish": "Yakınma, şikayet",
+      "sentence_en": "A special committee has been appointed to handle prisoners' grievances.",
+      "sentence_tr": "Mahkumların şikayetleri ile uğraşmak için özel bir komite atandı.",
+      "synonyms": [
+        "Complaint"
+      ],
+      "antonyms": [
+        "Benefit",
+        "privilege"
+      ],
+      "other_forms": "Grief (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A special committee has been appointed to handle prisoners' ________s."
+    },
+    {
+      "word": "HAZARD",
+      "type": "n",
+      "turkish": "Tehlike",
+      "sentence_en": "The busy traffic entrance was a hazard to pedestrians.",
+      "sentence_tr": "Yoğun trafik girişi yayalar için tehlike arz ediyordu.",
+      "synonyms": [
+        "Danger"
+      ],
+      "antonyms": [],
+      "other_forms": "Hazardous (adj) ---PAGE_184--- 177 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The busy traffic entrance was a ________ to pedestrians."
+    },
+    {
+      "word": "FLUCTUATE",
+      "type": "v",
+      "turkish": "Dalgalanmak, değişiklik göstermek",
+      "sentence_en": "Vegetable prices fluctuate according to the season.",
+      "sentence_tr": "Sebze fiyatları mevsime göre değişiyor.",
+      "synonyms": [
+        "Go up and down",
+        "wave"
+      ],
+      "antonyms": [
+        "Persist",
+        "stand fast",
+        "stand still"
+      ],
+      "other_forms": "Fluctuation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Vegetable prices ________ according to the season."
+    },
+    {
+      "word": "REIGN",
+      "type": "v",
+      "turkish": "Tahtta olmak, hüküm sürmek",
+      "sentence_en": "Queen Victoria reigned over Britain from 1837 to 1901.",
+      "sentence_tr": "Kraliçe Viktorya 1837’den 1901’e kadar İngiltere’yi yönetti.",
+      "synonyms": [
+        "Rule",
+        "power",
+        "govern"
+      ],
+      "antonyms": [],
+      "other_forms": "Reigning (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Queen Victoria ________ed over Britain from 1837 to 1901."
+    },
+    {
+      "word": "OFFEND",
+      "type": "v",
+      "turkish": "Gücendirmek",
+      "sentence_en": "You shouldn’t have shouted at her. You offended her.",
+      "sentence_tr": "Ona bağırmamalıydın, onu gücendirdin.",
+      "synonyms": [
+        "Annoy"
+      ],
+      "antonyms": [
+        "Cheer smb. up"
+      ],
+      "other_forms": "Offensive (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "You shouldn’t have shouted at her. You ________ed her."
+    },
+    {
+      "word": "OPPRESS",
+      "type": "v",
+      "turkish": "Eziyet etmek, ezmek, zulmetmek",
+      "sentence_en": "For years now, the people have been oppressed by a merciless dictator.",
+      "sentence_tr": "Yıllardır, insanlar acımasız bir diktatörün baskısı altındalar.",
+      "synonyms": [
+        "Suppress",
+        "trouble"
+      ],
+      "antonyms": [
+        "Relax",
+        "comfort"
+      ],
+      "other_forms": "Oppression (n), oppressed (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "For years now, the people have been ________ed by a merciless dictator."
+    },
+    {
+      "word": "CULPRIT",
+      "type": "n",
+      "turkish": "Suçlu, sebep",
+      "sentence_en": "Police hope the public will help them find the culprits.",
+      "sentence_tr": "Polis, halkın suçluları bulmak için kendilerine yardım edeceğini umuyor.",
+      "synonyms": [
+        "Guilty",
+        "criminal",
+        "cause",
+        "reason"
+      ],
+      "antonyms": [
+        "Innocent ---PAGE_185--- 178 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Police hope the public will help them find the ________s."
+    },
+    {
+      "word": "ESTEEM",
+      "type": "n",
+      "turkish": "Saygı",
+      "sentence_en": "There has been a drop in public esteem for teachers.",
+      "sentence_tr": "Öğretmenlere karşı halkın saygısında bir azalma oldu.",
+      "synonyms": [
+        "Respect",
+        "regard"
+      ],
+      "antonyms": [
+        "Disrespect"
+      ],
+      "other_forms": "Esteem (v) EXPOSE to (v) Türkçe Karşılığı : Maruz bırakmak Örnek Cümle : It is feared that people living near the power station may have been exposed to radiation. Çevirisi : Nükleer santralin yakınında yaşayan insanların radyasyona maruz kalmış olabileceğinden korkuluyor. Eş ya da Yakın Anlamlılar : Subject to, make liable Diğer Halleri : Exposure (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There has been a drop in public ________ for teachers."
+    },
+    {
+      "word": "TEMPORARY",
+      "type": "adj",
+      "turkish": "Geçici",
+      "sentence_en": "The ceasefire will only provide a temporary solution to the crisis.",
+      "sentence_tr": "Ateşkes, krize sadece geçici bir çözüm sağlayacaktır.",
+      "synonyms": [
+        "Provisional",
+        "interim"
+      ],
+      "antonyms": [
+        "Constant",
+        "permanent"
+      ],
+      "other_forms": "Temporarily (adv)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The ceasefire will only provide a ________ solution to the crisis."
+    },
+    {
+      "word": "WANDER",
+      "type": "v",
+      "turkish": "Gezmek, dolaşmak",
+      "sentence_en": "We spent the morning wandering around the old part of the city.",
+      "sentence_tr": "Sabahı, şehrin eski kısımlarını dolaşarak geçirdik.",
+      "synonyms": [
+        "Walk about",
+        "go aimlessly",
+        "roam"
+      ],
+      "antonyms": [
+        "Remain",
+        "stay"
+      ],
+      "other_forms": "Wander (n), wanderer (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We spent the morning ________ing around the old part of the city."
+    },
+    {
+      "word": "VACCINATE",
+      "type": "v",
+      "turkish": "Aşı yapmak",
+      "sentence_en": "Our children have been vaccinated for measles and other childhood diseases.",
+      "sentence_tr": "Çocuklarımız kızamık ve diğer çocuk hastalıklarına karşı aşı oldular.",
+      "synonyms": [
+        "Inoculate"
+      ],
+      "antonyms": [],
+      "other_forms": "Vaccine (n), vaccination (n) ---PAGE_186--- 179 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr WOULD-BE (adj) Türkçe Karşılığı : Olası, müstakbel, sözde Örnek Cümle : Passengers and crew foiled would-be Russian hijacker. Çevirisi : Yolcular ve mürettebat sözde Rus hava korsanını engelledi. Eş ya da Yakın Anlamlılar : Most likely, hopeful",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Our children have been ________d for measles and other childhood diseases."
+    },
+    {
+      "word": "SACRED",
+      "type": "adj",
+      "turkish": "Kutsal",
+      "sentence_en": "People worship in some sacred relics/temples.",
+      "sentence_tr": "İnsanlar bazı kutsal tapınaklarda ibadet eder.",
+      "synonyms": [
+        "Holy"
+      ],
+      "antonyms": [
+        "Secular"
+      ],
+      "other_forms": "Sacredness (n) ATTRIBUTE to (v) Türkçe Karşılığı : Atfetmek, -e bağlamak Örnek Cümle : The doctors have attributed the cause of the illness to an unknown virus. Çevirisi : Doktorlar hastalığın nedenini bilinmeyen bir virüse bağladı. Eş ya da Yakın Anlamlılar : Ascribe, assign, refer, associate, connect Zıt Anlamlılar : Disconnect, seperate Diğer Halleri : Attribute (n), Attribution (n), attributable (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "People worship in some ________ relics/temples."
+    },
+    {
+      "word": "AUGMENT",
+      "type": "v",
+      "turkish": "Artırmak",
+      "sentence_en": "He had to find an extra work to augment his income.",
+      "sentence_tr": "Gelirini artırmak için ek bir iş bulmak zorunda kaldı.",
+      "synonyms": [
+        "Increase",
+        "launch",
+        "rise",
+        "go up"
+      ],
+      "antonyms": [
+        "Decrease",
+        "fall"
+      ],
+      "other_forms": "Augmentation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He had to find an extra work to ________ his income."
+    },
+    {
+      "word": "ABUSE",
+      "type": "v",
+      "turkish": "Kötüye kullanma, suistimal etme, zarar verme",
+      "sentence_en": "She is continually abusing her authority.",
+      "sentence_tr": "Yetkisini sürekli kötüye kullanıyor.",
+      "synonyms": [
+        "Misuse",
+        "maltreat",
+        "exploit"
+      ],
+      "antonyms": [
+        "Protect",
+        "cherish",
+        "shield",
+        "care for",
+        "look after"
+      ],
+      "other_forms": "Abuser (n) ---PAGE_187--- 180 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She is continually abusing her authority. (________)"
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "prolific   a"
+        },
+        {
+          "id": 2,
+          "word": "privileged   b"
+        },
+        {
+          "id": 3,
+          "word": "hamper   c"
+        },
+        {
+          "id": 4,
+          "word": "grievance   d"
+        },
+        {
+          "id": 5,
+          "word": "hazard   e"
+        },
+        {
+          "id": 1,
+          "word": "fluctuate   a"
+        },
+        {
+          "id": 2,
+          "word": "reign   b"
+        },
+        {
+          "id": 3,
+          "word": "offend   c"
+        },
+        {
+          "id": 4,
+          "word": "oppress   d"
+        },
+        {
+          "id": 5,
+          "word": "culprit   e"
+        },
+        {
+          "id": 1,
+          "word": "esteem   a"
+        },
+        {
+          "id": 2,
+          "word": "expose to   b"
+        },
+        {
+          "id": 3,
+          "word": "temporary   c"
+        },
+        {
+          "id": 4,
+          "word": "wander   d"
+        },
+        {
+          "id": 5,
+          "word": "vaccinate   e"
+        },
+        {
+          "id": 1,
+          "word": "would"
+        },
+        {
+          "id": 2,
+          "word": "sacred   b"
+        },
+        {
+          "id": 3,
+          "word": "attribute to   c"
+        },
+        {
+          "id": 4,
+          "word": "augment   d"
+        },
+        {
+          "id": 5,
+          "word": "abuse   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "prevent, hinder, impede"
+        },
+        {
+          "key": "b",
+          "def": "complaint"
+        },
+        {
+          "key": "c",
+          "def": "danger"
+        },
+        {
+          "key": "d",
+          "def": "special"
+        },
+        {
+          "key": "e",
+          "def": "productive , fertile, fruitful"
+        },
+        {
+          "key": "a",
+          "def": "guilty, criminal, cause, reason"
+        },
+        {
+          "key": "b",
+          "def": "annoy"
+        },
+        {
+          "key": "c",
+          "def": "go up and down, wave"
+        },
+        {
+          "key": "d",
+          "def": "suppress, trouble"
+        },
+        {
+          "key": "e",
+          "def": "rule, power, govern"
+        },
+        {
+          "key": "a",
+          "def": "walk about, go aimlessly, roam"
+        },
+        {
+          "key": "b",
+          "def": "provisional, interim"
+        },
+        {
+          "key": "c",
+          "def": "inoculate"
+        },
+        {
+          "key": "d",
+          "def": "respect, regard"
+        },
+        {
+          "key": "e",
+          "def": "subject to, make liable"
+        },
+        {
+          "key": "a",
+          "def": "holy"
+        },
+        {
+          "key": "b",
+          "def": "increase, launch, rise, go up"
+        },
+        {
+          "key": "c",
+          "def": "misuse, maltreat, exploit"
+        },
+        {
+          "key": "d",
+          "def": "most likely, hopeful"
+        },
+        {
+          "key": "e",
+          "def": "ascribe, assign, refer, associate, connect"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "prolific   a"
+        },
+        {
+          "id": 2,
+          "word": "hamper   b"
+        },
+        {
+          "id": 3,
+          "word": "grievance   c"
+        },
+        {
+          "id": 4,
+          "word": "fluctuate   d"
+        },
+        {
+          "id": 1,
+          "word": "offend   a"
+        },
+        {
+          "id": 2,
+          "word": "oppress   b"
+        },
+        {
+          "id": 3,
+          "word": "culprit   c"
+        },
+        {
+          "id": 4,
+          "word": "esteem   d"
+        },
+        {
+          "id": 5,
+          "word": "temporary   e"
+        },
+        {
+          "id": 1,
+          "word": "wander   a"
+        },
+        {
+          "id": 2,
+          "word": "sacred   b"
+        },
+        {
+          "id": 3,
+          "word": "attribute to   c"
+        },
+        {
+          "id": 4,
+          "word": "augment   d"
+        },
+        {
+          "id": 5,
+          "word": "abuse   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "persist, stand fast, stand still"
+        },
+        {
+          "key": "b",
+          "def": "benefit, privilege"
+        },
+        {
+          "key": "c",
+          "def": "facilitate"
+        },
+        {
+          "key": "d",
+          "def": "futile"
+        },
+        {
+          "key": "a",
+          "def": "innocent"
+        },
+        {
+          "key": "b",
+          "def": "disrespect"
+        },
+        {
+          "key": "c",
+          "def": "constant, permanent"
+        },
+        {
+          "key": "d",
+          "def": "relax, comfort"
+        },
+        {
+          "key": "e",
+          "def": "cheer smb"
+        },
+        {
+          "key": "a",
+          "def": "secular"
+        },
+        {
+          "key": "b",
+          "def": "decrease, fall"
+        },
+        {
+          "key": "c",
+          "def": "protect, cherish, shiel d, care for, look after"
+        },
+        {
+          "key": "d",
+          "def": "remain, stay"
+        },
+        {
+          "key": "e",
+          "def": "disconnect, seperate"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “productive” ve Türkçesi “üretken, verimli” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "privileged",
+          "B": "reigning",
+          "C": "prolific",
+          "D": "offensive",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “hinder” ve Türkçesi “engellemek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "fluctuate",
+          "B": "persist",
+          "C": "rule",
+          "D": "offend",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “rule” ve Türkçesi “tahtta olmak, yönetmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "reign",
+          "B": "oppress",
+          "C": "inoculate",
+          "D": "wander",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Genellikle “to” edatı ile kullanılan, eş anlamlısı “ascribe” ve Türkçesi “-e bağlamak, atfetmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "expose",
+          "B": "subject",
+          "C": "augment",
+          "D": "attribute",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “exploit” ve Türkçesi “suistimal etme” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "shield",
+          "B": "abuse",
+          "C": "launch",
+          "D": "assign",
+          "E": "remain"
+        }
+      }
+    ]
+  }
+}

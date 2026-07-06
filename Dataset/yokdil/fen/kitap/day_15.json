@@ -1,0 +1,686 @@
+{
+  "day": 15,
+  "words": [
+    {
+      "word": "ADEQUATE",
+      "type": "adj",
+      "turkish": "Yeterli",
+      "sentence_en": "I didn't have adequate time to prepare.",
+      "sentence_tr": "Hazırlanmak için yeteri kadar vaktim olmadı.",
+      "synonyms": [
+        "Competent",
+        "sufficient",
+        "capable",
+        "satisfactory",
+        "enough"
+      ],
+      "antonyms": [
+        "Inferior",
+        "useless",
+        "incompetent",
+        "insufficient"
+      ],
+      "other_forms": "Adequately (adv), adequacy (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I didn't have ________ time to prepare."
+    },
+    {
+      "word": "THRIVE",
+      "type": "v",
+      "turkish": "Gelişmek, büyümek",
+      "sentence_en": "His business thrived in the years before the war.",
+      "sentence_tr": "İşi savaştan önceki yıllarda büyüdü.",
+      "synonyms": [
+        "Prosper",
+        "flourish"
+      ],
+      "antonyms": [
+        "Fail",
+        "decline"
+      ],
+      "other_forms": "Thriving (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "His business ________d in the years before the war."
+    },
+    {
+      "word": "CONTRADICT",
+      "type": "v",
+      "turkish": "Aksini söylemek, çelişmek",
+      "sentence_en": "He kept contradicting himself when we were arguing.",
+      "sentence_tr": "Tartışırken kendisiyle sürekli çelişti.",
+      "synonyms": [
+        "Counter",
+        "oppose"
+      ],
+      "antonyms": [
+        "Accept"
+      ],
+      "other_forms": "Contradiction (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He kept ________ing himself when we were arguing."
+    },
+    {
+      "word": "DEFER",
+      "type": "v",
+      "turkish": "Ertelemek",
+      "sentence_en": "Can we defer making a decision until next week?",
+      "sentence_tr": "Karar verme sürecini gelecek haftaya kadar erteleyebilir miyiz?",
+      "synonyms": [
+        "Put off",
+        "postpone",
+        "delay"
+      ],
+      "antonyms": [
+        "Hurry",
+        "hasten",
+        "quicken"
+      ],
+      "other_forms": "Deferment (n) ---PAGE_107--- 100 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Can we ________ making a decision until next week?"
+    },
+    {
+      "word": "DECEIT",
+      "type": "n",
+      "turkish": "Aldatma, dolandırma",
+      "sentence_en": "When the newspapers published the full story, all his earlier deceits were revealed.",
+      "sentence_tr": "Gazeteler hikayenin tümünü yayınladıklarında onun önceki tüm kirli çamaşırları ortaya çıktı.",
+      "synonyms": [
+        "Deception",
+        "fraud",
+        "cheating"
+      ],
+      "antonyms": [
+        "Honesty",
+        "sincerity"
+      ],
+      "other_forms": "Deceitful (adj), deceive (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "When the newspapers published the full story, all his earlier ________s were revealed."
+    },
+    {
+      "word": "DELAY",
+      "type": "v",
+      "turkish": "Gecik(tir)mek",
+      "sentence_en": "My plane was delayed for an hour.",
+      "sentence_tr": "Uçağım 1 saat rötar yaptı.",
+      "synonyms": [
+        "Defer",
+        "put off",
+        "postpone"
+      ],
+      "antonyms": [
+        "Advance",
+        "hasten"
+      ],
+      "other_forms": "Delay (n), delayed (adj)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "My plane was ________ed for an hour."
+    },
+    {
+      "word": "COMPULSION",
+      "type": "n",
+      "turkish": "Zorlama, baskı",
+      "sentence_en": "He was under compulsion when he was forced to talk.",
+      "sentence_tr": "Konuşmaya zorlandığında baskı altındaydı.",
+      "synonyms": [
+        "Force",
+        "urge"
+      ],
+      "antonyms": [
+        "be not related",
+        "ignore"
+      ],
+      "other_forms": "Compulse (v) CONCERN with (v) Türkçe Karşılığı : İlgilenmek, ilgili olmak Örnek Cümle : You had better not concern yourself with my problems. Çevirisi : Benim problemlerimle ilgilenmesen iyi olur. Eş ya da Yakın Anlamlılar : Be related to/with, be interested in Zıt Anlamlılar : be not related, ignore Diğer Halleri : Concerned (adj), concerning (prep)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He was under ________ when he was forced to talk."
+    },
+    {
+      "word": "CONCESSION",
+      "type": "n",
+      "turkish": "İmtiyaz, hak, ödün, taviz",
+      "sentence_en": "The government has granted concessions to three private telephone companies.",
+      "sentence_tr": "Hükümet üç telefon şirketine imtiyaz tanıdı.",
+      "synonyms": [
+        "Compromise",
+        "giving in"
+      ],
+      "antonyms": [],
+      "other_forms": "Concessional (adj), concessionary (adj) ---PAGE_108--- 101 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The government has granted ________s to three private telephone companies."
+    },
+    {
+      "word": "EXTERMINATE",
+      "type": "v",
+      "turkish": "Yok etmek",
+      "sentence_en": "Millions of Jewish people were exterminated in concentration camps in the Second World War.",
+      "sentence_tr": "Milyonlarca Yahudi İkinci Dünya Savaşında toplama kamplarında yok edildi.",
+      "synonyms": [
+        "Destroy",
+        "eradicate"
+      ],
+      "antonyms": [
+        "Establish",
+        "found",
+        "invent"
+      ],
+      "other_forms": "Extermination (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Millions of Jewish people were ________d in concentration camps in the Second World War."
+    },
+    {
+      "word": "EVASIVE",
+      "type": "adj",
+      "turkish": "Kaçamaklı, kaçamak hareket",
+      "sentence_en": "By the time the pilot realised how close the plane was to the building, it was too late to take evasive action.",
+      "sentence_tr": "Pilot uçağın binaya ne kadar yakın olduğunu farkettiğinde kazayı önleyecek manevrayı yapmak için çok geçti.",
+      "synonyms": [
+        "Elusive"
+      ],
+      "antonyms": [
+        "Straightforward"
+      ],
+      "other_forms": "Evade (v), evasion (n), evasively (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "By the time the pilot realised how close the plane was to the building, it was too late to take ________ action."
+    },
+    {
+      "word": "EMINENT",
+      "type": "adj",
+      "turkish": "Seçkin, ünlü, bilinen, saygın",
+      "sentence_en": "He is thought to be an eminent historian.",
+      "sentence_tr": "Seçkin bir tarihçi olduğu düşünülüyor.",
+      "synonyms": [
+        "Famous",
+        "well-known",
+        "reputed",
+        "prominent"
+      ],
+      "antonyms": [
+        "Notorious",
+        "mediocre"
+      ],
+      "other_forms": "Eminence (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He is thought to be an ________ historian."
+    },
+    {
+      "word": "INQUISITIVE",
+      "type": "adj",
+      "turkish": "Meraklı",
+      "sentence_en": "She could see inquisitive faces looking out from the windows next door.",
+      "sentence_tr": "Yan daireden dışarı bakan meraklı yüzleri görebiliyordu.",
+      "synonyms": [
+        "Curious",
+        "inquiring"
+      ],
+      "antonyms": [
+        "Uninterested"
+      ],
+      "other_forms": "Inquire (v), Inquisitively (adv), inquisitiveness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She could see ________ faces looking out from the windows next door."
+    },
+    {
+      "word": "FATIGUE",
+      "type": "n",
+      "turkish": "Aşırı yorgunluk, bitkinlik, aşınma",
+      "sentence_en": "She was suffering from fatigue and a stress-related illness.",
+      "sentence_tr": "O, yorgunluk ve stres kaynaklı bir hastalıktan muzdaripti.",
+      "synonyms": [
+        "Extreme tiredness",
+        "exhaustion"
+      ],
+      "antonyms": [
+        "Freshness",
+        "vigour"
+      ],
+      "other_forms": "Fatigue (v), fatigued (adj) ---PAGE_109--- 102 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "She was suffering from ________ and a stress-related illness."
+    },
+    {
+      "word": "FETCH",
+      "type": "v",
+      "turkish": "Alıp getirmek, kapmak",
+      "sentence_en": "I have to fetch my mother from the station.",
+      "sentence_tr": "Gidip, annemi istasyondan almak zorundayım.",
+      "synonyms": [
+        "Go and bring"
+      ],
+      "antonyms": [
+        "Put away",
+        "throw away"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I have to ________ my mother from the station."
+    },
+    {
+      "word": "SPILL",
+      "type": "v",
+      "turkish": "Dökmek, devirmek",
+      "sentence_en": "I spilt coffee on my silk shirt.",
+      "sentence_tr": "İpek gömleğime kahve döktüm.",
+      "synonyms": [
+        "Leak",
+        "overturn",
+        "splash about"
+      ],
+      "antonyms": [],
+      "other_forms": "Spill (n), spillage (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I spilt coffee on my silk shirt. (________)"
+    },
+    {
+      "word": "MANUFACTURE",
+      "type": "v",
+      "turkish": "Üretmek, imal etmek",
+      "sentence_en": "He works for a company that manufactures car parts.",
+      "sentence_tr": "Araba parçaları üreten bir firmada çalışıyor.",
+      "synonyms": [
+        "Make",
+        "produce",
+        "generate"
+      ],
+      "antonyms": [],
+      "other_forms": "Manufacture (n), manufacturer",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He works for a company that ________s car parts."
+    },
+    {
+      "word": "OPTION",
+      "type": "n",
+      "turkish": "Seçenek, tercih",
+      "sentence_en": "The best option would be to cancel the trip altogether.",
+      "sentence_tr": "En iyi seçenek turu tamamıyla iptal etmek.",
+      "synonyms": [
+        "Choice",
+        "alternative",
+        "preference"
+      ],
+      "antonyms": [],
+      "other_forms": "Optional (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The best ________ would be to cancel the trip altogether."
+    },
+    {
+      "word": "NECESSARY",
+      "type": "adj",
+      "turkish": "Gerekli",
+      "sentence_en": "He lacks the necessary skills for the job.",
+      "sentence_tr": "İş için gerekli becerilerden yoksun.",
+      "synonyms": [
+        "Essential"
+      ],
+      "antonyms": [
+        "Unnecessary"
+      ],
+      "other_forms": "Necessitate (v), necessarily (adv)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "He lacks the ________ skills for the job."
+    },
+    {
+      "word": "MAGNIFICENT",
+      "type": "adj",
+      "turkish": "Büyüleyici,görkemli, ihtişamlı, büyük, fevkalade",
+      "sentence_en": "They live in a magnificent Tudor house.",
+      "sentence_tr": "Büyüleyici bir Tudor evinde yaşıyorlar.",
+      "synonyms": [
+        "Splendid",
+        "impressive"
+      ],
+      "antonyms": [
+        "Ordinary",
+        "tiny"
+      ],
+      "other_forms": "Magnificently (adv), magnificence (n) ---PAGE_110--- 103 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They live in a ________ Tudor house."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "adequate   a"
+        },
+        {
+          "id": 2,
+          "word": "thrive   b"
+        },
+        {
+          "id": 3,
+          "word": "contradict   c"
+        },
+        {
+          "id": 4,
+          "word": "defer   d"
+        },
+        {
+          "id": 5,
+          "word": "deceit   e"
+        },
+        {
+          "id": 1,
+          "word": "delay   a"
+        },
+        {
+          "id": 2,
+          "word": "compulsion   b"
+        },
+        {
+          "id": 3,
+          "word": "concerned with   c"
+        },
+        {
+          "id": 4,
+          "word": "concession   d"
+        },
+        {
+          "id": 5,
+          "word": "exterminate   e"
+        },
+        {
+          "id": 1,
+          "word": "evasive   a"
+        },
+        {
+          "id": 2,
+          "word": "eminent   b"
+        },
+        {
+          "id": 3,
+          "word": "inquisitive   c"
+        },
+        {
+          "id": 4,
+          "word": "fatigue   d"
+        },
+        {
+          "id": 5,
+          "word": "fetch   e"
+        },
+        {
+          "id": 1,
+          "word": "spill   a"
+        },
+        {
+          "id": 2,
+          "word": "manufacture   b"
+        },
+        {
+          "id": 3,
+          "word": "option   c"
+        },
+        {
+          "id": 4,
+          "word": "necessary   d"
+        },
+        {
+          "id": 5,
+          "word": "magnificent   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "prosper, flourish"
+        },
+        {
+          "key": "b",
+          "def": "put off, postpone, delay"
+        },
+        {
+          "key": "c",
+          "def": "deception, fraud, cheating"
+        },
+        {
+          "key": "d",
+          "def": "competent, sufficient, enough"
+        },
+        {
+          "key": "e",
+          "def": "counter, oppose"
+        },
+        {
+          "key": "a",
+          "def": "be related to"
+        },
+        {
+          "key": "b",
+          "def": "compromise, giving in"
+        },
+        {
+          "key": "c",
+          "def": "destroy, eradicate"
+        },
+        {
+          "key": "d",
+          "def": "force, urge"
+        },
+        {
+          "key": "e",
+          "def": "defer, put off, postpone"
+        },
+        {
+          "key": "a",
+          "def": "extreme tiredness, exhaustion"
+        },
+        {
+          "key": "b",
+          "def": "curious, inquiring"
+        },
+        {
+          "key": "c",
+          "def": "go and bring"
+        },
+        {
+          "key": "d",
+          "def": "elusive"
+        },
+        {
+          "key": "e",
+          "def": "famous, well"
+        },
+        {
+          "key": "a",
+          "def": "splendid, impressive"
+        },
+        {
+          "key": "b",
+          "def": "choice, alterna tive, preference"
+        },
+        {
+          "key": "c",
+          "def": "leak, overturn, splash about"
+        },
+        {
+          "key": "d",
+          "def": "essential"
+        },
+        {
+          "key": "e",
+          "def": "make, produce, generate"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "adequate   a"
+        },
+        {
+          "id": 2,
+          "word": "thrive   b"
+        },
+        {
+          "id": 3,
+          "word": "contradict   c"
+        },
+        {
+          "id": 4,
+          "word": "defer   d"
+        },
+        {
+          "id": 5,
+          "word": "deceit   e"
+        },
+        {
+          "id": 1,
+          "word": "delay   a"
+        },
+        {
+          "id": 2,
+          "word": "concerned with   b"
+        },
+        {
+          "id": 3,
+          "word": "exterminate   c"
+        },
+        {
+          "id": 4,
+          "word": "evasive   d"
+        },
+        {
+          "id": 5,
+          "word": "eminent   e"
+        },
+        {
+          "id": 1,
+          "word": "inquisitive   a"
+        },
+        {
+          "id": 2,
+          "word": "fatigue   b"
+        },
+        {
+          "id": 3,
+          "word": "fetch   c"
+        },
+        {
+          "id": 4,
+          "word": "magnificent   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "accept"
+        },
+        {
+          "key": "b",
+          "def": "hurry, hasten, quicken"
+        },
+        {
+          "key": "c",
+          "def": "honesty, sincerity"
+        },
+        {
+          "key": "d",
+          "def": "fail, decline"
+        },
+        {
+          "key": "e",
+          "def": "inferior, useless, i ncompetent, insufficient"
+        },
+        {
+          "key": "a",
+          "def": "straightforward"
+        },
+        {
+          "key": "b",
+          "def": "establish, found, invent"
+        },
+        {
+          "key": "c",
+          "def": "notorious, mediocre"
+        },
+        {
+          "key": "d",
+          "def": "advance, hasten"
+        },
+        {
+          "key": "e",
+          "def": "be not related, ignore"
+        },
+        {
+          "key": "a",
+          "def": "freshness, vigour"
+        },
+        {
+          "key": "b",
+          "def": "uninterested"
+        },
+        {
+          "key": "c",
+          "def": "ordinary, tiny"
+        },
+        {
+          "key": "d",
+          "def": "put away, throw away"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “prosper” ve Türkçesi “büyümek, zenginleşmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "contradict",
+          "B": "defer",
+          "C": "compulse",
+          "D": "thrive",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Phrasal verb olarak Eş anlamlısı “put off” ve Türkçesi “ertelemek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "hasten",
+          "B": "destroy",
+          "C": "defer",
+          "D": "found",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “reputed” ve Türkçesi “ünlü, bilinen” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "notorious",
+          "B": "curious",
+          "C": "essential",
+          "D": "splendid",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “splendid” ve Türkçesi “büyüleyici” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "ordinary",
+          "B": "magnificient",
+          "C": "fatigue",
+          "D": "inquisitive",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “leak” ve Türkçesi “dökmek, sızdırmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "spill",
+          "B": "generate",
+          "C": "fetch",
+          "D": "inquire",
+          "E": "evade"
+        }
+      }
+    ]
+  }
+}

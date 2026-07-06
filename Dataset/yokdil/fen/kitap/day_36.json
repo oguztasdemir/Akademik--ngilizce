@@ -1,0 +1,678 @@
+{
+  "day": 36,
+  "words": [
+    {
+      "word": "LIKELY",
+      "type": "adj",
+      "turkish": "Olası, muhtemel",
+      "sentence_en": "Please, do remind me the concert because I'm likely to forget.",
+      "sentence_tr": "Ben muhtemelen unutacağım için lütfen bana konseri hatırlat.",
+      "synonyms": [
+        "Probable",
+        "possible"
+      ],
+      "antonyms": [
+        "Unlikely",
+        "improbable"
+      ],
+      "other_forms": "Unlikely (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Please, do remind me the concert because I'm ________ to forget."
+    },
+    {
+      "word": "LEGISLATE",
+      "type": "v",
+      "turkish": "Yasa yapmak",
+      "sentence_en": "They promised to legislate against cigarette advertising.",
+      "sentence_tr": "Sigara reklamlarına karşı yasa çıkartmaya söz verdiler.",
+      "synonyms": [
+        "Make laws",
+        "enforce laws"
+      ],
+      "antonyms": [],
+      "other_forms": "Legislation (n), legislative (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They promised to ________ against cigarette advertising."
+    },
+    {
+      "word": "IRREVERSIBLE",
+      "type": "adj",
+      "turkish": "Geri dönüşü olmayan, tersine çevrilemez",
+      "sentence_en": "Smoking has caused irreversible damage to his lungs.",
+      "sentence_tr": "Sigara ciğerlerinde dönüşü olmayan zararlara yol açtı.",
+      "synonyms": [
+        "Irreparable"
+      ],
+      "antonyms": [
+        "Reversible"
+      ],
+      "other_forms": "Irreversibly (adv)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "Smoking has caused ________ damage to his lungs."
+    },
+    {
+      "word": "INVESTIGATE",
+      "type": "v",
+      "turkish": "Araştırmak",
+      "sentence_en": "We are of course investigating how an error like this could have occurred.",
+      "sentence_tr": "Böyle bir hatanın nasıl olmuş olabileceğini elbette araştırıyoruz.",
+      "synonyms": [
+        "Look into",
+        "explore"
+      ],
+      "antonyms": [],
+      "other_forms": "Investigation (n), investigative (adj), investigator (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "We are of course investigating how an error like this could have occurred. (________)"
+    },
+    {
+      "word": "HARSH",
+      "type": "adj",
+      "turkish": "Acımasız, sert, haşin",
+      "sentence_en": "The punishment was rather harsh for such a minor offence.",
+      "sentence_tr": "Ceza, böylesine küçük bir suç için oldukça acımasızdı.",
+      "synonyms": [
+        "Severe",
+        "pitiless"
+      ],
+      "antonyms": [
+        "Gentle",
+        "kind"
+      ],
+      "other_forms": "Harshly (adv), harshness (n) ---PAGE_254--- 247 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The punishment was rather ________ for such a minor offence."
+    },
+    {
+      "word": "FLATTER",
+      "type": "v",
+      "turkish": "Övmek, övünmek",
+      "sentence_en": "I knew he was only flattering me because he wanted to borrow some money.",
+      "sentence_tr": "Sadece, benden borç para almak istediği için beni pohpohladığını biliyordum.",
+      "synonyms": [
+        "Compliment",
+        "praise"
+      ],
+      "antonyms": [
+        "Insult",
+        "look down on",
+        "humiliate"
+      ],
+      "other_forms": "Flattery (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I knew he was only ________ing me because he wanted to borrow some money."
+    },
+    {
+      "word": "FEVER",
+      "type": "n",
+      "turkish": "Yüksek ateş",
+      "sentence_en": "He's got a headache and a slight fever.",
+      "sentence_tr": "Başı ağrıyor ve biraz da ateşi var.",
+      "synonyms": [
+        "High temperature"
+      ],
+      "antonyms": [],
+      "other_forms": "Fevered (adj), feverish (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He's got a headache and a slight ________."
+    },
+    {
+      "word": "FINITE",
+      "type": "adj",
+      "turkish": "Sınırlı, kısıtlı",
+      "sentence_en": "The funds available for the health service are finite.",
+      "sentence_tr": "Sağlık hizmetleri için elde olan para sınırlı.",
+      "synonyms": [
+        "Limited",
+        "restricted"
+      ],
+      "antonyms": [
+        "Infinite",
+        "unlimited"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The funds available for the health service are ________."
+    },
+    {
+      "word": "FIRM",
+      "type": "adj",
+      "turkish": "Sert, katı",
+      "sentence_en": "These pears are still too firm to eat.",
+      "sentence_tr": "Bu armutlar hala yenilemeyecek kadar sert.",
+      "synonyms": [
+        "Stiff",
+        "rigid"
+      ],
+      "antonyms": [
+        "Soft",
+        "tender"
+      ],
+      "other_forms": "Firmly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "These pears are still too ________ to eat."
+    },
+    {
+      "word": "GENOCIDE",
+      "type": "n",
+      "turkish": "Katliam, soykırım",
+      "sentence_en": "We should all pray for the victims of genocide.",
+      "sentence_tr": "Soykırım kurbanlar için hepimiz dua etmeliyiz.",
+      "synonyms": [
+        "Massacre"
+      ],
+      "antonyms": [],
+      "other_forms": "Genocidal (adj) ---PAGE_255--- 248 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We should all pray for the victims of ________."
+    },
+    {
+      "word": "COHERENT",
+      "type": "adj",
+      "turkish": "Mantıklı, birleşik, kendinde",
+      "sentence_en": "When she calmed down, she was more coherent in her speech.",
+      "sentence_tr": "Sakinleştiğinde konuşmasında daha tutarlıydı.",
+      "synonyms": [
+        "Connected",
+        "consistent",
+        "rational"
+      ],
+      "antonyms": [
+        "Irrational",
+        "loose"
+      ],
+      "other_forms": "Coherence (n), coherently (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "When she calmed down, she was more ________ in her speech."
+    },
+    {
+      "word": "CONSERVE",
+      "type": "v",
+      "turkish": "Korumak, muhafaza etmek",
+      "sentence_en": "The nationalists are very keen to conserve their customs and language.",
+      "sentence_tr": "Milliyetçiler geleneklerini ve dillerini korumaya çok düşkündür.",
+      "synonyms": [
+        "Preserve",
+        "protect"
+      ],
+      "antonyms": [
+        "Neglect",
+        "destroy"
+      ],
+      "other_forms": "Conservation (n), conservationist (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The nationalists are very keen to ________ their customs and language."
+    },
+    {
+      "word": "DISPLAY",
+      "type": "v",
+      "turkish": "Göstermek, sergilemek",
+      "sentence_en": "The British traditionally tend not to display much emotion in public.",
+      "sentence_tr": "İngilizler genellikle halk içinde pek fazla duygularını göstermezler.",
+      "synonyms": [
+        "Show",
+        "exhibit",
+        "portray"
+      ],
+      "antonyms": [
+        "Hide",
+        "conceal"
+      ],
+      "other_forms": "Display (n) EMBARK on (v) Türkçe Karşılığı : Başlamak Örnek Cümle : We're embarking upon a new project later this year. Çevirisi : Bu yılın ilerleyen dönemlerinde yeni bir projeye başlayacağız. Eş ya da Yakın Anlamlılar : Start, initiate Zıt Anlamlılar : Finish, end",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The British traditionally tend not to ________ much emotion in public."
+    },
+    {
+      "word": "ELIMINATE",
+      "type": "v",
+      "turkish": "Ortadan kaldırmak, elemek",
+      "sentence_en": "He was eliminated in the third round of the competition.",
+      "sentence_tr": "Yarışın üçüncü raundunda elendi.",
+      "synonyms": [
+        "Get rid of",
+        "eradicate",
+        "do away with"
+      ],
+      "antonyms": [
+        "Recruit",
+        "employ"
+      ],
+      "other_forms": "Elimination (n) ---PAGE_256--- 249 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "He was ________d in the third round of the competition."
+    },
+    {
+      "word": "DIM",
+      "type": "adj",
+      "turkish": "Karanlık, loş",
+      "sentence_en": "He sat in a dim corner of the waiting-room.",
+      "sentence_tr": "O bekleme odasında karanlık/loş bir köşeye oturdu.",
+      "synonyms": [
+        "Not bright",
+        "darkish"
+      ],
+      "antonyms": [
+        "Bright"
+      ],
+      "other_forms": "Dim (v), dimly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He sat in a ________ corner of the waiting-room."
+    },
+    {
+      "word": "DISPENSE",
+      "type": "v",
+      "turkish": "vazgeçmek, -den kurtulmak, -sız yapmak",
+      "sentence_en": "They've had to dispense with a lot of luxuries since Mike lost his job.",
+      "sentence_tr": "Mike işini kaybettiğinden beri birçok lüksten vazgeçmek zorunda kaldılar.",
+      "synonyms": [
+        "Give away",
+        "do without"
+      ],
+      "antonyms": [
+        "Have",
+        "possess",
+        "own"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They've had to ________ with a lot of luxuries since Mike lost his job."
+    },
+    {
+      "word": "ERA",
+      "type": "n",
+      "turkish": "Çağ, dönem",
+      "sentence_en": "The fall of the Berlin wall was the end of an era.",
+      "sentence_tr": "Berlin duvarının yıkılışı bir dönemin bitişiydi.",
+      "synonyms": [
+        "Age",
+        "period"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The fall of the Berlin wall was the end of an ________."
+    },
+    {
+      "word": "ADDICTED",
+      "type": "adj",
+      "turkish": "Bağımlı, müptela, kendini kaptıran",
+      "sentence_en": "I know that if I start watching a soap opera I immediately become addicted.",
+      "sentence_tr": "Bir dizi izlemeye başlarsam hemen kendimi kaptıracağımı biliyorum.",
+      "synonyms": [
+        "Dependent",
+        "attached"
+      ],
+      "antonyms": [
+        "Averse",
+        "unaccustomed"
+      ],
+      "other_forms": "Addict (n), addiction (n), addictive (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I know that if I start watching a soap opera I immediately become ________."
+    },
+    {
+      "word": "ALLURE",
+      "type": "v",
+      "turkish": "Etkilemek, çekmek, cezbetmek",
+      "sentence_en": "This game allures most of the children.",
+      "sentence_tr": "Bu oyun çocukların çoğunun ilgisini çekiyor.",
+      "synonyms": [
+        "Attract",
+        "entice",
+        "seduce",
+        "charm"
+      ],
+      "antonyms": [
+        "Repel",
+        "dissuade",
+        "push away"
+      ],
+      "other_forms": "Alluring (adj) ---PAGE_257--- 250 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This game ________s most of the children."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "likely   a"
+        },
+        {
+          "id": 2,
+          "word": "legislate   b"
+        },
+        {
+          "id": 3,
+          "word": "irreversible   c"
+        },
+        {
+          "id": 4,
+          "word": "investigate   d"
+        },
+        {
+          "id": 5,
+          "word": "harsh   e"
+        },
+        {
+          "id": 1,
+          "word": "flatter   a"
+        },
+        {
+          "id": 2,
+          "word": "fever   b"
+        },
+        {
+          "id": 3,
+          "word": "finite   c"
+        },
+        {
+          "id": 4,
+          "word": "firm   d"
+        },
+        {
+          "id": 5,
+          "word": "genocide   e"
+        },
+        {
+          "id": 1,
+          "word": "coherent   a"
+        },
+        {
+          "id": 2,
+          "word": "conserve   b"
+        },
+        {
+          "id": 3,
+          "word": "display   c"
+        },
+        {
+          "id": 4,
+          "word": "embark   d"
+        },
+        {
+          "id": 5,
+          "word": "eliminate   e"
+        },
+        {
+          "id": 1,
+          "word": "dim   a"
+        },
+        {
+          "id": 2,
+          "word": "dispense   b"
+        },
+        {
+          "id": 3,
+          "word": "era   c"
+        },
+        {
+          "id": 4,
+          "word": "addicted   d"
+        },
+        {
+          "id": 5,
+          "word": "allure   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "irreparable"
+        },
+        {
+          "key": "b",
+          "def": "look into, explore"
+        },
+        {
+          "key": "c",
+          "def": "severe, pitiless"
+        },
+        {
+          "key": "d",
+          "def": "make laws, enforce laws"
+        },
+        {
+          "key": "e",
+          "def": "probable, possible"
+        },
+        {
+          "key": "a",
+          "def": "high temperature"
+        },
+        {
+          "key": "b",
+          "def": "stiff, rigid"
+        },
+        {
+          "key": "c",
+          "def": "massacre"
+        },
+        {
+          "key": "d",
+          "def": "compliment, praise"
+        },
+        {
+          "key": "e",
+          "def": "limited, restricted"
+        },
+        {
+          "key": "a",
+          "def": "start, initiate"
+        },
+        {
+          "key": "b",
+          "def": "show, exhibit, portray"
+        },
+        {
+          "key": "c",
+          "def": "get rid of, eradi cate, do away with"
+        },
+        {
+          "key": "d",
+          "def": "connected, consistent, rational"
+        },
+        {
+          "key": "e",
+          "def": "preserve, protect"
+        },
+        {
+          "key": "a",
+          "def": "attract, entice, seduce, charm"
+        },
+        {
+          "key": "b",
+          "def": "age, period"
+        },
+        {
+          "key": "c",
+          "def": "not bright, darkish"
+        },
+        {
+          "key": "d",
+          "def": "dependent, attached"
+        },
+        {
+          "key": "e",
+          "def": "give away, do without"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "likely   a"
+        },
+        {
+          "id": 2,
+          "word": "harsh   b"
+        },
+        {
+          "id": 3,
+          "word": "flatter   c"
+        },
+        {
+          "id": 1,
+          "word": "finite   a"
+        },
+        {
+          "id": 2,
+          "word": "firm   b"
+        },
+        {
+          "id": 3,
+          "word": "coherent   c"
+        },
+        {
+          "id": 1,
+          "word": "conserve   a"
+        },
+        {
+          "id": 2,
+          "word": "display   b"
+        },
+        {
+          "id": 3,
+          "word": "embark   c"
+        },
+        {
+          "id": 4,
+          "word": "eliminate   d"
+        },
+        {
+          "id": 1,
+          "word": "dim   a"
+        },
+        {
+          "id": 2,
+          "word": "dispense   b"
+        },
+        {
+          "id": 3,
+          "word": "addicted   c"
+        },
+        {
+          "id": 4,
+          "word": "allure   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "insult, humiliate, look down on"
+        },
+        {
+          "key": "b",
+          "def": "gentle, kind"
+        },
+        {
+          "key": "c",
+          "def": "unlikely, improbable"
+        },
+        {
+          "key": "a",
+          "def": "soft, tender"
+        },
+        {
+          "key": "b",
+          "def": "irrational, loose"
+        },
+        {
+          "key": "c",
+          "def": "infinite, unlimited"
+        },
+        {
+          "key": "a",
+          "def": "recruit, employ"
+        },
+        {
+          "key": "b",
+          "def": "finish, end"
+        },
+        {
+          "key": "c",
+          "def": "hide, conceal"
+        },
+        {
+          "key": "d",
+          "def": "neglect, destroy"
+        },
+        {
+          "key": "a",
+          "def": "have, possess, own"
+        },
+        {
+          "key": "b",
+          "def": "bright"
+        },
+        {
+          "key": "c",
+          "def": "repel, dissuade, push away"
+        },
+        {
+          "key": "d",
+          "def": "averse, unaccustomed"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “enact laws” ve Türkçesi “yasalaştırmak, yasa yapmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "preserve",
+          "B": "flatter",
+          "C": "legislate",
+          "D": "investigate",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Zıt anlamlısı “humiliate” ve Türkçesi “övmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "insult",
+          "B": "display",
+          "C": "conserve",
+          "D": "conceal",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “severe” ve Türkçesi “acımasız, sert” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "harsh",
+          "B": "gentle",
+          "C": "irreversible",
+          "D": "finite",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “initiate” ve Türkçesi “başla(t)mak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "allure",
+          "B": "terminate",
+          "C": "possess",
+          "D": "embark",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Zıt anlamlısı “possess” ve Türkçesi “-sız yapmak, -den vazgeçmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "flatter",
+          "B": "dispense",
+          "C": "seduce",
+          "D": "eradicate",
+          "E": "repel"
+        }
+      }
+    ]
+  }
+}

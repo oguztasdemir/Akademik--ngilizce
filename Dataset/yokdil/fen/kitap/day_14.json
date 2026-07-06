@@ -1,0 +1,702 @@
+{
+  "day": 14,
+  "words": [
+    {
+      "word": "PRECISE",
+      "type": "adj",
+      "turkish": "Kesin, kati, tam",
+      "sentence_en": "He caught me at the precise moment that I fainted.",
+      "sentence_tr": "Tam bayıldığım anda beni yakaladı.",
+      "synonyms": [
+        "Exact",
+        "definite"
+      ],
+      "antonyms": [
+        "Vague",
+        "ambigious"
+      ],
+      "other_forms": "Precision (n), precisely (adv)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "He caught me at the ________ moment that I fainted."
+    },
+    {
+      "word": "RAISE",
+      "type": "v",
+      "turkish": "Artırmak, yükselmek, gündeme getirmek",
+      "sentence_en": "The government is planning to raise taxes.",
+      "sentence_tr": "Hükümet vergileri artırmayı planlıyor.",
+      "synonyms": [
+        "Increase",
+        "rear",
+        "bring up",
+        "mention"
+      ],
+      "antonyms": [
+        "Decrease",
+        "abate"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The government is planning to ________ taxes."
+    },
+    {
+      "word": "GRATIFY",
+      "type": "v",
+      "turkish": "Memnun etmek, tatmin etmek",
+      "sentence_en": "He was gratified to see how well his students had done.",
+      "sentence_tr": "Öğrencilerinin ne kadar iyi olduklarını görmek onu memnun etti.",
+      "synonyms": [
+        "Please",
+        "satisfy"
+      ],
+      "antonyms": [
+        "Displease"
+      ],
+      "other_forms": "Gratification (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He was gratified to see how well his students had done. (________)"
+    },
+    {
+      "word": "ILLICIT",
+      "type": "adj",
+      "turkish": "Yasa dışı",
+      "sentence_en": "The illicit trade in stolen vehicles is a controversial issue.",
+      "sentence_tr": "Çalıntı arabaların yasadışı ticareti tartışmalı bir konu.",
+      "synonyms": [
+        "illegal",
+        "unlawful"
+      ],
+      "antonyms": [
+        "Legal"
+      ],
+      "other_forms": "illicitly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The ________ trade in stolen vehicles is a controversial issue."
+    },
+    {
+      "word": "INSULT",
+      "type": "v",
+      "turkish": "Aşağılamak, hakaret etmek",
+      "sentence_en": "She made several insults about my appearance.",
+      "sentence_tr": "Benim görünüşümle ilgili birkaç hakarette bulundu.",
+      "synonyms": [
+        "Offend",
+        "look down on",
+        "humiliate"
+      ],
+      "antonyms": [
+        "Honor",
+        "praise"
+      ],
+      "other_forms": "Insult (n), insulting (adj) ---PAGE_100--- 93 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She made several ________s about my appearance."
+    },
+    {
+      "word": "CITE",
+      "type": "v",
+      "turkish": "Bahsetmek",
+      "sentence_en": "The lawyer cited two similar cases.",
+      "sentence_tr": "Avukat benzer iki olaydan bahsetti.",
+      "synonyms": [
+        "Mention",
+        "talk about",
+        "refer to"
+      ],
+      "antonyms": [
+        "Keep silent"
+      ],
+      "other_forms": "Citation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The lawyer ________d two similar cases."
+    },
+    {
+      "word": "DEFEAT",
+      "type": "v",
+      "turkish": "Yenmek, bozguna uğratmak",
+      "sentence_en": "If we can defeat the Italian team, we'll be through to the final.",
+      "sentence_tr": "Eğer İtalyan takımını yenersek finale çıkacağız.",
+      "synonyms": [
+        "Beat",
+        "overcome"
+      ],
+      "antonyms": [
+        "Win",
+        "gain"
+      ],
+      "other_forms": "Defeat (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "If we can ________ the Italian team, we'll be through to the final."
+    },
+    {
+      "word": "DECREE",
+      "type": "v",
+      "turkish": "İlan etmek, duyurmak, buyurmak",
+      "sentence_en": "The local council has decreed that the hospital should be closed.",
+      "sentence_tr": "Konsey hastanenin kapatılmasını kararlaştırdı.",
+      "synonyms": [
+        "Declare",
+        "announce",
+        "order"
+      ],
+      "antonyms": [],
+      "other_forms": "Decree (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The local council has ________d that the hospital should be closed."
+    },
+    {
+      "word": "CONVINCE",
+      "type": "v",
+      "turkish": "İkna etmek",
+      "sentence_en": "He managed to convince the jury of his innocence.",
+      "sentence_tr": "Jüriyi masum olduğuna dair ikna etmeyi başardı.",
+      "synonyms": [
+        "Persuade",
+        "win over",
+        "bring round"
+      ],
+      "antonyms": [
+        "Deter"
+      ],
+      "other_forms": "Convinced (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He managed to ________ the jury of his innocence."
+    },
+    {
+      "word": "REVOKE",
+      "type": "v",
+      "turkish": "İptal etmek, feshetmek, geri almak",
+      "sentence_en": "The authorities have revoked their original decision to allow development of this rural area.",
+      "sentence_tr": "Yetkililer bu kırsal alanın gelişmesini sağlayacak asıl kararlarını iptal etti.",
+      "synonyms": [
+        "Cancel",
+        "annul",
+        "repeal"
+      ],
+      "antonyms": [],
+      "other_forms": "Revocation (n) ---PAGE_101--- 94 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The authorities have ________d their original decision to allow development of this rural area."
+    },
+    {
+      "word": "WIPE OUT",
+      "type": "v",
+      "turkish": "Silip süpürmek, kökünü kazımak",
+      "sentence_en": "One bad harvest could wipe out all of a grower's profits for the previous two years.",
+      "sentence_tr": "Kötü bir hasat çitçinin önceki iki yılda elde ettiği karın tümünü silip süpürebilir.",
+      "synonyms": [
+        "Destroy",
+        "exterminate"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "One bad harvest could ________ all of a grower's profits for the previous two years."
+    },
+    {
+      "word": "WISDOM",
+      "type": "n",
+      "turkish": "Bilgelik, akıl, sağduyu",
+      "sentence_en": "He's got a weekly radio programme in which he dispenses wisdom on a variety of subjects.",
+      "sentence_tr": "Çeşitli konularda akıl verdiği haftalık bir radyo programı var.",
+      "synonyms": [
+        "Common sense",
+        "prudence",
+        "insight"
+      ],
+      "antonyms": [
+        "Folly",
+        "idiocy",
+        "imbecility"
+      ],
+      "other_forms": "Wise (adj)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "He's got a weekly radio programme in which he dispenses ________ on a variety of subjects."
+    },
+    {
+      "word": "WITHDRAW",
+      "type": "v",
+      "turkish": "Geri çekmek",
+      "sentence_en": "The UN has withdrawn its troops from the country.",
+      "sentence_tr": "BM askerlerini ülkeden çekti.",
+      "synonyms": [
+        "Take back",
+        "pull back",
+        "extract"
+      ],
+      "antonyms": [
+        "Advance",
+        "enter",
+        "penetrate"
+      ],
+      "other_forms": "Withdrawal (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The UN has ________n its troops from the country."
+    },
+    {
+      "word": "UNIQUE",
+      "type": "adj",
+      "turkish": "Eşsiz, benzersiz",
+      "sentence_en": "Each person's genetic code is unique except in the case of identical twins.",
+      "sentence_tr": "Tek yumurta ikizleri hariç, her insanın gen yapısı benzersizdir.",
+      "synonyms": [
+        "Exclusive",
+        "only",
+        "single"
+      ],
+      "antonyms": [
+        "Common",
+        "ordinary"
+      ],
+      "other_forms": "Uniqueness (n), uniquely (adv)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Each person's genetic code is ________ except in the case of identical twins."
+    },
+    {
+      "word": "PREY",
+      "type": "n",
+      "turkish": "Av, kurban",
+      "sentence_en": "A hawk hovers in the air before swooping on its prey.",
+      "sentence_tr": "Bir şahin avına saldırmadan önce havada süzülür.",
+      "synonyms": [
+        "Victim ---PAGE_102--- 95 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A hawk hovers in the air before swooping on its ________."
+    },
+    {
+      "word": "UNREST",
+      "type": "n",
+      "turkish": "Huzursuzluk",
+      "sentence_en": "It is feared that the civil unrest we are now witnessing could lead to full- scale civil war.",
+      "sentence_tr": "Bu aralar şahit olduğumuz iç huzursuzluğun çok geniş bir iç savaşa yol açacağından korkuluyor.",
+      "synonyms": [
+        "Uneasiness",
+        "restlessness"
+      ],
+      "antonyms": [
+        "Rest",
+        "peace"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It is feared that the civil ________ we are now witnessing could lead to full- scale civil war."
+    },
+    {
+      "word": "VERGE",
+      "type": "n",
+      "turkish": "Eşik, kenar",
+      "sentence_en": "They set up camp on the verge of the desert.",
+      "sentence_tr": "Çölün kenarına kamp kurdular.",
+      "synonyms": [
+        "Edge",
+        "threshold"
+      ],
+      "antonyms": [
+        "Centre",
+        "midst"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They set up camp on the ________ of the desert."
+    },
+    {
+      "word": "TREND",
+      "type": "n",
+      "turkish": "Eğilim, moda",
+      "sentence_en": "There's been a downward trend in sales in the last few years.",
+      "sentence_tr": "Son birkaç yılda satışlarda aşağı doğru bir eğilim var.",
+      "synonyms": [
+        "Tendency",
+        "fashion"
+      ],
+      "antonyms": [],
+      "other_forms": "Trendy (adj)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "There's been a downward ________ in sales in the last few years."
+    },
+    {
+      "word": "AMASS",
+      "type": "v",
+      "turkish": "Biriktirmek, toplamak",
+      "sentence_en": "She has amassed a huge fortune through her novels.",
+      "sentence_tr": "Romanları sayesinde büyük bir servet biriktirdi.",
+      "synonyms": [
+        "Accumulate",
+        "gather up",
+        "heap up",
+        "pile up"
+      ],
+      "antonyms": [
+        "Disperse",
+        "scatter",
+        "waste",
+        "dissipate"
+      ],
+      "other_forms": "Amasser (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She has ________ed a huge fortune through her novels."
+    },
+    {
+      "word": "BOTHER",
+      "type": "v",
+      "turkish": "Sıkıntı vermek, zahmet vermek",
+      "sentence_en": "Don't bother making the bed - I'll do it later.",
+      "sentence_tr": "Yatağı yapmaya zahmet etme, ben sonra yaparım.",
+      "synonyms": [
+        "Trouble"
+      ],
+      "antonyms": [
+        "Relieve"
+      ],
+      "other_forms": "Bother (n) ---PAGE_103--- 96 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Don't ________ making the bed - I'll do it later."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "precise   a"
+        },
+        {
+          "id": 2,
+          "word": "raise   b"
+        },
+        {
+          "id": 3,
+          "word": "gratify   c"
+        },
+        {
+          "id": 4,
+          "word": "illicit   d"
+        },
+        {
+          "id": 5,
+          "word": "insult   e"
+        },
+        {
+          "id": 1,
+          "word": "cite   a"
+        },
+        {
+          "id": 2,
+          "word": "defeat   b"
+        },
+        {
+          "id": 3,
+          "word": "decree   c"
+        },
+        {
+          "id": 4,
+          "word": "convince   d"
+        },
+        {
+          "id": 5,
+          "word": "revoke   e"
+        },
+        {
+          "id": 1,
+          "word": "wipe out   a"
+        },
+        {
+          "id": 2,
+          "word": "wisdom   b"
+        },
+        {
+          "id": 3,
+          "word": "withdraw   c"
+        },
+        {
+          "id": 4,
+          "word": "unique   d"
+        },
+        {
+          "id": 5,
+          "word": "prey   e"
+        },
+        {
+          "id": 1,
+          "word": "unrest   a"
+        },
+        {
+          "id": 2,
+          "word": "verge   b"
+        },
+        {
+          "id": 3,
+          "word": "trend   c"
+        },
+        {
+          "id": 4,
+          "word": "amass   d"
+        },
+        {
+          "id": 5,
+          "word": "bother   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "please, satisfy"
+        },
+        {
+          "key": "b",
+          "def": "illegal, unlawful"
+        },
+        {
+          "key": "c",
+          "def": "offend, look down on, humiliate"
+        },
+        {
+          "key": "d",
+          "def": "increase, rear, bring up, mention"
+        },
+        {
+          "key": "e",
+          "def": "exact, definite"
+        },
+        {
+          "key": "a",
+          "def": "cancel, annul, repeal"
+        },
+        {
+          "key": "b",
+          "def": "declare, announce, order"
+        },
+        {
+          "key": "c",
+          "def": "mention, talk about, refer to"
+        },
+        {
+          "key": "d",
+          "def": "persuade, win over, bring round"
+        },
+        {
+          "key": "e",
+          "def": "beat, overcome"
+        },
+        {
+          "key": "a",
+          "def": "exclusive, only, single"
+        },
+        {
+          "key": "b",
+          "def": "take back, pull back, extract"
+        },
+        {
+          "key": "c",
+          "def": "victim"
+        },
+        {
+          "key": "d",
+          "def": "destroy, exterminate"
+        },
+        {
+          "key": "e",
+          "def": "common sense, prudence, insight"
+        },
+        {
+          "key": "a",
+          "def": "edge, threshold"
+        },
+        {
+          "key": "b",
+          "def": "accumulate, gather up, pile up"
+        },
+        {
+          "key": "c",
+          "def": "trouble"
+        },
+        {
+          "key": "d",
+          "def": "uneasiness, restlessness"
+        },
+        {
+          "key": "e",
+          "def": "tendency, fashion"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "precise   a"
+        },
+        {
+          "id": 2,
+          "word": "raise   b"
+        },
+        {
+          "id": 3,
+          "word": "gratify   c"
+        },
+        {
+          "id": 4,
+          "word": "illicit   d"
+        },
+        {
+          "id": 5,
+          "word": "insult   e"
+        },
+        {
+          "id": 1,
+          "word": "cite   a"
+        },
+        {
+          "id": 2,
+          "word": "defeat   b"
+        },
+        {
+          "id": 3,
+          "word": "convince   c"
+        },
+        {
+          "id": 4,
+          "word": "withdraw   d"
+        },
+        {
+          "id": 5,
+          "word": "unique   e"
+        },
+        {
+          "id": 1,
+          "word": "unrest   a"
+        },
+        {
+          "id": 2,
+          "word": "verge   b"
+        },
+        {
+          "id": 3,
+          "word": "amass   c"
+        },
+        {
+          "id": 4,
+          "word": "bother   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "displease"
+        },
+        {
+          "key": "b",
+          "def": "legal"
+        },
+        {
+          "key": "c",
+          "def": "honor, praise"
+        },
+        {
+          "key": "d",
+          "def": "decrease, abate"
+        },
+        {
+          "key": "e",
+          "def": "vague, ambigious"
+        },
+        {
+          "key": "a",
+          "def": "advance, penetrate"
+        },
+        {
+          "key": "b",
+          "def": "deter"
+        },
+        {
+          "key": "c",
+          "def": "common, ordinary"
+        },
+        {
+          "key": "d",
+          "def": "keep silent"
+        },
+        {
+          "key": "e",
+          "def": "win, gain"
+        },
+        {
+          "key": "a",
+          "def": "disperse, scatter, waste, dissipate"
+        },
+        {
+          "key": "b",
+          "def": "relieve"
+        },
+        {
+          "key": "c",
+          "def": "rest, peace"
+        },
+        {
+          "key": "d",
+          "def": "centre, midst"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Zıt anlamlısı “ambigious” ve Türkçesi “kesin, net” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "vague",
+          "B": "convinced",
+          "C": "precise",
+          "D": "wise",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “illegal” ve Türkçesi “yasa dışı” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "definite",
+          "B": "unique",
+          "C": "persuaded",
+          "D": "insulting",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Phrasal verb olarak Eş anlamlısı “look down on” ve Türkçesi “aşağılamak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "insult",
+          "B": "mention",
+          "C": "abate",
+          "D": "gratify",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Zıt anlamlısı “displease” ve Türkçesi “memnun etmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "humiliate",
+          "B": "overcome",
+          "C": "decree",
+          "D": "gratify",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Zıt anlamlısı “penetrate” ve Türkçesi “geri çekmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "accumulate",
+          "B": "withdraw",
+          "C": "disperse",
+          "D": "bother",
+          "E": "wipe out"
+        }
+      }
+    ]
+  }
+}

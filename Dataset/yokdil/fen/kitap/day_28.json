@@ -1,0 +1,657 @@
+{
+  "day": 28,
+  "words": [
+    {
+      "word": "SWAMP",
+      "type": "n",
+      "turkish": "Bataklık",
+      "sentence_en": "The Everglades are an area of swamp in southern Florida.",
+      "sentence_tr": "Everglades güney Florida’da bataklık bir bölgedir.",
+      "synonyms": [
+        "Marsh"
+      ],
+      "antonyms": [],
+      "other_forms": "Swampy (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The Everglades are an area of ________ in southern Florida."
+    },
+    {
+      "word": "SWELL",
+      "type": "v",
+      "turkish": "Şişmek",
+      "sentence_en": "It was obvious she had broken her toe, because it immediately started to swell.",
+      "sentence_tr": "Başparmağını kırdığı belliydi çünkü hemen şişmeye başladı.",
+      "synonyms": [
+        "Become bigger"
+      ],
+      "antonyms": [
+        "Decrease"
+      ],
+      "other_forms": "Swell (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It was obvious she had broken her toe, because it immediately started to ________."
+    },
+    {
+      "word": "STRAIN",
+      "type": "n",
+      "turkish": "Gerilim, yük, zorlanma",
+      "sentence_en": "The hurricane put such a strain on the bridge that it collapsed.",
+      "sentence_tr": "Kasırga köprüye o kadar baskı yaptı ki köprü yıkıldı.",
+      "synonyms": [
+        "Force",
+        "exertion",
+        "burden",
+        "tension"
+      ],
+      "antonyms": [],
+      "other_forms": "Strained (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The hurricane put such a ________ on the bridge that it collapsed."
+    },
+    {
+      "word": "INSPIRE",
+      "type": "v",
+      "turkish": "İlham vermek, (öfke, sevgi v.b.) uyandırmak, solumak",
+      "sentence_en": "The captain's heroic effort inspired them with determination.",
+      "sentence_tr": "Kaptan’ın kahramanca çabaları onlara kararlı olmaları için ilham verdi.",
+      "synonyms": [
+        "Motivate",
+        "encourage"
+      ],
+      "antonyms": [
+        "Discourage"
+      ],
+      "other_forms": "Inspiration (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The captain's heroic effort ________d them with determination."
+    },
+    {
+      "word": "INNATE",
+      "type": "adj",
+      "turkish": "Doğuştan gelen",
+      "sentence_en": "Cyril's most impressive quality was his innate goodness.",
+      "sentence_tr": "Cyrill’in en etkileyici özelliği doğuştan gelen iyiliğiydi.",
+      "synonyms": [
+        "Inborn",
+        "inherited"
+      ],
+      "antonyms": [
+        "Incidental"
+      ],
+      "other_forms": "Innately (adv) ---PAGE_198--- 191 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "Cyril's most impressive quality was his ________ goodness."
+    },
+    {
+      "word": "GIFT",
+      "type": "n",
+      "turkish": "Yetenek",
+      "sentence_en": "She has an amazing gift for design.",
+      "sentence_tr": "Tasarım konusunda şaşırtıcı bir yeteneği var.",
+      "synonyms": [
+        "Knack",
+        "ability",
+        "talent",
+        "skill"
+      ],
+      "antonyms": [
+        "Inability",
+        "weakness"
+      ],
+      "other_forms": "Gift (=hediye) (n), Gifted (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She has an amazing ________ for design."
+    },
+    {
+      "word": "LEGEND",
+      "type": "n",
+      "turkish": "Efsane",
+      "sentence_en": "She is writing a thesis on Irish legends and mythology.",
+      "sentence_tr": "İrlanda efsaneleri ve mitolojisi üzerine bir tez yazıyor.",
+      "synonyms": [
+        "Folk",
+        "tale",
+        "myth"
+      ],
+      "antonyms": [
+        "Fact",
+        "truth"
+      ],
+      "other_forms": "Legendary (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She is writing a thesis on Irish ________s and mythology."
+    },
+    {
+      "word": "REVENUE",
+      "type": "n",
+      "turkish": "Gelir, kazanç",
+      "sentence_en": "Taxes provide most of the government's revenue.",
+      "sentence_tr": "Hükümetin gelirinin büyük bölümünü vergiler oluşturmaktadır.",
+      "synonyms": [
+        "Income",
+        "earnings"
+      ],
+      "antonyms": [
+        "Outcome",
+        "expense",
+        "expenditure"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Taxes provide most of the government's ________."
+    },
+    {
+      "word": "NUTRITION",
+      "type": "n",
+      "turkish": "Gıda, beslenme",
+      "sentence_en": "Good nutrition is essential if patients are to make a quick recovery.",
+      "sentence_tr": "Hastaların çabuk iyileşmesi için iyi beslenmeleri gerekir.",
+      "synonyms": [
+        "Food",
+        "nutriment",
+        "nourishment"
+      ],
+      "antonyms": [],
+      "other_forms": "Nutritious (adj), nutritional (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Good ________ is essential if patients are to make a quick recovery."
+    },
+    {
+      "word": "CONTEMPORARY",
+      "type": "adj",
+      "turkish": "Çağdaş, aynı zamanda olan",
+      "sentence_en": "Most of the writers he was contemporary with were interested in the same subjects.",
+      "sentence_tr": "Çağdaşı olduğu yazarların çoğu aynı konularla ilgilendi.",
+      "synonyms": [
+        "Modern"
+      ],
+      "antonyms": [
+        "Old-fashioned",
+        "ancient"
+      ],
+      "other_forms": "Contemporary (n) ---PAGE_199--- 192 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Most of the writers he was ________ with were interested in the same subjects."
+    },
+    {
+      "word": "CONTENTIOUS",
+      "type": "adj",
+      "turkish": "Tartışmalı, çelişkili",
+      "sentence_en": "She has some rather contentious views on education.",
+      "sentence_tr": "Onun eğitimle ilgili çelişkili/tartışmalı görüşleri var.",
+      "synonyms": [
+        "Controversial"
+      ],
+      "antonyms": [
+        "Clear",
+        "concise",
+        "undisputed"
+      ],
+      "other_forms": "Contention (n), contentiousness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She has some rather ________ views on education."
+    },
+    {
+      "word": "CONTEND",
+      "type": "v",
+      "turkish": "İddia etmek, öne sürmek",
+      "sentence_en": "The lawyer contended that her client had never been even near the scene of the crime.",
+      "sentence_tr": "Avukat müvekkilinin olay mahalinin yakınında bile olmadığını iddia etti.",
+      "synonyms": [
+        "Claim",
+        "assert",
+        "allege",
+        "maintain"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The lawyer ________ed that her client had never been even near the scene of the crime."
+    },
+    {
+      "word": "CURIOSITY",
+      "type": "n",
+      "turkish": "Merak, ilgi",
+      "sentence_en": "I'm burning with curiosity - you must tell me who's won.",
+      "sentence_tr": "Meraktan ölüyorum. Kimin kazandığını söylemelisin.",
+      "synonyms": [
+        "Interest",
+        "inquisitive"
+      ],
+      "antonyms": [
+        "Being indifferent to sth"
+      ],
+      "other_forms": "Curious (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I'm burning with ________ - you must tell me who's won."
+    },
+    {
+      "word": "ENDEAVOR",
+      "type": "v",
+      "turkish": "Çaba göstermek",
+      "sentence_en": "Engineers are endeavouring to locate the source of the problem.",
+      "sentence_tr": "Mühendisler problemin kaynağını bulmak için çabalıyor.",
+      "synonyms": [
+        "Strive",
+        "try hard"
+      ],
+      "antonyms": [
+        "Ignore"
+      ],
+      "other_forms": "Endeavor (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Engineers are endeavouring to locate the source of the problem. (________)"
+    },
+    {
+      "word": "UNEASE",
+      "type": "n",
+      "turkish": "Huzursuzluk",
+      "sentence_en": "Growing unease at the prospect of an election is causing fierce arguments within the party.",
+      "sentence_tr": "Seçim beklentisiyle artan huzursuzluk parti içerisinde hararetli tartışmalara sebep oluyor.",
+      "synonyms": [
+        "Discomfort",
+        "restlessness"
+      ],
+      "antonyms": [],
+      "other_forms": "Uneasy (adj), uneasiness (n) ---PAGE_200--- 193 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Growing ________ at the prospect of an election is causing fierce arguments within the party."
+    },
+    {
+      "word": "UNCEASING",
+      "type": "adj",
+      "turkish": "Sürekli",
+      "sentence_en": "We had a fortnight of unceasing rain.",
+      "sentence_tr": "İki hafta kesintisiz yağmur yağdı.",
+      "synonyms": [
+        "Perpetual",
+        "constant",
+        "continuous"
+      ],
+      "antonyms": [
+        "Stative"
+      ],
+      "other_forms": "Unceasingly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We had a fortnight of ________ rain."
+    },
+    {
+      "word": "TRAIT",
+      "type": "n",
+      "turkish": "Özellik",
+      "sentence_en": "His sense of humour is one of his best traits.",
+      "sentence_tr": "Mizah anlayışı onun en iyi özelliklerinden biridir.",
+      "synonyms": [
+        "Property",
+        "characteristic",
+        "feature"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "His sense of humour is one of his best ________s."
+    },
+    {
+      "word": "SEEK",
+      "type": "v",
+      "turkish": "Aramak",
+      "sentence_en": "Legal advice should be sought before you take any further action.",
+      "sentence_tr": "Daha ileri bir safhaya geçmeden önce yasal bir yardım aranmalıdır.",
+      "synonyms": [
+        "Look for",
+        "search for"
+      ],
+      "antonyms": [
+        "Lessen",
+        "decrease",
+        "die",
+        "decay",
+        "fall"
+      ],
+      "other_forms": "Seek to: çaba göstermek, seeker (n) ABOUND in (v) Türkçe Karşılığı : Bol, dolu, çok olmak Örnek Cümle : Venice abounds in famous hotels. Çevirisi : Venedik ünlü otellerle doludur. Eş ya da Yakın Anlamlılar : Be plentiful, be rich in, teem with, multiply, flourish Zıt Anlamlılar : Lessen, decrease, die, decay, fall Diğer Halleri : Abundant (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Legal advice should be sought before you take any further action. (________)"
+    },
+    {
+      "word": "SPARE",
+      "type": "adj",
+      "turkish": "Yedek",
+      "sentence_en": "We've got a spare room if you want to stay overnight with us.",
+      "sentence_tr": "Gece bizimle kalmak istersen fazladan bir odamız var.",
+      "synonyms": [
+        "Extra"
+      ],
+      "antonyms": [],
+      "other_forms": "Spare (v) ---PAGE_201--- 194 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We've got a ________ room if you want to stay overnight with us."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "swamp   a"
+        },
+        {
+          "id": 2,
+          "word": "swell   b"
+        },
+        {
+          "id": 3,
+          "word": "strain   c"
+        },
+        {
+          "id": 4,
+          "word": "inspire   d"
+        },
+        {
+          "id": 5,
+          "word": "innate   e"
+        },
+        {
+          "id": 1,
+          "word": "gift   a"
+        },
+        {
+          "id": 2,
+          "word": "legend   b"
+        },
+        {
+          "id": 3,
+          "word": "revenue   c"
+        },
+        {
+          "id": 4,
+          "word": "nutrition   d"
+        },
+        {
+          "id": 5,
+          "word": "contemporary   e"
+        },
+        {
+          "id": 1,
+          "word": "contentious   a"
+        },
+        {
+          "id": 2,
+          "word": "contend   b"
+        },
+        {
+          "id": 3,
+          "word": "curiosity   c"
+        },
+        {
+          "id": 4,
+          "word": "endeavor   d"
+        },
+        {
+          "id": 5,
+          "word": "unease   e"
+        },
+        {
+          "id": 1,
+          "word": "unceasing   a"
+        },
+        {
+          "id": 2,
+          "word": "trait   b"
+        },
+        {
+          "id": 3,
+          "word": "seek   c"
+        },
+        {
+          "id": 4,
+          "word": "abound in   d"
+        },
+        {
+          "id": 5,
+          "word": "spare   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "force, exertion, burden, tension"
+        },
+        {
+          "key": "b",
+          "def": "motivate, encourage"
+        },
+        {
+          "key": "c",
+          "def": "inborn, inherited"
+        },
+        {
+          "key": "d",
+          "def": "become bigger"
+        },
+        {
+          "key": "e",
+          "def": "marsh"
+        },
+        {
+          "key": "a",
+          "def": "modern"
+        },
+        {
+          "key": "b",
+          "def": "income, earnings"
+        },
+        {
+          "key": "c",
+          "def": "knack, ability, talent, skill"
+        },
+        {
+          "key": "d",
+          "def": "food, nutriment, nourishment"
+        },
+        {
+          "key": "e",
+          "def": "folk, tale, myth"
+        },
+        {
+          "key": "a",
+          "def": "strive, try hard"
+        },
+        {
+          "key": "b",
+          "def": "interest, inquisitive"
+        },
+        {
+          "key": "c",
+          "def": "discomfort, restlessness"
+        },
+        {
+          "key": "d",
+          "def": "controversial"
+        },
+        {
+          "key": "e",
+          "def": "claim, assert, allege, maintain"
+        },
+        {
+          "key": "a",
+          "def": "property, characteristic, feature"
+        },
+        {
+          "key": "b",
+          "def": "be plentiful, be rich in, t eem with, multiply, flourish"
+        },
+        {
+          "key": "c",
+          "def": "extra"
+        },
+        {
+          "key": "d",
+          "def": "perpetual, constant, continuous"
+        },
+        {
+          "key": "e",
+          "def": "look for, search for"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "swell   a"
+        },
+        {
+          "id": 2,
+          "word": "inspire   b"
+        },
+        {
+          "id": 3,
+          "word": "innate   c"
+        },
+        {
+          "id": 4,
+          "word": "gift   d"
+        },
+        {
+          "id": 1,
+          "word": "legend   a"
+        },
+        {
+          "id": 2,
+          "word": "revenue   b"
+        },
+        {
+          "id": 3,
+          "word": "contemporary   c"
+        },
+        {
+          "id": 4,
+          "word": "contentious   d"
+        },
+        {
+          "id": 1,
+          "word": "curiosity   a"
+        },
+        {
+          "id": 2,
+          "word": "endeavor   b"
+        },
+        {
+          "id": 3,
+          "word": "unceasing   c"
+        },
+        {
+          "id": 4,
+          "word": "abound in   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "inability, weakness"
+        },
+        {
+          "key": "b",
+          "def": "incidental"
+        },
+        {
+          "key": "c",
+          "def": "discourage"
+        },
+        {
+          "key": "d",
+          "def": "decrease"
+        },
+        {
+          "key": "a",
+          "def": "old"
+        },
+        {
+          "key": "b",
+          "def": "clear, concise, undisputed"
+        },
+        {
+          "key": "c",
+          "def": "fact, truth"
+        },
+        {
+          "key": "d",
+          "def": "outcome, expen se, expenditure"
+        },
+        {
+          "key": "a",
+          "def": "ignore"
+        },
+        {
+          "key": "b",
+          "def": "being indifferent to sth"
+        },
+        {
+          "key": "c",
+          "def": "lessen, decrease , die, decay, fall"
+        },
+        {
+          "key": "d",
+          "def": "stative"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “motivate, encourage” ve Türkçesi “ilham vermek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "swell",
+          "B": "discourage",
+          "C": "maintain",
+          "D": "inspire",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “allege” ve Türkçesi “iddia etmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "inspire",
+          "B": "strive",
+          "C": "contend",
+          "D": "seek",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “inherited” ve Türkçesi “doğuştan” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "gifted",
+          "B": "inspired",
+          "C": "incidental",
+          "D": "contemporary",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Zıt anlamlısı “expenditure” ve Türkçesi “gelir, kazanç” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "nourishment",
+          "B": "revenue",
+          "C": "curiosity",
+          "D": "discomfort",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “modern” ve Türkçesi “çağdaş” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "contemporary",
+          "B": "curious",
+          "C": "concise",
+          "D": "controversial",
+          "E": "contentious"
+        }
+      }
+    ]
+  }
+}

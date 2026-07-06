@@ -1,0 +1,708 @@
+{
+  "day": 179,
+  "words": [
+    {
+      "word": "contribute",
+      "en": "It is essential to contribute the system properties to get accurate results.",
+      "tr": "katkıda bulunmak",
+      "synonyms": "",
+      "type": "verb",
+      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini katkıda bulunmak gereklidir.",
+      "collocation": "seek to contribute, directly contribute",
+      "sentences": [
+        {
+          "en": "It is essential to contribute the system properties to get accurate results.",
+          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini katkıda bulunmak gereklidir.",
+          "blanked": "It is essential to ________ the system properties to get accurate results."
+        },
+        {
+          "en": "Researchers always seek to contribute new methodologies in this field.",
+          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler katkıda bulunmak isterler.",
+          "blanked": "Researchers always seek to ________ new methodologies in this field."
+        },
+        {
+          "en": "We need to contribute the main factors before drawing a final conclusion.",
+          "tr": "Nihai bir sonuca varmadan önce ana faktörleri katkıda bulunmak gerekir.",
+          "blanked": "We need to ________ the main factors before drawing a final conclusion."
+        },
+        {
+          "en": "Several parameters were designed to contribute the chemical reaction.",
+          "tr": "Kimyasal reaksiyonu katkıda bulunmak için birkaç parametre tasarlandı.",
+          "blanked": "Several parameters were designed to ________ the chemical reaction."
+        },
+        {
+          "en": "The new algorithm can contribute the overall processing speed.",
+          "tr": "Yeni algoritma, genel işlem hızını katkıda bulunmak konusunda yardımcı olabilir.",
+          "blanked": "The new algorithm can ________ the overall processing speed."
+        }
+      ],
+      "priority": "Yüksek Sıklık"
+    },
+    {
+      "word": "dramatic",
+      "en": "The data reveal a strong correlation between carbon emissions and dramatic.",
+      "tr": "ani, çarpıcı, tiyatroyla ilgili",
+      "synonyms": "",
+      "type": "adj",
+      "en_tr": "Veriler, karbon emisyonları ile ani, çarpıcı, tiyatroyla ilgili arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "dramatic important, dramatic effective",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and dramatic.",
+          "tr": "Veriler, karbon emisyonları ile ani, çarpıcı, tiyatroyla ilgili arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of dramatic on the ecosystem.",
+          "tr": "Son çalışmalar, ani, çarpıcı, tiyatroyla ilgili yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in dramatic during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında ani, çarpıcı, tiyatroyla ilgili durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of dramatic.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, ani, çarpıcı, tiyatroyla ilgili seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of dramatic under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında ani, çarpıcı, tiyatroyla ilgili davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Çok Yüksek Sıklık"
+    },
+    {
+      "word": "irrational",
+      "en": "The data reveal a strong correlation between carbon emissions and irrational.",
+      "tr": "mantıksız, rasyonel olmayan",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile mantıksız, rasyonel olmayan arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial irrational, study of irrational",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and irrational.",
+          "tr": "Veriler, karbon emisyonları ile mantıksız, rasyonel olmayan arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of irrational on the ecosystem.",
+          "tr": "Son çalışmalar, mantıksız, rasyonel olmayan yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in irrational during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında mantıksız, rasyonel olmayan durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of irrational.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, mantıksız, rasyonel olmayan seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of irrational under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında mantıksız, rasyonel olmayan davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "incredible",
+      "en": "The data reveal a strong correlation between carbon emissions and incredible.",
+      "tr": "inanılmaz, şaşırtıcı",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile inanılmaz, şaşırtıcı arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial incredible, study of incredible",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and incredible.",
+          "tr": "Veriler, karbon emisyonları ile inanılmaz, şaşırtıcı arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of incredible on the ecosystem.",
+          "tr": "Son çalışmalar, inanılmaz, şaşırtıcı yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in incredible during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında inanılmaz, şaşırtıcı durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of incredible.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, inanılmaz, şaşırtıcı seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of incredible under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında inanılmaz, şaşırtıcı davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Yüksek Sıklık"
+    },
+    {
+      "word": "rapid",
+      "en": "The data reveal a strong correlation between carbon emissions and rapid.",
+      "tr": "hızlı, ani",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile hızlı, ani arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial rapid, study of rapid",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and rapid.",
+          "tr": "Veriler, karbon emisyonları ile hızlı, ani arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of rapid on the ecosystem.",
+          "tr": "Son çalışmalar, hızlı, ani yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in rapid during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında hızlı, ani durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of rapid.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, hızlı, ani seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of rapid under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında hızlı, ani davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Çok Yüksek Sıklık"
+    },
+    {
+      "word": "rule",
+      "en": "It is essential to rule the system properties to get accurate results.",
+      "tr": "kural, hükmetmek",
+      "synonyms": "",
+      "type": "verb",
+      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini kural, hükmetmek gereklidir.",
+      "collocation": "seek to rule, directly rule",
+      "sentences": [
+        {
+          "en": "It is essential to rule the system properties to get accurate results.",
+          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini kural, hükmetmek gereklidir.",
+          "blanked": "It is essential to ________ the system properties to get accurate results."
+        },
+        {
+          "en": "Researchers always seek to rule new methodologies in this field.",
+          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler kural, hükmetmek isterler.",
+          "blanked": "Researchers always seek to ________ new methodologies in this field."
+        },
+        {
+          "en": "We need to rule the main factors before drawing a final conclusion.",
+          "tr": "Nihai bir sonuca varmadan önce ana faktörleri kural, hükmetmek gerekir.",
+          "blanked": "We need to ________ the main factors before drawing a final conclusion."
+        },
+        {
+          "en": "Several parameters were designed to rule the chemical reaction.",
+          "tr": "Kimyasal reaksiyonu kural, hükmetmek için birkaç parametre tasarlandı.",
+          "blanked": "Several parameters were designed to ________ the chemical reaction."
+        },
+        {
+          "en": "The new algorithm can rule the overall processing speed.",
+          "tr": "Yeni algoritma, genel işlem hızını kural, hükmetmek konusunda yardımcı olabilir.",
+          "blanked": "The new algorithm can ________ the overall processing speed."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "empirical",
+      "en": "The data reveal a strong correlation between carbon emissions and empirical.",
+      "tr": "deneysel, ampirik",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile deneysel, ampirik arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial empirical, study of empirical",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and empirical.",
+          "tr": "Veriler, karbon emisyonları ile deneysel, ampirik arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of empirical on the ecosystem.",
+          "tr": "Son çalışmalar, deneysel, ampirik yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in empirical during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında deneysel, ampirik durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of empirical.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, deneysel, ampirik seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of empirical under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında deneysel, ampirik davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "boundary",
+      "en": "The data reveal a strong correlation between carbon emissions and boundary.",
+      "tr": "sınır, limit",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile sınır, limit arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial boundary, study of boundary",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and boundary.",
+          "tr": "Veriler, karbon emisyonları ile sınır, limit arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of boundary on the ecosystem.",
+          "tr": "Son çalışmalar, sınır, limit yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in boundary during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında sınır, limit durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of boundary.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, sınır, limit seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of boundary under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında sınır, limit davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "originally",
+      "en": "The data reveal a strong correlation between carbon emissions and originally.",
+      "tr": "başlangıçta",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile başlangıçta arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial originally, study of originally",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and originally.",
+          "tr": "Veriler, karbon emisyonları ile başlangıçta arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of originally on the ecosystem.",
+          "tr": "Son çalışmalar, başlangıçta yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in originally during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında başlangıçta durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of originally.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, başlangıçta seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of originally under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında başlangıçta davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Çok Yüksek Sıklık"
+    },
+    {
+      "word": "vector",
+      "en": "The data reveal a strong correlation between carbon emissions and vector.",
+      "tr": "vektör",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile vektör arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial vector, study of vector",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and vector.",
+          "tr": "Veriler, karbon emisyonları ile vektör arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of vector on the ecosystem.",
+          "tr": "Son çalışmalar, vektör yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in vector during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında vektör durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of vector.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, vektör seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of vector under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında vektör davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "excrete",
+      "en": "It is essential to excrete the system properties to get accurate results.",
+      "tr": "vücuttan atmak, salgılamak",
+      "synonyms": "",
+      "type": "verb",
+      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini vücuttan atmak, salgılamak gereklidir.",
+      "collocation": "seek to excrete, directly excrete",
+      "sentences": [
+        {
+          "en": "It is essential to excrete the system properties to get accurate results.",
+          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini vücuttan atmak, salgılamak gereklidir.",
+          "blanked": "It is essential to ________ the system properties to get accurate results."
+        },
+        {
+          "en": "Researchers always seek to excrete new methodologies in this field.",
+          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler vücuttan atmak, salgılamak isterler.",
+          "blanked": "Researchers always seek to ________ new methodologies in this field."
+        },
+        {
+          "en": "We need to excrete the main factors before drawing a final conclusion.",
+          "tr": "Nihai bir sonuca varmadan önce ana faktörleri vücuttan atmak, salgılamak gerekir.",
+          "blanked": "We need to ________ the main factors before drawing a final conclusion."
+        },
+        {
+          "en": "Several parameters were designed to excrete the chemical reaction.",
+          "tr": "Kimyasal reaksiyonu vücuttan atmak, salgılamak için birkaç parametre tasarlandı.",
+          "blanked": "Several parameters were designed to ________ the chemical reaction."
+        },
+        {
+          "en": "The new algorithm can excrete the overall processing speed.",
+          "tr": "Yeni algoritma, genel işlem hızını vücuttan atmak, salgılamak konusunda yardımcı olabilir.",
+          "blanked": "The new algorithm can ________ the overall processing speed."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "interaction",
+      "en": "The data reveal a strong correlation between carbon emissions and interaction.",
+      "tr": "etkileşim",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile etkileşim arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial interaction, study of interaction",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and interaction.",
+          "tr": "Veriler, karbon emisyonları ile etkileşim arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of interaction on the ecosystem.",
+          "tr": "Son çalışmalar, etkileşim yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in interaction during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında etkileşim durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of interaction.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, etkileşim seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of interaction under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında etkileşim davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Yüksek Sıklık"
+    },
+    {
+      "word": "rootsout",
+      "en": "The data reveal a strong correlation between carbon emissions and rootsout.",
+      "tr": "rootout",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile rootout arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial rootsout, study of rootsout",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and rootsout.",
+          "tr": "Veriler, karbon emisyonları ile rootout arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of rootsout on the ecosystem.",
+          "tr": "Son çalışmalar, rootout yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in rootsout during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında rootout durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of rootsout.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, rootout seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of rootsout under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında rootout davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "conserve",
+      "en": "It is essential to conserve the system properties to get accurate results.",
+      "tr": "korumak, muhafaza etmek",
+      "synonyms": "",
+      "type": "verb",
+      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini korumak, muhafaza etmek gereklidir.",
+      "collocation": "seek to conserve, directly conserve",
+      "sentences": [
+        {
+          "en": "It is essential to conserve the system properties to get accurate results.",
+          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini korumak, muhafaza etmek gereklidir.",
+          "blanked": "It is essential to ________ the system properties to get accurate results."
+        },
+        {
+          "en": "Researchers always seek to conserve new methodologies in this field.",
+          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler korumak, muhafaza etmek isterler.",
+          "blanked": "Researchers always seek to ________ new methodologies in this field."
+        },
+        {
+          "en": "We need to conserve the main factors before drawing a final conclusion.",
+          "tr": "Nihai bir sonuca varmadan önce ana faktörleri korumak, muhafaza etmek gerekir.",
+          "blanked": "We need to ________ the main factors before drawing a final conclusion."
+        },
+        {
+          "en": "Several parameters were designed to conserve the chemical reaction.",
+          "tr": "Kimyasal reaksiyonu korumak, muhafaza etmek için birkaç parametre tasarlandı.",
+          "blanked": "Several parameters were designed to ________ the chemical reaction."
+        },
+        {
+          "en": "The new algorithm can conserve the overall processing speed.",
+          "tr": "Yeni algoritma, genel işlem hızını korumak, muhafaza etmek konusunda yardımcı olabilir.",
+          "blanked": "The new algorithm can ________ the overall processing speed."
+        }
+      ],
+      "priority": "Çok Yüksek Sıklık"
+    },
+    {
+      "word": "viable",
+      "en": "The data reveal a strong correlation between carbon emissions and viable.",
+      "tr": "yaşayabilir, uygulanabilir",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile yaşayabilir, uygulanabilir arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial viable, study of viable",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and viable.",
+          "tr": "Veriler, karbon emisyonları ile yaşayabilir, uygulanabilir arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of viable on the ecosystem.",
+          "tr": "Son çalışmalar, yaşayabilir, uygulanabilir yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in viable during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında yaşayabilir, uygulanabilir durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of viable.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, yaşayabilir, uygulanabilir seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of viable under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında yaşayabilir, uygulanabilir davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Yüksek Sıklık"
+    },
+    {
+      "word": "ecology",
+      "en": "The data reveal a strong correlation between carbon emissions and ecology.",
+      "tr": "ekoloji, çevre bilimi",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile ekoloji, çevre bilimi arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial ecology, study of ecology",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and ecology.",
+          "tr": "Veriler, karbon emisyonları ile ekoloji, çevre bilimi arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of ecology on the ecosystem.",
+          "tr": "Son çalışmalar, ekoloji, çevre bilimi yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in ecology during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında ekoloji, çevre bilimi durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of ecology.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, ekoloji, çevre bilimi seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of ecology under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında ekoloji, çevre bilimi davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Çok Yüksek Sıklık"
+    },
+    {
+      "word": "lethal",
+      "en": "The data reveal a strong correlation between carbon emissions and lethal.",
+      "tr": "ölümcül, öldürücü",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile ölümcül, öldürücü arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial lethal, study of lethal",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and lethal.",
+          "tr": "Veriler, karbon emisyonları ile ölümcül, öldürücü arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of lethal on the ecosystem.",
+          "tr": "Son çalışmalar, ölümcül, öldürücü yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in lethal during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında ölümcül, öldürücü durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of lethal.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, ölümcül, öldürücü seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of lethal under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında ölümcül, öldürücü davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "register",
+      "en": "It is essential to register the system properties to get accurate results.",
+      "tr": "kayıt, kaydolmak",
+      "synonyms": "",
+      "type": "verb",
+      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini kayıt, kaydolmak gereklidir.",
+      "collocation": "seek to register, directly register",
+      "sentences": [
+        {
+          "en": "It is essential to register the system properties to get accurate results.",
+          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini kayıt, kaydolmak gereklidir.",
+          "blanked": "It is essential to ________ the system properties to get accurate results."
+        },
+        {
+          "en": "Researchers always seek to register new methodologies in this field.",
+          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler kayıt, kaydolmak isterler.",
+          "blanked": "Researchers always seek to ________ new methodologies in this field."
+        },
+        {
+          "en": "We need to register the main factors before drawing a final conclusion.",
+          "tr": "Nihai bir sonuca varmadan önce ana faktörleri kayıt, kaydolmak gerekir.",
+          "blanked": "We need to ________ the main factors before drawing a final conclusion."
+        },
+        {
+          "en": "Several parameters were designed to register the chemical reaction.",
+          "tr": "Kimyasal reaksiyonu kayıt, kaydolmak için birkaç parametre tasarlandı.",
+          "blanked": "Several parameters were designed to ________ the chemical reaction."
+        },
+        {
+          "en": "The new algorithm can register the overall processing speed.",
+          "tr": "Yeni algoritma, genel işlem hızını kayıt, kaydolmak konusunda yardımcı olabilir.",
+          "blanked": "The new algorithm can ________ the overall processing speed."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "system",
+      "en": "The data reveal a strong correlation between carbon emissions and system.",
+      "tr": "sistem, düzen",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "Veriler, karbon emisyonları ile sistem, düzen arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+      "collocation": "crucial system, study of system",
+      "sentences": [
+        {
+          "en": "The data reveal a strong correlation between carbon emissions and system.",
+          "tr": "Veriler, karbon emisyonları ile sistem, düzen arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
+          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+        },
+        {
+          "en": "Recent studies have demonstrated the significant impact of system on the ecosystem.",
+          "tr": "Son çalışmalar, sistem, düzen yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
+          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+        },
+        {
+          "en": "Researchers must carefully monitor the changes in system during the experiment.",
+          "tr": "Araştırmacılar, deney sırasında sistem, düzen durumundaki değişimleri dikkatle gözlemlemelidir.",
+          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+        },
+        {
+          "en": "A key factor in achieving sustainable development is controlling the level of system.",
+          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, sistem, düzen seviyesinin kontrol edilmesidir.",
+          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+        },
+        {
+          "en": "The primary objective of this project is to analyze the behavior of system under pressure.",
+          "tr": "Bu projenin temel amacı, basınç altında sistem, düzen davranışını analiz etmektir.",
+          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+        }
+      ],
+      "priority": "Çok Yüksek Sıklık"
+    }
+  ]
+}

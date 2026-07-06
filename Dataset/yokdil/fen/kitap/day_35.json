@@ -1,0 +1,664 @@
+{
+  "day": 35,
+  "words": [
+    {
+      "word": "VICTORY",
+      "type": "n",
+      "turkish": "Zafer, başarı, yengi, utku",
+      "sentence_en": "The Redskins opened the season by scoring a impressive 25-3 victory against Detroit.",
+      "sentence_tr": "Redskins takımı, Detroit’i parlak bir zaferle 25-3 yenerek sezonu açtı.",
+      "synonyms": [
+        "Win",
+        "triumph"
+      ],
+      "antonyms": [
+        "Defeat",
+        "retreat"
+      ],
+      "other_forms": "Victor (n), victorious (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The Redskins opened the season by scoring a impressive 25-3 ________ against Detroit."
+    },
+    {
+      "word": "ZEAL",
+      "type": "n",
+      "turkish": "Şevk, istek",
+      "sentence_en": "The zeal for money-making never ends for some people.",
+      "sentence_tr": "Bazı insanlar için para kazanma arzusu asla bitmez.",
+      "synonyms": [
+        "Eagerness",
+        "enthusiasm"
+      ],
+      "antonyms": [
+        "Apathy",
+        "coldness"
+      ],
+      "other_forms": "Zealot (n), zealous (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The ________ for money-making never ends for some people."
+    },
+    {
+      "word": "WRECK",
+      "type": "v",
+      "turkish": "Yıkmak, tahrip etmek",
+      "sentence_en": "The explosion shattered nearby windows and wrecked two cars.",
+      "sentence_tr": "Patlama, yakınındaki camları paramparça etti ve iki arabaya ağır hasar verdi.",
+      "synonyms": [
+        "Destroy",
+        "ruin"
+      ],
+      "antonyms": [
+        "Preserve"
+      ],
+      "other_forms": "Wreckage (n), wreck (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The explosion shattered nearby windows and ________ed two cars."
+    },
+    {
+      "word": "YIELD",
+      "type": "n",
+      "turkish": "ürün vermek, sağlamak, boyun eğmek",
+      "sentence_en": "The yield of corn varies from year to year.",
+      "sentence_tr": "Mısır hasatı yıldan yıla değişiklik gösterir.",
+      "synonyms": [
+        "Harvest",
+        "crop"
+      ],
+      "antonyms": [],
+      "other_forms": "Yield (v) : vermek)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The ________ of corn varies from year to year."
+    },
+    {
+      "word": "WILL",
+      "type": "n",
+      "turkish": "İrade, istek, vasiyet",
+      "sentence_en": "After six months in hospital she began to lose the will to live.",
+      "sentence_tr": "Hastanede geçirdiği altı aydan sonra, yaşama isteğini kaybetmeye başladı.",
+      "synonyms": [
+        "Determination",
+        "decision ---PAGE_247--- 240 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "After six months in hospital she began to lose the ________ to live."
+    },
+    {
+      "word": "WELFARE",
+      "type": "n",
+      "turkish": "Refah, mutluluk",
+      "sentence_en": "These organizations have fought very hard for the rights and welfare of immigrants.",
+      "sentence_tr": "Bu kuruluşlar göçmenlerin hakları ve mutluluğu için çok mücadele verdi.",
+      "synonyms": [
+        "Well-being",
+        "prosperity",
+        "affluence"
+      ],
+      "antonyms": [
+        "Adversity",
+        "failure"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "These organizations have fought very hard for the rights and ________ of immigrants."
+    },
+    {
+      "word": "WIDESPREAD",
+      "type": "adj",
+      "turkish": "Yaygın, geniş çapta",
+      "sentence_en": "Malnutrition in the region is widespread - affecting up to 78% of children under five years old.",
+      "sentence_tr": "Beş yaşın altındaki çocukların %78’ini etkileyen kötü beslenme bölgede yaygın.",
+      "synonyms": [
+        "Plenty",
+        "abundant"
+      ],
+      "antonyms": [
+        "Limited",
+        "less",
+        "narrow"
+      ],
+      "other_forms": "",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Malnutrition in the region is ________ - affecting up to 78% of children under five years old."
+    },
+    {
+      "word": "APPEAL",
+      "type": "v",
+      "turkish": "İlgisini çekmek",
+      "sentence_en": "I think what appeals to me about his painting is the colors he uses.",
+      "sentence_tr": "Sanırım onun resimlerinde bana çekici gelen şey kullandığı renkler.",
+      "synonyms": [
+        "Invoke",
+        "attract",
+        "provoke attention",
+        "captivate"
+      ],
+      "antonyms": [
+        "Be indifferent to"
+      ],
+      "other_forms": "Appealing (adj), appeal (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I think what ________s to me about his painting is the colors he uses."
+    },
+    {
+      "word": "DIVERT",
+      "type": "v",
+      "turkish": "Yön değiştirmek",
+      "sentence_en": "Our plane had to be diverted to Stansted because of the storm.",
+      "sentence_tr": "Fırtına yüzünden uçağımız Stansted’e doğru yön değiştirdi.",
+      "synonyms": [
+        "Distract",
+        "deviate",
+        "shift"
+      ],
+      "antonyms": [],
+      "other_forms": "Diversion (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Our plane had to be ________ed to Stansted because of the storm."
+    },
+    {
+      "word": "CONVENIENT",
+      "type": "adj",
+      "turkish": "Uygun, elverişli",
+      "sentence_en": "What time would it be convenient for me to come round?",
+      "sentence_tr": "Ne zaman uğramam uygun olur?",
+      "synonyms": [
+        "Suitable",
+        "appropriate"
+      ],
+      "antonyms": [
+        "Inconvenient",
+        "useless",
+        "awkward"
+      ],
+      "other_forms": "Conveniently (adv), convenience (n) ---PAGE_248--- 241 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr COMPLY with (v) Türkçe Karşılığı : Uymak Örnek Cümle : He had no choice but to comply with the rules. Çevirisi : Kurallara uymaktan başka seçeneği yoktu. Eş ya da Yakın Anlamlılar : Abide by, obey, conform to, stick to Zıt Anlamlılar : Violate, resist Diğer Halleri : Compliance (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "What time would it be ________ for me to come round?"
+    },
+    {
+      "word": "COMPEL",
+      "type": "v",
+      "turkish": "Zorlamak",
+      "sentence_en": "I felt morally compelled to help.",
+      "sentence_tr": "Kendimi, yardım etmeye vicdanen zorunlu hissettim.",
+      "synonyms": [
+        "Force"
+      ],
+      "antonyms": [
+        "Volunteer to"
+      ],
+      "other_forms": "Compulsion (n), compulsory (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I felt morally ________led to help."
+    },
+    {
+      "word": "INITIATE",
+      "type": "v",
+      "turkish": "Başlatmak",
+      "sentence_en": "Who initiated the violence?",
+      "sentence_tr": "Kavgayı kim başlattı?",
+      "synonyms": [
+        "Start",
+        "begin"
+      ],
+      "antonyms": [
+        "End",
+        "finish"
+      ],
+      "other_forms": "Initiation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Who ________d the violence?"
+    },
+    {
+      "word": "INCLINE",
+      "type": "n",
+      "turkish": "Eğim, meyil",
+      "sentence_en": "A steep incline made the climbers exhausted.",
+      "sentence_tr": "Dik bir eğim dağcıları yordu.",
+      "synonyms": [
+        "Slope"
+      ],
+      "antonyms": [],
+      "other_forms": "Inclination (n), incline (v), inclined (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A steep ________ made the climbers exhausted."
+    },
+    {
+      "word": "GRAVE",
+      "type": "adj",
+      "turkish": "Ciddi, önemli",
+      "sentence_en": "This was a grave situation, which necessitated great experience.",
+      "sentence_tr": "Bu, büyük tecrübe gerektiren ciddi bir konuydu.",
+      "synonyms": [
+        "Serious",
+        "crucial",
+        "solemn",
+        "severe"
+      ],
+      "antonyms": [
+        "Trivial",
+        "unimportant"
+      ],
+      "other_forms": "Gravity (n) ---PAGE_249--- 242 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This was a ________ situation, which necessitated great experience."
+    },
+    {
+      "word": "PROVISIONS",
+      "type": "n",
+      "turkish": "Erzak, azık, araç-gereç",
+      "sentence_en": "Provisions for the journey have been started beforehand.",
+      "sentence_tr": "Seyahat için gerekli hazırlıklar önceden başlatıldı.",
+      "synonyms": [
+        "Food",
+        "groceries",
+        "preparation STEM from (v) Türkçe Karşılığı : -den kaynaklanmak",
+        "ileri gelmek Örnek Cümle : Their disagreement stemmed from a misunderstanding. Çevirisi : Anlaşmazlıkları bir yanlış anlamadan kaynaklandı. Eş ya da Yakın Anlamlılar : Arise from",
+        "develop out of",
+        "originate from"
+      ],
+      "antonyms": [
+        "Lead to",
+        "result in",
+        "give rise to"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "________ for the journey have been started beforehand."
+    },
+    {
+      "word": "RELUCTANT",
+      "type": "adj",
+      "turkish": "İsteksiz, gönülsüz, tereddütlü",
+      "sentence_en": "She persuaded her reluctant husband to take a trip to Florida with her.",
+      "sentence_tr": "O, isteksiz olan eşini Florida gezisi için ikna etti.",
+      "synonyms": [
+        "Unwilling"
+      ],
+      "antonyms": [
+        "Willing",
+        "eager",
+        "volunteer"
+      ],
+      "other_forms": "Reluctantly (adv), reluctance (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She persuaded her ________ husband to take a trip to Florida with her."
+    },
+    {
+      "word": "PACE",
+      "type": "n",
+      "turkish": "Hız, bir adımda alınan mesafe, ilerleme hızı, yürüyüş",
+      "sentence_en": "When she thought she heard someone following her, she quickened her pace.",
+      "sentence_tr": "Birisinin onu izlediğini duyduğunu sandığında, adımlarını hızlandırdı.",
+      "synonyms": [
+        "Step",
+        "tempo"
+      ],
+      "antonyms": [],
+      "other_forms": "Pace (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "When she thought she heard someone following her, she quickened her ________."
+    },
+    {
+      "word": "PARADOX",
+      "type": "n",
+      "turkish": "Çelişki",
+      "sentence_en": "It's an interesting paradox that drinking a lot of water can often make you feel thirsty.",
+      "sentence_tr": "Çok fazla su içmenin kişiyi sıklıkla susatabileceği ilginç bir çelişkidir.",
+      "synonyms": [
+        "Contradiction",
+        "inconsistency"
+      ],
+      "antonyms": [
+        "Consistency"
+      ],
+      "other_forms": "Paradoxical (adj), paradoxically (adv) ---PAGE_250--- 243 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It's an interesting ________ that drinking a lot of water can often make you feel thirsty."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "victory   a"
+        },
+        {
+          "id": 2,
+          "word": "zeal   b"
+        },
+        {
+          "id": 3,
+          "word": "wreck   c"
+        },
+        {
+          "id": 4,
+          "word": "yield   d"
+        },
+        {
+          "id": 5,
+          "word": "will   e"
+        },
+        {
+          "id": 1,
+          "word": "welfare   a"
+        },
+        {
+          "id": 2,
+          "word": "widespread   b"
+        },
+        {
+          "id": 3,
+          "word": "appeal   c"
+        },
+        {
+          "id": 4,
+          "word": "divert   d"
+        },
+        {
+          "id": 5,
+          "word": "convenient   e"
+        },
+        {
+          "id": 1,
+          "word": "comply with   a"
+        },
+        {
+          "id": 2,
+          "word": "compel   b"
+        },
+        {
+          "id": 3,
+          "word": "initiate   c"
+        },
+        {
+          "id": 4,
+          "word": "incline   d"
+        },
+        {
+          "id": 5,
+          "word": "grave   e"
+        },
+        {
+          "id": 1,
+          "word": "provisions   a"
+        },
+        {
+          "id": 2,
+          "word": "stem from   b"
+        },
+        {
+          "id": 3,
+          "word": "reluctant   c"
+        },
+        {
+          "id": 4,
+          "word": "pace   d"
+        },
+        {
+          "id": 5,
+          "word": "paradox   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "determination, decision"
+        },
+        {
+          "key": "b",
+          "def": "destroy, ruin"
+        },
+        {
+          "key": "c",
+          "def": "win, triumph"
+        },
+        {
+          "key": "d",
+          "def": "harvest, crop"
+        },
+        {
+          "key": "e",
+          "def": "eagerness, enthusiasm"
+        },
+        {
+          "key": "a",
+          "def": "invoke, attract, captivate"
+        },
+        {
+          "key": "b",
+          "def": "distract, deviate, shift"
+        },
+        {
+          "key": "c",
+          "def": "suitable, appropriate"
+        },
+        {
+          "key": "d",
+          "def": "plenty, abundant"
+        },
+        {
+          "key": "e",
+          "def": "well"
+        },
+        {
+          "key": "a",
+          "def": "slope"
+        },
+        {
+          "key": "b",
+          "def": "start, begin"
+        },
+        {
+          "key": "c",
+          "def": "serious, crucial, solemn, severe"
+        },
+        {
+          "key": "d",
+          "def": "abide by, obey, conform to, stick to"
+        },
+        {
+          "key": "e",
+          "def": "force"
+        },
+        {
+          "key": "a",
+          "def": "arise from, develop out of, originate from"
+        },
+        {
+          "key": "b",
+          "def": "step, tempo"
+        },
+        {
+          "key": "c",
+          "def": "contradiction, inconsistency"
+        },
+        {
+          "key": "d",
+          "def": "food, groceries, preparation"
+        },
+        {
+          "key": "e",
+          "def": "unwilling"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "victory   a"
+        },
+        {
+          "id": 2,
+          "word": "zeal   b"
+        },
+        {
+          "id": 3,
+          "word": "wreck   c"
+        },
+        {
+          "id": 4,
+          "word": "welfare   d"
+        },
+        {
+          "id": 5,
+          "word": "widespread   e"
+        },
+        {
+          "id": 1,
+          "word": "appeal   a"
+        },
+        {
+          "id": 2,
+          "word": "convenient   b"
+        },
+        {
+          "id": 3,
+          "word": "comply with   c"
+        },
+        {
+          "id": 4,
+          "word": "compel   d"
+        },
+        {
+          "id": 5,
+          "word": "initiate   e"
+        },
+        {
+          "id": 1,
+          "word": "grave   a"
+        },
+        {
+          "id": 2,
+          "word": "stem from   b"
+        },
+        {
+          "id": 3,
+          "word": "reluctant   c"
+        },
+        {
+          "id": 4,
+          "word": "paradox   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "preserve"
+        },
+        {
+          "key": "b",
+          "def": "adversity, failure"
+        },
+        {
+          "key": "c",
+          "def": "limited, less, narrow"
+        },
+        {
+          "key": "d",
+          "def": "apathy, coldness"
+        },
+        {
+          "key": "e",
+          "def": "defeat, retreat"
+        },
+        {
+          "key": "a",
+          "def": "end, finish"
+        },
+        {
+          "key": "b",
+          "def": "violate, resist"
+        },
+        {
+          "key": "c",
+          "def": "be indifferent to"
+        },
+        {
+          "key": "d",
+          "def": "be volunteer to"
+        },
+        {
+          "key": "e",
+          "def": "inconvenient, u seless, awkward"
+        },
+        {
+          "key": "a",
+          "def": "consistency"
+        },
+        {
+          "key": "b",
+          "def": "willing, eager, volunteer"
+        },
+        {
+          "key": "c",
+          "def": "result in, lead  to, give rise to"
+        },
+        {
+          "key": "d",
+          "def": "trivial, unimportant"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “triumph” ve Türkçesi “zafer” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "zeal",
+          "B": "wreckage",
+          "C": "victory",
+          "D": "yield",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “destroy” ve Türkçesi “yıkmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "appeal",
+          "B": "divert",
+          "C": "violate",
+          "D": "compel",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “suitable” ve Türkçesi “uygun” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "convenient",
+          "B": "reluctant",
+          "C": "widespread",
+          "D": "crucial",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “obey” ve Türkçesi “uymak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "ruin",
+          "B": "invoke",
+          "C": "deviate",
+          "D": "comply with",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “develop out of” ve Türkçesi “-den kaynaklanmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "result in",
+          "B": "stem from",
+          "C": "invoke",
+          "D": "lead to",
+          "E": "force"
+        }
+      }
+    ]
+  }
+}

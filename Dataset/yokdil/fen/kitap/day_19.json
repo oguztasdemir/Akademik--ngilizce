@@ -1,0 +1,701 @@
+{
+  "day": 19,
+  "words": [
+    {
+      "word": "BRILLIANT",
+      "type": "adj",
+      "turkish": "Zeki, dahice",
+      "sentence_en": "The idea was quite brilliant.",
+      "sentence_tr": "Fikir dahiceydi.",
+      "synonyms": [
+        "Clever",
+        "smart",
+        "intelligent"
+      ],
+      "antonyms": [
+        "Stupid"
+      ],
+      "other_forms": "Brilliantly (adv), brilliance (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The idea was quite ________."
+    },
+    {
+      "word": "AGGRAVATE",
+      "type": "v",
+      "turkish": "Kötüleştirmek, şiddetlendirmek",
+      "sentence_en": "The treatment only aggravated the condition.",
+      "sentence_tr": "Tedavi durumu daha da kötüleştirdi.",
+      "synonyms": [
+        "Worsen",
+        "intensify",
+        "deteriorate"
+      ],
+      "antonyms": [
+        "Diminish",
+        "lessen",
+        "flourish"
+      ],
+      "other_forms": "Aggravating (adj), aggravation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The treatment only ________d the condition."
+    },
+    {
+      "word": "AFFECT",
+      "type": "v",
+      "turkish": "Etkilemek",
+      "sentence_en": "Both buildings were badly affected by the fire.",
+      "sentence_tr": "Her iki bina da yangından kötü etkilendi.",
+      "synonyms": [
+        "Influence",
+        "impact",
+        "impress"
+      ],
+      "antonyms": [],
+      "other_forms": "Effect (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Both buildings were badly ________ed by the fire."
+    },
+    {
+      "word": "ACCLAIM",
+      "type": "v",
+      "turkish": "Övmek, beğenmek",
+      "sentence_en": "Though it was acclaimed, the novel did not sell well.",
+      "sentence_tr": "Övülmesine rağmen kitap iyi satmadı.",
+      "synonyms": [
+        "Praise",
+        "extol",
+        "commend"
+      ],
+      "antonyms": [
+        "Criticize",
+        "denounce",
+        "condemn"
+      ],
+      "other_forms": "Acclamation (n) ---PAGE_135--- 128 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Though it was ________ed, the novel did not sell well."
+    },
+    {
+      "word": "ENTHUSIASTIC",
+      "type": "adj",
+      "turkish": "İstekli, hevesli",
+      "sentence_en": "You don't seem very enthusiastic about the party - don't you want to go tonight?",
+      "sentence_tr": "Parti konusunda pek istekli görünmüyorsun. Bu gece gitmek istemiyor musun?",
+      "synonyms": [
+        "Eager",
+        "earnest"
+      ],
+      "antonyms": [
+        "Unwilling",
+        "reluctant"
+      ],
+      "other_forms": "Enthusiastically (adv), enthusiasm (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "You don't seem very ________ about the party - don't you want to go tonight?"
+    },
+    {
+      "word": "ENTIRE",
+      "type": "adj",
+      "turkish": "Bütün, tüm",
+      "sentence_en": "He'd spent the entire journey sleeping.",
+      "sentence_tr": "Tüm seyahati uyuyarak geçirdi.",
+      "synonyms": [
+        "Whole",
+        "complete"
+      ],
+      "antonyms": [
+        "Partial",
+        "incomplete",
+        "broken"
+      ],
+      "other_forms": "Entirely (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He'd spent the ________ journey sleeping."
+    },
+    {
+      "word": "DESTINY",
+      "type": "n",
+      "turkish": "Kader",
+      "sentence_en": "The destiny of our nation depends on this vote.",
+      "sentence_tr": "Milletimizin kaderi bu oylara bağlıdır.",
+      "synonyms": [
+        "Fate",
+        "lot",
+        "fortune"
+      ],
+      "antonyms": [],
+      "other_forms": "Destination (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The ________ of our nation depends on this vote."
+    },
+    {
+      "word": "CONSEQUENCE",
+      "type": "n",
+      "turkish": "Sonuç, etki",
+      "sentence_en": "If you insist on eating so much, you'll have to take the consequences!",
+      "sentence_tr": "Çok yemek yemekte ısrar edersen, sonuçlarına katlanmak zorunda kalacaksın.",
+      "synonyms": [
+        "Result",
+        "effect"
+      ],
+      "antonyms": [
+        "Cause"
+      ],
+      "other_forms": "Consequent (adj), consequently (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "If you insist on eating so much, you'll have to take the ________s!"
+    },
+    {
+      "word": "CLIENT",
+      "type": "n",
+      "turkish": "Müşteri, müvekkil",
+      "sentence_en": "Mr. Black has been a client of this firm for many years.",
+      "sentence_tr": "Mr. Black yıllardır bu şirketin müşterisidir.",
+      "synonyms": [
+        "Customer",
+        "consumer"
+      ],
+      "antonyms": [
+        "Producer",
+        "manufacturer"
+      ],
+      "other_forms": "Clientele (n) ---PAGE_136--- 129 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Mr. Black has been a ________ of this firm for many years."
+    },
+    {
+      "word": "DAZZLE",
+      "type": "v",
+      "turkish": "Şaşırtmak, etkilemek",
+      "sentence_en": "I was dazzled by his good looks.",
+      "sentence_tr": "Onun güzel bakışlarından etkilendim.",
+      "synonyms": [
+        "Impress",
+        "astonish",
+        "surprise",
+        "perplex"
+      ],
+      "antonyms": [],
+      "other_forms": "Dazzling (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I was ________d by his good looks."
+    },
+    {
+      "word": "CONTRIVE",
+      "type": "v",
+      "turkish": "İcat etmek, yaratmak, başarmak",
+      "sentence_en": "Somehow she contrived to get tickets for the concert.",
+      "sentence_tr": "Bir şekilde konser için bilet almayı başardı.",
+      "synonyms": [
+        "Invent",
+        "devise",
+        "manage"
+      ],
+      "antonyms": [
+        "Fail"
+      ],
+      "other_forms": "Contrivance (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Somehow she ________d to get tickets for the concert."
+    },
+    {
+      "word": "LOATH",
+      "type": "adj",
+      "turkish": "İsteksiz",
+      "sentence_en": "I'm loath to spend it all at once.",
+      "sentence_tr": "Hepsini bir defada harcamak istemiyorum.",
+      "synonyms": [
+        "Unwilling",
+        "reluctant"
+      ],
+      "antonyms": [
+        "Eager",
+        "enthusiastic"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I'm ________ to spend it all at once."
+    },
+    {
+      "word": "OBSCURE",
+      "type": "adj",
+      "turkish": "Belirsiz, karanlık, silik",
+      "sentence_en": "There are obscure islands in the Pacific.",
+      "sentence_tr": "Pasifik’de bilinmeyen adalar mevcut.",
+      "synonyms": [
+        "Vague",
+        "ambigious"
+      ],
+      "antonyms": [
+        "Definite",
+        "clear"
+      ],
+      "other_forms": "Obscurity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There are ________ islands in the Pacific."
+    },
+    {
+      "word": "PARAMOUNT",
+      "type": "adj",
+      "turkish": "Son derece önemli",
+      "sentence_en": "There are many priorities, but reducing the budget deficit is of paramount importance.",
+      "sentence_tr": "Birçok öncelik var, ancak bütçe açığını kapatmak son derece önemli",
+      "synonyms": [
+        "Supreme"
+      ],
+      "antonyms": [
+        "Trivial",
+        "unimportant ---PAGE_137--- 130 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There are many priorities, but reducing the budget deficit is of ________ importance."
+    },
+    {
+      "word": "FOSTER",
+      "type": "v",
+      "turkish": "Teşvik etmek, büyütmek, bakmak",
+      "sentence_en": "I'm trying to foster an interest in classical music in my children.",
+      "sentence_tr": "Çocuklarımı klasik müzikle ilgilenmeleri için teşvik etmeye çalışıyorum.",
+      "synonyms": [
+        "Encourage",
+        "nurture",
+        "bring up"
+      ],
+      "antonyms": [
+        "Discourage"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I'm trying to ________ an interest in classical music in my children."
+    },
+    {
+      "word": "FANCY",
+      "type": "v",
+      "turkish": "Hayal etmek, sanmak, -den hoşlanmak, istemek",
+      "sentence_en": "I fancied you were angry.",
+      "sentence_tr": "Senin kızgın olduğunu sandım.",
+      "synonyms": [
+        "Imagine",
+        "suppose"
+      ],
+      "antonyms": [],
+      "other_forms": "Fancy (adj), fancy (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I fancied you were angry. (________)"
+    },
+    {
+      "word": "HANDLE",
+      "type": "v",
+      "turkish": "Ele almak, baş etmek",
+      "sentence_en": "I think that he has handled the situation very well.",
+      "sentence_tr": "Durumla gayet iyi başa çıktığını düşünüyorum.",
+      "synonyms": [
+        "Deal with",
+        "manage",
+        "direct"
+      ],
+      "antonyms": [],
+      "other_forms": "Handler (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I think that he has ________d the situation very well."
+    },
+    {
+      "word": "INFRINGE",
+      "type": "v",
+      "turkish": "Çiğnemek, ihlal etmek",
+      "sentence_en": "They infringed building regulations.",
+      "sentence_tr": "İnşa düzenlemelerini ihlal ettiler.",
+      "synonyms": [
+        "Break",
+        "violate",
+        "disobey"
+      ],
+      "antonyms": [
+        "Keep",
+        "obey",
+        "comply with",
+        "conform to",
+        "abide by"
+      ],
+      "other_forms": "Infringement (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They ________d building regulations."
+    },
+    {
+      "word": "INTERACT",
+      "type": "v",
+      "turkish": "Etkileşimde bulunmak",
+      "sentence_en": "Dominique's teacher says that she interacts well with the other children.",
+      "sentence_tr": "Dominique’in öğretmeni onun diğer çocuklarla iyi bir etkileşim kurduğunu söylüyor.",
+      "synonyms": [
+        "Act on each other"
+      ],
+      "antonyms": [],
+      "other_forms": "Interaction (n), interactive (adj), interactively (adv)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Dominique's teacher says that she ________s well with the other children."
+    },
+    {
+      "word": "PROHIBIT",
+      "type": "v",
+      "turkish": "Yasaklamak, menetmek",
+      "sentence_en": "Motor vehicles are prohibited from driving in the town centre.",
+      "sentence_tr": "Motorlu araçların şehir merkezine girişi yasaktır.",
+      "synonyms": [
+        "Ban",
+        "forbid"
+      ],
+      "antonyms": [
+        "Allow",
+        "let"
+      ],
+      "other_forms": "Prohibition (n), prohibited (adj) ---PAGE_138--- 131 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Motor vehicles are ________ed from driving in the town centre."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "brilliant   a"
+        },
+        {
+          "id": 2,
+          "word": "aggravate   b"
+        },
+        {
+          "id": 3,
+          "word": "affect   c"
+        },
+        {
+          "id": 4,
+          "word": "acclaim   d"
+        },
+        {
+          "id": 5,
+          "word": "enthusiastic   e"
+        },
+        {
+          "id": 1,
+          "word": "entire   a"
+        },
+        {
+          "id": 2,
+          "word": "destiny   b"
+        },
+        {
+          "id": 3,
+          "word": "consequence   c"
+        },
+        {
+          "id": 4,
+          "word": "client   d"
+        },
+        {
+          "id": 5,
+          "word": "dazzle   e"
+        },
+        {
+          "id": 1,
+          "word": "contrive   a"
+        },
+        {
+          "id": 2,
+          "word": "loath   b"
+        },
+        {
+          "id": 3,
+          "word": "obscure   c"
+        },
+        {
+          "id": 4,
+          "word": "paramount   d"
+        },
+        {
+          "id": 5,
+          "word": "foster   e"
+        },
+        {
+          "id": 1,
+          "word": "fancy   a"
+        },
+        {
+          "id": 2,
+          "word": "handle   b"
+        },
+        {
+          "id": 3,
+          "word": "infringe   c"
+        },
+        {
+          "id": 4,
+          "word": "interact   d"
+        },
+        {
+          "id": 5,
+          "word": "prohibit   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "influence, impact, impress"
+        },
+        {
+          "key": "b",
+          "def": "praise, ext ol, commend"
+        },
+        {
+          "key": "c",
+          "def": "eager, earnest"
+        },
+        {
+          "key": "d",
+          "def": "worsen, intensify, deteriorate"
+        },
+        {
+          "key": "e",
+          "def": "clever, smart, intelligent"
+        },
+        {
+          "key": "a",
+          "def": "customer, consumer"
+        },
+        {
+          "key": "b",
+          "def": "result, effect"
+        },
+        {
+          "key": "c",
+          "def": "impress, astonish, surprise, perplex"
+        },
+        {
+          "key": "d",
+          "def": "whole, complete"
+        },
+        {
+          "key": "e",
+          "def": "fate, lot, fortune"
+        },
+        {
+          "key": "a",
+          "def": "encourage, nurture, bring up"
+        },
+        {
+          "key": "b",
+          "def": "vague, ambigious"
+        },
+        {
+          "key": "c",
+          "def": "invent, devise, manage"
+        },
+        {
+          "key": "d",
+          "def": "supreme"
+        },
+        {
+          "key": "e",
+          "def": "unwilling, reluctant"
+        },
+        {
+          "key": "a",
+          "def": "deal with, manage, direct"
+        },
+        {
+          "key": "b",
+          "def": "act on each other"
+        },
+        {
+          "key": "c",
+          "def": "ban, forbid"
+        },
+        {
+          "key": "d",
+          "def": "imagine, suppose"
+        },
+        {
+          "key": "e",
+          "def": "break, violate, disobey"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "brilliant   a"
+        },
+        {
+          "id": 2,
+          "word": "aggravate   b"
+        },
+        {
+          "id": 3,
+          "word": "acclaim   c"
+        },
+        {
+          "id": 4,
+          "word": "enthusiastic   d"
+        },
+        {
+          "id": 1,
+          "word": "entire   a"
+        },
+        {
+          "id": 2,
+          "word": "consequence   b"
+        },
+        {
+          "id": 3,
+          "word": "client   c"
+        },
+        {
+          "id": 4,
+          "word": "contrive   d"
+        },
+        {
+          "id": 5,
+          "word": "loath   e"
+        },
+        {
+          "id": 1,
+          "word": "obscure   a"
+        },
+        {
+          "id": 2,
+          "word": "paramount   b"
+        },
+        {
+          "id": 3,
+          "word": "foster   c"
+        },
+        {
+          "id": 4,
+          "word": "infringe   d"
+        },
+        {
+          "id": 5,
+          "word": "prohibit   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "unwilling, reluctant"
+        },
+        {
+          "key": "b",
+          "def": "criticize, denounce, condemn"
+        },
+        {
+          "key": "c",
+          "def": "diminish, lessen, flourish"
+        },
+        {
+          "key": "d",
+          "def": "stupid"
+        },
+        {
+          "key": "a",
+          "def": "producer, manufacturer"
+        },
+        {
+          "key": "b",
+          "def": "fail"
+        },
+        {
+          "key": "c",
+          "def": "eager, enthusiastic"
+        },
+        {
+          "key": "d",
+          "def": "cause"
+        },
+        {
+          "key": "e",
+          "def": "partial, incomplete, broken"
+        },
+        {
+          "key": "a",
+          "def": "allow, let"
+        },
+        {
+          "key": "b",
+          "def": "discourage"
+        },
+        {
+          "key": "c",
+          "def": "definite, clear"
+        },
+        {
+          "key": "d",
+          "def": "keep, obey, comply with, conform to, abide by"
+        },
+        {
+          "key": "e",
+          "def": "trivial, unimportant"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “supreme” ve Türkçesi “son derece önemli” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "trivial",
+          "B": "obscure",
+          "C": "definite",
+          "D": "paramount",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Zıt anlamlısı “incomplete” ve Türkçesi “tüm, bütün” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "partial",
+          "B": "eager",
+          "C": "entire",
+          "D": "earnest",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “deteriorate” ve Türkçesi “kötüleştirmek, şiddetlendirmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "diminish",
+          "B": "flourish",
+          "C": "impact",
+          "D": "extol",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “astonish” ve Türkçesi “şaşırtmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "contrive",
+          "B": "dazzle",
+          "C": "fancy",
+          "D": "handle",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “encourage, bring up” ve Türkçesi “teşvik etmek, yetiştirmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "foster",
+          "B": "suppose",
+          "C": "violate",
+          "D": "conform",
+          "E": "forbid"
+        }
+      }
+    ]
+  }
+}

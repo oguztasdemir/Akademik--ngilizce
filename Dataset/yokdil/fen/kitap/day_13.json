@@ -1,0 +1,719 @@
+{
+  "day": 13,
+  "words": [
+    {
+      "word": "AUSTERE",
+      "type": "adj",
+      "turkish": "Sert, ciddi, katı",
+      "sentence_en": "He experienced an austere childhood during the war.",
+      "sentence_tr": "Savaş sırasında zor bir çocukluk geçirdi.",
+      "synonyms": [
+        "Severe",
+        "serious",
+        "strict",
+        "stern",
+        "hard",
+        "harsh",
+        "rigid"
+      ],
+      "antonyms": [
+        "Soft",
+        "indulgent"
+      ],
+      "other_forms": "Austerity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He experienced an ________ childhood during the war."
+    },
+    {
+      "word": "BLUNTLY",
+      "type": "adv",
+      "turkish": "Açık, dürüst bir şekilde",
+      "sentence_en": "To put it bluntly, you have to improve your English.",
+      "sentence_tr": "Açık olmak gerekirse, İngilizceni geliştirmek zorundasın.",
+      "synonyms": [
+        "Frankly",
+        "honestly"
+      ],
+      "antonyms": [
+        "Indirectly",
+        "by implying"
+      ],
+      "other_forms": "Blunt (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "To put it ________, you have to improve your English."
+    },
+    {
+      "word": "ANTICIPATE",
+      "type": "v",
+      "turkish": "Beklemek, ummak",
+      "sentence_en": "They anticipate having several applications for the job.",
+      "sentence_tr": "İş için birçok başvuru olacağını umuyorlar.",
+      "synonyms": [
+        "Expect",
+        "await",
+        "foresee",
+        "forecast"
+      ],
+      "antonyms": [
+        "Unforesee"
+      ],
+      "other_forms": "Anticipation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They ________ having several applications for the job."
+    },
+    {
+      "word": "AILMENT",
+      "type": "n",
+      "turkish": "Hastalık",
+      "sentence_en": "Nurses can treat minor ailments themselves.",
+      "sentence_tr": "Hemşireler küçük hastalıkları kendileri tedavi edebilir.",
+      "synonyms": [
+        "Illness",
+        "disease",
+        "complaint",
+        "disorder",
+        "malfunction"
+      ],
+      "antonyms": [
+        "Health",
+        "peace"
+      ],
+      "other_forms": "Ailing (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Nurses can treat minor ________s themselves."
+    },
+    {
+      "word": "ACCOMPANY",
+      "type": "v",
+      "turkish": "Eşlik etmek",
+      "sentence_en": "Would you like me to accompany you?",
+      "sentence_tr": "Size eşlik etmemi ister misiniz?",
+      "synonyms": [
+        "Go with",
+        "escort",
+        "attend",
+        "follow"
+      ],
+      "antonyms": [
+        "Abandon",
+        "leave",
+        "quit",
+        "desert"
+      ],
+      "other_forms": "Accomplice (n), accompanying (adj) ---PAGE_93--- 86 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Would you like me to ________ you?"
+    },
+    {
+      "word": "ACCORDINGLY",
+      "type": "adv",
+      "turkish": "Uygun şekilde, bu nedenle, -e bağlı olarak",
+      "sentence_en": "She's an expert in her field, and is well- paid accordingly.",
+      "sentence_tr": "Alanında uzman, buna bağlı olarak da iyi maaş alıyor.",
+      "synonyms": [
+        "Appropriately",
+        "consequently",
+        "therefore",
+        "hence",
+        "as a result"
+      ],
+      "antonyms": [
+        "Inconsistently",
+        "conversely"
+      ],
+      "other_forms": "Accord (n), accord (v)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "She's an expert in her field, and is well- paid ________."
+    },
+    {
+      "word": "ABDUCT",
+      "type": "v",
+      "turkish": "Kaçırmak",
+      "sentence_en": "They abducted the little innocent girl.",
+      "sentence_tr": "Onlar küçük, masum kızı kaçırdı.",
+      "synonyms": [
+        "Kidnap",
+        "seize",
+        "drag away"
+      ],
+      "antonyms": [
+        "Restore",
+        "reinstate"
+      ],
+      "other_forms": "Abduction (n), abductor (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They ________ed the little innocent girl."
+    },
+    {
+      "word": "SHIFT",
+      "type": "v",
+      "turkish": "Değişmek, değiştirmek, kımıldamak",
+      "sentence_en": "The wind is expected to shift to the east tomorrow.",
+      "sentence_tr": "Rüzgarın yarın doğuya yönelmesi bekleniyor.",
+      "synonyms": [
+        "Change",
+        "alter",
+        "modify"
+      ],
+      "antonyms": [
+        "Conserve",
+        "preserve"
+      ],
+      "other_forms": "Shift (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The wind is expected to ________ to the east tomorrow."
+    },
+    {
+      "word": "SECULAR",
+      "type": "adj",
+      "turkish": "Laik",
+      "sentence_en": "We live in an increasingly secular society, in which religion has less and less influence on our daily lives.",
+      "sentence_tr": "Dinin günlük hayatımızda çok az etkisinin olduğu, gittikçe daha da laikleşen bir toplumda yaşıyoruz.",
+      "synonyms": [
+        "Worldly"
+      ],
+      "antonyms": [
+        "Religious"
+      ],
+      "other_forms": "Secularism (n), secularist (adj), secularize (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We live in an increasingly ________ society, in which religion has less and less influence on our daily lives."
+    },
+    {
+      "word": "COURSE",
+      "type": "n",
+      "turkish": "Seyir, akış, yol, yön",
+      "sentence_en": "The pilot avoided a collision by changing course.",
+      "sentence_tr": "Pilot istikameti değiştirerek bir çarpışmayı önledi.",
+      "synonyms": [
+        "Route",
+        "way",
+        "direction",
+        "drift ---PAGE_94--- 87 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The pilot avoided a collision by changing ________."
+    },
+    {
+      "word": "DEPART",
+      "type": "v",
+      "turkish": "Ayrılmak, hareket etmek",
+      "sentence_en": "The train for London departs from Platform 2.",
+      "sentence_tr": "Londra treni 2. perondan hareket edecek.",
+      "synonyms": [
+        "Leave",
+        "set off"
+      ],
+      "antonyms": [
+        "Arrive",
+        "come"
+      ],
+      "other_forms": "Departure (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The train for London ________s from Platform 2."
+    },
+    {
+      "word": "CONSTRAIN",
+      "type": "v",
+      "turkish": "Zorlamak, baskı altına almak, sınırlamak",
+      "sentence_en": "The company's progress was constrained by the managers who refused to look forward.",
+      "sentence_tr": "Şirketin gelişimi, ileriyi görmek istemeyen yöneticiler yüzünden sınırlandı.",
+      "synonyms": [
+        "Force",
+        "compel",
+        "limit"
+      ],
+      "antonyms": [],
+      "other_forms": "Constraint (n), constrained (adj)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The company's progress was ________ed by the managers who refused to look forward."
+    },
+    {
+      "word": "DEVIATE",
+      "type": "v",
+      "turkish": "Sapmak, yön değiştirmek",
+      "sentence_en": "The road deviates both to the right and left.",
+      "sentence_tr": "Yol hem sağa hem de sola doğru sapıyor.",
+      "synonyms": [
+        "Move away",
+        "diverge"
+      ],
+      "antonyms": [],
+      "other_forms": "Deviation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The road ________s both to the right and left."
+    },
+    {
+      "word": "DEVOUT",
+      "type": "adj",
+      "turkish": "Dindar",
+      "sentence_en": "He is a devout person who always goes to church.",
+      "sentence_tr": "O daima kiliseye giden dindar birisi.",
+      "synonyms": [
+        "Religious"
+      ],
+      "antonyms": [
+        "Irreligious",
+        "indifferent"
+      ],
+      "other_forms": "Devoutly (adv), devoutness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He is a ________ person who always goes to church."
+    },
+    {
+      "word": "DROUGHT",
+      "type": "n",
+      "turkish": "Kuraklık",
+      "sentence_en": "This year a severe drought has ruined the crops.",
+      "sentence_tr": "Bu yıl ciddi bir kuraklık ekinleri mahvetti.",
+      "synonyms": [
+        "Dry season"
+      ],
+      "antonyms": [
+        "Wet season",
+        "precipitation ---PAGE_95--- 88 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "other_forms": "",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "This year a severe ________ has ruined the crops."
+    },
+    {
+      "word": "ELIGIBLE",
+      "type": "adj",
+      "turkish": "Uygun, seçilebilir",
+      "sentence_en": "Only people over 18 are eligible to vote.",
+      "sentence_tr": "Sadece 18 yaşın üzerindekiler oy verebilir.",
+      "synonyms": [
+        "Suitable",
+        "appropriate"
+      ],
+      "antonyms": [
+        "Ineligible",
+        "ordinary"
+      ],
+      "other_forms": "Eligibility (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "Only people over 18 are ________ to vote."
+    },
+    {
+      "word": "FULFILL",
+      "type": "v",
+      "turkish": "Yerine getirmek",
+      "sentence_en": "School fails if it does not fulfil the needs of its pupils.",
+      "sentence_tr": "Okul eğer öğrencilerin beklentilerini yerine getirmezse başarısız olur.",
+      "synonyms": [
+        "Execute",
+        "carry out",
+        "implement"
+      ],
+      "antonyms": [
+        "Neglect",
+        "ignore",
+        "falsify"
+      ],
+      "other_forms": "Fulfilling (adj), fulfillment (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "School fails if it does not fulfil the needs of its pupils. (________)"
+    },
+    {
+      "word": "HARASS",
+      "type": "v",
+      "turkish": "Taciz etmek",
+      "sentence_en": "Stop harassing me with your words!",
+      "sentence_tr": "Laflarınla beni taciz etmeyi kes!",
+      "synonyms": [
+        "Bother",
+        "pester"
+      ],
+      "antonyms": [],
+      "other_forms": "Harassed (adj), harassment (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Stop ________ing me with your words!"
+    },
+    {
+      "word": "PEAK",
+      "type": "n",
+      "turkish": "Zirve",
+      "sentence_en": "The climbers reached the peak in the end.",
+      "sentence_tr": "Dağcılar sonunda zirveye ulaştı.",
+      "synonyms": [
+        "Summit",
+        "zenith"
+      ],
+      "antonyms": [
+        "Bottom"
+      ],
+      "other_forms": "Peak (v), peak (adj)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The climbers reached the ________ in the end."
+    },
+    {
+      "word": "OUTWEIGH",
+      "type": "v",
+      "turkish": "Daha ağır basmak, daha önemli olmak",
+      "sentence_en": "The benefits of this treatment far outweigh any risk.",
+      "sentence_tr": "Bu tedavinin faydaları herhangi bir riskten çok daha ağır basmaktadır.",
+      "synonyms": [
+        "Be greater in weight",
+        "be more than ---PAGE_96--- 89 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The benefits of this treatment far ________ any risk."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "austere   a"
+        },
+        {
+          "id": 2,
+          "word": "bluntly   b"
+        },
+        {
+          "id": 3,
+          "word": "anticipate   c"
+        },
+        {
+          "id": 4,
+          "word": "ailment   d"
+        },
+        {
+          "id": 5,
+          "word": "accompany   e"
+        },
+        {
+          "id": 1,
+          "word": "accordingly   a"
+        },
+        {
+          "id": 2,
+          "word": "abduct   b"
+        },
+        {
+          "id": 3,
+          "word": "shift   c"
+        },
+        {
+          "id": 4,
+          "word": "secular   d"
+        },
+        {
+          "id": 5,
+          "word": "course   e"
+        },
+        {
+          "id": 1,
+          "word": "depart   a"
+        },
+        {
+          "id": 2,
+          "word": "constrain   b"
+        },
+        {
+          "id": 3,
+          "word": "deviate   c"
+        },
+        {
+          "id": 4,
+          "word": "devout   d"
+        },
+        {
+          "id": 5,
+          "word": "drought   e"
+        },
+        {
+          "id": 1,
+          "word": "eligible   a"
+        },
+        {
+          "id": 2,
+          "word": "fulfill   b"
+        },
+        {
+          "id": 3,
+          "word": "harass   c"
+        },
+        {
+          "id": 4,
+          "word": "peak   d"
+        },
+        {
+          "id": 5,
+          "word": "outweigh   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "expect, await, foresee, forecast"
+        },
+        {
+          "key": "b",
+          "def": "illness, disease, complaint"
+        },
+        {
+          "key": "c",
+          "def": "go with, escort, attend, follow"
+        },
+        {
+          "key": "d",
+          "def": "frankly, honestly"
+        },
+        {
+          "key": "e",
+          "def": "severe, serious, strict"
+        },
+        {
+          "key": "a",
+          "def": "route, way, direction, drift"
+        },
+        {
+          "key": "b",
+          "def": "change, alter, modify"
+        },
+        {
+          "key": "c",
+          "def": "appropriately, consequently, t herefore, hence, as a result"
+        },
+        {
+          "key": "d",
+          "def": "worldly"
+        },
+        {
+          "key": "e",
+          "def": "kidnap, seize, drag away"
+        },
+        {
+          "key": "a",
+          "def": "religious"
+        },
+        {
+          "key": "b",
+          "def": "move away, diverge"
+        },
+        {
+          "key": "c",
+          "def": "dry season"
+        },
+        {
+          "key": "d",
+          "def": "leave, set off"
+        },
+        {
+          "key": "e",
+          "def": "force, compel, limit"
+        },
+        {
+          "key": "a",
+          "def": "execute, carry out, implement"
+        },
+        {
+          "key": "b",
+          "def": "summit, zenith"
+        },
+        {
+          "key": "c",
+          "def": "greater in weight, more"
+        },
+        {
+          "key": "d",
+          "def": "suitable, appropriate"
+        },
+        {
+          "key": "e",
+          "def": "bother, pester"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "austere   a"
+        },
+        {
+          "id": 2,
+          "word": "bluntly   b"
+        },
+        {
+          "id": 3,
+          "word": "anticipate   c"
+        },
+        {
+          "id": 4,
+          "word": "ailment   d"
+        },
+        {
+          "id": 5,
+          "word": "accompany   e"
+        },
+        {
+          "id": 1,
+          "word": "accordingly   a"
+        },
+        {
+          "id": 2,
+          "word": "abduct   b"
+        },
+        {
+          "id": 3,
+          "word": "shift   c"
+        },
+        {
+          "id": 4,
+          "word": "secular   d"
+        },
+        {
+          "id": 5,
+          "word": "depart   e"
+        },
+        {
+          "id": 1,
+          "word": "devout   a"
+        },
+        {
+          "id": 2,
+          "word": "drought   b"
+        },
+        {
+          "id": 3,
+          "word": "eligible   c"
+        },
+        {
+          "id": 4,
+          "word": "fulfill   d"
+        },
+        {
+          "id": 5,
+          "word": "peak   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "unforesee"
+        },
+        {
+          "key": "b",
+          "def": "health, peace"
+        },
+        {
+          "key": "c",
+          "def": "abandon, leave, quit, desert"
+        },
+        {
+          "key": "d",
+          "def": "indirectly, by implying"
+        },
+        {
+          "key": "e",
+          "def": "soft, indulgent"
+        },
+        {
+          "key": "a",
+          "def": "religious"
+        },
+        {
+          "key": "b",
+          "def": "conserve, preserve"
+        },
+        {
+          "key": "c",
+          "def": "arrive, come"
+        },
+        {
+          "key": "d",
+          "def": "inconsistently, conversely"
+        },
+        {
+          "key": "e",
+          "def": "restore, reinstate"
+        },
+        {
+          "key": "a",
+          "def": "wet season, precipitation"
+        },
+        {
+          "key": "b",
+          "def": "neglect, ignore, falsify"
+        },
+        {
+          "key": "c",
+          "def": "bottom"
+        },
+        {
+          "key": "d",
+          "def": "irreligious, indifferent"
+        },
+        {
+          "key": "e",
+          "def": "ordinary"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “await” ve Türkçesi “beklemek, ummak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "abandon",
+          "B": "restore",
+          "C": "anticipate",
+          "D": "modify",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “religious” ve Türkçesi “dindar” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "indifferent",
+          "B": "constrained",
+          "C": "eligible",
+          "D": "ordinary",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “suitable” ve Türkçesi “uygun, seçilebilir” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "eligible",
+          "B": "peak",
+          "C": "devout",
+          "D": "secular",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “disease” ve Türkçesi “hastalık” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "anticipation",
+          "B": "abduction",
+          "C": "course",
+          "D": "ailment",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Phrasal verb olarak eş anlamlısı “carry out” ve Türkçesi “yapmak, yerine getirmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "harass",
+          "B": "fulfill",
+          "C": "ignore",
+          "D": "outweigh",
+          "E": "diverge"
+        }
+      }
+    ]
+  }
+}

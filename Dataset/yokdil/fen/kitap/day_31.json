@@ -1,0 +1,683 @@
+{
+  "day": 31,
+  "words": [
+    {
+      "word": "RITUAL",
+      "type": "n",
+      "turkish": "Dinsel tören, ayin, seremoni",
+      "sentence_en": "Different religions have different rituals.",
+      "sentence_tr": "Farklı dinlerin farklı dini törenleri vardır.",
+      "synonyms": [
+        "Ceremony"
+      ],
+      "antonyms": [],
+      "other_forms": "Ritual (adj), rite (n), ritualistic (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Different religions have different ________s."
+    },
+    {
+      "word": "ABANDON",
+      "type": "v",
+      "turkish": "Terketmek, bırakmak, vazgeçmek",
+      "sentence_en": "She abandoned painting.",
+      "sentence_tr": "Resim yapmayı bıraktı.",
+      "synonyms": [
+        "Give up",
+        "leave",
+        "desert",
+        "forsake"
+      ],
+      "antonyms": [
+        "Keep",
+        "retain",
+        "continue",
+        "uphold",
+        "maintain"
+      ],
+      "other_forms": "Abandonment (n), abandoned (adj)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "She ________ed painting."
+    },
+    {
+      "word": "CHEAT",
+      "type": "v",
+      "turkish": "Kopya çekmek, aldatmak",
+      "sentence_en": "She cheated in the test by copying from the boy in the front.",
+      "sentence_tr": "Öndeki çocuktan bakarak testte kopya çekti.",
+      "synonyms": [
+        "Copy",
+        "deceive",
+        "swindle",
+        "trick"
+      ],
+      "antonyms": [
+        "To be honest",
+        "to be frank"
+      ],
+      "other_forms": "Cheat (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She ________ed in the test by copying from the boy in the front."
+    },
+    {
+      "word": "CEASE",
+      "type": "v",
+      "turkish": "Durmak, durdurmak",
+      "sentence_en": "The company has decided to cease all operations.",
+      "sentence_tr": "Şirket tüm faaliyetleri durdurmaya karar verdi.",
+      "synonyms": [
+        "Stop"
+      ],
+      "antonyms": [
+        "Continue",
+        "keep on"
+      ],
+      "other_forms": "Cease (n), ceaseless (adj) ---PAGE_219--- 212 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The company has decided to ________ all operations."
+    },
+    {
+      "word": "BENEFICIAL",
+      "type": "adj",
+      "turkish": "Faydalı, yararlı, olumlu",
+      "sentence_en": "The improvement in sales figures had a beneficial effect on the company.",
+      "sentence_tr": "Satışlardaki artış şirket üzerinde olumlu bir etki yarattı.",
+      "synonyms": [
+        "Useful"
+      ],
+      "antonyms": [
+        "Useless",
+        "futile"
+      ],
+      "other_forms": "Benefit (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The improvement in sales figures had a ________ effect on the company."
+    },
+    {
+      "word": "BEWILDER",
+      "type": "v",
+      "turkish": "Şaşır(t)mak, hayrete düşürmek",
+      "sentence_en": "The instructions completely bewildered me.",
+      "sentence_tr": "Açıklamalar tamamıyla kafamı karıştırdı.",
+      "synonyms": [
+        "Confuse",
+        "astonish"
+      ],
+      "antonyms": [],
+      "other_forms": "Bewildered (adj), bewildering (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The instructions completely ________ed me."
+    },
+    {
+      "word": "DWELL",
+      "type": "v",
+      "turkish": "Yaşamak, yerleşmek",
+      "sentence_en": "She dwelt in remote parts of Asia for many years.",
+      "sentence_tr": "O yıllarca Asya’nın ücra bölgelerinde yaşadı.",
+      "synonyms": [
+        "Live",
+        "inhabit"
+      ],
+      "antonyms": [],
+      "other_forms": "Dweller (n), dwelling (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She dwelt in remote parts of Asia for many years. (________)"
+    },
+    {
+      "word": "EXERT",
+      "type": "v",
+      "turkish": "Kullanmak, uygulamak",
+      "sentence_en": "Some managers exert considerable pressure on their staff to work extra hours without being paid.",
+      "sentence_tr": "Bazı yöneticiler çalışanları üzerinde, ödeme yapmadan fazla mesai yapmaları konusunda baskı uyguluyorlar.",
+      "synonyms": [
+        "Use",
+        "make use of",
+        "utilize"
+      ],
+      "antonyms": [],
+      "other_forms": "Exertion (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "Some managers ________ considerable pressure on their staff to work extra hours without being paid."
+    },
+    {
+      "word": "EVADE",
+      "type": "v",
+      "turkish": "Kaçırmak, kurtulmak",
+      "sentence_en": "Just give me an answer and do not try evading the question!",
+      "sentence_tr": "Bana bir cevap ver, sorudan kaçmaya çalışma.",
+      "synonyms": [
+        "Escape",
+        "avoid"
+      ],
+      "antonyms": [
+        "Stay",
+        "keep standstill"
+      ],
+      "other_forms": "Evasion (n) ---PAGE_220--- 213 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Just give me an answer and do not try evading the question! (________)"
+    },
+    {
+      "word": "EXPLODE",
+      "type": "v",
+      "turkish": "Patlamak, infilak etmek",
+      "sentence_en": "A bomb exploded at one of London's busiest railway stations this morning.",
+      "sentence_tr": "Bu sabah Londra’nın en yoğun metro istasyonlarından birinde bir bomba patladı.",
+      "synonyms": [
+        "Go off"
+      ],
+      "antonyms": [],
+      "other_forms": "Explosion (n), expolisive (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A bomb ________d at one of London's busiest railway stations this morning."
+    },
+    {
+      "word": "COMMEMORATE",
+      "type": "v",
+      "turkish": "Anmak, hatırlamak",
+      "sentence_en": "A statue has been built to commemorate the 100th anniversary of the poet's birthday.",
+      "sentence_tr": "Şairin 100. doğumgününü anmak için bir heykel dikildi.",
+      "synonyms": [
+        "Celebrate",
+        "honor"
+      ],
+      "antonyms": [
+        "Forget"
+      ],
+      "other_forms": "Commemoration (n), commemorative (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A statue has been built to ________ the 100th anniversary of the poet's birthday."
+    },
+    {
+      "word": "PERISH",
+      "type": "v",
+      "turkish": "Yok olmak, çürümek",
+      "sentence_en": "Three hundred people perished in the earthquake.",
+      "sentence_tr": "Depremde 300 kişi yok oldu.",
+      "synonyms": [
+        "Die out",
+        "disappear"
+      ],
+      "antonyms": [
+        "Blossom"
+      ],
+      "other_forms": "Perishable (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Three hundred people ________ed in the earthquake."
+    },
+    {
+      "word": "NONSENSE",
+      "type": "adj",
+      "turkish": "Saçma",
+      "sentence_en": "This report is nonsense and nothing but a waste of paper.",
+      "sentence_tr": "Bu haber saçma ve kağıt israfından başka birşey değil.",
+      "synonyms": [
+        "Irrational",
+        "ridiculous",
+        "absurd"
+      ],
+      "antonyms": [
+        "Rational",
+        "logical",
+        "plausible",
+        "sensible",
+        "reasonable"
+      ],
+      "other_forms": "Nonsensical (adj), nonsense (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This report is ________ and nothing but a waste of paper."
+    },
+    {
+      "word": "NOTIFY",
+      "type": "v",
+      "turkish": "Bildirmek, bilgilendirmek, haber vermek",
+      "sentence_en": "The school is required to notify parents if their children fail to come to school.",
+      "sentence_tr": "Eğer çocukları okula gelmiyorsa okulun ebeveynleri bilgilendirmesi gerekir.",
+      "synonyms": [
+        "Inform"
+      ],
+      "antonyms": [
+        "Conceal",
+        "misinform"
+      ],
+      "other_forms": "Notifiable (adj), notification (n) ---PAGE_221--- 214 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The school is required to ________ parents if their children fail to come to school."
+    },
+    {
+      "word": "RESUME",
+      "type": "v",
+      "turkish": "Yeniden başlamak, kaldığı yerden devam etmek",
+      "sentence_en": "Please resume your seats, the performance will continue in two minutes.",
+      "sentence_tr": "Lütfen yerlerinize dönünüz, gösteri iki dakika içinde başlayacak.",
+      "synonyms": [
+        "Start again",
+        "go back"
+      ],
+      "antonyms": [
+        "Finish"
+      ],
+      "other_forms": "Resumption (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Please ________ your seats, the performance will continue in two minutes."
+    },
+    {
+      "word": "MUSTER",
+      "type": "v",
+      "turkish": "Toplamak, biraraya getirmek",
+      "sentence_en": "The general mustered his troops.",
+      "sentence_tr": "General birliklerini topladı.",
+      "synonyms": [
+        "Collect",
+        "gather",
+        "assemble"
+      ],
+      "antonyms": [
+        "Disperse"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The general ________ed his troops."
+    },
+    {
+      "word": "LURE",
+      "type": "v",
+      "turkish": "Cezbetmek, çekmek",
+      "sentence_en": "Supermarket chains try to lure customers with price discounts.",
+      "sentence_tr": "Supermarket zincirleri fiyat indirimleri ile müşterileri cezbetmeye çalışıyor.",
+      "synonyms": [
+        "Attract",
+        "allure",
+        "entice"
+      ],
+      "antonyms": [],
+      "other_forms": "Lure (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Supermarket chains try to ________ customers with price discounts."
+    },
+    {
+      "word": "FURIOUS",
+      "type": "adj",
+      "turkish": "Kızgın",
+      "sentence_en": "I was late and he was furious with me.",
+      "sentence_tr": "Ben geç kaldım ve o da bana kızdı.",
+      "synonyms": [
+        "Angry"
+      ],
+      "antonyms": [
+        "Calm"
+      ],
+      "other_forms": "Fury (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I was late and he was ________ with me."
+    },
+    {
+      "word": "PROSPER",
+      "type": "v",
+      "turkish": "Gelişmek, zenginleşmek, başarılı olmak",
+      "sentence_en": "A lot of microchip manufacturing companies prospered during that time.",
+      "sentence_tr": "Mikroçip üreten bir çok fabrika o zamanlarda zenginleşti.",
+      "synonyms": [
+        "Flourish",
+        "thrive"
+      ],
+      "antonyms": [],
+      "other_forms": "Prosperous (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A lot of microchip manufacturing companies ________ed during that time."
+    },
+    {
+      "word": "DISASTER",
+      "type": "n",
+      "turkish": "Felaket",
+      "sentence_en": "This is one of the worst natural disasters I have ever witnessed.",
+      "sentence_tr": "Bu şimdiye kadar tanık olduğum en kötü felaketlerden biri.",
+      "synonyms": [
+        "Calamity",
+        "catastrophe"
+      ],
+      "antonyms": [
+        "Prosperity",
+        "blessing",
+        "well-being"
+      ],
+      "other_forms": "Disastrous (adj) ---PAGE_222--- 215 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "This is one of the worst natural ________s I have ever witnessed."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "ritual   a"
+        },
+        {
+          "id": 2,
+          "word": "abandon   b"
+        },
+        {
+          "id": 3,
+          "word": "cheat   c"
+        },
+        {
+          "id": 4,
+          "word": "cease   d"
+        },
+        {
+          "id": 5,
+          "word": "beneficial   e"
+        },
+        {
+          "id": 1,
+          "word": "bewilder   a"
+        },
+        {
+          "id": 2,
+          "word": "dwell   b"
+        },
+        {
+          "id": 3,
+          "word": "exert   c"
+        },
+        {
+          "id": 4,
+          "word": "evade   d"
+        },
+        {
+          "id": 5,
+          "word": "explode   e"
+        },
+        {
+          "id": 1,
+          "word": "commemorate   a"
+        },
+        {
+          "id": 2,
+          "word": "perish   b"
+        },
+        {
+          "id": 3,
+          "word": "nonsense   c"
+        },
+        {
+          "id": 4,
+          "word": "notify   d"
+        },
+        {
+          "id": 5,
+          "word": "resume   e"
+        },
+        {
+          "id": 1,
+          "word": "muster   a"
+        },
+        {
+          "id": 2,
+          "word": "lure   b"
+        },
+        {
+          "id": 3,
+          "word": "furious   c"
+        },
+        {
+          "id": 4,
+          "word": "prosper   d"
+        },
+        {
+          "id": 5,
+          "word": "disaster   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "useful"
+        },
+        {
+          "key": "b",
+          "def": "copy, deceive , swindle, trick"
+        },
+        {
+          "key": "c",
+          "def": "ceremony"
+        },
+        {
+          "key": "d",
+          "def": "stop"
+        },
+        {
+          "key": "e",
+          "def": "give up, leave, desert, forsake"
+        },
+        {
+          "key": "a",
+          "def": "live, inhabit"
+        },
+        {
+          "key": "b",
+          "def": "escape, avoid"
+        },
+        {
+          "key": "c",
+          "def": "go off"
+        },
+        {
+          "key": "d",
+          "def": "confuse, astonish"
+        },
+        {
+          "key": "e",
+          "def": "use, make use of, utilize"
+        },
+        {
+          "key": "a",
+          "def": "irrational"
+        },
+        {
+          "key": "b",
+          "def": "inform"
+        },
+        {
+          "key": "c",
+          "def": "start again"
+        },
+        {
+          "key": "d",
+          "def": "die out, disappear"
+        },
+        {
+          "key": "e",
+          "def": "celebrate, honor"
+        },
+        {
+          "key": "a",
+          "def": "flourish, thrive"
+        },
+        {
+          "key": "b",
+          "def": "angry"
+        },
+        {
+          "key": "c",
+          "def": "calamity, catastrophe"
+        },
+        {
+          "key": "d",
+          "def": "collect, gather, assemble"
+        },
+        {
+          "key": "e",
+          "def": "attract, allure, entice"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "abandon   a"
+        },
+        {
+          "id": 2,
+          "word": "cheat   b"
+        },
+        {
+          "id": 3,
+          "word": "cease   c"
+        },
+        {
+          "id": 4,
+          "word": "beneficial   d"
+        },
+        {
+          "id": 1,
+          "word": "evade   a"
+        },
+        {
+          "id": 2,
+          "word": "commemorate   b"
+        },
+        {
+          "id": 3,
+          "word": "perish   c"
+        },
+        {
+          "id": 4,
+          "word": "nonsense   d"
+        },
+        {
+          "id": 5,
+          "word": "notify   e"
+        },
+        {
+          "id": 1,
+          "word": "resume   a"
+        },
+        {
+          "id": 2,
+          "word": "muster   b"
+        },
+        {
+          "id": 3,
+          "word": "furious   c"
+        },
+        {
+          "id": 4,
+          "word": "disaster   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "useless, futile"
+        },
+        {
+          "key": "b",
+          "def": "continue, keep on"
+        },
+        {
+          "key": "c",
+          "def": "to be honest, to be frank"
+        },
+        {
+          "key": "d",
+          "def": "keep, retain, continue, uphold, maintain"
+        },
+        {
+          "key": "a",
+          "def": "conceal, misinform"
+        },
+        {
+          "key": "b",
+          "def": "blossom"
+        },
+        {
+          "key": "c",
+          "def": "stay, keep standstill"
+        },
+        {
+          "key": "d",
+          "def": "sensible, logical, reasonable, plausible"
+        },
+        {
+          "key": "e",
+          "def": "forget"
+        },
+        {
+          "key": "a",
+          "def": "disperse"
+        },
+        {
+          "key": "b",
+          "def": "finish"
+        },
+        {
+          "key": "c",
+          "def": "prosperity, well"
+        },
+        {
+          "key": "d",
+          "def": "calm"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “forsake” ve Türkçesi “terketmek, vazgeçmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "cheat",
+          "B": "bewilder",
+          "C": "cease",
+          "D": "abandon",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Zıt anlamlısı “continue” ve Türkçesi “dur (dur)mak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "exert",
+          "B": "desert",
+          "C": "cease",
+          "D": "astonish",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “make use of” ve Türkçesi “kullanmak, uygulamak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "explode",
+          "B": "blossom",
+          "C": "evade",
+          "D": "commemorate",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “thrive” ve Türkçesi “gelişmek, zenginleşmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "muster",
+          "B": "prosper",
+          "C": "entice",
+          "D": "resume",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “dissappear” ve Türkçesi “yok olmak, çürümek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "perish",
+          "B": "conceal",
+          "C": "blossom",
+          "D": "resume",
+          "E": "assemble"
+        }
+      }
+    ]
+  }
+}

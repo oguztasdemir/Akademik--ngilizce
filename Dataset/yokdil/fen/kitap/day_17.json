@@ -1,0 +1,697 @@
+{
+  "day": 17,
+  "words": [
+    {
+      "word": "ACCEDE",
+      "type": "v",
+      "turkish": "Kabul etmek, onaylamak, razı olmak",
+      "sentence_en": "He acceded to our offer.",
+      "sentence_tr": "Teklifimizi kabul etti.",
+      "synonyms": [
+        "Assent to",
+        "agree to",
+        "accept",
+        "comply",
+        "approve"
+      ],
+      "antonyms": [
+        "Decline",
+        "oppose",
+        "refuse",
+        "reject",
+        "dissent",
+        "turn down"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He ________d to our offer."
+    },
+    {
+      "word": "ACCELERATE",
+      "type": "v",
+      "turkish": "Hızlan(dır)mak",
+      "sentence_en": "The government is to accelerate its privatisation programme.",
+      "sentence_tr": "Hükümet özelleştirme programını hızlandırması lazım.",
+      "synonyms": [
+        "Increase in rate/amount/extent",
+        "speed up"
+      ],
+      "antonyms": [
+        "Delay",
+        "impede",
+        "hinder",
+        "drag",
+        "obstruct"
+      ],
+      "other_forms": "Acceleration (n), accelerator (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The government is to ________ its privatisation programme."
+    },
+    {
+      "word": "AMBIGUOUS",
+      "type": "adj",
+      "turkish": "Belirsiz, şüpheli",
+      "sentence_en": "The government is still ambiguous on this issue.",
+      "sentence_tr": "Hükümet bu konu hakkında hala kararsız.",
+      "synonyms": [
+        "Doubtful",
+        "dubious",
+        "unclear",
+        "uncertain",
+        "indefinite",
+        "vague",
+        "obscure"
+      ],
+      "antonyms": [
+        "Obvious",
+        "plain",
+        "clear",
+        "lucid"
+      ],
+      "other_forms": "Ambiguity (n), ambigiously (adv)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The government is still ________ on this issue."
+    },
+    {
+      "word": "SEIZE",
+      "type": "v",
+      "turkish": "Kavramak, yakalamak, ele geçirmek",
+      "sentence_en": "Troops yesterday seized control of the broadcasting station.",
+      "sentence_tr": "Birlikler dün televizyon istasyonunun kontrolünü ele geçirdi.",
+      "synonyms": [
+        "Capture",
+        "grab"
+      ],
+      "antonyms": [
+        "Release"
+      ],
+      "other_forms": "Seizure (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Troops yesterday ________d control of the broadcasting station."
+    },
+    {
+      "word": "REWARD",
+      "type": "n",
+      "turkish": "Ödül",
+      "sentence_en": "There's a reward for whoever finishes first.",
+      "sentence_tr": "Her kim ilk bitirirse onun için bir ödül var.",
+      "synonyms": [
+        "Prize"
+      ],
+      "antonyms": [],
+      "other_forms": "Reward (v) ---PAGE_121--- 114 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There's a ________ for whoever finishes first."
+    },
+    {
+      "word": "WIELD",
+      "type": "v",
+      "turkish": "Kullanmak, sahip olmak",
+      "sentence_en": "She was confronted by a man wielding a knife.",
+      "sentence_tr": "Bıçaklı bir adamla karşı karşıya geldi.",
+      "synonyms": [
+        "Employ",
+        "exercise",
+        "use",
+        "have"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She was confronted by a man ________ing a knife."
+    },
+    {
+      "word": "VERDICT",
+      "type": "n",
+      "turkish": "karar, hüküm",
+      "sentence_en": "The jury reached a verdict of not guilty after six hours of deliberation.",
+      "sentence_tr": "Jüri 6 saatlik müzakereden sonra onun suçlu olmadığı hükmüne vardı.",
+      "synonyms": [
+        "Decision"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The jury reached a ________ of not guilty after six hours of deliberation."
+    },
+    {
+      "word": "UNSUBSTANTIATED",
+      "type": "adj",
+      "turkish": "Kanıtlanmamış, onaylanmamış",
+      "sentence_en": "Sunday World made unsubstantiated allegations against Berti Ahem.",
+      "sentence_tr": "Sunday World, Berti Ahern’e karşı henüz kanıtlanmamış iddialarda bulundu.",
+      "synonyms": [
+        "Unproven",
+        "unconfirmed",
+        "questionable"
+      ],
+      "antonyms": [
+        "Substantiated",
+        "confirmed",
+        "doubtless"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Sunday World made ________ allegations against Berti Ahem."
+    },
+    {
+      "word": "TANGIBLE",
+      "type": "adj",
+      "turkish": "Elle tutulur, somut",
+      "sentence_en": "We need tangible evidence if we're going to take legal action.",
+      "sentence_tr": "Yasal işlem başlatmak için somut delillere iihtiyacımız var.",
+      "synonyms": [
+        "Can be touched",
+        "concrete"
+      ],
+      "antonyms": [
+        "Imperceptible",
+        "abstract"
+      ],
+      "other_forms": "Tangibly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We need ________ evidence if we're going to take legal action."
+    },
+    {
+      "word": "TENDER",
+      "type": "adj",
+      "turkish": "Yumuşak, şefkatli",
+      "sentence_en": "What you need is some tender loving care.",
+      "sentence_tr": "İhtiyacın olan şey biraz şefkatli, sevgi dolu bir yaklaşım.",
+      "synonyms": [
+        "Soft",
+        "gentle"
+      ],
+      "antonyms": [
+        "Hard",
+        "tough"
+      ],
+      "other_forms": "Tenderness (n) ---PAGE_122--- 115 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "What you need is some ________ loving care."
+    },
+    {
+      "word": "DISTINCTIVE",
+      "type": "adj",
+      "turkish": "Belirgin, ayrı, farklı",
+      "sentence_en": "She's got a very distinctive voice.",
+      "sentence_tr": "Çok farklı bir sese sahip.",
+      "synonyms": [
+        "Unique",
+        "distinguishing"
+      ],
+      "antonyms": [
+        "Indefinite",
+        "vague"
+      ],
+      "other_forms": "Distinction (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "She's got a very ________ voice."
+    },
+    {
+      "word": "ENTERPRISE",
+      "type": "n",
+      "turkish": "Girişim, teşebbüs",
+      "sentence_en": "Don't forget this is a commercial enterprise - we're here to make money.",
+      "sentence_tr": "Bunun ticari bir girişim olduğunu unutma. Para kazanmak için buradayız.",
+      "synonyms": [
+        "Venture",
+        "project"
+      ],
+      "antonyms": [],
+      "other_forms": "Enterprising (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Don't forget this is a commercial ________ - we're here to make money."
+    },
+    {
+      "word": "EXCEED",
+      "type": "v",
+      "turkish": "Aşmak, geçmek",
+      "sentence_en": "The success of our campaign has exceeded our expectations.",
+      "sentence_tr": "Kampanyamızın başarısı bizim beklentilerimizi aştı.",
+      "synonyms": [
+        "Surpass",
+        "surmount"
+      ],
+      "antonyms": [
+        "Fall behind"
+      ],
+      "other_forms": "Exceeding (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The success of our campaign has ________ed our expectations."
+    },
+    {
+      "word": "EXCLUSIVE",
+      "type": "adj",
+      "turkish": "Özel, seçkin",
+      "sentence_en": "This room is for the exclusive use of guests.",
+      "sentence_tr": "Bu oda misafirlerin özel kullanımı için.",
+      "synonyms": [
+        "Special",
+        "private",
+        "unique"
+      ],
+      "antonyms": [
+        "Common",
+        "shared"
+      ],
+      "other_forms": "Exclusively (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This room is for the ________ use of guests."
+    },
+    {
+      "word": "CONCISELY",
+      "type": "adv",
+      "turkish": "Kısaca, öz",
+      "sentence_en": "He has written his report clearly and concisely.",
+      "sentence_tr": "Raporunu kısa ve öz bir şekilde yazdı.",
+      "synonyms": [
+        "Briefly",
+        "shortly",
+        "in brief"
+      ],
+      "antonyms": [
+        "In detail"
+      ],
+      "other_forms": "Concise (adj), conciseness (n) ---PAGE_123--- 116 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He has written his report clearly and ________."
+    },
+    {
+      "word": "CONFLICT",
+      "type": "n",
+      "turkish": "Anlaşmazlık, çatışma",
+      "sentence_en": "There was a lot of conflict between him and his father.",
+      "sentence_tr": "Babasıyla arasında çok fazla anlaşmazlık vardı.",
+      "synonyms": [
+        "Hostility"
+      ],
+      "antonyms": [
+        "Agreement"
+      ],
+      "other_forms": "Conflicting (adj)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "There was a lot of ________ between him and his father."
+    },
+    {
+      "word": "CHIEF",
+      "type": "adj",
+      "turkish": "Başlıca",
+      "sentence_en": "The chief problem we have in the area now is the spread of the disease.",
+      "sentence_tr": "Şu anda bölgedeki asıl problemimiz hastalığın yayılması.",
+      "synonyms": [
+        "Main",
+        "principal",
+        "leading",
+        "major"
+      ],
+      "antonyms": [
+        "Minor",
+        "inferior"
+      ],
+      "other_forms": "Chiefly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The ________ problem we have in the area now is the spread of the disease."
+    },
+    {
+      "word": "CRUDE",
+      "type": "adj",
+      "turkish": "Ham, işlenmemiş, basit",
+      "sentence_en": "The soldiers used crude weapons.",
+      "sentence_tr": "Askerler basit silahlar kullandılar.",
+      "synonyms": [
+        "Raw",
+        "unrefined",
+        "unprocessed",
+        "simple"
+      ],
+      "antonyms": [
+        "Refined",
+        "processed"
+      ],
+      "other_forms": "Crudely (adv), crudeness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The soldiers used ________ weapons."
+    },
+    {
+      "word": "INDISPENSABLE",
+      "type": "adj",
+      "turkish": "Vazgeçilemez, gerekli",
+      "sentence_en": "This book is an indispensable resource for researchers.",
+      "sentence_tr": "Bu kitap araştırmacılar için vazgeçilmez bir kaynak.",
+      "synonyms": [
+        "Necessary",
+        "essential"
+      ],
+      "antonyms": [
+        "Dispensable"
+      ],
+      "other_forms": "Indispensability (n) RANGE from…to (v) Türkçe Karşılığı : Arasında farklılık göstermek Örnek Cümle : Prices range between $50 and $250. Çevirisi : Fiyatlar 50 ve 250 dolar arasında değişmektedir. Eş ya da Yakın Anlamlılar : Vary Diğer Halleri : Range (n) ---PAGE_124--- 117 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "This book is an ________ resource for researchers."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "accede   a"
+        },
+        {
+          "id": 2,
+          "word": "accelerate   b"
+        },
+        {
+          "id": 3,
+          "word": "ambiguous   c"
+        },
+        {
+          "id": 4,
+          "word": "seize   d"
+        },
+        {
+          "id": 5,
+          "word": "reward   e"
+        },
+        {
+          "id": 1,
+          "word": "wield   a"
+        },
+        {
+          "id": 2,
+          "word": "verdict   b"
+        },
+        {
+          "id": 3,
+          "word": "unsubstantiated   c"
+        },
+        {
+          "id": 4,
+          "word": "tangible   d"
+        },
+        {
+          "id": 5,
+          "word": "tender   e"
+        },
+        {
+          "id": 1,
+          "word": "distinctive   a"
+        },
+        {
+          "id": 2,
+          "word": "enterprise   b"
+        },
+        {
+          "id": 3,
+          "word": "exceed   c"
+        },
+        {
+          "id": 4,
+          "word": "exclusive   d"
+        },
+        {
+          "id": 5,
+          "word": "concisely   e"
+        },
+        {
+          "id": 1,
+          "word": "conflict   a"
+        },
+        {
+          "id": 2,
+          "word": "chief   b"
+        },
+        {
+          "id": 3,
+          "word": "crude   c"
+        },
+        {
+          "id": 4,
+          "word": "indispensable   d"
+        },
+        {
+          "id": 5,
+          "word": "range   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "doubtful, dubious, vague, obscure"
+        },
+        {
+          "key": "b",
+          "def": "capture, grab"
+        },
+        {
+          "key": "c",
+          "def": "prize"
+        },
+        {
+          "key": "d",
+          "def": "increase in rate"
+        },
+        {
+          "key": "e",
+          "def": "assent to, agree, accept, comply, approve"
+        },
+        {
+          "key": "a",
+          "def": "concrete, can be touched"
+        },
+        {
+          "key": "b",
+          "def": "unproven, unconfirmed, questionable"
+        },
+        {
+          "key": "c",
+          "def": "soft, gentle"
+        },
+        {
+          "key": "d",
+          "def": "employ, exercise, use, have"
+        },
+        {
+          "key": "e",
+          "def": "decision"
+        },
+        {
+          "key": "a",
+          "def": "briefly, shortly, in brief"
+        },
+        {
+          "key": "b",
+          "def": "surpass, surmount"
+        },
+        {
+          "key": "c",
+          "def": "unique, distinguishing"
+        },
+        {
+          "key": "d",
+          "def": "special, private, unique"
+        },
+        {
+          "key": "e",
+          "def": "venture, project"
+        },
+        {
+          "key": "a",
+          "def": "main, principal, leading, major"
+        },
+        {
+          "key": "b",
+          "def": "necessary, essential"
+        },
+        {
+          "key": "c",
+          "def": "vary"
+        },
+        {
+          "key": "d",
+          "def": "hostility"
+        },
+        {
+          "key": "e",
+          "def": "raw, unrefined, unprocessed"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "accede   a"
+        },
+        {
+          "id": 2,
+          "word": "accelerate   b"
+        },
+        {
+          "id": 3,
+          "word": "ambiguous   c"
+        },
+        {
+          "id": 4,
+          "word": "seize   d"
+        },
+        {
+          "id": 1,
+          "word": "unsubstantiated   a"
+        },
+        {
+          "id": 2,
+          "word": "tangible   b"
+        },
+        {
+          "id": 3,
+          "word": "tender   c"
+        },
+        {
+          "id": 4,
+          "word": "distinctive   d"
+        },
+        {
+          "id": 5,
+          "word": "exceed   e"
+        },
+        {
+          "id": 1,
+          "word": "exclusive   a"
+        },
+        {
+          "id": 2,
+          "word": "concisely   b"
+        },
+        {
+          "id": 3,
+          "word": "conflict   c"
+        },
+        {
+          "id": 4,
+          "word": "chief   d"
+        },
+        {
+          "id": 5,
+          "word": "crude   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "release"
+        },
+        {
+          "key": "b",
+          "def": "obvious, plain, clear, lucid"
+        },
+        {
+          "key": "c",
+          "def": "delay, impede, hinder, drag, obstruct"
+        },
+        {
+          "key": "d",
+          "def": "decline, refuse, rej ect, dissent, turn down"
+        },
+        {
+          "key": "a",
+          "def": "hard, tough"
+        },
+        {
+          "key": "b",
+          "def": "indefinite, vague"
+        },
+        {
+          "key": "c",
+          "def": "fall behind"
+        },
+        {
+          "key": "d",
+          "def": "imperceptible, abstract"
+        },
+        {
+          "key": "e",
+          "def": "confirmed, doubtless"
+        },
+        {
+          "key": "a",
+          "def": "minor, inferior"
+        },
+        {
+          "key": "b",
+          "def": "agreement"
+        },
+        {
+          "key": "c",
+          "def": "refined, processed"
+        },
+        {
+          "key": "d",
+          "def": "common, shared"
+        },
+        {
+          "key": "e",
+          "def": "in detail"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “vague” ve Türkçesi “belirsiz” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "obvious",
+          "B": "unsubstantiated",
+          "C": "ambigious",
+          "D": "tangible",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “concrete” ve Türkçesi “somut, elle tutulur” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "tender",
+          "B": "confirmed",
+          "C": "distinctive",
+          "D": "indefinite",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “raw” ve Türkçesi “ham, işlenmemiş” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "crude",
+          "B": "processed",
+          "C": "dispensable",
+          "D": "inferior",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “decision” ve Türkçesi “karar, hüküm” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "distinction",
+          "B": "venture",
+          "C": "range",
+          "D": "verdict",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Zıt anlamlısı “release” ve Türkçesi “yakalamak, ele geçirmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "accede",
+          "B": "seize",
+          "C": "impede",
+          "D": "comply",
+          "E": "surmount"
+        }
+      }
+    ]
+  }
+}

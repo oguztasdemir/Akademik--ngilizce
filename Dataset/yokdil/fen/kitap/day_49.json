@@ -1,0 +1,666 @@
+{
+  "day": 49,
+  "words": [
+    {
+      "word": "UNPRECEDENTED",
+      "type": "adj",
+      "turkish": "Daha önce görülmemiş, eşsiz",
+      "sentence_en": "This century has witnessed environmental destruction on an unprecedented scale.",
+      "sentence_tr": "Bu asır, emsalsiz bir çevresel tahribata tanık oldu.",
+      "synonyms": [
+        "Unique",
+        "unmatched"
+      ],
+      "antonyms": [
+        "Precedented"
+      ],
+      "other_forms": "",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "This century has witnessed environmental destruction on an ________ scale."
+    },
+    {
+      "word": "VIBRATE",
+      "type": "v",
+      "turkish": "Titreşim yapmak",
+      "sentence_en": "The whole station seemed to vibrate as the express train rushed through.",
+      "sentence_tr": "Ekspres tren hızla gelirken sanki bütün istasyon titredi.",
+      "synonyms": [
+        "Shake",
+        "tremble",
+        "oscillate"
+      ],
+      "antonyms": [
+        "Rest",
+        "be still"
+      ],
+      "other_forms": "Vibration (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The whole station seemed to ________ as the express train rushed through."
+    },
+    {
+      "word": "VULNERABLE",
+      "type": "adj",
+      "turkish": "Korunmasız, savunmasız",
+      "sentence_en": "Tourists are more vulnerable to attack, because they do not know which areas of the city to avoid.",
+      "sentence_tr": "Turistler saldırıya karşı daha savunmasızdır, çünkü şehrin hangi bölgelerinden sakınmaları gerektiğini bilmezler.",
+      "synonyms": [
+        "Susceptible",
+        "defenseless",
+        "unprotected"
+      ],
+      "antonyms": [
+        "Defended",
+        "formidable"
+      ],
+      "other_forms": "Vulnerability (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Tourists are more ________ to attack, because they do not know which areas of the city to avoid."
+    },
+    {
+      "word": "TERMINATE",
+      "type": "v",
+      "turkish": "Sona er (dir)mek, bitirmek",
+      "sentence_en": "They terminated my contract in October",
+      "sentence_tr": "Sözleşmemi Ekim’de sona erdirdiler.",
+      "synonyms": [
+        "End",
+        "conclude"
+      ],
+      "antonyms": [
+        "Begin",
+        "start",
+        "commence"
+      ],
+      "other_forms": "Termination (n) ---PAGE_345--- 338 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They ________d my contract in October"
+    },
+    {
+      "word": "WARRANT",
+      "type": "v",
+      "turkish": "Garanti etmek, haklı kılmak, gerektirmek",
+      "sentence_en": "This is a relatively simple task that really doesn't warrant a great deal of time being spent on it.",
+      "sentence_tr": "Bu, harcanılan zamanı gerektirmeyen nispeten basit bir görevdir.",
+      "synonyms": [
+        "Justify",
+        "necessitate",
+        "guarantee"
+      ],
+      "antonyms": [
+        "Invalidate"
+      ],
+      "other_forms": "Warrant (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This is a relatively simple task that really doesn't ________ a great deal of time being spent on it."
+    },
+    {
+      "word": "SHRINK",
+      "type": "v",
+      "turkish": "Küçülmek, çekmek, azalmak",
+      "sentence_en": "Your sweater might shrink if you wash it at too high a temperature.",
+      "sentence_tr": "Eğer kazağını çok yüksek ısıda yıkarsan, çekebilir.",
+      "synonyms": [
+        "Diminish",
+        "become smaller"
+      ],
+      "antonyms": [
+        "Expand",
+        "swell"
+      ],
+      "other_forms": "Shrinkage (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "Your sweater might ________ if you wash it at too high a temperature."
+    },
+    {
+      "word": "BIAS",
+      "type": "n",
+      "turkish": "Önyargı",
+      "sentence_en": "There was clear evidence of a strong bias against her.",
+      "sentence_tr": "Ona karşı güçlü önyargı olduğuna dair açık kanıtlar vardı.",
+      "synonyms": [
+        "Prejudice",
+        "prejudgment"
+      ],
+      "antonyms": [
+        "Being objective",
+        "unprejudiced"
+      ],
+      "other_forms": "Bias (v), biased (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There was clear evidence of a strong ________ against her."
+    },
+    {
+      "word": "ALTER",
+      "type": "v",
+      "turkish": "Değiştirmek",
+      "sentence_en": "We've had to alter some of our plans.",
+      "sentence_tr": "Bazı planlarımızı değiştirmek zorunda kaldık.",
+      "synonyms": [
+        "Change",
+        "modify",
+        "shift",
+        "convert"
+      ],
+      "antonyms": [
+        "Conserve",
+        "preserve",
+        "keep",
+        "retain"
+      ],
+      "other_forms": "Alteration (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "We've had to ________ some of our plans."
+    },
+    {
+      "word": "ADAMANT",
+      "type": "adj",
+      "turkish": "Kararlı, vazgeçmeyen, inatçı",
+      "sentence_en": "The prime minister is adamant that he will not resign.",
+      "sentence_tr": "Başbakan istifa etmemekte kararlı.",
+      "synonyms": [
+        "Resolute",
+        "obstinate",
+        "unyielding"
+      ],
+      "antonyms": [
+        "Yielding",
+        "easy-going"
+      ],
+      "other_forms": "Adamance (n), adamantly (adv) ---PAGE_346--- 339 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ ABSTAIN from (v) Türkçe Karşılığı : Çekimser kalmak, uzak durmak, -den kaçınmak Örnek Cümle 1 : The doctor advised him that he abstain from cakes and sweets. Çevirisi : Doktor şeker ve tatlıdan uzak durmasını tavsiye etti. Örnek Cümle 2 : The president abstained from mentioning the issue. Çevirisi : Başkan meseleden bahsetmekten kaçındı. Eş ya da Yakın Anlamlılar : Refrain from, avoid Zıt Anlamlılar : Indulge, commit Diğer Halleri : Abstainer (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The prime minister is ________ that he will not resign."
+    },
+    {
+      "word": "ESSENCE",
+      "type": "n",
+      "turkish": "Öz, esas",
+      "sentence_en": "Vanilla essence is my favourite.",
+      "sentence_tr": "Vanilya esansı benim favorim.",
+      "synonyms": [
+        "Basic nature",
+        "essential quality"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Vanilla ________ is my favourite."
+    },
+    {
+      "word": "DRAWBACK",
+      "type": "n",
+      "turkish": "Kusur, sakınca",
+      "sentence_en": "One of the drawbacks of living with someone is having to share the same bathroom.",
+      "sentence_tr": "Birisiyle beraber yaşamanın dezavantajlarından biri aynı banyoyu paylaşmak zorunda olmaktır.",
+      "synonyms": [
+        "Pitfall",
+        "shortcoming",
+        "disadvantage",
+        "obstacle",
+        "defect"
+      ],
+      "antonyms": [
+        "Advantage",
+        "merit",
+        "plus"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "One of the ________s of living with someone is having to share the same bathroom."
+    },
+    {
+      "word": "COMMIT",
+      "type": "v",
+      "turkish": "(suç) işlemek, emanet etmek, teslim etmek, -e karışmak",
+      "sentence_en": "He was sent to prison for a crime that he didn't commit.",
+      "sentence_tr": "İşlemediği bir suç nedeniyle hapse atıldı.",
+      "synonyms": [
+        "Perform",
+        "assign",
+        "carry out"
+      ],
+      "antonyms": [],
+      "other_forms": "Commitment (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "He was sent to prison for a crime that he didn't ________."
+    },
+    {
+      "word": "CURE",
+      "type": "v",
+      "turkish": "Tedavi etmek, iyileştirmek",
+      "sentence_en": "At one time the doctors couldn't cure TB.",
+      "sentence_tr": "Bir zamanlar doktorlar TB hastalığını tedavi edemiyorlardı.",
+      "synonyms": [
+        "Treat",
+        "heal",
+        "find remedy"
+      ],
+      "antonyms": [
+        "Make worse",
+        "get ill"
+      ],
+      "other_forms": "Cure (n) ---PAGE_347--- 340 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "At one time the doctors couldn't ________ TB."
+    },
+    {
+      "word": "MEDIEVAL",
+      "type": "adj",
+      "turkish": "Orta çağa ait",
+      "sentence_en": "This is a medieval painting.",
+      "sentence_tr": "Bu ortaçağa ait bir resim.",
+      "synonyms": [
+        "Belonging to middle ages"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This is a ________ painting."
+    },
+    {
+      "word": "OUTNUMBER",
+      "type": "v",
+      "turkish": "Sayıca üstün olmak",
+      "sentence_en": "In our office, the women outnumber the men 3 to 1.",
+      "sentence_tr": "Bizim ofiste bayanlar erkeklerden 3 kat daha fazladır.",
+      "synonyms": [
+        "To be greater in number"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "In our office, the women ________ the men 3 to 1."
+    },
+    {
+      "word": "RETARD",
+      "type": "v",
+      "turkish": "Geciktirmek, yavaşlatmak",
+      "sentence_en": "A rise in interest rates will severely retard economic growth.",
+      "sentence_tr": "Faiz oranlarındaki artış ekonomik büyümeyi ciddi şekilde yavaşlatacaktır.",
+      "synonyms": [
+        "Delay",
+        "impede",
+        "obstruct"
+      ],
+      "antonyms": [],
+      "other_forms": "Retardant (adj), retard (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A rise in interest rates will severely ________ economic growth."
+    },
+    {
+      "word": "HERITAGE",
+      "type": "n",
+      "turkish": "Miras",
+      "sentence_en": "These scripts are a vital part of the cultural heritage of South America.",
+      "sentence_tr": "Bu yazıtlar Güney Amerika’nın kültürel mirasının önemli bir parçasıdır.",
+      "synonyms": [
+        "Legacy",
+        "inheritance"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "These scripts are a vital part of the cultural ________ of South America."
+    },
+    {
+      "word": "HARDLY",
+      "type": "adv",
+      "turkish": "Hemen hemen hiç, neredeyse hiç, zar zor, güç bela",
+      "sentence_en": "He ate hardly anything.",
+      "sentence_tr": "Neredeyse hiçbirşey yemedi.",
+      "synonyms": [
+        "Barely",
+        "scarcely",
+        "almost not"
+      ],
+      "antonyms": [
+        "Often",
+        "almost always"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He ate ________ anything."
+    },
+    {
+      "word": "SPIN",
+      "type": "v",
+      "turkish": "Dönmek",
+      "sentence_en": "The Earth spins on its axis.",
+      "sentence_tr": "Dünya yörüngesinde döner.",
+      "synonyms": [
+        "Rotate",
+        "turn"
+      ],
+      "antonyms": [],
+      "other_forms": "Spin (n), spinner (n) ---PAGE_348--- 341 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The Earth ________s on its axis."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "unprecedented   a"
+        },
+        {
+          "id": 2,
+          "word": "vibrate   b"
+        },
+        {
+          "id": 3,
+          "word": "vulnerable   c"
+        },
+        {
+          "id": 4,
+          "word": "terminate   d"
+        },
+        {
+          "id": 5,
+          "word": "warrant   e"
+        },
+        {
+          "id": 1,
+          "word": "shrink   a"
+        },
+        {
+          "id": 2,
+          "word": "bias   b"
+        },
+        {
+          "id": 3,
+          "word": "alter   c"
+        },
+        {
+          "id": 4,
+          "word": "adamant   d"
+        },
+        {
+          "id": 5,
+          "word": "abstain from   e"
+        },
+        {
+          "id": 1,
+          "word": "essence   a"
+        },
+        {
+          "id": 2,
+          "word": "drawback   b"
+        },
+        {
+          "id": 3,
+          "word": "commit   c"
+        },
+        {
+          "id": 4,
+          "word": "cure   d"
+        },
+        {
+          "id": 5,
+          "word": "medieval   e"
+        },
+        {
+          "id": 1,
+          "word": "outnumber   a"
+        },
+        {
+          "id": 2,
+          "word": "retard   b"
+        },
+        {
+          "id": 3,
+          "word": "heritage   c"
+        },
+        {
+          "id": 4,
+          "word": "hardly   d"
+        },
+        {
+          "id": 5,
+          "word": "spin   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "susceptible, defenseless, unprotected"
+        },
+        {
+          "key": "b",
+          "def": "end, conclude"
+        },
+        {
+          "key": "c",
+          "def": "justify, necessitate, guarantee"
+        },
+        {
+          "key": "d",
+          "def": "shake, tremble, oscillate"
+        },
+        {
+          "key": "e",
+          "def": "unique, unmatched"
+        },
+        {
+          "key": "a",
+          "def": "resolute, obstinate, unyielding"
+        },
+        {
+          "key": "b",
+          "def": "change, modify, shift, convert"
+        },
+        {
+          "key": "c",
+          "def": "refrain from, avoid"
+        },
+        {
+          "key": "d",
+          "def": "diminish, become smaller"
+        },
+        {
+          "key": "e",
+          "def": "prejudice, prejudgment"
+        },
+        {
+          "key": "a",
+          "def": "belonging to middle ages"
+        },
+        {
+          "key": "b",
+          "def": "perform, assign, carry out"
+        },
+        {
+          "key": "c",
+          "def": "basic nature, essential quality"
+        },
+        {
+          "key": "d",
+          "def": "treat, heal, find remedy"
+        },
+        {
+          "key": "e",
+          "def": "pitfall, shortcoming, disadvantage, obstacle, defect"
+        },
+        {
+          "key": "a",
+          "def": "delay, impede, obstruct"
+        },
+        {
+          "key": "b",
+          "def": "barely, scarcely, almost not"
+        },
+        {
+          "key": "c",
+          "def": "rotate, turn"
+        },
+        {
+          "key": "d",
+          "def": "to be greater in number"
+        },
+        {
+          "key": "e",
+          "def": "legacy, inheritance"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "vibrate   a"
+        },
+        {
+          "id": 2,
+          "word": "vulnerable   b"
+        },
+        {
+          "id": 3,
+          "word": "terminate   c"
+        },
+        {
+          "id": 4,
+          "word": "warrant   d"
+        },
+        {
+          "id": 1,
+          "word": "shrink   a"
+        },
+        {
+          "id": 2,
+          "word": "bias   b"
+        },
+        {
+          "id": 3,
+          "word": "alter   c"
+        },
+        {
+          "id": 4,
+          "word": "adamant   d"
+        },
+        {
+          "id": 1,
+          "word": "abstain from   a"
+        },
+        {
+          "id": 2,
+          "word": "drawback   b"
+        },
+        {
+          "id": 3,
+          "word": "cure   c"
+        },
+        {
+          "id": 4,
+          "word": "hardly   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "begin, start, commence"
+        },
+        {
+          "key": "b",
+          "def": "invalidate"
+        },
+        {
+          "key": "c",
+          "def": "rest, be still"
+        },
+        {
+          "key": "d",
+          "def": "defended, formidable"
+        },
+        {
+          "key": "a",
+          "def": "being objective, unprejudiced"
+        },
+        {
+          "key": "b",
+          "def": "expand, swell"
+        },
+        {
+          "key": "c",
+          "def": "yielding, easy"
+        },
+        {
+          "key": "d",
+          "def": "conserve, preserve, keep, retain"
+        },
+        {
+          "key": "a",
+          "def": "often, almost always"
+        },
+        {
+          "key": "b",
+          "def": "make worse, get ill"
+        },
+        {
+          "key": "c",
+          "def": "advantage, merit, plus"
+        },
+        {
+          "key": "d",
+          "def": "indulge, commit"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “susceptible” ve Türkçesi “hassas, karşı korunmasız” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "formidable",
+          "B": "sensible",
+          "C": "unique",
+          "D": "vulnerable",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “diminish” ve Türkçesi “küçülmek, çekmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "expand",
+          "B": "swell",
+          "C": "shrink",
+          "D": "modify",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “change” ve Türkçesi “değiş (tir)mek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "preserve",
+          "B": "retain",
+          "C": "warrant",
+          "D": "justify",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Genellikle “from” edatı ile kullanılan, eş anlamlısı “refrain from” ve Türkçesi “-den kaçınmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "indulge",
+          "B": "abstain",
+          "C": "outnumber",
+          "D": "retard",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “shortcoming” ve Türkçesi “kusur, eksiklik” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "drawback",
+          "B": "merit",
+          "C": "heritage",
+          "D": "essence",
+          "E": "bias"
+        }
+      }
+    ]
+  }
+}

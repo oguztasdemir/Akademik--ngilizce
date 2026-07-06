@@ -1,0 +1,648 @@
+{
+  "day": 30,
+  "words": [
+    {
+      "word": "INVARIABLY",
+      "type": "v",
+      "turkish": "Değişmez şekilde, daima, sürekli",
+      "sentence_en": "The train is invariably late.",
+      "sentence_tr": "Tren sürekli gecikiyor.",
+      "synonyms": [
+        "Always",
+        "constantly"
+      ],
+      "antonyms": [
+        "Momentarily",
+        "instantly"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The train is ________ late."
+    },
+    {
+      "word": "SUBSISTENCE",
+      "type": "n",
+      "turkish": "Hayatta kalma",
+      "sentence_en": "This money is to provide a basic subsistence and should not be paid to someone who receives other income.",
+      "sentence_tr": "Bu para, temel ihtiyaçları karşılamak içindir ve başka geliri olan insanlara ödenmemelidir.",
+      "synonyms": [
+        "Survival",
+        "continuation"
+      ],
+      "antonyms": [],
+      "other_forms": "Subsist (v) TAKE sth.",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This money is to provide a basic ________ and should not be paid to someone who receives other income."
+    },
+    {
+      "word": "FOR GRANTED",
+      "type": "v",
+      "turkish": "Gerçek değerini vermemek, düşünmeden öyle olduğunu varsaymak",
+      "sentence_en": "I didn't realize that Melanie hadn't been to college - I suppose I just took it for granted.",
+      "sentence_tr": "Melanie’nin üniversite okumadığını farketmedim. Sanırım okuduğunu düşündüm.",
+      "synonyms": [
+        "Assume",
+        "presume"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I didn't realize that Melanie hadn't been to college - I suppose I just took it ________."
+    },
+    {
+      "word": "INSANE",
+      "type": "adj",
+      "turkish": "Çılgın, deli",
+      "sentence_en": "I sometimes think I'm going insane.",
+      "sentence_tr": "Bazen delirmeye başladığımı düşünüyorum.",
+      "synonyms": [
+        "Crazy",
+        "mad"
+      ],
+      "antonyms": [
+        "Sane",
+        "sensible"
+      ],
+      "other_forms": "Insanity (n) ---PAGE_212--- 205 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I sometimes think I'm going ________."
+    },
+    {
+      "word": "HUMOR",
+      "type": "n",
+      "turkish": "Mizah",
+      "sentence_en": "He's got a great sense of humour.",
+      "sentence_tr": "Çok iyi bir mizah anlayışı var.",
+      "synonyms": [
+        "Joking"
+      ],
+      "antonyms": [
+        "Seriousness"
+      ],
+      "other_forms": "Humorist (n), humorous (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He's got a great sense of humour. (________)"
+    },
+    {
+      "word": "SCHOLAR",
+      "type": "n",
+      "turkish": "Bilgin, araştırmacı",
+      "sentence_en": "Dr. Miles was a distinguished scholar of Russian history.",
+      "sentence_tr": "Dr. Miles Rus tarihi üzerine seçkin bir araştırmacıydı.",
+      "synonyms": [
+        "Academic",
+        "researcher"
+      ],
+      "antonyms": [],
+      "other_forms": "Scholarly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Dr. Miles was a distinguished ________ of Russian history."
+    },
+    {
+      "word": "REPRISAL",
+      "type": "n",
+      "turkish": "Misilleme, aynen karşılığını yapma",
+      "sentence_en": "The attack was in reprisal for the kidnapping of their leaders.",
+      "sentence_tr": "Saldırı, liderlerinin kaçırılmasına bir misillemeydi.",
+      "synonyms": [
+        "Counter-attack",
+        "retaliation"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The attack was in ________ for the kidnapping of their leaders."
+    },
+    {
+      "word": "OSTENSIBLY",
+      "type": "adv",
+      "turkish": "Görünürde, sözde",
+      "sentence_en": "He has spent the past three months in Florida, ostensibly for medical treatment, but in actual fact to avoid prosecution for a series of notorious armed robberies.",
+      "sentence_tr": "Son üç ayı Florida’da geçirdi, görünürde tedavi için gitti ama aslında bir dizi silahlı soygundan dava edilmemek için oraya gitmişti.",
+      "synonyms": [
+        "Apparently",
+        "seemingly"
+      ],
+      "antonyms": [],
+      "other_forms": "Ostensible (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He has spent the past three months in Florida, ________ for medical treatment, but in actual fact to avoid prosecution for a series of notorious armed robberies."
+    },
+    {
+      "word": "PREDOMINANTLY",
+      "type": "adv",
+      "turkish": "Başlıca, baskın şekilde, çoğunlukla",
+      "sentence_en": "She predominantly dances, but she also sings.",
+      "sentence_tr": "Çoğunlukla dans ediyor ama şarkı da söylüyor.",
+      "synonyms": [
+        "Mainly",
+        "chiefly"
+      ],
+      "antonyms": [
+        "Partly"
+      ],
+      "other_forms": "Predominant (adj), predominance (n) ---PAGE_213--- 206 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She ________ dances, but she also sings."
+    },
+    {
+      "word": "COMPARE",
+      "type": "v",
+      "turkish": "Karşılaştırmak",
+      "sentence_en": "This road is quite busy compared to/with ours.",
+      "sentence_tr": "Bizimki ile karşılaştırıldığında bu yol oldukça yoğun.",
+      "synonyms": [
+        "Match",
+        "relate",
+        "correspond"
+      ],
+      "antonyms": [
+        "Contrast"
+      ],
+      "other_forms": "Comparable (adj), comparatively (adv), comparison (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This road is quite busy ________d to/with ours."
+    },
+    {
+      "word": "CONTEST",
+      "type": "v",
+      "turkish": "Yarışmak, mücadele etmek",
+      "sentence_en": "The medal is being keenly contested by eighty gymnasts.",
+      "sentence_tr": "Madalya için 80 sporcu yarışıyor.",
+      "synonyms": [
+        "Challenge",
+        "dispute",
+        "compete for"
+      ],
+      "antonyms": [],
+      "other_forms": "Contest (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The medal is being keenly ________ed by eighty gymnasts."
+    },
+    {
+      "word": "CONCLUSIVE",
+      "type": "adj",
+      "turkish": "Kesin, kati, tartışılmaz",
+      "sentence_en": "They claim there is no conclusive evidence that any murders take place.",
+      "sentence_tr": "Herhangi bir cinayetin olduğuna dair kesin kanıt olmadığını iddia ettiler.",
+      "synonyms": [
+        "Decisive",
+        "indisputable"
+      ],
+      "antonyms": [
+        "Inconclusive",
+        "vague",
+        "uncertain"
+      ],
+      "other_forms": "Conclusively (adv), conclusiveness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They claim there is no ________ evidence that any murders take place."
+    },
+    {
+      "word": "DEPRECIATE",
+      "type": "v",
+      "turkish": "Değer kaybet(tir)mek",
+      "sentence_en": "Our car depreciated by £1500 in the first year we owned it.",
+      "sentence_tr": "Arabamız aldığımız ilk yıl 1500 pound değer kaybetti.",
+      "synonyms": [
+        "Decline in value"
+      ],
+      "antonyms": [],
+      "other_forms": "Depreciation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Our car ________d by £1500 in the first year we owned it."
+    },
+    {
+      "word": "DESCENT",
+      "type": "n",
+      "turkish": "Soy, köken",
+      "sentence_en": "She's a woman of French descent.",
+      "sentence_tr": "O Fransız soyundan gelen bir bayandır.",
+      "synonyms": [
+        "Ancestry",
+        "origin ---PAGE_214--- 207 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She's a woman of French ________."
+    },
+    {
+      "word": "UNDERESTIMATE",
+      "type": "v",
+      "turkish": "Küçümsemek, hafife almak",
+      "sentence_en": "One shouldn't underestimate the difficulties of getting all the political parties to the conference table.",
+      "sentence_tr": "Tüm siyasi partileri görüşme masasına getirmenin zorlukları küçümsenmemelidir.",
+      "synonyms": [
+        "Minimize",
+        "belittle"
+      ],
+      "antonyms": [
+        "Maximize",
+        "exaggerate"
+      ],
+      "other_forms": "Underestimate (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "One shouldn't ________ the difficulties of getting all the political parties to the conference table."
+    },
+    {
+      "word": "TRACE",
+      "type": "n",
+      "turkish": "İz",
+      "sentence_en": "He attempted to cover up all the traces of his crime.",
+      "sentence_tr": "Suçunun tüm izlerini kapatmaya çalıştı.",
+      "synonyms": [
+        "Sign",
+        "mark"
+      ],
+      "antonyms": [],
+      "other_forms": "Trace (v), traceable (adj)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "He attempted to cover up all the ________s of his crime."
+    },
+    {
+      "word": "UNTAPPED",
+      "type": "adj",
+      "turkish": "Dokunulmamış, el sürülmemiş",
+      "sentence_en": "The country's forests are largely untapped resources.",
+      "sentence_tr": "Ülkenin ormanları büyük ölçüde kullanılmamış kaynaklar.",
+      "synonyms": [
+        "Unused",
+        "untouched",
+        "maiden",
+        "virgin"
+      ],
+      "antonyms": [
+        "Tapped"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The country's forests are largely ________ resources."
+    },
+    {
+      "word": "UNSANITARY",
+      "type": "adj",
+      "turkish": "Kirli, sağlıksız",
+      "sentence_en": "Measures must be taken against unsanitary living conditions.",
+      "sentence_tr": "Sağlıksız yaşam koşullarına karşı önlemler alınmalı.",
+      "synonyms": [
+        "Not clean",
+        "polluted"
+      ],
+      "antonyms": [
+        "Sanitary"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Measures must be taken against ________ living conditions."
+    },
+    {
+      "word": "SEDENTARY",
+      "type": "adj",
+      "turkish": "Oturarak, hareketsiz, masabaşı",
+      "sentence_en": "A sedentary job/occupation makes some bored.",
+      "sentence_tr": "Masabaşı iş bazılarını sıkar.",
+      "synonyms": [
+        "Sitting",
+        "inactive"
+      ],
+      "antonyms": [
+        "Active",
+        "walking"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A ________ job/occupation makes some bored."
+    },
+    {
+      "word": "RIDICULOUS",
+      "type": "adj",
+      "turkish": "Gülünç, saçma",
+      "sentence_en": "It's ridiculous to expect a two-year-old to be able to read!",
+      "sentence_tr": "İki yaşındaki bir çocuğun okumasını beklemek saçma olur.",
+      "synonyms": [
+        "Absurd",
+        "funny"
+      ],
+      "antonyms": [
+        "Reasonable",
+        "logical",
+        "sound"
+      ],
+      "other_forms": "Ridicule (v), ridicilously (adv) ---PAGE_215--- 208 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It's ________ to expect a two-year-old to be able to read!"
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "invariably   a"
+        },
+        {
+          "id": 2,
+          "word": "subsistence   b"
+        },
+        {
+          "id": 3,
+          "word": "take sth"
+        },
+        {
+          "id": 4,
+          "word": "insane   d"
+        },
+        {
+          "id": 5,
+          "word": "humor   e"
+        },
+        {
+          "id": 1,
+          "word": "scholar   a"
+        },
+        {
+          "id": 2,
+          "word": "reprisal   b"
+        },
+        {
+          "id": 3,
+          "word": "ostensibly   c"
+        },
+        {
+          "id": 4,
+          "word": "predominantly   d"
+        },
+        {
+          "id": 5,
+          "word": "compare   e"
+        },
+        {
+          "id": 1,
+          "word": "contest   a"
+        },
+        {
+          "id": 2,
+          "word": "conclusive   b"
+        },
+        {
+          "id": 3,
+          "word": "depreciate   c"
+        },
+        {
+          "id": 4,
+          "word": "descent   d"
+        },
+        {
+          "id": 5,
+          "word": "underestimate   e"
+        },
+        {
+          "id": 1,
+          "word": "trace   a"
+        },
+        {
+          "id": 2,
+          "word": "untapped   b"
+        },
+        {
+          "id": 3,
+          "word": "unsanitary   c"
+        },
+        {
+          "id": 4,
+          "word": "sedentary   d"
+        },
+        {
+          "id": 5,
+          "word": "ridiculous   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "assume, presume"
+        },
+        {
+          "key": "b",
+          "def": "crazy, mad"
+        },
+        {
+          "key": "c",
+          "def": "joking"
+        },
+        {
+          "key": "d",
+          "def": "survival, continuation"
+        },
+        {
+          "key": "e",
+          "def": "always, constantly"
+        },
+        {
+          "key": "a",
+          "def": "match, relate, correspond"
+        },
+        {
+          "key": "b",
+          "def": "apparently, seemingly"
+        },
+        {
+          "key": "c",
+          "def": "academic, researcher"
+        },
+        {
+          "key": "d",
+          "def": "mainly, chiefly"
+        },
+        {
+          "key": "e",
+          "def": "counter"
+        },
+        {
+          "key": "a",
+          "def": "decisive, indisputable"
+        },
+        {
+          "key": "b",
+          "def": "ancestry, origin"
+        },
+        {
+          "key": "c",
+          "def": "minimize, belittle"
+        },
+        {
+          "key": "d",
+          "def": "challenge, dispute, compete for"
+        },
+        {
+          "key": "e",
+          "def": "decline in value"
+        },
+        {
+          "key": "a",
+          "def": "sitting, inactive"
+        },
+        {
+          "key": "b",
+          "def": "not clean, polluted"
+        },
+        {
+          "key": "c",
+          "def": "absurd, funny"
+        },
+        {
+          "key": "d",
+          "def": "sign, mark"
+        },
+        {
+          "key": "e",
+          "def": "unused, untouched, maiden, virgin"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "invariably   a"
+        },
+        {
+          "id": 2,
+          "word": "insane   b"
+        },
+        {
+          "id": 3,
+          "word": "humor   c"
+        },
+        {
+          "id": 4,
+          "word": "predominantly   d"
+        },
+        {
+          "id": 5,
+          "word": "compare   e"
+        },
+        {
+          "id": 1,
+          "word": "conclusive   a"
+        },
+        {
+          "id": 2,
+          "word": "underestimate   b"
+        },
+        {
+          "id": 3,
+          "word": "unsanitary   c"
+        },
+        {
+          "id": 4,
+          "word": "sedentary   d"
+        },
+        {
+          "id": 5,
+          "word": "ridiculous   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "contrast"
+        },
+        {
+          "key": "b",
+          "def": "seriousness"
+        },
+        {
+          "key": "c",
+          "def": "momentarily, instantly"
+        },
+        {
+          "key": "d",
+          "def": "partly"
+        },
+        {
+          "key": "e",
+          "def": "sane, sensible"
+        },
+        {
+          "key": "a",
+          "def": "active, walking"
+        },
+        {
+          "key": "b",
+          "def": "clean"
+        },
+        {
+          "key": "c",
+          "def": "reasonable, logical, sound"
+        },
+        {
+          "key": "d",
+          "def": "vague, uncertain"
+        },
+        {
+          "key": "e",
+          "def": "maximize, exaggerate"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “assume / fail to properly appreciate” ve Türkçesi “varsaymak, gerçek değerini vermemek, görmezden gelmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "correspond",
+          "B": "contest",
+          "C": "dispute",
+          "D": "ta ke for granted",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “ancestry” ve Türkçesi “soy, köken” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "reprisal",
+          "B": "scholar",
+          "C": "descent",
+          "D": "trace",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “retaliation” ve Türkçesi “misilleme” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "subsistence",
+          "B": "descent",
+          "C": "contest",
+          "D": "survival",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “undisputable” ve Türkçesi “kesin, kati” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "ridiculous",
+          "B": "conclusive",
+          "C": "sedentary",
+          "D": "insane",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Zıt anlamlısı “exaggerate” ve Türkçesi “hafife almak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "underestimate",
+          "B": "presume",
+          "C": "depreciate",
+          "D": "compete",
+          "E": "decline"
+        }
+      }
+    ]
+  }
+}

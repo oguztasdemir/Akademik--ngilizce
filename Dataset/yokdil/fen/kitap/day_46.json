@@ -1,0 +1,686 @@
+{
+  "day": 46,
+  "words": [
+    {
+      "word": "QUEUE",
+      "type": "n",
+      "turkish": "Kuyruk, sıra",
+      "sentence_en": "If you want tickets, you had beter join the queue.",
+      "sentence_tr": "Eğer bilet almak istiyorsan, sıraya girseniz iyi olur.",
+      "synonyms": [
+        "Line",
+        "line up",
+        "stand in line"
+      ],
+      "antonyms": [],
+      "other_forms": "Queue (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "If you want tickets, you had beter join the ________."
+    },
+    {
+      "word": "JUSTICE",
+      "type": "n",
+      "turkish": "Adalet, hak, haklılık, doğruluk",
+      "sentence_en": "There's no justice in the world, people aren’t treated equally.",
+      "sentence_tr": "Dünyada hiç adalet yok, insanlara eşit davranılmıyor.",
+      "synonyms": [
+        "Fairness",
+        "equity"
+      ],
+      "antonyms": [
+        "Injustice",
+        "unfairness"
+      ],
+      "other_forms": "Justifiable (adj), justify (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There's no ________ in the world, people aren’t treated equally."
+    },
+    {
+      "word": "INBORN",
+      "type": "adj",
+      "turkish": "Doğuştan gelen",
+      "sentence_en": "She seems to have an inborn talent for physics.",
+      "sentence_tr": "Fiziğe karşı doğuştan gelen bir yeteneği varmış gibi görünüyor.",
+      "synonyms": [
+        "Innate"
+      ],
+      "antonyms": [
+        "Unnatural"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She seems to have an ________ talent for physics."
+    },
+    {
+      "word": "IDLE",
+      "type": "adj",
+      "turkish": "Başı boş, aylak, boşta, çalışmayan, tembel",
+      "sentence_en": "Half of these factories now stand idle.",
+      "sentence_tr": "Bu fabrikaların yarısı şu anda çalışmıyor.",
+      "synonyms": [
+        "Unoccupied"
+      ],
+      "antonyms": [
+        "Occupied"
+      ],
+      "other_forms": "Idleness (n), idler (n), idly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Half of these factories now stand ________."
+    },
+    {
+      "word": "HUMILIATE",
+      "type": "v",
+      "turkish": "Küçük düşürmek, aşağılamak",
+      "sentence_en": "You cannot humiliate me by questioning in front of everyone like that.",
+      "sentence_tr": "Beni herkesin önünde bu şekilde sorgulayarak aşağılayamazsın.",
+      "synonyms": [
+        "Degrade",
+        "disgrace",
+        "look down on"
+      ],
+      "antonyms": [
+        "Honor",
+        "look up to"
+      ],
+      "other_forms": "Humiliated (adj), humiliation (n) ---PAGE_324--- 317 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "You cannot ________ me by questioning in front of everyone like that."
+    },
+    {
+      "word": "RECREATION",
+      "type": "n",
+      "turkish": "Eğlence",
+      "sentence_en": "His favourite recreations are golf and playing scrabble.",
+      "sentence_tr": "Onun en çok sevdiği şeyler golf ve scrabble oynamak.",
+      "synonyms": [
+        "Leisure",
+        "pastime",
+        "amusement"
+      ],
+      "antonyms": [],
+      "other_forms": "Recreational (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "His favourite ________s are golf and playing scrabble."
+    },
+    {
+      "word": "MUTUAL",
+      "type": "adj",
+      "turkish": "Karşılıklı, çift taraflı",
+      "sentence_en": "Theirs was a partnership based on mutual respect, trust and understanding.",
+      "sentence_tr": "Onlarınki karşılıklı anlayış, güven ve saygıya dayanan bir ortaklıktı.",
+      "synonyms": [
+        "Reciprocal",
+        "common"
+      ],
+      "antonyms": [],
+      "other_forms": "Mutually (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Theirs was a partnership based on ________ respect, trust and understanding."
+    },
+    {
+      "word": "SCOPE",
+      "type": "n",
+      "turkish": "Kapsam",
+      "sentence_en": "I'm afraid that problem is beyond/outside the scope of my lecture.",
+      "sentence_tr": "Korkarım bu soru benim dersimin kapsamının dışında.",
+      "synonyms": [
+        "Range"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I'm afraid that problem is beyond/outside the ________ of my lecture."
+    },
+    {
+      "word": "MERELY",
+      "type": "adv",
+      "turkish": "Yalnızca, sadece",
+      "sentence_en": "I wasn't complaining, I merely said that I was tired.",
+      "sentence_tr": "Şikayet etmiyordum. Sadece yorgun olduğumu söyledim.",
+      "synonyms": [
+        "Only",
+        "solely",
+        "just"
+      ],
+      "antonyms": [],
+      "other_forms": "Mere (adj), merest (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I wasn't complaining, I ________ said that I was tired."
+    },
+    {
+      "word": "LETHAL",
+      "type": "adj",
+      "turkish": "Öldürücü, ölümcül",
+      "sentence_en": "In the car the police found guns, knives and other lethal weapons.",
+      "sentence_tr": "Polis arabada silahlar, bıçaklar ve başka öldürücü silahlar buldu.",
+      "synonyms": [
+        "Fatal",
+        "deadly",
+        "mortal"
+      ],
+      "antonyms": [
+        "Safe"
+      ],
+      "other_forms": "Lethally (adv) ---PAGE_325--- 318 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "In the car the police found guns, knives and other ________ weapons."
+    },
+    {
+      "word": "DEMONSTRATE",
+      "type": "v",
+      "turkish": "Göstermek",
+      "sentence_en": "These problems demonstrate the importance of strategic planning.",
+      "sentence_tr": "Bu problemler stratejik planlamanın önemini göstermektedir.",
+      "synonyms": [
+        "Show",
+        "display",
+        "indicate"
+      ],
+      "antonyms": [
+        "Hide",
+        "disprove"
+      ],
+      "other_forms": "Demonstration (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "These problems ________ the importance of strategic planning."
+    },
+    {
+      "word": "DELINEATE",
+      "type": "v",
+      "turkish": "Tasvir etmek, betimlemek",
+      "sentence_en": "The main characters are clearly delineated in the first chapter of the book.",
+      "sentence_tr": "Ana karakterler kitabın ilk bölümünde açık bir şekilde tasvir edilmektedir.",
+      "synonyms": [
+        "Describe",
+        "portray"
+      ],
+      "antonyms": [],
+      "other_forms": "Delineation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The main characters are clearly ________d in the first chapter of the book."
+    },
+    {
+      "word": "COMMEND",
+      "type": "v",
+      "turkish": "Övmek",
+      "sentence_en": "For a low-budget film, it has much to commend in it.",
+      "sentence_tr": "Düşük bütçeli bir filme göre övülecek çok yanı var.",
+      "synonyms": [
+        "Praise",
+        "extol",
+        "acclaim"
+      ],
+      "antonyms": [
+        "Look down on",
+        "humiliate"
+      ],
+      "other_forms": "Commendable (adj), commendation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "For a low-budget film, it has much to ________ in it."
+    },
+    {
+      "word": "EXTRAVAGANT",
+      "type": "adj",
+      "turkish": "Müsrif, aşırı harcama yapan, savurgan",
+      "sentence_en": "The extravagant lifestyle of a movie star affects lots of young people.",
+      "sentence_tr": "Bir film yıldızının savurgan hayat tarzı gençleri etkilemektedir.",
+      "synonyms": [
+        "Excessive",
+        "lavish"
+      ],
+      "antonyms": [
+        "Stingy",
+        "mean"
+      ],
+      "other_forms": "Extravagantly (adv), extravagance (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The ________ lifestyle of a movie star affects lots of young people."
+    },
+    {
+      "word": "ESSENTIAL",
+      "type": "adj",
+      "turkish": "Gerekli, vazgeçilemeyen",
+      "sentence_en": "Government support will be essential if the project is to succeed.",
+      "sentence_tr": "Projenin başarılı olması için hükümet desteği gerekli.",
+      "synonyms": [
+        "Necessary",
+        "indispensable"
+      ],
+      "antonyms": [
+        "Unnecessary",
+        "redundant"
+      ],
+      "other_forms": "Essential (n) ---PAGE_326--- 319 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Government support will be ________ if the project is to succeed."
+    },
+    {
+      "word": "ERUPT",
+      "type": "v",
+      "turkish": "Patlamak, püskürtmek",
+      "sentence_en": "Since the volcano last erupted, many houses have been rebuilt.",
+      "sentence_tr": "Volkan son patladığından beri, birçok ev yeniden inşa edildi.",
+      "synonyms": [
+        "Explode",
+        "emit",
+        "break out"
+      ],
+      "antonyms": [],
+      "other_forms": "Eruption (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Since the volcano last ________ed, many houses have been rebuilt."
+    },
+    {
+      "word": "ENDURE",
+      "type": "v",
+      "turkish": "Dayanmak, katlanmak, tahammül etmek",
+      "sentence_en": "She's had to endure three painful operations on her leg.",
+      "sentence_tr": "Bacağından yapılan üç tane zor ameliyata dayanmak zorunda kaldı.",
+      "synonyms": [
+        "Bear",
+        "tolerate",
+        "put up with"
+      ],
+      "antonyms": [
+        "Can’t stand",
+        "can’t bear"
+      ],
+      "other_forms": "Endurance (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "She's had to ________ three painful operations on her leg."
+    },
+    {
+      "word": "APPOINT",
+      "type": "v",
+      "turkish": "Atamak",
+      "sentence_en": "He's been appointed as the director of the publishing division.",
+      "sentence_tr": "Yayın bölümü direktörü olarak atandı.",
+      "synonyms": [
+        "Assign",
+        "allot",
+        "direct"
+      ],
+      "antonyms": [
+        "Withhold",
+        "cancel"
+      ],
+      "other_forms": "Appointment (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He's been ________ed as the director of the publishing division."
+    },
+    {
+      "word": "APPRECIATE",
+      "type": "v",
+      "turkish": "Takdir etmek, beğenmek, anlamak",
+      "sentence_en": "We really appreciate all the support you gave us last weekend.",
+      "sentence_tr": "Geçen haftasonu verdiğiniz desteği gerçekten takdirle karşılıyoruz.",
+      "synonyms": [
+        "Admire",
+        "esteem",
+        "value highly",
+        "respect"
+      ],
+      "antonyms": [
+        "Undervalue",
+        "misjudge",
+        "depreciate"
+      ],
+      "other_forms": "Appreciable (adj)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "We really ________ all the support you gave us last weekend."
+    },
+    {
+      "word": "AVAILABLE",
+      "type": "adj",
+      "turkish": "Mümkün, elde edilebilir",
+      "sentence_en": "It is vital that food is made available to the famine areas.",
+      "sentence_tr": "Açlık olan bölgelere yiyecek ulaştırılması çok önemlidir.",
+      "synonyms": [
+        "Accessible",
+        "obtainable"
+      ],
+      "antonyms": [
+        "Unavailable",
+        "inaccessible"
+      ],
+      "other_forms": "Availability (n) ---PAGE_327--- 320 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "It is vital that food is made ________ to the famine areas."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "queue   a"
+        },
+        {
+          "id": 2,
+          "word": "justice   b"
+        },
+        {
+          "id": 3,
+          "word": "inborn   c"
+        },
+        {
+          "id": 4,
+          "word": "idle   d"
+        },
+        {
+          "id": 5,
+          "word": "humiliate   e"
+        },
+        {
+          "id": 1,
+          "word": "recreation   a"
+        },
+        {
+          "id": 2,
+          "word": "mutual   b"
+        },
+        {
+          "id": 3,
+          "word": "scope   c"
+        },
+        {
+          "id": 4,
+          "word": "merely   d"
+        },
+        {
+          "id": 5,
+          "word": "lethal   e"
+        },
+        {
+          "id": 1,
+          "word": "erupt   a"
+        },
+        {
+          "id": 2,
+          "word": "delineate   b"
+        },
+        {
+          "id": 3,
+          "word": "commend   c"
+        },
+        {
+          "id": 4,
+          "word": "extravagant   d"
+        },
+        {
+          "id": 5,
+          "word": "essential   e"
+        },
+        {
+          "id": 1,
+          "word": "demonstrate   a"
+        },
+        {
+          "id": 2,
+          "word": "endure   b"
+        },
+        {
+          "id": 3,
+          "word": "appoint   c"
+        },
+        {
+          "id": 4,
+          "word": "appreciate   d"
+        },
+        {
+          "id": 5,
+          "word": "available   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "innate"
+        },
+        {
+          "key": "b",
+          "def": "unoccupied"
+        },
+        {
+          "key": "c",
+          "def": "degrade, disgrace, look down on"
+        },
+        {
+          "key": "d",
+          "def": "fairness, equity"
+        },
+        {
+          "key": "e",
+          "def": "line, line up, stand in line"
+        },
+        {
+          "key": "a",
+          "def": "fatal, deadly, mortal"
+        },
+        {
+          "key": "b",
+          "def": "range"
+        },
+        {
+          "key": "c",
+          "def": "leisure, pasti me, amusement"
+        },
+        {
+          "key": "d",
+          "def": "only, solely, just"
+        },
+        {
+          "key": "e",
+          "def": "reciprocal, common"
+        },
+        {
+          "key": "a",
+          "def": "excessive, lavish"
+        },
+        {
+          "key": "b",
+          "def": "praise, e xtol, acclaim"
+        },
+        {
+          "key": "c",
+          "def": "necessary, indispensable"
+        },
+        {
+          "key": "d",
+          "def": "explode, emit, break out"
+        },
+        {
+          "key": "e",
+          "def": "describe, portray"
+        },
+        {
+          "key": "a",
+          "def": "bear, tolerate, put up with"
+        },
+        {
+          "key": "b",
+          "def": "admire, esteem, value highly, respect"
+        },
+        {
+          "key": "c",
+          "def": "accessible, obtainable"
+        },
+        {
+          "key": "d",
+          "def": "show, display, indicate"
+        },
+        {
+          "key": "e",
+          "def": "assign, allot, direct"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "justice   a"
+        },
+        {
+          "id": 2,
+          "word": "inborn   b"
+        },
+        {
+          "id": 3,
+          "word": "idle   c"
+        },
+        {
+          "id": 4,
+          "word": "humiliate   d"
+        },
+        {
+          "id": 1,
+          "word": "lethal   a"
+        },
+        {
+          "id": 2,
+          "word": "commend   b"
+        },
+        {
+          "id": 3,
+          "word": "extravagant   c"
+        },
+        {
+          "id": 4,
+          "word": "essential   d"
+        },
+        {
+          "id": 1,
+          "word": "demonstrate   a"
+        },
+        {
+          "id": 2,
+          "word": "endure   b"
+        },
+        {
+          "id": 3,
+          "word": "appoint   c"
+        },
+        {
+          "id": 4,
+          "word": "appreciate   d"
+        },
+        {
+          "id": 5,
+          "word": "available   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "honor, look up to"
+        },
+        {
+          "key": "b",
+          "def": "occupied"
+        },
+        {
+          "key": "c",
+          "def": "unnatural"
+        },
+        {
+          "key": "d",
+          "def": "unfairness"
+        },
+        {
+          "key": "a",
+          "def": "stingy, mean"
+        },
+        {
+          "key": "b",
+          "def": "unnecessary, redundant"
+        },
+        {
+          "key": "c",
+          "def": "safe"
+        },
+        {
+          "key": "d",
+          "def": "look down on, humiliate"
+        },
+        {
+          "key": "a",
+          "def": "can"
+        },
+        {
+          "key": "b",
+          "def": "undervalue"
+        },
+        {
+          "key": "c",
+          "def": "inaccessible"
+        },
+        {
+          "key": "d",
+          "def": "hide, disprove"
+        },
+        {
+          "key": "e",
+          "def": "withhold, cancel"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “reciprocal” ve Türkçesi “iki taraflı, karşılıklı” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "inborn",
+          "B": "occupied",
+          "C": "recreational",
+          "D": "mutual",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “solely” ve Türkçesi “sadece” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "fatal",
+          "B": "excessive",
+          "C": "merely",
+          "D": "stingy",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “mortal” ve Türkçesi “ölümcül” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "safe",
+          "B": "lavish",
+          "C": "redundant",
+          "D": "obtainable",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “praise” ve Türkçesi “övmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "delineate",
+          "B": "commend",
+          "C": "describe",
+          "D": "appoint",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “range” ve Türkçesi “kapsam” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "scope",
+          "B": "queue",
+          "C": "justice",
+          "D": "idleness",
+          "E": "leisure"
+        }
+      }
+    ]
+  }
+}

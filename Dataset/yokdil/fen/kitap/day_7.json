@@ -1,0 +1,692 @@
+{
+  "day": 7,
+  "words": [
+    {
+      "word": "ADJUST",
+      "type": "v",
+      "turkish": "Ayarlamak, düzenlemek, kurmak, tamir etmek",
+      "sentence_en": "If the chair is too high, you can adjust it to suit you.",
+      "sentence_tr": "Eğer sandalye çok yüksekse kendine göre ayarlayabilirsin.",
+      "synonyms": [
+        "Set",
+        "regulate",
+        "mend",
+        "repair",
+        "fix",
+        "arrange",
+        "adapt"
+      ],
+      "antonyms": [
+        "Disturb",
+        "confuse",
+        "break down"
+      ],
+      "other_forms": "Adjustment (n), adjustable (adj), adjustment (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "If the chair is too high, you can ________ it to suit you."
+    },
+    {
+      "word": "CONTAIN",
+      "type": "v",
+      "turkish": "İçermek, kontrol altına almak",
+      "sentence_en": "I've lost a file containing a lot of important documents.",
+      "sentence_tr": "Çok önemli belgeleri içeren bir dosyayı kaybettim.",
+      "synonyms": [
+        "Consist of",
+        "include",
+        "control"
+      ],
+      "antonyms": [
+        "Exclude"
+      ],
+      "other_forms": "Container (n), containerize (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I've lost a file ________ing a lot of important documents."
+    },
+    {
+      "word": "DARING",
+      "type": "adj",
+      "turkish": "Cesaretli, cüretkar",
+      "sentence_en": "Emergency crews quickly planned a daring rescue to get the people out of the burning building.",
+      "sentence_tr": "Acil durum ekibi insanları yanan binadan kurtarmak için hızlıca cesur bir plan hazırladı.",
+      "synonyms": [
+        "Brave",
+        "bold",
+        "courageous",
+        "dauntless"
+      ],
+      "antonyms": [
+        "Coward"
+      ],
+      "other_forms": "Dare (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Emergency crews quickly planned a ________ rescue to get the people out of the burning building."
+    },
+    {
+      "word": "CURTAIL",
+      "type": "v",
+      "turkish": "Azaltmak, kısaltmak",
+      "sentence_en": "The last government severely curtailed trade union rights.",
+      "sentence_tr": "Son hükümet sendika haklarını ciddi şekilde azalttı.",
+      "synonyms": [
+        "Reduce",
+        "decrease",
+        "abate",
+        "lessen"
+      ],
+      "antonyms": [
+        "Increase",
+        "enhance"
+      ],
+      "other_forms": "Curtailment (n) ---PAGE_51--- 44 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The last government severely ________ed trade union rights."
+    },
+    {
+      "word": "CREDIBLE",
+      "type": "adj",
+      "turkish": "İnanılabilir, inanılır",
+      "sentence_en": "They haven't produced any credible evidence for convicting him.",
+      "sentence_tr": "Onu tutuklamak için inanılır bir kanıt bulamadılar.",
+      "synonyms": [
+        "Believable"
+      ],
+      "antonyms": [
+        "Unbeliavable",
+        "incredible",
+        "unlikely"
+      ],
+      "other_forms": "Credibly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They haven't produced any ________ evidence for convicting him."
+    },
+    {
+      "word": "DISPUTE",
+      "type": "v",
+      "turkish": "Tartışmak",
+      "sentence_en": "The reasons of her death have been hotly disputed.",
+      "sentence_tr": "Onun ölüm nedenleri çok fazla tartışıldı.",
+      "synonyms": [
+        "Debate",
+        "argue"
+      ],
+      "antonyms": [],
+      "other_forms": "Disputed (adj), disputable (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The reasons of her death have been hotly ________d."
+    },
+    {
+      "word": "DISCREET",
+      "type": "adj",
+      "turkish": "Ayrı, belirgin, akıllı, gizli",
+      "sentence_en": "The family made discreet enquiries about his background.",
+      "sentence_tr": "Aile onun geçmişi hakkında gizli araştırmalar yaptı.",
+      "synonyms": [
+        "Wise",
+        "discerning",
+        "considerate"
+      ],
+      "antonyms": [
+        "Careless",
+        "reckless",
+        "foolish"
+      ],
+      "other_forms": "Discretion (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The family made ________ enquiries about his background."
+    },
+    {
+      "word": "DISMAY",
+      "type": "n",
+      "turkish": "Korku, cesaretin kırılması, üzüntü, endişe",
+      "sentence_en": "The supporters watched in/with dismay as their team lost 5-0.",
+      "sentence_tr": "Taraftarlar takımlarının 5-0 yenilgisini üzüntüyle izlediler.",
+      "synonyms": [
+        "Discouragement",
+        "wonder",
+        "disappointment"
+      ],
+      "antonyms": [
+        "Encouragement"
+      ],
+      "other_forms": "Dismay (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The supporters watched in/with ________ as their team lost 5-0."
+    },
+    {
+      "word": "IMPEDE",
+      "type": "v",
+      "turkish": "Engel olmak",
+      "sentence_en": "Although he's shy, it certainly hasn't impeded his career in any way.",
+      "sentence_tr": "Çekingen olmasına rağmen, bu durum kariyerini hiçbir şekilde engellemedi.",
+      "synonyms": [
+        "Prevent",
+        "hinder",
+        "hamper"
+      ],
+      "antonyms": [
+        "Help",
+        "encourage",
+        "facilitate"
+      ],
+      "other_forms": "Impediment (n), impedimenta (n) ILLEGIBLE ( a d j ) Türkçe Karşılığı : Okunaksız Örnek Cümle : His writing is almost illegible. Çevirisi : Yazısı neredeyse hiç okunmuyor. Eş ya da Yakın Anlamlılar : Cannot be read Zıt Anlamlılar : Legible Diğer Halleri : illegibly (adv) ---PAGE_52--- 45 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Although he's shy, it certainly hasn't ________d his career in any way."
+    },
+    {
+      "word": "INHERENT",
+      "type": "adj",
+      "turkish": "Doğal, doğuştan gelen",
+      "sentence_en": "I have an inherent distrust of lawyers.",
+      "sentence_tr": "Avukatlara karşı doğuştan gelen bir güvensizliğim var.",
+      "synonyms": [
+        "Inborn"
+      ],
+      "antonyms": [
+        "Incidental"
+      ],
+      "other_forms": "Inherently (adv)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "I have an ________ distrust of lawyers."
+    },
+    {
+      "word": "INHIBIT",
+      "type": "v",
+      "turkish": "Engel olmak",
+      "sentence_en": "This drug inhibits the growth of tumours.",
+      "sentence_tr": "Bu ilaç tümörlerin büyümesine engel oluyor.",
+      "synonyms": [
+        "Prevent",
+        "hamper"
+      ],
+      "antonyms": [
+        "Help",
+        "pave the way"
+      ],
+      "other_forms": "Inhibited (adj), inhibition (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This drug ________s the growth of tumours."
+    },
+    {
+      "word": "FORECAST",
+      "type": "v",
+      "turkish": "Tahmin etmek, beklemek",
+      "sentence_en": "Snow has been forecast for tonight.",
+      "sentence_tr": "Bu gece kar yağışı bekleniyor.",
+      "synonyms": [
+        "Predict",
+        "foresee"
+      ],
+      "antonyms": [],
+      "other_forms": "Forecast (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Snow has been ________ for tonight."
+    },
+    {
+      "word": "FORESEE",
+      "type": "v",
+      "turkish": "Öngörmek, tahmin etmek",
+      "sentence_en": "I don't foresee any difficulties so long as we keep within budget.",
+      "sentence_tr": "Bütçeye göre hareket ettiğimiz sürece herhangi bir zorluk yaşayacağımızı tahmin etmiyorum.",
+      "synonyms": [
+        "Foretell",
+        "see ahead"
+      ],
+      "antonyms": [],
+      "other_forms": "Foresight (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "I don't ________ any difficulties so long as we keep within budget."
+    },
+    {
+      "word": "JUSTIFY",
+      "type": "v",
+      "turkish": "Haklı çıkarmak, doğrulamak, suçsuzluğunu ortaya çıkarmak",
+      "sentence_en": "It was the only thing that I could do - I don't have to justify myself to anyone.",
+      "sentence_tr": "Yapabileceğim tek şey buydu. Kendimi kimseye haklı göstermek zorunda değilim.",
+      "synonyms": [
+        "Vindicate",
+        "acquit"
+      ],
+      "antonyms": [
+        "Condemn"
+      ],
+      "other_forms": "Justification (n) ---PAGE_53--- 46 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It was the only thing that I could do - I don't have to ________ myself to anyone."
+    },
+    {
+      "word": "PROS AND CONS",
+      "type": "n",
+      "turkish": "Artılar ve eksiler",
+      "sentence_en": "We're just weighing up the pros and cons of moving to a bigger house.",
+      "sentence_tr": "Daha büyük bir eve taşınmanın artı ve eksilerini değerlendiriyoruz.",
+      "synonyms": [
+        "Advantages and disadvantages"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We're just weighing up the ________ of moving to a bigger house."
+    },
+    {
+      "word": "POTENT",
+      "type": "adj",
+      "turkish": "Güçlü",
+      "sentence_en": "The Berlin Wall was a potent symbol of the Cold War.",
+      "sentence_tr": "Berlin Duvarı Soğuk Savaş’ın güçlü bir sembolüydü.",
+      "synonyms": [
+        "Effective",
+        "powerful"
+      ],
+      "antonyms": [
+        "Ineffective",
+        "weak"
+      ],
+      "other_forms": "Potency (n), potently (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The Berlin Wall was a ________ symbol of the Cold War."
+    },
+    {
+      "word": "MANIFEST",
+      "type": "v",
+      "turkish": "Göstermek",
+      "sentence_en": "The workers manifested their dissatisfaction in a series of strikes.",
+      "sentence_tr": "İşçiler birçok grev yaparak memnuniyetsizliklerini gösterdi.",
+      "synonyms": [
+        "Show",
+        "exhibit"
+      ],
+      "antonyms": [
+        "Hide",
+        "conceal"
+      ],
+      "other_forms": "Manifestation (n), manifest (adj), manifestly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The workers ________ed their dissatisfaction in a series of strikes."
+    },
+    {
+      "word": "MASSACRE",
+      "type": "n",
+      "turkish": "Katliam, toplu kıyım",
+      "sentence_en": "He ordered the massacre of 2,000 women and children.",
+      "sentence_tr": "O, 2000 kadın ve çocuğun katlini emretti.",
+      "synonyms": [
+        "Genocide",
+        "slaughter"
+      ],
+      "antonyms": [],
+      "other_forms": "Massacre (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He ordered the ________ of 2,000 women and children."
+    },
+    {
+      "word": "MEND",
+      "type": "v",
+      "turkish": "Tamir etmek, onarmak",
+      "sentence_en": "The plumber came to mend the burst pipe.",
+      "sentence_tr": "Musluk tamircisi patlak boruyu tamir etmek için geldi.",
+      "synonyms": [
+        "Repair",
+        "fix"
+      ],
+      "antonyms": [
+        "Damage",
+        "harm"
+      ],
+      "other_forms": "Mend (n), mending (n) ---PAGE_54--- 47 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The plumber came to ________ the burst pipe."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "adjust   a"
+        },
+        {
+          "id": 2,
+          "word": "contain   b"
+        },
+        {
+          "id": 3,
+          "word": "daring   c"
+        },
+        {
+          "id": 4,
+          "word": "curtail   d"
+        },
+        {
+          "id": 5,
+          "word": "credible   e"
+        },
+        {
+          "id": 1,
+          "word": "dispute   a"
+        },
+        {
+          "id": 2,
+          "word": "discreet   b"
+        },
+        {
+          "id": 3,
+          "word": "dismay   c"
+        },
+        {
+          "id": 4,
+          "word": "impede   d"
+        },
+        {
+          "id": 5,
+          "word": "illegible   e"
+        },
+        {
+          "id": 1,
+          "word": "inherent   a"
+        },
+        {
+          "id": 2,
+          "word": "inhibit   b"
+        },
+        {
+          "id": 3,
+          "word": "forecast   c"
+        },
+        {
+          "id": 4,
+          "word": "justify   d"
+        },
+        {
+          "id": 5,
+          "word": "pros and cons   e"
+        },
+        {
+          "id": 1,
+          "word": "foresee   a"
+        },
+        {
+          "id": 2,
+          "word": "potent   b"
+        },
+        {
+          "id": 3,
+          "word": "manifest   c"
+        },
+        {
+          "id": 4,
+          "word": "massacre   d"
+        },
+        {
+          "id": 5,
+          "word": "mend   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "consist of, include, control"
+        },
+        {
+          "key": "b",
+          "def": "reduce, decrease, abate, lessen"
+        },
+        {
+          "key": "c",
+          "def": "believable"
+        },
+        {
+          "key": "d",
+          "def": "set, regulate, fix, arrange"
+        },
+        {
+          "key": "e",
+          "def": "brave, bold, courageous"
+        },
+        {
+          "key": "a",
+          "def": "discouragement, wonder, disappointment"
+        },
+        {
+          "key": "b",
+          "def": "prevent, hin der, hamper"
+        },
+        {
+          "key": "c",
+          "def": "cannot be read"
+        },
+        {
+          "key": "d",
+          "def": "wise, discerning, considerate"
+        },
+        {
+          "key": "e",
+          "def": "debate, argue"
+        },
+        {
+          "key": "a",
+          "def": "vindicate, acquit"
+        },
+        {
+          "key": "b",
+          "def": "predict, foresee"
+        },
+        {
+          "key": "c",
+          "def": "advantages and disadvantages"
+        },
+        {
+          "key": "d",
+          "def": "inborn"
+        },
+        {
+          "key": "e",
+          "def": "prevent, hamper"
+        },
+        {
+          "key": "a",
+          "def": "repair, fix"
+        },
+        {
+          "key": "b",
+          "def": "show, exhibit"
+        },
+        {
+          "key": "c",
+          "def": "foretell, see ahead"
+        },
+        {
+          "key": "d",
+          "def": "genocide, slaughter"
+        },
+        {
+          "key": "e",
+          "def": "effective, powerful"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "adjust   a"
+        },
+        {
+          "id": 2,
+          "word": "contain   b"
+        },
+        {
+          "id": 3,
+          "word": "daring   c"
+        },
+        {
+          "id": 4,
+          "word": "curtail   d"
+        },
+        {
+          "id": 5,
+          "word": "credible   e"
+        },
+        {
+          "id": 1,
+          "word": "discreet   a"
+        },
+        {
+          "id": 2,
+          "word": "dismay   b"
+        },
+        {
+          "id": 3,
+          "word": "impede   c"
+        },
+        {
+          "id": 4,
+          "word": "illegible   d"
+        },
+        {
+          "id": 5,
+          "word": "inherent   e"
+        },
+        {
+          "id": 1,
+          "word": "inhibit   a"
+        },
+        {
+          "id": 2,
+          "word": "justify   b"
+        },
+        {
+          "id": 3,
+          "word": "potent   c"
+        },
+        {
+          "id": 4,
+          "word": "manifest   d"
+        },
+        {
+          "id": 5,
+          "word": "mend   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "unbeliavable, incredible, unlikely"
+        },
+        {
+          "key": "b",
+          "def": "coward"
+        },
+        {
+          "key": "c",
+          "def": "disturb, confuse, break down"
+        },
+        {
+          "key": "d",
+          "def": "increase, enhance"
+        },
+        {
+          "key": "e",
+          "def": "exclude"
+        },
+        {
+          "key": "a",
+          "def": "legible"
+        },
+        {
+          "key": "b",
+          "def": "help, encourage, facilitate"
+        },
+        {
+          "key": "c",
+          "def": "incidental"
+        },
+        {
+          "key": "d",
+          "def": "careless, reckless, foolish"
+        },
+        {
+          "key": "e",
+          "def": "encouragement"
+        },
+        {
+          "key": "a",
+          "def": "condemn"
+        },
+        {
+          "key": "b",
+          "def": "hide, conceal"
+        },
+        {
+          "key": "c",
+          "def": "damage, harm"
+        },
+        {
+          "key": "d",
+          "def": "help, pave the way"
+        },
+        {
+          "key": "e",
+          "def": "ineffective, weak"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Türkçesi “haklı çıkarmak” ve eş anlamlısı “vindicate” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "adjust",
+          "B": "confuse",
+          "C": "disturb",
+          "D": "justify",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Türkçesi “ayarlamak, düzenlemek” ve eş anlamlısı “regulate” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "include",
+          "B": "dare",
+          "C": "adjust",
+          "D": "curtail",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Türkçesi “azaltmak” ve zıt anlamlısı “increase” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "arrange",
+          "B": "dispute",
+          "C": "relinquish",
+          "D": "impede",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Türkçesi “doğuştan” ve eş anlamlısı “inborn” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "potent",
+          "B": "inherent",
+          "C": "incidental",
+          "D": "credible",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Türkçesi “üzüntü, hayal kırıklığı” ve eş anlamlısı “disappointment” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "dismay",
+          "B": "discretion",
+          "C": "inhibition",
+          "D": "forecast",
+          "E": "justification"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "day": 4,
+  "title": "Edilgen Yapı (Passive Voice)",
+  "lecture": "EDİLGEN YAPI (PASSIVE VOICE)\n\n1. TEMEL KURALLAR VE FORMÜLLER:\nAkademik makalelerde eylemi yapan kişiden ziyade eylemin kendisi ve etkilenen nesne önemli olduğu için cümlelerin büyük kısmı pasif kurulur.\n* Temel Mantık: Nesne + Be + V3 (tarafından anlamı katmak için 'by' eklenir).\n* Zamanlara Göre Pasif Çekimleri:\n  - Present Simple: am/is/are + V3\n  - Past Simple: was/were + V3\n  - Present Perfect: have/has been + V3\n  - Modals: modal + be + V3 (örn. 'must be cleaned')\n\n2. ÖRNEK AKADEMİK CÜMLELER:\n* Active: The lab assistant sterilized the equipment.\n* Passive: The equipment was sterilized by the lab assistant.\n  (Ekipman laboratuvar asistanı tarafından sterilize edildi.)\n\n3. SINAV STRATEJİLERİ VE İPUÇLARI:\n* Boşluktan sonra bir nesne (isim) gelmiyorsa, edat ('by', 'in', 'at', 'with') geliyorsa o fiil büyük olasılıkla pasif çekimlenmelidir.\n* Cansız varlıklar (araştırma, veri, kan, hücre) kendi kendilerine eylem yapamayacakları için edilgen yapı (passive) tercih edilir.",
+  "questions": [
+    {
+      "q": "The laboratory experiments _______ by a team of biochemists last week.",
+      "options": [
+        "conducted",
+        "were conducted",
+        "have been conducted",
+        "are conducted"
+      ],
+      "answer": "were conducted",
+      "exp": "Deneyler biochemistler 'tarafından' (by) gerçekleştirildiği ve zaman 'geçen hafta' (last week) olduğu için Past Passive (were conducted) kullanılmalıdır."
+    },
+    {
+      "q": "It _______ that carbon emissions must _______ immediately to prevent global warming.",
+      "options": [
+        "believes / reduce",
+        "is believed / be reduced",
+        "believed / reduced",
+        "is believed / reduce"
+      ],
+      "answer": "is believed / be reduced",
+      "exp": "'İnanılmaktadır' (is believed) genel kanı ifadesidir ve emisyonlar 'azaltılmalıdır' (must be reduced) pasif yapısı doğru eşleşmedir."
+    },
+    {
+      "q": "Data gathered from the satellite _______ by the research center next month.",
+      "options": [
+        "will analyze",
+        "analyzed",
+        "will be analyzed",
+        "will have analyzed"
+      ],
+      "answer": "will be analyzed",
+      "exp": "Gelecek ay (next month) veriler 'analiz edileceği' (will be analyzed - edilgen gelecek zaman) için pasif yapı tercih edilmelidir."
+    },
+    {
+      "q": "Penicillin, which _______ by Alexander Fleming, _______ widely used in medicine today.",
+      "options": [
+        "discovered / is",
+        "was discovered / is",
+        "had discovered / was",
+        "discovered / was"
+      ],
+      "answer": "was discovered / is",
+      "exp": "Penisilin geçmişte 'keşfedildiği' (was discovered - Past Passive) için V2 edilgen, günümüzde ise 'kullanıldığı' (is - Present Passive) için is kullanılmalıdır."
+    },
+    {
+      "q": "All surgical instruments _______ before they can _______ in the operating room.",
+      "options": [
+        "must sterilize / use",
+        "must be sterilized / be used",
+        "should sterilize / be used",
+        "must be sterilized / use"
+      ],
+      "answer": "must be sterilized / be used",
+      "exp": "Cerrahi aletlerin hem 'sterilize edilmesi' (must be sterilized) hem de 'kullanılması' (be used) edilgen yapıda modal passives gerektirir."
+    }
+  ]
+}

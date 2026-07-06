@@ -1,0 +1,666 @@
+{
+  "day": 32,
+  "words": [
+    {
+      "word": "FRUSTRATE",
+      "type": "v",
+      "turkish": "Hayal kırıklığına uğratmak, üzmek",
+      "sentence_en": "It frustrates me that I'm not able to put any of my ideas into practice.",
+      "sentence_tr": "Fikirlerimin hiçbirini pratiğe dökememem beni hayal kırıklığına uğratıyor.",
+      "synonyms": [
+        "Disappoint"
+      ],
+      "antonyms": [
+        "Cheer up",
+        "entertain"
+      ],
+      "other_forms": "Frustration (n), frustrated (adj), frustrating (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It ________s me that I'm not able to put any of my ideas into practice."
+    },
+    {
+      "word": "ILLUMINATE",
+      "type": "v",
+      "turkish": "Açıklamak, aydınlatmak",
+      "sentence_en": "Some articles which illuminate these issues are necessary.",
+      "sentence_tr": "Bu meseleleri açıklayan birkaç makale gerekli.",
+      "synonyms": [
+        "Clarify",
+        "shed light on"
+      ],
+      "antonyms": [
+        "Darken",
+        "obscure"
+      ],
+      "other_forms": "illuminating (adj), illumination (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Some articles which ________ these issues are necessary."
+    },
+    {
+      "word": "INQUIRE",
+      "type": "v",
+      "turkish": "Sormak, soruşturmak",
+      "sentence_en": "\"Where are we going?\" he inquired politely.",
+      "sentence_tr": "Nazikçe ‘Nereye gidiyoruz?’ diye sordu.",
+      "synonyms": [
+        "Ask",
+        "investigate"
+      ],
+      "antonyms": [],
+      "other_forms": "Inquiry (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "\"Where are we going?\" he ________d politely."
+    },
+    {
+      "word": "INFER",
+      "type": "v",
+      "turkish": "Çıkarım yapmak",
+      "sentence_en": "I inferred from her face expression that she wanted to leave.",
+      "sentence_tr": "Yüz ifadesinden gitmek istediği sonucuna vardım.",
+      "synonyms": [
+        "Conclude",
+        "deduce"
+      ],
+      "antonyms": [],
+      "other_forms": "Inference (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "I ________red from her face expression that she wanted to leave."
+    },
+    {
+      "word": "NAIVE",
+      "type": "adj",
+      "turkish": "Saf",
+      "sentence_en": "She was very naive to believe that he would stay with her.",
+      "sentence_tr": "Onun kendisiyle yaşayacağına inanacak kadar saftı.",
+      "synonyms": [
+        "Foolish",
+        "credulous"
+      ],
+      "antonyms": [
+        "Shrewe"
+      ],
+      "other_forms": "Naively (adv) ---PAGE_226--- 219 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She was very ________ to believe that he would stay with her."
+    },
+    {
+      "word": "MORAL",
+      "type": "adj",
+      "turkish": "Ahlaki, etik",
+      "sentence_en": "It's her moral obligation to tell the police what she knows.",
+      "sentence_tr": "Bildiklerini polise söylemesi onun ahlaki görevi.",
+      "synonyms": [
+        "Ethical",
+        "virtuos"
+      ],
+      "antonyms": [
+        "Immoral"
+      ],
+      "other_forms": "Morality (n), moral (n), morally (adv.)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It's her ________ obligation to tell the police what she knows."
+    },
+    {
+      "word": "RESOLUTION",
+      "type": "n",
+      "turkish": "Karar tasarısı, önerge, teklif",
+      "sentence_en": "Joint resolution has been presented to the Parliament.",
+      "sentence_tr": "Ortak karar tasarısı Parlamento’ya sunuldu.",
+      "synonyms": [
+        "Decision"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Joint ________ has been presented to the Parliament."
+    },
+    {
+      "word": "REMINISCENT",
+      "type": "adj",
+      "turkish": "-i anımsatan, -i hatırlatan",
+      "sentence_en": "This song is so reminiscent of my adolescence.",
+      "sentence_tr": "Bu şarkı bana gençliğimi hatırlatıyor.",
+      "synonyms": [
+        "Remindful"
+      ],
+      "antonyms": [],
+      "other_forms": "Reminiscence (n), reminisce (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This song is so ________ of my adolescence."
+    },
+    {
+      "word": "REDUNDANT",
+      "type": "adj",
+      "turkish": "Gereksiz, fazla, işsiz",
+      "sentence_en": "To keep the company alive, half the workforce is being made redundant.",
+      "sentence_tr": "Şirketi ayakta tutmak için, işgücünün yarısı işten çıkarılıyor.",
+      "synonyms": [
+        "Unnecessary",
+        "inessential"
+      ],
+      "antonyms": [
+        "Necessary",
+        "essential"
+      ],
+      "other_forms": "Redundancy (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "To keep the company alive, half the workforce is being made ________."
+    },
+    {
+      "word": "NEGLIGIBLE",
+      "type": "adj",
+      "turkish": "Önemsiz",
+      "sentence_en": "The difference between the two products is negligible.",
+      "sentence_tr": "İki ürün arasındaki fark önemsiz.",
+      "synonyms": [
+        "Unimportant",
+        "insignificant"
+      ],
+      "antonyms": [
+        "Important"
+      ],
+      "other_forms": "Neglect (v) ---PAGE_227--- 220 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The difference between the two products is ________."
+    },
+    {
+      "word": "NOMINATE",
+      "type": "v",
+      "turkish": "Aday gösterme",
+      "sentence_en": "President Yeltsin nominated prime minister Sergei Kiriyenko to head the government.",
+      "sentence_tr": "Başkan Yeltsin hükümeti yönetmesi için Başbakan Sergei Kiriyenko’yu aday gösterdi.",
+      "synonyms": [
+        "Appoint",
+        "elect",
+        "select"
+      ],
+      "antonyms": [
+        "Withdraw"
+      ],
+      "other_forms": "Nominee (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "President Yeltsin ________d prime minister Sergei Kiriyenko to head the government."
+    },
+    {
+      "word": "PER",
+      "type": "adj",
+      "turkish": "Başına, tek",
+      "sentence_en": "The car was travelling at 70 miles per hour.",
+      "sentence_tr": "Araba saatte 70 mil’de seyir halindeydi.",
+      "synonyms": [
+        "One",
+        "for each"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The car was travelling at 70 miles ________ hour."
+    },
+    {
+      "word": "CONFORM",
+      "type": "v",
+      "turkish": "Uymak",
+      "sentence_en": "At our school, you are required to conform the rules.",
+      "sentence_tr": "Okulumuzda kurallara uymak zorundasınız.",
+      "synonyms": [
+        "Obey",
+        "comply with",
+        "abide by"
+      ],
+      "antonyms": [
+        "Violate",
+        "dissent",
+        "disagree"
+      ],
+      "other_forms": "Conformity (n), conformist (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "At our school, you are required to ________ the rules."
+    },
+    {
+      "word": "DECENCY",
+      "type": "n",
+      "turkish": "Uygunluk, edepli olma",
+      "sentence_en": "She didn't even have the decency to apologize.",
+      "sentence_tr": "Özür dilemeye yüzü bile yoktu.",
+      "synonyms": [
+        "Morality",
+        "propriety",
+        "modesty"
+      ],
+      "antonyms": [
+        "Indecency"
+      ],
+      "other_forms": "Decent (adj), decently (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She didn't even have the ________ to apologize."
+    },
+    {
+      "word": "DIVINE",
+      "type": "adj",
+      "turkish": "İlahi, tanrısal",
+      "sentence_en": "Some fans seem to regard footballers as divine beings.",
+      "sentence_tr": "Bazı fanatikler futbolcuları ilah olarak görüyor.",
+      "synonyms": [
+        "Godlike",
+        "heavenly"
+      ],
+      "antonyms": [
+        "Human",
+        "earthly ---PAGE_228--- 221 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Some fans seem to regard footballers as ________ beings."
+    },
+    {
+      "word": "BARELY",
+      "type": "adv",
+      "turkish": "Zorlukla, güçlükle, nadiren, hemen hemen hiç",
+      "sentence_en": "I can barely hear you.",
+      "sentence_tr": "Seni zar zor duyabiliyorum.",
+      "synonyms": [
+        "Hardly",
+        "scarcely"
+      ],
+      "antonyms": [
+        "Often",
+        "generally"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I can ________ hear you."
+    },
+    {
+      "word": "BATTLE",
+      "type": "n",
+      "turkish": "Kavga, çatışma, savaş",
+      "sentence_en": "Her only brother was killed in battle.",
+      "sentence_tr": "Tek kardeşi savaşta öldürüldü.",
+      "synonyms": [
+        "Fight",
+        "war",
+        "conflict"
+      ],
+      "antonyms": [
+        "Peace and quiet"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Her only brother was killed in ________."
+    },
+    {
+      "word": "SLOPE",
+      "type": "n",
+      "turkish": "Eğim",
+      "sentence_en": "There's a very steep slope just before you reach the top of the mountain.",
+      "sentence_tr": "Dağın zirvesine ulaşmadan hemen önce çok dik bir yamaç var.",
+      "synonyms": [
+        "Incline"
+      ],
+      "antonyms": [],
+      "other_forms": "Slope (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There's a very steep ________ just before you reach the top of the mountain."
+    },
+    {
+      "word": "SEGREGATE",
+      "type": "v",
+      "turkish": "Ayırmak",
+      "sentence_en": "Blacks were segregated from whites in every area of life.",
+      "sentence_tr": "Zenciler hayatın her alanında beyazlardan ayrı tutuldu.",
+      "synonyms": [
+        "Separate"
+      ],
+      "antonyms": [
+        "Unite"
+      ],
+      "other_forms": "Segregation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Blacks were ________d from whites in every area of life."
+    },
+    {
+      "word": "SETBACK",
+      "type": "n",
+      "turkish": "Yenilgi, zorluk, aksilik",
+      "sentence_en": "There has been a temporary setback in our plans.",
+      "sentence_tr": "Planlarımızda geçici bir aksilik oldu.",
+      "synonyms": [
+        "Defeat",
+        "difficulty"
+      ],
+      "antonyms": [
+        "Ease ---PAGE_229--- 222 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There has been a temporary ________ in our plans."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "frustrate   a"
+        },
+        {
+          "id": 2,
+          "word": "illuminate   b"
+        },
+        {
+          "id": 3,
+          "word": "inquire   c"
+        },
+        {
+          "id": 4,
+          "word": "infer   d"
+        },
+        {
+          "id": 5,
+          "word": "naive   e"
+        },
+        {
+          "id": 1,
+          "word": "moral   a"
+        },
+        {
+          "id": 2,
+          "word": "resolution   b"
+        },
+        {
+          "id": 3,
+          "word": "reminiscent   c"
+        },
+        {
+          "id": 4,
+          "word": "redundant   d"
+        },
+        {
+          "id": 5,
+          "word": "nominate   e"
+        },
+        {
+          "id": 1,
+          "word": "negligible   a"
+        },
+        {
+          "id": 2,
+          "word": "per   b"
+        },
+        {
+          "id": 3,
+          "word": "conform   c"
+        },
+        {
+          "id": 4,
+          "word": "decency   d"
+        },
+        {
+          "id": 5,
+          "word": "divine   e"
+        },
+        {
+          "id": 1,
+          "word": "barely   a"
+        },
+        {
+          "id": 2,
+          "word": "battle   b"
+        },
+        {
+          "id": 3,
+          "word": "slope   c"
+        },
+        {
+          "id": 4,
+          "word": "segregate   d"
+        },
+        {
+          "id": 5,
+          "word": "setback   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "conclude, deduce"
+        },
+        {
+          "key": "b",
+          "def": "ask, investigate"
+        },
+        {
+          "key": "c",
+          "def": "foolish, credulous"
+        },
+        {
+          "key": "d",
+          "def": "disappoint"
+        },
+        {
+          "key": "e",
+          "def": "clarify, shed light on"
+        },
+        {
+          "key": "a",
+          "def": "remindful"
+        },
+        {
+          "key": "b",
+          "def": "unnecessary, inessential"
+        },
+        {
+          "key": "c",
+          "def": "appoint, elect, select"
+        },
+        {
+          "key": "d",
+          "def": "decision"
+        },
+        {
+          "key": "e",
+          "def": "ethical, virtuos"
+        },
+        {
+          "key": "a",
+          "def": "one, for each"
+        },
+        {
+          "key": "b",
+          "def": "morality, propriety, modesty"
+        },
+        {
+          "key": "c",
+          "def": "godlike, heavenly"
+        },
+        {
+          "key": "d",
+          "def": "unimportant, i nsignificant"
+        },
+        {
+          "key": "e",
+          "def": "obey, comply with, abide by"
+        },
+        {
+          "key": "a",
+          "def": "defeat, difficulty"
+        },
+        {
+          "key": "b",
+          "def": "incline"
+        },
+        {
+          "key": "c",
+          "def": "hardly, scarcely"
+        },
+        {
+          "key": "d",
+          "def": "separate"
+        },
+        {
+          "key": "e",
+          "def": "fight, war, conflict"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "frustrate   a"
+        },
+        {
+          "id": 2,
+          "word": "illuminate   b"
+        },
+        {
+          "id": 3,
+          "word": "moral   c"
+        },
+        {
+          "id": 4,
+          "word": "redundant   d"
+        },
+        {
+          "id": 1,
+          "word": "nominate   a"
+        },
+        {
+          "id": 2,
+          "word": "negligible   b"
+        },
+        {
+          "id": 3,
+          "word": "conform   c"
+        },
+        {
+          "id": 4,
+          "word": "divine   d"
+        },
+        {
+          "id": 1,
+          "word": "barely   a"
+        },
+        {
+          "id": 2,
+          "word": "battle   b"
+        },
+        {
+          "id": 3,
+          "word": "segregate   c"
+        },
+        {
+          "id": 4,
+          "word": "setback   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "necessary, essential"
+        },
+        {
+          "key": "b",
+          "def": "immoral"
+        },
+        {
+          "key": "c",
+          "def": "darken, obscure"
+        },
+        {
+          "key": "d",
+          "def": "cheer up, entertain"
+        },
+        {
+          "key": "a",
+          "def": "violate, dissent, disagree"
+        },
+        {
+          "key": "b",
+          "def": "human, earthly"
+        },
+        {
+          "key": "c",
+          "def": "withdraw"
+        },
+        {
+          "key": "d",
+          "def": "important"
+        },
+        {
+          "key": "a",
+          "def": "peace and quiet"
+        },
+        {
+          "key": "b",
+          "def": "often, generally"
+        },
+        {
+          "key": "c",
+          "def": "ease"
+        },
+        {
+          "key": "d",
+          "def": "unite"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “shed light on” ve Türkçesi “aydınlatmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "frustrate",
+          "B": "inquire",
+          "C": "illuminate",
+          "D": "entertain",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “deduce” ve Türkçesi “çıkarım yapmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "clarify",
+          "B": "investigate",
+          "C": "nominate",
+          "D": "conform",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “insignificant” ve Türkçesi “ihmal edilebilir, önemsiz” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "negligible",
+          "B": "divine",
+          "C": "decent",
+          "D": "redundant",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Genellikle “to” edatı ile kullanılan, eş anlamlısı “abide by” ve Türkçesi “uymak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "nominate",
+          "B": "comply",
+          "C": "conclude",
+          "D": "conform",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “investigate” ve Türkçesi “araştırmak, soruşturmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "appoint",
+          "B": "inquire",
+          "C": "infer",
+          "D": "frustrate",
+          "E": "clarify"
+        }
+      }
+    ]
+  }
+}

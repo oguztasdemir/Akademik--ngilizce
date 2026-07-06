@@ -1,0 +1,640 @@
+{
+  "day": 8,
+  "words": [
+    {
+      "word": "MODIFY",
+      "type": "v",
+      "turkish": "Değiştirmek",
+      "sentence_en": "The proposals were not reasonable and were only accepted in a modified form.",
+      "sentence_tr": "Öneriler mantıklı değildi ve ancak değiştirilerek kabul edildi.",
+      "synonyms": [
+        "Change",
+        "alter",
+        "shift",
+        "vary"
+      ],
+      "antonyms": [],
+      "other_forms": "Modification (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The proposals were not reasonable and were only accepted in a modified form. (________)"
+    },
+    {
+      "word": "MITIGATE",
+      "type": "v",
+      "turkish": "Azaltmak",
+      "sentence_en": "It isn’t certain how to mitigate the effects of tourism on the island.",
+      "sentence_tr": "Turizmin ada üzerindeki etkilerinin nasıl azaltılacağı belli değil.",
+      "synonyms": [
+        "Lessen",
+        "ease"
+      ],
+      "antonyms": [
+        "Aggravate"
+      ],
+      "other_forms": "Mitigating (adj), mitigation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It isn’t certain how to ________ the effects of tourism on the island."
+    },
+    {
+      "word": "OBSTINATE",
+      "type": "adj",
+      "turkish": "İnatçı",
+      "sentence_en": "He can be very obstinate at times.",
+      "sentence_tr": "Bazen çok inatçı olabiliyor.",
+      "synonyms": [
+        "Stubborn"
+      ],
+      "antonyms": [
+        "Compliant"
+      ],
+      "other_forms": "Obstinacy (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He can be very ________ at times."
+    },
+    {
+      "word": "INTRINSIC",
+      "type": "adj",
+      "turkish": "Asıl, esas, kendine özgü, içten gelen",
+      "sentence_en": "Maths is an intrinsic part of the school curriculum.",
+      "sentence_tr": "Matematik okul müfredatının temel bir parçasıdır.",
+      "synonyms": [
+        "Inherent",
+        "inborn",
+        "basic"
+      ],
+      "antonyms": [
+        "Extrinsic"
+      ],
+      "other_forms": "Intrinsically (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Maths is an ________ part of the school curriculum."
+    },
+    {
+      "word": "FATAL",
+      "type": "adj",
+      "turkish": "Ölümcül",
+      "sentence_en": "This illness is fatal in almost all cases.",
+      "sentence_tr": "Bu hastalık hemen her vakada ölümcüldür.",
+      "synonyms": [
+        "Mortal",
+        "deadly",
+        "lethal"
+      ],
+      "antonyms": [
+        "Teeming with life"
+      ],
+      "other_forms": "Fatality (n) ---PAGE_58--- 51 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "This illness is ________ in almost all cases."
+    },
+    {
+      "word": "HASTY",
+      "type": "adj",
+      "turkish": "Acele, hızlı",
+      "sentence_en": "He warned against making hasty decisions.",
+      "sentence_tr": "Acele kararlar vermeye karşı uyardı.",
+      "synonyms": [
+        "Hurried",
+        "speedy"
+      ],
+      "antonyms": [
+        "Slow",
+        "deliberate"
+      ],
+      "other_forms": "Hastily (adv), hasten (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He warned against making ________ decisions."
+    },
+    {
+      "word": "IMPACT",
+      "type": "n",
+      "turkish": "Etki, çarpma",
+      "sentence_en": "The impact of the crash reduced the car to a third of its original length.",
+      "sentence_tr": "Çarpmanın etkisi arabayı orjinal uzunluğunun üçte birine küçülttü.",
+      "synonyms": [
+        "Effect",
+        "influence"
+      ],
+      "antonyms": [],
+      "other_forms": "Impact (v), impacted (adj)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The ________ of the crash reduced the car to a third of its original length."
+    },
+    {
+      "word": "INADEQUATE",
+      "type": "adj",
+      "turkish": "Yetersiz",
+      "sentence_en": "This work is extremely inadequate - you'll have to do it again.",
+      "sentence_tr": "Bu çalışma çok yetersiz. Tekrar yapmak zorunda kalacaksın.",
+      "synonyms": [
+        "Insufficient",
+        "deficient",
+        "not enough"
+      ],
+      "antonyms": [
+        "Adequate",
+        "enough"
+      ],
+      "other_forms": "Inadequately (adv), inadequacy (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "This work is extremely ________ - you'll have to do it again."
+    },
+    {
+      "word": "DIFFUSE",
+      "type": "v",
+      "turkish": "Yaymak",
+      "sentence_en": "Oxygen diffuses from the lungs into the bloodstream.",
+      "sentence_tr": "Oksijen ciğerlerden kana karışır.",
+      "synonyms": [
+        "Scatter",
+        "spread"
+      ],
+      "antonyms": [
+        "Assemble",
+        "draw"
+      ],
+      "other_forms": "Diffusion (n), diffuse (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Oxygen ________s from the lungs into the bloodstream."
+    },
+    {
+      "word": "DWARF",
+      "type": "n",
+      "turkish": "Cüce",
+      "sentence_en": "Snow White and the Seven Dwarves is known to everybody.",
+      "sentence_tr": "Pamuk Prenses ve Yedi Cüceler herkesçe bilinir.",
+      "synonyms": [
+        "Very short person"
+      ],
+      "antonyms": [
+        "Tall"
+      ],
+      "other_forms": "Dwarf (v) ---PAGE_59--- 52 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Snow White and the Seven Dwarves is known to everybody. (________)"
+    },
+    {
+      "word": "ENTREPRENEUR",
+      "type": "n",
+      "turkish": "Girişimci, yatırımcı",
+      "sentence_en": "He was one of the entrepreneurs of the eighties and made lots of money.",
+      "sentence_tr": "Seksenli yılların girişimcilerinden biriydi ve çok para kazandı.",
+      "synonyms": [
+        "Capitalist",
+        "industrialist",
+        "investor"
+      ],
+      "antonyms": [],
+      "other_forms": "Entrepreneurial (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He was one of the ________s of the eighties and made lots of money."
+    },
+    {
+      "word": "CONVERT",
+      "type": "v",
+      "turkish": "Dönüştürmek, değiştirmek",
+      "sentence_en": "He converted to Catholicism when he got married.",
+      "sentence_tr": "Evlenince Katolik oldu.",
+      "synonyms": [
+        "Turn into",
+        "alter",
+        "change",
+        "transform"
+      ],
+      "antonyms": [
+        "Keep stable"
+      ],
+      "other_forms": "Convert (n), conversion (n) DEDUCE from (v) Türkçe Karşılığı : Çıkarım yapmak, sonucuna varmak Örnek Cümle : The police have deduced that he must have left his apartment yesterday evening. Çevirisi : Polisler onun dün akşam evden çıkmış olduğu sonucuna vardı. Eş ya da Yakın Anlamlılar : Infer from Diğer Halleri : Deduction (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "He ________ed to Catholicism when he got married."
+    },
+    {
+      "word": "DELIBERATELY",
+      "type": "adv",
+      "turkish": "Kasıtlı, bilerek",
+      "sentence_en": "I'm sure he says these things deliberately to annoy me.",
+      "sentence_tr": "Eminim bunları beni kızdırmak için kasıtlı olarak söylüyor.",
+      "synonyms": [
+        "Intentionally",
+        "on purpose"
+      ],
+      "antonyms": [
+        "Accidentally",
+        "by chance",
+        "by accident"
+      ],
+      "other_forms": "Deliberate (adj), deliberation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I'm sure he says these things ________ to annoy me."
+    },
+    {
+      "word": "ACCUSE",
+      "type": "v",
+      "turkish": "Suçlamak",
+      "sentence_en": "Are you accusing me of lying?",
+      "sentence_tr": "Beni yalan söylemekle mi suçluyorsun?",
+      "synonyms": [
+        "Blame",
+        "charge",
+        "indict",
+        "reproach"
+      ],
+      "antonyms": [
+        "Discharge",
+        "defend",
+        "release"
+      ],
+      "other_forms": "Accused (adj), accuser (n), accusation (n) ---PAGE_60--- 53 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr ACCUSTOMED to (v) Türkçe Karşılığı : Alışkın olmak, alıştırmak Örnek Cümle : The army accustomed him to discipline. Çevirisi : Askerlik onu disipline alıştırdı. Eş ya da Yakın Anlamlılar : Be used to, be addicted to Zıt Anlamlılar : Be unfamiliar to, feel strange, odd Diğer Halleri : Accustom (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Are you accusing me of lying? (________)"
+    },
+    {
+      "word": "ARBITRARY",
+      "type": "adj",
+      "turkish": "Rasgele, keyfi, otoriter",
+      "sentence_en": "What guided your decision or was it arbitrary?",
+      "sentence_tr": "Senin kararını ne yönlendirdi, ya da kararın keyfi miydi?",
+      "synonyms": [
+        "Random",
+        "chance",
+        "dictatorial"
+      ],
+      "antonyms": [
+        "lead to",
+        "give rise to",
+        "result in"
+      ],
+      "other_forms": "Arbitrate (v), arbitration (n) ARISE from (v) Türkçe Karşılığı : -den doğmak, kaynaklanmak Örnek Cümle : Are there any matters arising from the last meeting? Çevirisi : Son toplantıdan ortaya çıkan herhangi bir problem var mı? Eş ya da Yakın Anlamlılar : Originate from, proceed, spring, result from, emerge from Zıt Anlamlılar : lead to, give rise to, result in",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "What guided your decision or was it ________?"
+    },
+    {
+      "word": "BEAT",
+      "type": "v",
+      "turkish": "Yenmek, bozguna uğratmak, vurmak",
+      "sentence_en": "They saw him beating his dog with a stick.",
+      "sentence_tr": "Onu köpeğine sopayla vururken gördüler.",
+      "synonyms": [
+        "Defeat",
+        "strike",
+        "hit"
+      ],
+      "antonyms": [
+        "Lose"
+      ],
+      "other_forms": "Beaten (adj), beater (n), beating (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They saw him ________ing his dog with a stick."
+    },
+    {
+      "word": "CASE",
+      "type": "n",
+      "turkish": "Durum, vaka",
+      "sentence_en": "I wouldn't normally agree but it will be an exception in this case.",
+      "sentence_tr": "Normalde kabul etmezdim ama bu durumda bir istisna olacak.",
+      "synonyms": [
+        "Condition",
+        "situation ---PAGE_61--- 54 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I wouldn't normally agree but it will be an exception in this ________."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "modify   a"
+        },
+        {
+          "id": 2,
+          "word": "mitigate   b"
+        },
+        {
+          "id": 3,
+          "word": "obstinate   c"
+        },
+        {
+          "id": 4,
+          "word": "intrinsic   d"
+        },
+        {
+          "id": 5,
+          "word": "fatal   e"
+        },
+        {
+          "id": 1,
+          "word": "hasty   a"
+        },
+        {
+          "id": 2,
+          "word": "impact   b"
+        },
+        {
+          "id": 3,
+          "word": "inadequate   c"
+        },
+        {
+          "id": 4,
+          "word": "diffuse   d"
+        },
+        {
+          "id": 5,
+          "word": "dwarf   e"
+        },
+        {
+          "id": 1,
+          "word": "entrepreneur   a"
+        },
+        {
+          "id": 2,
+          "word": "convert   b"
+        },
+        {
+          "id": 3,
+          "word": "deduce   c"
+        },
+        {
+          "id": 4,
+          "word": "deliberately   d"
+        },
+        {
+          "id": 5,
+          "word": "accuse   e"
+        },
+        {
+          "id": 1,
+          "word": "accustomed to   a"
+        },
+        {
+          "id": 2,
+          "word": "arbitrary   b"
+        },
+        {
+          "id": 3,
+          "word": "arise from   c"
+        },
+        {
+          "id": 4,
+          "word": "beat   d"
+        },
+        {
+          "id": 5,
+          "word": "case   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "stubborn"
+        },
+        {
+          "key": "b",
+          "def": "inherent, in born, basic"
+        },
+        {
+          "key": "c",
+          "def": "mortal, deadly, lethal"
+        },
+        {
+          "key": "d",
+          "def": "lessen, ease"
+        },
+        {
+          "key": "e",
+          "def": "change, alter, shift, vary"
+        },
+        {
+          "key": "a",
+          "def": "scatter, spread"
+        },
+        {
+          "key": "b",
+          "def": "insufficient,, not enough"
+        },
+        {
+          "key": "c",
+          "def": "very short person"
+        },
+        {
+          "key": "d",
+          "def": "hurried, speedy"
+        },
+        {
+          "key": "e",
+          "def": "effect, influence"
+        },
+        {
+          "key": "a",
+          "def": "turn into, alter, change, transform"
+        },
+        {
+          "key": "b",
+          "def": "intentionally, on purpose"
+        },
+        {
+          "key": "c",
+          "def": "blame, charge, indict, reproach"
+        },
+        {
+          "key": "d",
+          "def": "capitalist, industrialist, investor"
+        },
+        {
+          "key": "e",
+          "def": "infer"
+        },
+        {
+          "key": "a",
+          "def": "condition, situation"
+        },
+        {
+          "key": "b",
+          "def": "originate from, result from, emerge from"
+        },
+        {
+          "key": "c",
+          "def": "be used to, be addicted to"
+        },
+        {
+          "key": "d",
+          "def": "defeat, strike, hit"
+        },
+        {
+          "key": "e",
+          "def": "random, chance, dictatorial"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "mitigate   a"
+        },
+        {
+          "id": 2,
+          "word": "obstinate   b"
+        },
+        {
+          "id": 3,
+          "word": "intrinsic   c"
+        },
+        {
+          "id": 4,
+          "word": "fatal   d"
+        },
+        {
+          "id": 5,
+          "word": "hasty   e"
+        },
+        {
+          "id": 1,
+          "word": "inadequate   a"
+        },
+        {
+          "id": 2,
+          "word": "diffuse   b"
+        },
+        {
+          "id": 3,
+          "word": "convert   c"
+        },
+        {
+          "id": 4,
+          "word": "deliberately   d"
+        },
+        {
+          "id": 1,
+          "word": "accuse   a"
+        },
+        {
+          "id": 2,
+          "word": "accustomed to   b"
+        },
+        {
+          "id": 3,
+          "word": "arise from   c"
+        },
+        {
+          "id": 4,
+          "word": "beat   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "slow, deliberate"
+        },
+        {
+          "key": "b",
+          "def": "extrinsic"
+        },
+        {
+          "key": "c",
+          "def": "aggravate"
+        },
+        {
+          "key": "d",
+          "def": "teeming with life"
+        },
+        {
+          "key": "e",
+          "def": "compliant"
+        },
+        {
+          "key": "a",
+          "def": "accidentally, by chance, by accident"
+        },
+        {
+          "key": "b",
+          "def": "keep stable"
+        },
+        {
+          "key": "c",
+          "def": "assemble, draw"
+        },
+        {
+          "key": "d",
+          "def": "adequate, enough, sufficient"
+        },
+        {
+          "key": "a",
+          "def": "lead to, give rise to, result in"
+        },
+        {
+          "key": "b",
+          "def": "lose"
+        },
+        {
+          "key": "c",
+          "def": "discharge, defend, release"
+        },
+        {
+          "key": "d",
+          "def": "be unfamiliar to, feel strange, odd"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Türkçesi “değiştirmek” ve eş anlamlısı “modify” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "mitigate",
+          "B": "alter",
+          "C": "aggravate",
+          "D": "ease",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Türkçesi “yetersiz” ve zıt anlamlısı “sufficient” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "inadequate",
+          "B": "dwarf",
+          "C": "deliberate",
+          "D": "accused",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Genellikle “to” edatı ile kullanılan ve Türkçesi “alışkın olmak” anlamına gelen kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "arbitrary",
+          "B": "arise",
+          "C": "deduce",
+          "D": "convert",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Türkçesi “yaymak” ve eş anlamlısı “scatter” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "modify",
+          "B": "lessen",
+          "C": "assemble",
+          "D": "diffuse",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Genellikle “of” edatı ile kullanılan ve eş anlamlıları “blame for, be charged with” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "deduce",
+          "B": "convert",
+          "C": "accuse",
+          "D": "infer",
+          "E": "accustom"
+        }
+      }
+    ]
+  }
+}

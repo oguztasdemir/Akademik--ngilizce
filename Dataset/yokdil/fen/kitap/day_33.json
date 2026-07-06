@@ -1,0 +1,702 @@
+{
+  "day": 33,
+  "words": [
+    {
+      "word": "ABRUPT",
+      "type": "adj",
+      "turkish": "Ani, beklenmeyen",
+      "sentence_en": "His abrupt reaction surprised us all.",
+      "sentence_tr": "Onun ani tepkisi hepimizi şaşırttı.",
+      "synonyms": [
+        "Sudden",
+        "unexpected",
+        "hasty"
+      ],
+      "antonyms": [
+        "Foreseen",
+        "expected"
+      ],
+      "other_forms": "Abruptly (adv), abruptness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "His ________ reaction surprised us all."
+    },
+    {
+      "word": "APPROPRIATE",
+      "type": "adj",
+      "turkish": "Uygun",
+      "sentence_en": "Is this film appropriate for small children?",
+      "sentence_tr": "Bu film küçük çocuklar için uygun mu?",
+      "synonyms": [
+        "Suitable",
+        "proper",
+        "fitting"
+      ],
+      "antonyms": [
+        "Irrelevant",
+        "improper"
+      ],
+      "other_forms": "Appropriately (adv), appropriateness (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Is this film ________ for small children?"
+    },
+    {
+      "word": "ENTAIL",
+      "type": "v",
+      "turkish": "Gerektirmek",
+      "sentence_en": "Such a large investment inevitably entails some risk.",
+      "sentence_tr": "Böylesine büyük bir yatırım kaçınılmaz olarak risk gerektiriyor.",
+      "synonyms": [
+        "Require",
+        "necessitate"
+      ],
+      "antonyms": [
+        "Prevent",
+        "nullify"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Such a large investment inevitably ________s some risk."
+    },
+    {
+      "word": "ERADICATE",
+      "type": "v",
+      "turkish": "Yok etmek, kökünü kazmak",
+      "sentence_en": "The disease which once affected millions of people has now been eradicated.",
+      "sentence_tr": "Bir zamanlar milyonlarca insanı etkileyen hastalık artık yok edildi.",
+      "synonyms": [
+        "Get rid of",
+        "wipe out",
+        "eliminate"
+      ],
+      "antonyms": [
+        "Erect",
+        "found"
+      ],
+      "other_forms": "Eradication (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The disease which once affected millions of people has now been ________d."
+    },
+    {
+      "word": "CONTAMINATE",
+      "type": "v",
+      "turkish": "Kirletmek",
+      "sentence_en": "Much of the coast has been contaminated by nuclear waste.",
+      "sentence_tr": "Sahilin büyük bölümü nükleer atıklarla kirletildi.",
+      "synonyms": [
+        "Pollute"
+      ],
+      "antonyms": [
+        "Purify",
+        "cleanse"
+      ],
+      "other_forms": "Contamination (n) ---PAGE_233--- 226 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Much of the coast has been ________d by nuclear waste."
+    },
+    {
+      "word": "CONSPIRACY",
+      "type": "n",
+      "turkish": "Entrika, söylenti, komplo",
+      "sentence_en": "I think there was a conspiracy to keep me out of the committee.",
+      "sentence_tr": "Bence, beni komitenin dışında tutmak için bir komplo vardı.",
+      "synonyms": [
+        "Intrigue",
+        "trickery"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I think there was a ________ to keep me out of the committee."
+    },
+    {
+      "word": "COMPASSION",
+      "type": "n",
+      "turkish": "Merhamet, acıma",
+      "sentence_en": "I was hoping she might show a little compassion.",
+      "sentence_tr": "Az da olsa merhamet gösterebileceğini umuyordum.",
+      "synonyms": [
+        "Sympathy",
+        "tenderness",
+        "kindness",
+        "pity",
+        "mercy"
+      ],
+      "antonyms": [
+        "Cruelty",
+        "harshness"
+      ],
+      "other_forms": "Compassionate (adj), compassionately (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I was hoping she might show a little ________."
+    },
+    {
+      "word": "OUTLAY",
+      "type": "n",
+      "turkish": "Masraf, harcama",
+      "sentence_en": "To make up for the initial outlay of £2000 to buy the equipment, you should market the product well.",
+      "sentence_tr": "Malzemeyi almak için gerekli olan ilk etaptaki 2000 euro masrafı çıkartmak için ürünü iyi pazarlamalısın.",
+      "synonyms": [
+        "Expense",
+        "expenditure"
+      ],
+      "antonyms": [
+        "Income",
+        "revenue"
+      ],
+      "other_forms": "Outlay (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "To make up for the initial ________ of £2000 to buy the equipment, you should market the product well."
+    },
+    {
+      "word": "OBEDIENT",
+      "type": "adj",
+      "turkish": "Uyumlu, kurallara uyan",
+      "sentence_en": "Students are expected to be quiet and obedient in the classroom.",
+      "sentence_tr": "Öğrencilerin sınıfta sessiz olmaları ve kurallara uymaları beklenir.",
+      "synonyms": [
+        "Conformable",
+        "abiding"
+      ],
+      "antonyms": [
+        "Disrespectful"
+      ],
+      "other_forms": "Obey (v), obediently (adv), obedience (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Students are expected to be quiet and ________ in the classroom."
+    },
+    {
+      "word": "MUTINY",
+      "type": "n",
+      "turkish": "İsyan",
+      "sentence_en": "Conditions on the ship were often very bad, and crews were on the point of mutiny.",
+      "sentence_tr": "Gemideki koşullar genel anlamıyla çok kötüydü ve tayfalar isyanın eşiğindeydi.",
+      "synonyms": [
+        "Revolt",
+        "rebellion"
+      ],
+      "antonyms": [],
+      "other_forms": "Mutineer (n), mutiny (v), mutinous (adj) ---PAGE_234--- 227 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Conditions on the ship were often very bad, and crews were on the point of ________."
+    },
+    {
+      "word": "REVENGE",
+      "type": "n",
+      "turkish": "İntikam",
+      "sentence_en": "She took her revenge on him for leaving her.",
+      "sentence_tr": "Ondan, kendisini terk etmesinin intikamını aldı.",
+      "synonyms": [
+        "Vengeance"
+      ],
+      "antonyms": [],
+      "other_forms": "Revenge (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She took her ________ on him for leaving her."
+    },
+    {
+      "word": "LITERACY",
+      "type": "n",
+      "turkish": "Okur yazarlık",
+      "sentence_en": "Far more resources are needed to improve adult literacy average.",
+      "sentence_tr": "Yetişkin okuryazarlık ortalamasını artırmak için daha fazla kaynağa ihtiyaç var.",
+      "synonyms": [
+        "Ability to read and write"
+      ],
+      "antonyms": [
+        "Illiteracy"
+      ],
+      "other_forms": "Literate (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Far more resources are needed to improve adult ________ average."
+    },
+    {
+      "word": "INITIAL",
+      "type": "adj",
+      "turkish": "İlk, öncelikli",
+      "sentence_en": "Initial reports say that seven people have died, though this has not yet been confirmed.",
+      "sentence_tr": "İlk haberler yedi kişinin öldüğünü söylüyor ama bu henüz doğrulanmadı.",
+      "synonyms": [
+        "First",
+        "beginning"
+      ],
+      "antonyms": [
+        "Last",
+        "final"
+      ],
+      "other_forms": "Initially (adv)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "________ reports say that seven people have died, though this has not yet been confirmed."
+    },
+    {
+      "word": "IMPAIR",
+      "type": "v",
+      "turkish": "Bozmak, zarar vermek",
+      "sentence_en": "A recurring knee injury may have impaired his chances of winning the tournament.",
+      "sentence_tr": "Dizindeki sakatlığın nüksetmesi turnuvayı kazanma şansını olumsuz etkilemiş olabilir.",
+      "synonyms": [
+        "Spoil",
+        "worsen",
+        "damage",
+        "harm"
+      ],
+      "antonyms": [
+        "Repair",
+        "improve"
+      ],
+      "other_forms": "Impaired (adj), impairment (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A recurring knee injury may have ________ed his chances of winning the tournament."
+    },
+    {
+      "word": "FORBID",
+      "type": "v",
+      "turkish": "Yasaklamak",
+      "sentence_en": "The law forbids the sale of cigarettes to people under the age of 16.",
+      "sentence_tr": "Yasa 16 yaşın altındaki çocuklara sigara satışını yasaklamaktadır.",
+      "synonyms": [
+        "Prohibit",
+        "ban",
+        "not allow"
+      ],
+      "antonyms": [
+        "Allow",
+        "let"
+      ],
+      "other_forms": "Forbidden (adj) ---PAGE_235--- 228 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The law ________s the sale of cigarettes to people under the age of 16."
+    },
+    {
+      "word": "QUARREL",
+      "type": "n",
+      "turkish": "Kavga, münakaşa, çekişme",
+      "sentence_en": "They had a quarrel over/about money three years ago and they have not talked to each other since.",
+      "sentence_tr": "Üç yıl önce para meselesi yüzünden tartıştılar ve o günden beri birbirleriyle konuşmuyorlar.",
+      "synonyms": [
+        "Argument",
+        "dispute",
+        "disagreement",
+        "fight"
+      ],
+      "antonyms": [
+        "Agreement"
+      ],
+      "other_forms": "Quarrel (v), quarrelsome (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They had a ________ over/about money three years ago and they have not talked to each other since."
+    },
+    {
+      "word": "INVOLVE",
+      "type": "v",
+      "turkish": "İçermek, gerektirmek",
+      "sentence_en": "I prefer teaching methods that actively involve students in learning.",
+      "sentence_tr": "Öğrencileri aktif olarak öğrenme sürecine dahil edecek öğretim metodlarını tercih ediyorum.",
+      "synonyms": [
+        "Include",
+        "require"
+      ],
+      "antonyms": [
+        "Exclude"
+      ],
+      "other_forms": "Involvement (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "I prefer teaching methods that actively ________ students in learning."
+    },
+    {
+      "word": "JEOPARDIZE",
+      "type": "v",
+      "turkish": "Tehlikeye atmak",
+      "sentence_en": "She knew that by failing her exams she could jeopardize her whole future.",
+      "sentence_tr": "Sınavlarında başarısız olarak tüm geleceğini tehlikeye atabileceğini biliyordu.",
+      "synonyms": [
+        "Endanger"
+      ],
+      "antonyms": [
+        "Protect"
+      ],
+      "other_forms": "Jeopardy (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She knew that by failing her exams she could ________ her whole future."
+    },
+    {
+      "word": "SUBJECT TO",
+      "type": "v",
+      "turkish": "Maruz kalmak",
+      "sentence_en": "The inquiry revealed that they had been subjected to unfair treatment.",
+      "sentence_tr": "Soruşturma onların haksız muameleye maruz kaldıklarını ortaya çıkardı.",
+      "synonyms": [
+        "Exposed to"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The inquiry revealed that they had been subjected to unfair treatment. (________)"
+    },
+    {
+      "word": "SURPLUS",
+      "type": "n",
+      "turkish": "Fazlalık",
+      "sentence_en": "The government has authorized the army to sell its surplus weapons.",
+      "sentence_tr": "Hükümet fazla silahlarını satması için orduya yetki verdi.",
+      "synonyms": [
+        "Extra",
+        "excess ---PAGE_236--- 229 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The government has authorized the army to sell its ________ weapons."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "abrupt   a"
+        },
+        {
+          "id": 2,
+          "word": "appropriate   b"
+        },
+        {
+          "id": 3,
+          "word": "entail   c"
+        },
+        {
+          "id": 4,
+          "word": "eradicate   d"
+        },
+        {
+          "id": 5,
+          "word": "contaminate   e"
+        },
+        {
+          "id": 1,
+          "word": "conspiracy   a"
+        },
+        {
+          "id": 2,
+          "word": "compassion   b"
+        },
+        {
+          "id": 3,
+          "word": "outlay   c"
+        },
+        {
+          "id": 4,
+          "word": "obedient   d"
+        },
+        {
+          "id": 5,
+          "word": "mutiny   e"
+        },
+        {
+          "id": 1,
+          "word": "revenge   a"
+        },
+        {
+          "id": 2,
+          "word": "literacy   b"
+        },
+        {
+          "id": 3,
+          "word": "initial   c"
+        },
+        {
+          "id": 4,
+          "word": "impair   d"
+        },
+        {
+          "id": 5,
+          "word": "forbid   e"
+        },
+        {
+          "id": 1,
+          "word": "quarrel   a"
+        },
+        {
+          "id": 2,
+          "word": "involve   b"
+        },
+        {
+          "id": 3,
+          "word": "jeopardize   c"
+        },
+        {
+          "id": 4,
+          "word": "subject to   d"
+        },
+        {
+          "id": 5,
+          "word": "surplus   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "require, necessitate"
+        },
+        {
+          "key": "b",
+          "def": "get rid of, wipe out, eliminate"
+        },
+        {
+          "key": "c",
+          "def": "pollute"
+        },
+        {
+          "key": "d",
+          "def": "suitable, proper, fitting"
+        },
+        {
+          "key": "e",
+          "def": "sudden, unexpected, hasty"
+        },
+        {
+          "key": "a",
+          "def": "revolt, rebellion"
+        },
+        {
+          "key": "b",
+          "def": "expense, expenditure"
+        },
+        {
+          "key": "c",
+          "def": "intrigue, trickery"
+        },
+        {
+          "key": "d",
+          "def": "conformable, abiding"
+        },
+        {
+          "key": "e",
+          "def": "sympathy, tenderness, kindness, pity, mercy"
+        },
+        {
+          "key": "a",
+          "def": "spoil, worsen, damage, harm"
+        },
+        {
+          "key": "b",
+          "def": "first, beginning"
+        },
+        {
+          "key": "c",
+          "def": "prohibit, ban, not allow"
+        },
+        {
+          "key": "d",
+          "def": "vengeance"
+        },
+        {
+          "key": "e",
+          "def": "ability to read and write"
+        },
+        {
+          "key": "a",
+          "def": "include, require"
+        },
+        {
+          "key": "b",
+          "def": "exposed to"
+        },
+        {
+          "key": "c",
+          "def": "extra, excess"
+        },
+        {
+          "key": "d",
+          "def": "argument, dispute , disagreement, fight"
+        },
+        {
+          "key": "e",
+          "def": "endanger"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "abrupt   a"
+        },
+        {
+          "id": 2,
+          "word": "appropriate   b"
+        },
+        {
+          "id": 3,
+          "word": "entail   c"
+        },
+        {
+          "id": 4,
+          "word": "eradicate   d"
+        },
+        {
+          "id": 5,
+          "word": "contaminate   e"
+        },
+        {
+          "id": 1,
+          "word": "compassion   a"
+        },
+        {
+          "id": 2,
+          "word": "outlay   b"
+        },
+        {
+          "id": 3,
+          "word": "obedient   c"
+        },
+        {
+          "id": 4,
+          "word": "literacy   d"
+        },
+        {
+          "id": 5,
+          "word": "initial   e"
+        },
+        {
+          "id": 1,
+          "word": "impair   a"
+        },
+        {
+          "id": 2,
+          "word": "forbid   b"
+        },
+        {
+          "id": 3,
+          "word": "quarrel   c"
+        },
+        {
+          "id": 4,
+          "word": "involve   d"
+        },
+        {
+          "id": 5,
+          "word": "jeopardize   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "erect, found"
+        },
+        {
+          "key": "b",
+          "def": "prevent, nullify"
+        },
+        {
+          "key": "c",
+          "def": "purify, cleanse"
+        },
+        {
+          "key": "d",
+          "def": "foreseen, expected"
+        },
+        {
+          "key": "e",
+          "def": "irrelevant, improper"
+        },
+        {
+          "key": "a",
+          "def": "last, final"
+        },
+        {
+          "key": "b",
+          "def": "disrespectful"
+        },
+        {
+          "key": "c",
+          "def": "cruelty, harshness"
+        },
+        {
+          "key": "d",
+          "def": "illiteracy"
+        },
+        {
+          "key": "e",
+          "def": "income, revenue"
+        },
+        {
+          "key": "a",
+          "def": "agreement"
+        },
+        {
+          "key": "b",
+          "def": "exclude"
+        },
+        {
+          "key": "c",
+          "def": "protect"
+        },
+        {
+          "key": "d",
+          "def": "allow, let"
+        },
+        {
+          "key": "e",
+          "def": "repair, improve"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “sudden” ve Türkçesi “ani, beklenmedik” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "irrelevant",
+          "B": "foreseen",
+          "C": "abiding",
+          "D": "abrupt",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “require” ve Türkçesi “gerektirmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "nullify",
+          "B": "eradicate",
+          "C": "entail",
+          "D": "contaminate",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Phrasal verb olarak eş anlamlısı “wipe out” ve Türkçesi “yok etmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "necessitate",
+          "B": "worsen",
+          "C": "purify",
+          "D": "forbid",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “revolt” ve Türkçesi “isyan” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "outlay",
+          "B": "mutiny",
+          "C": "revenge",
+          "D": "literacy",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “dispute” ve Türkçesi “tartışma” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "quarrel",
+          "B": "compassion",
+          "C": "expenditure",
+          "D": "conspiracy",
+          "E": "rebellion"
+        }
+      }
+    ]
+  }
+}

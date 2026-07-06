@@ -1,0 +1,603 @@
+{
+  "day": 51,
+  "words": [
+    {
+      "word": "TINY",
+      "type": "adj",
+      "turkish": "Çok küçük",
+      "sentence_en": "A tiny flower made her happy.",
+      "sentence_tr": "Küçük bir çiçek onu mutlu etti.",
+      "synonyms": [
+        "Very small",
+        "petty"
+      ],
+      "antonyms": [
+        "Enormous",
+        "huge"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A ________ flower made her happy."
+    },
+    {
+      "word": "THRILLING",
+      "type": "adj",
+      "turkish": "Heyecan verici",
+      "sentence_en": "The book is a thrilling adventure story.",
+      "sentence_tr": "Kitap heyecan verici bir macera hikayesi.",
+      "synonyms": [
+        "Exciting"
+      ],
+      "antonyms": [
+        "Boring",
+        "dull"
+      ],
+      "other_forms": "Thrilled (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The book is a ________ adventure story."
+    },
+    {
+      "word": "VAIN",
+      "type": "adj",
+      "turkish": "Değersiz, boş, yararsız",
+      "sentence_en": "Employers clearly hoped that the workers would stay longer, but their efforts were largely in vain.",
+      "sentence_tr": "İşverenler işçilerin daha uzun süre kalacağını umuyorlardı fakat çabalarının çoğu boşunaydı.",
+      "synonyms": [
+        "Worthless",
+        "useless"
+      ],
+      "antonyms": [
+        "Fruitful"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Employers clearly hoped that the workers would stay longer, but their efforts were largely in ________."
+    },
+    {
+      "word": "BURDEN",
+      "type": "n",
+      "turkish": "Ağır yük (soyut)",
+      "sentence_en": "She's totally a burden to me.",
+      "sentence_tr": "O benim için tamamen bir yük.",
+      "synonyms": [
+        "Load",
+        "strain"
+      ],
+      "antonyms": [],
+      "other_forms": "Burden (v), burdensome (adj) ---PAGE_359--- 352 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She's totally a ________ to me."
+    },
+    {
+      "word": "ASSERT",
+      "type": "v",
+      "turkish": "İleri sürmek, iddia etmek",
+      "sentence_en": "The Allies asserted their right to move freely between the two borders.",
+      "sentence_tr": "Müttefikler iki sınır arasında serbest dolaşma haklarının olduğunu iddia etti.",
+      "synonyms": [
+        "Put forward",
+        "claim",
+        "maintain"
+      ],
+      "antonyms": [
+        "Keep silent"
+      ],
+      "other_forms": "Assertion (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The Allies ________ed their right to move freely between the two borders."
+    },
+    {
+      "word": "EMPHASIZE",
+      "type": "v",
+      "turkish": "Vurgulamak",
+      "sentence_en": "I'd just like to emphasize how important it is for people to learn foreign languages.",
+      "sentence_tr": "Yabancı dil öğrenmenin insanlar için ne kadar önemli olduğunu vurgulamak istiyorum.",
+      "synonyms": [
+        "Stress"
+      ],
+      "antonyms": [
+        "Understate",
+        "underestimate"
+      ],
+      "other_forms": "Emphasis (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I'd just like to ________ how important it is for people to learn foreign languages."
+    },
+    {
+      "word": "FACILITATE",
+      "type": "v",
+      "turkish": "Kolaylaştırmak",
+      "sentence_en": "The new ramp will facilitate the entry of wheelchairs.",
+      "sentence_tr": "Yeni rampa tekerlekli sandalyelerin girişini kolaylaştıracak.",
+      "synonyms": [
+        "Make it easy",
+        "ease"
+      ],
+      "antonyms": [
+        "Make sth difficult"
+      ],
+      "other_forms": "Facility (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The new ramp will ________ the entry of wheelchairs."
+    },
+    {
+      "word": "EXTINCT",
+      "type": "adj",
+      "turkish": "Soyu tükenmiş, yok olmuş",
+      "sentence_en": "There is concern that the giant panda will soon become extinct.",
+      "sentence_tr": "Büyük pandaların yakında soylarının tükeneceğine dair endişeler var.",
+      "synonyms": [
+        "Vanished",
+        "died out"
+      ],
+      "antonyms": [
+        "Survive"
+      ],
+      "other_forms": "Extinction (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "There is concern that the giant panda will soon become ________."
+    },
+    {
+      "word": "DESCEND",
+      "type": "v",
+      "turkish": "İnmek, alçalmak",
+      "sentence_en": "Jane descended the stairs.",
+      "sentence_tr": "Jane merdivenlerden indi.",
+      "synonyms": [
+        "Drop",
+        "fall",
+        "go down"
+      ],
+      "antonyms": [
+        "Ascend"
+      ],
+      "other_forms": "Descent (n) ---PAGE_360--- 353 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ DEAL with (v) Türkçe Karşılığı : Başetmek, ele almak Örnek Cümle : Her new film deals with the relationship between a woman and her sick daughter. Çevirisi : Yeni filmi bir kadın ile hasta kızı arasındaki ilişkiyi ele alıyor. Eş ya da Yakın Anlamlılar : Cope with, handle, tackle",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Jane ________ed the stairs."
+    },
+    {
+      "word": "LAYER",
+      "type": "n",
+      "turkish": "Tabaka",
+      "sentence_en": "A thick layer of clay lies over the sandstone.",
+      "sentence_tr": "Kumtaşı üzerinde kalın bir balçık tabakası var.",
+      "synonyms": [
+        "Stratum"
+      ],
+      "antonyms": [],
+      "other_forms": "Layer (v), layered (adj)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "A thick ________ of clay lies over the sandstone."
+    },
+    {
+      "word": "PERSPIRE",
+      "type": "v",
+      "turkish": "Terlemek",
+      "sentence_en": "He was perspiring due to his thick woollen jumper.",
+      "sentence_tr": "Kalın yünlü kazağı yüzünden terliyordu.",
+      "synonyms": [
+        "Sweat"
+      ],
+      "antonyms": [],
+      "other_forms": "Perspiration (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He was perspiring due to his thick woollen jumper. (________)"
+    },
+    {
+      "word": "MISCELLANEOUS",
+      "type": "adj",
+      "turkish": "Çeşitli",
+      "sentence_en": "There are miscellaneous rumors about the murder.",
+      "sentence_tr": "Cinayetle ilgili çeşitli söylentiler var.",
+      "synonyms": [
+        "Various",
+        "diverse"
+      ],
+      "antonyms": [],
+      "other_forms": "Miscellany (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There are ________ rumors about the murder."
+    },
+    {
+      "word": "PORTRAY",
+      "type": "v",
+      "turkish": "Göstermek, sergilemek",
+      "sentence_en": "The painting portrays a beautiful young woman in a blue dress.",
+      "sentence_tr": "Resimde mavi elbise giymiş güzel bir bayan görülüyor.",
+      "synonyms": [
+        "Represent",
+        "display"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The painting ________s a beautiful young woman in a blue dress."
+    },
+    {
+      "word": "PERVADE",
+      "type": "v",
+      "turkish": "Yayılmak, dağılmak, istila etmek, kaplamak, bürümek",
+      "sentence_en": "The film is a reflection of the violence that pervades American culture.",
+      "sentence_tr": "Film Amerikan kültürünü kaplayan şiddetin bir yansıması.",
+      "synonyms": [
+        "Spread",
+        "penetrate"
+      ],
+      "antonyms": [],
+      "other_forms": "Pervasive (adj) ---PAGE_361--- 354 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The film is a reflection of the violence that ________s American culture."
+    },
+    {
+      "word": "SUSPEND",
+      "type": "v",
+      "turkish": "Askıya almak, ertelemek",
+      "sentence_en": "The ferry service has been suspended for the day because of bad weather.",
+      "sentence_tr": "Kötü hava koşulları yüzünden feribot servisleri bugün için ertelendi.",
+      "synonyms": [
+        "Hang",
+        "hang up",
+        "postpone"
+      ],
+      "antonyms": [],
+      "other_forms": "Suspension (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The ferry service has been ________ed for the day because of bad weather."
+    },
+    {
+      "word": "SPECIES",
+      "type": "n",
+      "turkish": "Tür",
+      "sentence_en": "Over a hundred species of insect are found in this area.",
+      "sentence_tr": "Bu bölgede yüzden fazla böcek türü bulundu.",
+      "synonyms": [
+        "Type",
+        "kind",
+        "variety STICK to (v) Türkçe Karşılığı : Bağlı kalmak",
+        "yapışık olmak Örnek Cümle : Don’t worry! We’ll stick to the agreement. Çevirisi : Endişelenmeyin. Anlaşmaya sadık kalacağız. Eş ya da Yakın Anlamlılar : Abide by",
+        "comply with",
+        "adhere to"
+      ],
+      "antonyms": [],
+      "other_forms": "Sticky (adj)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Over a hundred ________ of insect are found in this area."
+    },
+    {
+      "word": "STUN",
+      "type": "v",
+      "turkish": "Sersemletmek, şok etmek",
+      "sentence_en": "News of the disaster stunned people throughout the world.",
+      "sentence_tr": "Felaket haberleri dünyanın her yerinde insanları şaşırttı.",
+      "synonyms": [
+        "Shock",
+        "make unconscious"
+      ],
+      "antonyms": [
+        "Comfort",
+        "relax"
+      ],
+      "other_forms": "Stunning (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "News of the disaster ________ned people throughout the world."
+    },
+    {
+      "word": "STRIVE",
+      "type": "v",
+      "turkish": "Çaba göstermek",
+      "sentence_en": "In her essay she strove for a balance between innovation and familiar prose forms.",
+      "sentence_tr": "Denemesinde yeni ve bilinen düzyazı formları arasında bir denge kurmaya çalıştı.",
+      "synonyms": [
+        "Try",
+        "attempt ---PAGE_362--- 355 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "In her essay she strove for a balance between innovation and familiar prose forms. (________)"
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "tiny   a"
+        },
+        {
+          "id": 2,
+          "word": "thrilling   b"
+        },
+        {
+          "id": 3,
+          "word": "vain   c"
+        },
+        {
+          "id": 4,
+          "word": "burden   d"
+        },
+        {
+          "id": 5,
+          "word": "assert   e"
+        },
+        {
+          "id": 1,
+          "word": "emphasize   a"
+        },
+        {
+          "id": 2,
+          "word": "facilitate   b"
+        },
+        {
+          "id": 3,
+          "word": "extinct   c"
+        },
+        {
+          "id": 4,
+          "word": "descend   d"
+        },
+        {
+          "id": 5,
+          "word": "deal with   e"
+        },
+        {
+          "id": 1,
+          "word": "layer   a"
+        },
+        {
+          "id": 2,
+          "word": "perspire   b"
+        },
+        {
+          "id": 3,
+          "word": "miscellaneous   c"
+        },
+        {
+          "id": 4,
+          "word": "portray   d"
+        },
+        {
+          "id": 5,
+          "word": "pervade   e"
+        },
+        {
+          "id": 1,
+          "word": "suspend   a"
+        },
+        {
+          "id": 2,
+          "word": "species   b"
+        },
+        {
+          "id": 3,
+          "word": "stick to   c"
+        },
+        {
+          "id": 4,
+          "word": "stun   d"
+        },
+        {
+          "id": 5,
+          "word": "strive   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "put forward, claim, maintain"
+        },
+        {
+          "key": "b",
+          "def": "worthless, useless"
+        },
+        {
+          "key": "c",
+          "def": "very small, petty"
+        },
+        {
+          "key": "d",
+          "def": "load, strain"
+        },
+        {
+          "key": "e",
+          "def": "exciting"
+        },
+        {
+          "key": "a",
+          "def": "drop, fall, go down"
+        },
+        {
+          "key": "b",
+          "def": "vanished, died out"
+        },
+        {
+          "key": "c",
+          "def": "cope with, handle, tackle"
+        },
+        {
+          "key": "d",
+          "def": "stress"
+        },
+        {
+          "key": "e",
+          "def": "make it easy, ease"
+        },
+        {
+          "key": "a",
+          "def": "sweat"
+        },
+        {
+          "key": "b",
+          "def": "represent, display"
+        },
+        {
+          "key": "c",
+          "def": "spread, penetrate"
+        },
+        {
+          "key": "d",
+          "def": "stratum"
+        },
+        {
+          "key": "e",
+          "def": "various, diverse"
+        },
+        {
+          "key": "a",
+          "def": "abide by, comply with, adhere to"
+        },
+        {
+          "key": "b",
+          "def": "shock, make unconscious"
+        },
+        {
+          "key": "c",
+          "def": "try, attempt"
+        },
+        {
+          "key": "d",
+          "def": "type, kind, variety"
+        },
+        {
+          "key": "e",
+          "def": "hang, hang up, postpone"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "tiny   a"
+        },
+        {
+          "id": 2,
+          "word": "thrilling   b"
+        },
+        {
+          "id": 3,
+          "word": "vain   c"
+        },
+        {
+          "id": 1,
+          "word": "assert   a"
+        },
+        {
+          "id": 2,
+          "word": "emphasize   b"
+        },
+        {
+          "id": 3,
+          "word": "facilitate   c"
+        },
+        {
+          "id": 1,
+          "word": "extinct   a"
+        },
+        {
+          "id": 2,
+          "word": "descend   b"
+        },
+        {
+          "id": 3,
+          "word": "stun   c"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "boring, dull"
+        },
+        {
+          "key": "b",
+          "def": "enormous, huge"
+        },
+        {
+          "key": "c",
+          "def": "fruitful"
+        },
+        {
+          "key": "a",
+          "def": "understate, underestimate"
+        },
+        {
+          "key": "b",
+          "def": "make sth"
+        },
+        {
+          "key": "c",
+          "def": "keep silent"
+        },
+        {
+          "key": "a",
+          "def": "comfort, relax"
+        },
+        {
+          "key": "b",
+          "def": "ascend"
+        },
+        {
+          "key": "c",
+          "def": "survive"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “load” ve Türkçesi “yük” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "emphasis",
+          "B": "burden",
+          "C": "assertion",
+          "D": "facility",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “put forward” ve Türkçesi “ileri sürmek, iddia etmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "assert",
+          "B": "stress",
+          "C": "ease",
+          "D": "underestimate",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “make sth. easy” ve Türkçesi “kolaylaştırmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "deal with",
+          "B": "perspire",
+          "C": "represent",
+          "D": "pervade",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “hang up” ve Türkçesi “askıya almak, ertelemek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "attempt",
+          "B": "spread",
+          "C": "display",
+          "D": "suspend",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Genellikle “to” edatı ile kullanılan, eş anlamlısı “obey” ve Türkçesi “uymak, -e bağlı kalmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "abide",
+          "B": "comply",
+          "C": "stick",
+          "D": "strive",
+          "E": "descend"
+        }
+      }
+    ]
+  }
+}

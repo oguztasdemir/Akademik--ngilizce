@@ -1,0 +1,605 @@
+{
+  "day": 20,
+  "words": [
+    {
+      "word": "SUBMIT",
+      "type": "v",
+      "turkish": "Teslim etmek, sunmak",
+      "sentence_en": "You must submit your application before January 1st.",
+      "sentence_tr": "1 Ocak’tan önce başvurunu vermek zorundasın.",
+      "synonyms": [
+        "Hand in",
+        "present"
+      ],
+      "antonyms": [],
+      "other_forms": "Submission (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "You must ________ your application before January 1st."
+    },
+    {
+      "word": "FLAIR",
+      "type": "n",
+      "turkish": "Yetenek",
+      "sentence_en": "He has a flair for learning languages.",
+      "sentence_tr": "Dil öğrenmeye yeteneği var.",
+      "synonyms": [
+        "Ability",
+        "talent",
+        "gift",
+        "knack"
+      ],
+      "antonyms": [],
+      "other_forms": "Flair (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He has a ________ for learning languages."
+    },
+    {
+      "word": "MISHAP",
+      "type": "n",
+      "turkish": "Aksilik, kaza",
+      "sentence_en": "The parade was very well organised and passed without mishap.",
+      "sentence_tr": "Gösteri çok güzel organize edilmişti ve bir aksilik olmadan sona erdi.",
+      "synonyms": [
+        "Misfortune",
+        "unfortunate accident"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The parade was very well organised and passed without ________."
+    },
+    {
+      "word": "RELEVANT",
+      "type": "adj",
+      "turkish": "İlgili, alakalı, konuyla ilgili, yerinde, -e uygun",
+      "sentence_en": "Education should be relevant to the child's needs.",
+      "sentence_tr": "Eğitim çocuğun ihtiyaçlarına uygun olmalıdır.",
+      "synonyms": [
+        "Related",
+        "pertinent"
+      ],
+      "antonyms": [
+        "Irrelevant"
+      ],
+      "other_forms": "Relevance (n) REFRAIN from (v) Türkçe Karşılığı : -den kaçınmak, -den çekinmek Örnek Cümle : We refrained from talking until we knew that the room was safe. Çevirisi : Odanın güvenli olduğuna kanaat getirene kadar konuşmaktan kaçındık. Eş ya da Yakın Anlamlılar : Abstain from, avoid doing sth. ---PAGE_142--- 135 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "Education should be ________ to the child's needs."
+    },
+    {
+      "word": "LEGACY",
+      "type": "n",
+      "turkish": "Miras",
+      "sentence_en": "An elderly cousin left her a small legacy.",
+      "sentence_tr": "Büyük bir kuzeni ona bir miktar miras bıraktı.",
+      "synonyms": [
+        "Inheritance",
+        "bequest"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "An elderly cousin left her a small ________."
+    },
+    {
+      "word": "LEGIBLE",
+      "type": "adj",
+      "turkish": "Okunaklı, okunabilir",
+      "sentence_en": "Her handwriting is barely legible.",
+      "sentence_tr": "El yazısı zar zor okunuyor.",
+      "synonyms": [
+        "Well-written"
+      ],
+      "antonyms": [
+        "illegible"
+      ],
+      "other_forms": "Legibly (adv) Eş ya da Yakın Anlamlılar : Well-written Zıt Anlamlılar : illegible",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Her handwriting is barely ________."
+    },
+    {
+      "word": "CRUCIAL",
+      "type": "adj",
+      "turkish": "Önemli",
+      "sentence_en": "It is crucial that the problem be tackled immediately.",
+      "sentence_tr": "Problemin hemen halledilmesi önem arz ediyor.",
+      "synonyms": [
+        "Important",
+        "vital",
+        "significant"
+      ],
+      "antonyms": [
+        "Trivial",
+        "unimportant"
+      ],
+      "other_forms": "Crucially (adv) CULMINATE in (v) Türkçe Karşılığı : Zirveye ulaşmak, son bulmak, ile sonuçlanmak Örnek Cümle : Their many years of research have finally culminated in a cure for the disease. Çevirisi : Onların yıllar süren araştırması sonunda hastalığa bir tedavi bulunmasıyla sonuçlandı. Eş ya da Yakın Anlamlılar : Reach the top, finalize Zıt Anlamlılar : Come to the bottom, fall Diğer Halleri : Culmination (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "It is ________ that the problem be tackled immediately."
+    },
+    {
+      "word": "DELINQUENCY",
+      "type": "n",
+      "turkish": "Suçluluk",
+      "sentence_en": "There is a high rate of juvenile delinquency in this area.",
+      "sentence_tr": "Bu bölgede çocuk suçları oranı yüksek.",
+      "synonyms": [
+        "Misdeed",
+        "misconduct"
+      ],
+      "antonyms": [
+        "Innocence"
+      ],
+      "other_forms": "Delinquent (adj) ---PAGE_143--- 136 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There is a high rate of juvenile ________ in this area."
+    },
+    {
+      "word": "CIRCUMSTANTIAL",
+      "type": "adj",
+      "turkish": "İkinci derecede, durumla ilgili, ayrıntılı",
+      "sentence_en": "The case against her was circumstantial.",
+      "sentence_tr": "Onun aleyhine olan dava kesin kanıtlar içermiyordu.",
+      "synonyms": [
+        "Secondary",
+        "indirect"
+      ],
+      "antonyms": [
+        "Initial",
+        "first",
+        "direct"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The case against her was ________."
+    },
+    {
+      "word": "CONFIRM",
+      "type": "v",
+      "turkish": "Doğrulamak, teyit etmek",
+      "sentence_en": "Six people have confirmed that they will be attending but ten haven't replied yet.",
+      "sentence_tr": "6 kişi katılacaklarını teyit etti ama 10 kişi henüz cevap vermedi.",
+      "synonyms": [
+        "Verify",
+        "substantiate",
+        "approve",
+        "endorse"
+      ],
+      "antonyms": [
+        "Cancel",
+        "annul"
+      ],
+      "other_forms": "Confirmation (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "Six people have ________ed that they will be attending but ten haven't replied yet."
+    },
+    {
+      "word": "CONDENSE",
+      "type": "v",
+      "turkish": "Yoğunlaştırmak",
+      "sentence_en": "Water vapour in the air condenses into fog.",
+      "sentence_tr": "Havadaki su buharı yoğunlaşıp sise dönüşür.",
+      "synonyms": [
+        "Compress",
+        "compact"
+      ],
+      "antonyms": [],
+      "other_forms": "Condensation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Water vapour in the air ________s into fog."
+    },
+    {
+      "word": "DISPARITY",
+      "type": "n",
+      "turkish": "Farklılık, fark, boşluk, uçurum",
+      "sentence_en": "The disparity between rich and poor is growing.",
+      "sentence_tr": "Zengin ve fakirler arasındaki uçurum giderek artıyor.",
+      "synonyms": [
+        "Difference",
+        "gap"
+      ],
+      "antonyms": [
+        "Similarity"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The ________ between rich and poor is growing."
+    },
+    {
+      "word": "ADMIT",
+      "type": "v",
+      "turkish": "Kabul etmek, itiraf etmek.",
+      "sentence_en": "She admitted that she had made a mistake.",
+      "sentence_tr": "Hata yaptığını kabul etti.",
+      "synonyms": [
+        "Accept",
+        "acknowledge",
+        "approve",
+        "confess"
+      ],
+      "antonyms": [
+        "Deny",
+        "reject",
+        "refuse",
+        "turn down"
+      ],
+      "other_forms": "Admission (n), admittedly (adv) ---PAGE_144--- 137 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She ________ted that she had made a mistake."
+    },
+    {
+      "word": "ARTIFICIAL",
+      "type": "adj",
+      "turkish": "Yapay, doğal olmayan",
+      "sentence_en": "Her smile was rather artificial.",
+      "sentence_tr": "Gülümseyişi oldukça yapmacıktı.",
+      "synonyms": [
+        "Unnatural",
+        "unreal",
+        "synthetic"
+      ],
+      "antonyms": [
+        "Natural",
+        "genuine"
+      ],
+      "other_forms": "Artificiality (n), artificially (adv)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Her smile was rather ________."
+    },
+    {
+      "word": "ASPIRE",
+      "type": "v",
+      "turkish": "Arzu etmek, istemek",
+      "sentence_en": "Few people who aspire to fame ever achieve it.",
+      "sentence_tr": "Ünlü olmayı isteyen çok az kişi başarılı olur.",
+      "synonyms": [
+        "Desire",
+        "long for",
+        "hope",
+        "wish"
+      ],
+      "antonyms": [
+        "Be unwilling",
+        "be reluctant"
+      ],
+      "other_forms": "Aspiration (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Few people who ________ to fame ever achieve it."
+    },
+    {
+      "word": "SANCTION",
+      "type": "n",
+      "turkish": "Yaptırım",
+      "sentence_en": "Economic sanctions will only be lifted when the aggressor nation withdraws its troops.",
+      "sentence_tr": "Ekonomik yaptırımlar ancak saldıran ülke askerlerini geri çektiğinde kaldırılacaktır.",
+      "synonyms": [
+        "Penalty",
+        "punishment",
+        "restriction TEND to (v) Türkçe Karşılığı : Eğilimli olmak Örnek Cümle : We tend to get cold winters and warm",
+        "dry summers in this part of the country. Çevirisi : Ülkenin bu bölgesinde genellikle soğuk kışlar ve sıcak",
+        "kurak yazlar yaşanır. Eş ya da Yakın Anlamlılar : Be inclined to",
+        "apt to"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Economic ________s will only be lifted when the aggressor nation withdraws its troops."
+    },
+    {
+      "word": "TESTIMONY",
+      "type": "n",
+      "turkish": "İfade, tanıklık, kanıt, delil",
+      "sentence_en": "Some doubts have been expressed about his testimony.",
+      "sentence_tr": "Onun ifadesi ile ilgili bazı şüpheler dile getirildi.",
+      "synonyms": [
+        "Evidence",
+        "statement ---PAGE_145--- 138 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Some doubts have been expressed about his ________."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "submit   a"
+        },
+        {
+          "id": 2,
+          "word": "flair   b"
+        },
+        {
+          "id": 3,
+          "word": "mishap   c"
+        },
+        {
+          "id": 4,
+          "word": "relevant   d"
+        },
+        {
+          "id": 5,
+          "word": "refrain from   e"
+        },
+        {
+          "id": 1,
+          "word": "legacy   a"
+        },
+        {
+          "id": 2,
+          "word": "legible   b"
+        },
+        {
+          "id": 3,
+          "word": "crucial   c"
+        },
+        {
+          "id": 4,
+          "word": "culminate   d"
+        },
+        {
+          "id": 5,
+          "word": "delinquency   e"
+        },
+        {
+          "id": 1,
+          "word": "circumstantial   a"
+        },
+        {
+          "id": 2,
+          "word": "confirm   b"
+        },
+        {
+          "id": 3,
+          "word": "condense   c"
+        },
+        {
+          "id": 4,
+          "word": "disparity   d"
+        },
+        {
+          "id": 5,
+          "word": "admit   e"
+        },
+        {
+          "id": 1,
+          "word": "artificial   a"
+        },
+        {
+          "id": 2,
+          "word": "aspire   b"
+        },
+        {
+          "id": 3,
+          "word": "sanction   c"
+        },
+        {
+          "id": 4,
+          "word": "tend   d"
+        },
+        {
+          "id": 5,
+          "word": "testimony   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "misfortune, unfor tunate accident"
+        },
+        {
+          "key": "b",
+          "def": "related, pertinent"
+        },
+        {
+          "key": "c",
+          "def": "abstain from, avoid doing sth"
+        },
+        {
+          "key": "d",
+          "def": "ability, talent, gift, knack"
+        },
+        {
+          "key": "e",
+          "def": "hand in, present"
+        },
+        {
+          "key": "a",
+          "def": "misdeed, misconduct"
+        },
+        {
+          "key": "b",
+          "def": "important, vital, significant"
+        },
+        {
+          "key": "c",
+          "def": "inheritance, bequest"
+        },
+        {
+          "key": "d",
+          "def": "reach the top, finalize"
+        },
+        {
+          "key": "e",
+          "def": "well"
+        },
+        {
+          "key": "a",
+          "def": "difference, gap"
+        },
+        {
+          "key": "b",
+          "def": "compress, compact"
+        },
+        {
+          "key": "c",
+          "def": "accept, acknowled ge, approve, confess"
+        },
+        {
+          "key": "d",
+          "def": "secondary, indirect"
+        },
+        {
+          "key": "e",
+          "def": "verify, substantiate, approve, endorse"
+        },
+        {
+          "key": "a",
+          "def": "desire, long for, hope, wish"
+        },
+        {
+          "key": "b",
+          "def": "be inclined  to, be apt to"
+        },
+        {
+          "key": "c",
+          "def": "evidence, statement"
+        },
+        {
+          "key": "d",
+          "def": "unnatural, unreal, synthetic"
+        },
+        {
+          "key": "e",
+          "def": "penalty, punishment, restriction"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "crucial   a"
+        },
+        {
+          "id": 2,
+          "word": "culminate   b"
+        },
+        {
+          "id": 3,
+          "word": "delinquency   c"
+        },
+        {
+          "id": 4,
+          "word": "circumstantial   d"
+        },
+        {
+          "id": 1,
+          "word": "confirm   a"
+        },
+        {
+          "id": 2,
+          "word": "disparity   b"
+        },
+        {
+          "id": 3,
+          "word": "admit   c"
+        },
+        {
+          "id": 4,
+          "word": "artificial   d"
+        },
+        {
+          "id": 5,
+          "word": "aspire   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "initial, first, direct"
+        },
+        {
+          "key": "b",
+          "def": "innocence"
+        },
+        {
+          "key": "c",
+          "def": "come to the bottom, fall"
+        },
+        {
+          "key": "d",
+          "def": "trivial, unimportant"
+        },
+        {
+          "key": "a",
+          "def": "similarity"
+        },
+        {
+          "key": "b",
+          "def": "natural, genuine"
+        },
+        {
+          "key": "c",
+          "def": "be unwilling, be reluctant"
+        },
+        {
+          "key": "d",
+          "def": "cancel, annul"
+        },
+        {
+          "key": "e",
+          "def": "deny, reject, refuse, turn down"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “talent” ve Türkçesi “yetenek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "submission",
+          "B": "flair",
+          "C": "mishap",
+          "D": "legacy",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “significant” ve Türkçesi “önemli” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "crucial",
+          "B": "delinquent",
+          "C": "circumstantial",
+          "D": "artificial",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Zıt anlamlısı “natural” ve Türkçesi “yapay” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "illegible",
+          "B": "talented",
+          "C": "genuine",
+          "D": "inclined",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “restriction” ve Türkçesi “yaptırım” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "tendency",
+          "B": "testimony",
+          "C": "aspiration",
+          "D": "sanction",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Zıt anlamlısı “innocence” ve Türkçesi “suçluluk” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "culmination",
+          "B": "inheritance",
+          "C": "delinquency",
+          "D": "mishap",
+          "E": "submission"
+        }
+      }
+    ]
+  }
+}

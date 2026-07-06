@@ -1,0 +1,633 @@
+{
+  "day": 43,
+  "words": [
+    {
+      "word": "CHERISH",
+      "type": "v",
+      "turkish": "Keyfini çıkartmak, değer vermek",
+      "sentence_en": "She cherishes her 1967 Cadillac.",
+      "sentence_tr": "1967 model Cadillac arabasına çok değer verir.",
+      "synonyms": [
+        "Value",
+        "relish",
+        "enjoy too much"
+      ],
+      "antonyms": [
+        "Hate",
+        "detest",
+        "not enjoy"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She ________es her 1967 Cadillac."
+    },
+    {
+      "word": "AWKWARD",
+      "type": "adj",
+      "turkish": "Beceriksiz, uğraşılması zor, zor",
+      "sentence_en": "It's an awkward corner to drive round.",
+      "sentence_tr": "Dönülmesi zor bir viraj.",
+      "synonyms": [
+        "Clumsy",
+        "uncomfortable",
+        "not easy to deal with"
+      ],
+      "antonyms": [
+        "Easy to deal with",
+        "clever",
+        "handy"
+      ],
+      "other_forms": "Awkwardly (adv), awkwardness (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It's an ________ corner to drive round."
+    },
+    {
+      "word": "ASSUME",
+      "type": "v",
+      "turkish": "Varsaymak",
+      "sentence_en": "Let's assume that they're coming and make plans on that basis.",
+      "sentence_tr": "Geldiklerini varsayalım ve ona göre planlar yapalım.",
+      "synonyms": [
+        "Presume",
+        "suppose",
+        "take for granted",
+        "postulate"
+      ],
+      "antonyms": [
+        "Annul"
+      ],
+      "other_forms": "Assumption (n) APPROVE of (v) Türkçe Karşılığı : Onaylamak Örnek Cümle : I thoroughly approve of what the government is doing. Çevirisi : Hükümetin yaptıklarını tamamıyla onaylıyorum. Eş ya da Yakın Anlamlılar : Support, endorse, back up, favor Zıt Anlamlılar : Annul Diğer Halleri : Approval (n) ---PAGE_303--- 296 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Let's ________ that they're coming and make plans on that basis."
+    },
+    {
+      "word": "SCRUTINIZE",
+      "type": "v",
+      "turkish": "İncelemek, detaylı araştırmak",
+      "sentence_en": "He scrutinized the men's faces carefully/closely, trying to work out who was lying.",
+      "sentence_tr": "Kimin yalan söylediğini ortaya çıkarmak için adamların yüzünü dikkatlice inceledi.",
+      "synonyms": [
+        "Examine in detail"
+      ],
+      "antonyms": [
+        "Guess",
+        "glance superficially"
+      ],
+      "other_forms": "Scrutiny (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He ________d the men's faces carefully/closely, trying to work out who was lying."
+    },
+    {
+      "word": "SCULPTURE",
+      "type": "n",
+      "turkish": "Heykel",
+      "sentence_en": "The museum has several life-sized sculptures of people and animals.",
+      "sentence_tr": "Müzede gerçek boyutlarında birkaç insan ve hayvan heykeli var.",
+      "synonyms": [
+        "Statue"
+      ],
+      "antonyms": [],
+      "other_forms": "Scuplt (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The museum has several life-sized ________s of people and animals."
+    },
+    {
+      "word": "REVIVAL",
+      "type": "n",
+      "turkish": "Canlandırma, hayat verme",
+      "sentence_en": "Recently, there has been some revival of interest in ancient music.",
+      "sentence_tr": "Son zamanlarda eski müziklere duyulan ilgi canlandı.",
+      "synonyms": [
+        "Renewal",
+        "restoration"
+      ],
+      "antonyms": [],
+      "other_forms": "Revive (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Recently, there has been some ________ of interest in ancient music."
+    },
+    {
+      "word": "EJECT",
+      "type": "v",
+      "turkish": "Çıkartmak",
+      "sentence_en": "The coffee machine suddenly ejected a handful of coins.",
+      "sentence_tr": "Kahve makinesi aniden bir avuç bozuk para çıkardı.",
+      "synonyms": [
+        "Force out",
+        "evict"
+      ],
+      "antonyms": [
+        "Retain",
+        "absorb",
+        "take in"
+      ],
+      "other_forms": "Ejection (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The coffee machine suddenly ________ed a handful of coins."
+    },
+    {
+      "word": "ELABORATE",
+      "type": "adj",
+      "turkish": "Ayrıntılı, karmaşık, özenli",
+      "sentence_en": "They're making most elaborate preparations for the wedding.",
+      "sentence_tr": "Düğün için çok özenli hazırlıklar yapıyorlar.",
+      "synonyms": [
+        "Detailed",
+        "complicated",
+        "intricate"
+      ],
+      "antonyms": [
+        "Simple",
+        "unadorned"
+      ],
+      "other_forms": "Elaboration (n), elaborately (adv) ---PAGE_304--- 297 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They're making most ________ preparations for the wedding."
+    },
+    {
+      "word": "ELEVATE",
+      "type": "v",
+      "turkish": "Yükseltmek",
+      "sentence_en": "The platform was elevated by means of hydraulic legs.",
+      "sentence_tr": "Platform hidrolik ayaklar vasıtasıyla yükseltildi.",
+      "synonyms": [
+        "Raise",
+        "heighten",
+        "lift up"
+      ],
+      "antonyms": [
+        "Lower",
+        "degrade"
+      ],
+      "other_forms": "Elevator (n) CONFINE to(v) Türkçe Karşılığı : Sınırlamak Örnek Cümle : Please confine your use of the telephone to business calls. Çevirisi : Lütfen telefon kullanımınızı iş görüşmeleriyle sınırlandırın. Eş ya da Yakın Anlamlılar : Limit, restrict Zıt Anlamlılar : Release, let free",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The platform was ________d by means of hydraulic legs."
+    },
+    {
+      "word": "CONCRETE",
+      "type": "adj",
+      "turkish": "Somut, elle tutulur, beton",
+      "sentence_en": "There is no concrete evidence against her.",
+      "sentence_tr": "Onun aleyhine somut bir kanıt yok.",
+      "synonyms": [
+        "Tangible",
+        "real"
+      ],
+      "antonyms": [
+        "Abstract"
+      ],
+      "other_forms": "Concretely (adv), concreteness (n) RESORT to (v) Türkçe Karşılığı : (Son çare olarak) -e başvurmak Örnek Cümle : He got hold of the money legally, without resorting to violence. Çevirisi : Şiddete başvurmadan parayı yasal yollarla ele geçirdi. Eş ya da Yakın Anlamlılar : Turn to, adopt",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There is no ________ evidence against her."
+    },
+    {
+      "word": "OVERLOOK",
+      "type": "v",
+      "turkish": "Gözardı etmek, göz yummak, dikkate almamak, bakmak",
+      "sentence_en": "I think there is one key fact that you have overlooked.",
+      "sentence_tr": "Sanırım gözardı ettiğin önemli bir gerçek var.",
+      "synonyms": [
+        "Ignore",
+        "disregard"
+      ],
+      "antonyms": [
+        "Take into consideration"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I think there is one key fact that you have ________ed."
+    },
+    {
+      "word": "INDUCE",
+      "type": "v",
+      "turkish": "İkna etmek, neden olmak, tetiklemek",
+      "sentence_en": "Nothing could induce me to climb a mountain.",
+      "sentence_tr": "Kimse beni bir dağa tırmanmaya ikna edemez.",
+      "synonyms": [
+        "Persuade",
+        "tempt",
+        "bring about",
+        "encourage"
+      ],
+      "antonyms": [
+        "Deter",
+        "discourage"
+      ],
+      "other_forms": "Inducement (n), induction (n) ---PAGE_305--- 298 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Nothing could ________ me to climb a mountain."
+    },
+    {
+      "word": "INTENSE",
+      "type": "adj",
+      "turkish": "Yoğun",
+      "sentence_en": "He suddenly felt an intense pain in his back.",
+      "sentence_tr": "Aniden sırtında büyük bir acı hissetti.",
+      "synonyms": [
+        "Extreme",
+        "intensified"
+      ],
+      "antonyms": [
+        "Mild",
+        "relaxed"
+      ],
+      "other_forms": "Intensify (v), intensely (adv), intensity (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "He suddenly felt an ________ pain in his back."
+    },
+    {
+      "word": "GLORIOUS",
+      "type": "adj",
+      "turkish": "Şanlı, parlak",
+      "sentence_en": "They had a glorious victory.",
+      "sentence_tr": "Parlak bir zafer kazandılar.",
+      "synonyms": [
+        "Splendid",
+        "brilliant",
+        "dazzling"
+      ],
+      "antonyms": [
+        "Unknown",
+        "dull",
+        "awful"
+      ],
+      "other_forms": "Gloriously (adv) INTERFERE in/with (v) Türkçe Karşılığı : -e engel olmak Örnek Cümle : Even a low level of noise interferes with my concentration. Çevirisi : Az bir gürültü bile konsantrasyonumu engelliyor. Eş ya da Yakın Anlamlılar : Prevent, inhibit",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They had a ________ victory."
+    },
+    {
+      "word": "POSTERITY",
+      "type": "n",
+      "turkish": "Gelecek nesil",
+      "sentence_en": "Every attempt is being made to ensure that these works of art are preserved for posterity.",
+      "sentence_tr": "Bu sanat eserlerinin gelecek nesillere kalması için her türlü çaba gösteriliyor.",
+      "synonyms": [
+        "Future generation"
+      ],
+      "antonyms": [
+        "Ancestors"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Every attempt is being made to ensure that these works of art are preserved for ________."
+    },
+    {
+      "word": "PRESUME",
+      "type": "v",
+      "turkish": "Varsaymak, farzetmek, sanmak, tahmin etmek",
+      "sentence_en": "I presume they're not coming, since they haven't replied to the invitation.",
+      "sentence_tr": "Davete cevap vermedikleri için gelmeyeceklerini tahmin ediyorum.",
+      "synonyms": [
+        "Think",
+        "assume"
+      ],
+      "antonyms": [],
+      "other_forms": "Presumably (adv) ---PAGE_306--- 299 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I ________ they're not coming, since they haven't replied to the invitation."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "cherish   a"
+        },
+        {
+          "id": 2,
+          "word": "awkward   b"
+        },
+        {
+          "id": 3,
+          "word": "assume   c"
+        },
+        {
+          "id": 4,
+          "word": "approve of   d"
+        },
+        {
+          "id": 5,
+          "word": "scrutinize   e"
+        },
+        {
+          "id": 1,
+          "word": "sculpture   a"
+        },
+        {
+          "id": 2,
+          "word": "revival   b"
+        },
+        {
+          "id": 3,
+          "word": "eject   c"
+        },
+        {
+          "id": 4,
+          "word": "elaborate   d"
+        },
+        {
+          "id": 5,
+          "word": "elevate   e"
+        },
+        {
+          "id": 1,
+          "word": "confine   a"
+        },
+        {
+          "id": 2,
+          "word": "concrete   b"
+        },
+        {
+          "id": 3,
+          "word": "resort to   c"
+        },
+        {
+          "id": 4,
+          "word": "overlook   d"
+        },
+        {
+          "id": 5,
+          "word": "induce   e"
+        },
+        {
+          "id": 1,
+          "word": "intense   a"
+        },
+        {
+          "id": 2,
+          "word": "glorious   b"
+        },
+        {
+          "id": 3,
+          "word": "interfere with   c"
+        },
+        {
+          "id": 4,
+          "word": "posterity   d"
+        },
+        {
+          "id": 5,
+          "word": "presume   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "support, endorse, back up, favor"
+        },
+        {
+          "key": "b",
+          "def": "presume, suppose, take sth"
+        },
+        {
+          "key": "c",
+          "def": "examine in detail"
+        },
+        {
+          "key": "d",
+          "def": "value, relish, enjoy too much"
+        },
+        {
+          "key": "e",
+          "def": "clumsy, uncomfortable , not easy to deal with"
+        },
+        {
+          "key": "a",
+          "def": "renewal, restoration"
+        },
+        {
+          "key": "b",
+          "def": "detailed, complicated, intricate"
+        },
+        {
+          "key": "c",
+          "def": "raise, heighten, lift up"
+        },
+        {
+          "key": "d",
+          "def": "statue"
+        },
+        {
+          "key": "e",
+          "def": "force out, evict"
+        },
+        {
+          "key": "a",
+          "def": "turn to, adopt"
+        },
+        {
+          "key": "b",
+          "def": "ignore, disregard"
+        },
+        {
+          "key": "c",
+          "def": "persuade, tempt, bri ng about, encourage"
+        },
+        {
+          "key": "d",
+          "def": "tangible, real"
+        },
+        {
+          "key": "e",
+          "def": "limit, restrict"
+        },
+        {
+          "key": "a",
+          "def": "think, assume"
+        },
+        {
+          "key": "b",
+          "def": "prevent, inhibit"
+        },
+        {
+          "key": "c",
+          "def": "extreme, intensified"
+        },
+        {
+          "key": "d",
+          "def": "future generation"
+        },
+        {
+          "key": "e",
+          "def": "splendid, brilliant, dazzling"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "cherish   a"
+        },
+        {
+          "id": 2,
+          "word": "awkward   b"
+        },
+        {
+          "id": 3,
+          "word": "approve of   c"
+        },
+        {
+          "id": 4,
+          "word": "scrutinize   d"
+        },
+        {
+          "id": 5,
+          "word": "eject   e"
+        },
+        {
+          "id": 1,
+          "word": "elaborate   a"
+        },
+        {
+          "id": 2,
+          "word": "elevate   b"
+        },
+        {
+          "id": 3,
+          "word": "confine   c"
+        },
+        {
+          "id": 4,
+          "word": "concrete   d"
+        },
+        {
+          "id": 5,
+          "word": "overlook   e"
+        },
+        {
+          "id": 1,
+          "word": "induce   a"
+        },
+        {
+          "id": 2,
+          "word": "intense   b"
+        },
+        {
+          "id": 3,
+          "word": "glorious   c"
+        },
+        {
+          "id": 4,
+          "word": "posterity   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "retain, absorb, take in"
+        },
+        {
+          "key": "b",
+          "def": "annul"
+        },
+        {
+          "key": "c",
+          "def": "hate, detest, not enjoy"
+        },
+        {
+          "key": "d",
+          "def": "guess, glance superficially"
+        },
+        {
+          "key": "e",
+          "def": "easy to deal wi th, clever, handy"
+        },
+        {
+          "key": "a",
+          "def": "release, let free"
+        },
+        {
+          "key": "b",
+          "def": "abstract"
+        },
+        {
+          "key": "c",
+          "def": "take sth"
+        },
+        {
+          "key": "d",
+          "def": "lower, degrade"
+        },
+        {
+          "key": "e",
+          "def": "simple, unadorned"
+        },
+        {
+          "key": "a",
+          "def": "ancestors"
+        },
+        {
+          "key": "b",
+          "def": "unknown, dull, awful"
+        },
+        {
+          "key": "c",
+          "def": "mild, relaxed"
+        },
+        {
+          "key": "d",
+          "def": "deter, discourage"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “endorse” ve Türkçesi “onaylamak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "annul",
+          "B": "guess",
+          "C": "take sth. for granted",
+          "D": "approve",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “examine in detail” ve Türkçesi “incelemek, araştırmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "value",
+          "B": "assume",
+          "C": "scrutinize",
+          "D": "support",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “renewal” ve Türkçesi “canlandırma, hayat verme” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "posterity",
+          "B": "sculpture",
+          "C": "approval",
+          "D": "assumption",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Genellikle “to” edatı ile kullanılan, eş anlamlısı “restrict” ve Türkçesi “sınırlamak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "resort",
+          "B": "confine",
+          "C": "tempt",
+          "D": "encourage",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Phrasal verb olarak eş anlamlısı “bring about” ve Türkçesi “-e neden olmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "induce",
+          "B": "presume",
+          "C": "elevate",
+          "D": "overlook",
+          "E": "adopt"
+        }
+      }
+    ]
+  }
+}

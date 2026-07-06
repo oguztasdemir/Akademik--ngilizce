@@ -1,0 +1,660 @@
+{
+  "day": 38,
+  "words": [
+    {
+      "word": "OVERCOME",
+      "type": "v",
+      "turkish": "Aşmak, üstesinden gelmek",
+      "sentence_en": "Eventually she managed to overcome her shyness in class.",
+      "sentence_tr": "Sonunda sınıftaki utangaçlığını atabildi.",
+      "synonyms": [
+        "Conquer",
+        "surmount"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Eventually she managed to ________ her shyness in class."
+    },
+    {
+      "word": "RELISH",
+      "type": "v",
+      "turkish": "Hoşlanmak, -den zevk almak",
+      "sentence_en": "I don't relish telling her that her son has been arrested.",
+      "sentence_tr": "Oğlunun tutuklandığını ona söylemekten zevk almam.",
+      "synonyms": [
+        "Like",
+        "enjoy"
+      ],
+      "antonyms": [
+        "Dislike",
+        "hate",
+        "detest"
+      ],
+      "other_forms": "Relish (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I don't ________ telling her that her son has been arrested."
+    },
+    {
+      "word": "REVERSAL",
+      "type": "n",
+      "turkish": "İptal, tersine çevirme",
+      "sentence_en": "The low number of refugees accepted to the USA was indeed a reversal, which was necessitated by post-September procedures.",
+      "sentence_tr": "Amerika’ya kabul edilen göçmenlerin sayısının azlığı aslında 11 Eylül sonrası prosedürler gereği ortaya çıkan olağandışı bir durumdu.",
+      "synonyms": [
+        "Repeal",
+        "annulment"
+      ],
+      "antonyms": [],
+      "other_forms": "Reverse (v), reversible (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The low number of refugees accepted to the USA was indeed a ________, which was necessitated by post-September procedures."
+    },
+    {
+      "word": "MERGE",
+      "type": "v",
+      "turkish": "Birleşmek, birleştirmek, içine karışıp kaybolmak",
+      "sentence_en": "The country's two biggest banks are planning to merge.",
+      "sentence_tr": "Ülkenin en büyük iki bankası birleşmeyi planlıyor.",
+      "synonyms": [
+        "Unite",
+        "join"
+      ],
+      "antonyms": [
+        "Separate"
+      ],
+      "other_forms": "Merger (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The country's two biggest banks are planning to ________."
+    },
+    {
+      "word": "MIRACLE",
+      "type": "adj",
+      "turkish": "Mucize",
+      "sentence_en": "I can't promise a miracle cure, but I think we can improve things.",
+      "sentence_tr": "Mucize bir tedavi için söz veremem, ama bir takım şeyleri iyileştireceğimize inanıyorum.",
+      "synonyms": [
+        "Wonder",
+        "marvel"
+      ],
+      "antonyms": [],
+      "other_forms": "Miraculous (adj), miraculously (adv) ---PAGE_268--- 261 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I can't promise a ________ cure, but I think we can improve things."
+    },
+    {
+      "word": "PRUDENT",
+      "type": "adj",
+      "turkish": "Akıllı, tedbirli",
+      "sentence_en": "It's always prudent to read a contract properly before signing it.",
+      "sentence_tr": "İmzalamadan önce kontratı düzgünce okumak her zaman akıllıcadır.",
+      "synonyms": [
+        "Wise",
+        "sensible",
+        "cautious"
+      ],
+      "antonyms": [],
+      "other_forms": "Prudently (adv), prudence (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It's always ________ to read a contract properly before signing it."
+    },
+    {
+      "word": "PERSUADE",
+      "type": "v",
+      "turkish": "İkna etmek, inandırmak",
+      "sentence_en": "If she doesn't want to go, nothing you can say will persuade her.",
+      "sentence_tr": "Eğer gitmek istemezse, söyleyeceğin hiçbir şey onu ikna edemez.",
+      "synonyms": [
+        "Convince"
+      ],
+      "antonyms": [
+        "Deter",
+        "discourage"
+      ],
+      "other_forms": "Persuasion (n), persuasive (adj), persuasively (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "If she doesn't want to go, nothing you can say will ________ her."
+    },
+    {
+      "word": "IRRITATE",
+      "type": "v",
+      "turkish": "Kızdırmak",
+      "sentence_en": "After a while her behaviour really began to irritate me.",
+      "sentence_tr": "Bir süre sonra davranışları gerçekten beni kızdırmaya başladı.",
+      "synonyms": [
+        "Anger",
+        "annoy"
+      ],
+      "antonyms": [
+        "Cheer up"
+      ],
+      "other_forms": "Irritated (adj), irritant (n), irritating (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "After a while her behaviour really began to ________ me."
+    },
+    {
+      "word": "HUMBLE",
+      "type": "adj",
+      "turkish": "Alçakgönüllü",
+      "sentence_en": "He's very humble about his success.",
+      "sentence_tr": "Başarısı konusunda gayet alçakgönüllü.",
+      "synonyms": [
+        "Modest"
+      ],
+      "antonyms": [
+        "Proud",
+        "arrogant"
+      ],
+      "other_forms": "Humble (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He's very ________ about his success."
+    },
+    {
+      "word": "DILEMMA",
+      "type": "n",
+      "turkish": "İkilem, çelişki",
+      "sentence_en": "The President is clearly in a dilemma about/over how to tackle the crisis.",
+      "sentence_tr": "Başkan krizle nasıl baş edeceği konusunda belli ki ikilemde.",
+      "synonyms": [
+        "Controversy ---PAGE_269--- 262 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The President is clearly in a ________ about/over how to tackle the crisis."
+    },
+    {
+      "word": "EVALUATE",
+      "type": "v",
+      "turkish": "Değerlendirmek",
+      "sentence_en": "It's impossible to evaluate these results without knowing more about the research methods employed.",
+      "sentence_tr": "Uygulanan araştırma metodlarını daha iyi bilmeden bu sonuçları değerlendirmek imkansız.",
+      "synonyms": [
+        "Assess",
+        "appraise"
+      ],
+      "antonyms": [
+        "Ignore"
+      ],
+      "other_forms": "Evaluation (n), evaluative (adj)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "It's impossible to ________ these results without knowing more about the research methods employed."
+    },
+    {
+      "word": "EVOLVE",
+      "type": "v",
+      "turkish": "Gelişmek, geliştirmek",
+      "sentence_en": "Bacteria are evolving resistance to antibiotics.",
+      "sentence_tr": "Bakteriler antibiyotiklere karşı direnç gösteriyor.",
+      "synonyms": [
+        "Develop"
+      ],
+      "antonyms": [
+        "Perish",
+        "deteriorate"
+      ],
+      "other_forms": "Evolution (n), evolutionary (adj)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Bacteria are evolving resistance to antibiotics. (________)"
+    },
+    {
+      "word": "FAKE",
+      "type": "adj",
+      "turkish": "Sahte",
+      "sentence_en": "Experts revealed that the painting was a fake.",
+      "sentence_tr": "Uzmanlar tablonun sahte olduğunu açığa çıkardılar.",
+      "synonyms": [
+        "False",
+        "imitation"
+      ],
+      "antonyms": [
+        "Real"
+      ],
+      "other_forms": "Fake (adj), faker (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Experts revealed that the painting was a ________."
+    },
+    {
+      "word": "SLIPPERY",
+      "type": "adj",
+      "turkish": "Kaygan, hiç sağlam olmayan, kaypak, güvenilmez",
+      "sentence_en": "The road was wet and slippery.",
+      "sentence_tr": "Yol ıslak ve kaygandı.",
+      "synonyms": [
+        "Icy",
+        "oily"
+      ],
+      "antonyms": [
+        "Firm",
+        "safe"
+      ],
+      "other_forms": "Slip (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The road was wet and ________."
+    },
+    {
+      "word": "BREED",
+      "type": "v",
+      "turkish": "Çiftleş(tir)mek",
+      "sentence_en": "Most birds breed in the spring.",
+      "sentence_tr": "Çoğu kuş baharda çiftleşir.",
+      "synonyms": [
+        "Produce"
+      ],
+      "antonyms": [
+        "Kill",
+        "become extinct"
+      ],
+      "other_forms": "Breed (n), breeder (n), breeding (n) ---PAGE_270--- 263 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Most birds ________ in the spring."
+    },
+    {
+      "word": "BRIBERY",
+      "type": "n",
+      "turkish": "Rüşvet",
+      "sentence_en": "The company was always rife with bribery.",
+      "sentence_tr": "Şirkette rüşvet hep vardı.",
+      "synonyms": [
+        "Corruption"
+      ],
+      "antonyms": [],
+      "other_forms": "Bribe (v), bribe (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The company was always rife with ________."
+    },
+    {
+      "word": "ASSEMBLE",
+      "type": "v",
+      "turkish": "Biraraya gelmek, topla(n)mak",
+      "sentence_en": "We assembled in the meeting room after lunch.",
+      "sentence_tr": "Öğle yemeğinden sonra toplantı odasında biraraya geldik.",
+      "synonyms": [
+        "Compile",
+        "come together",
+        "meet",
+        "convene"
+      ],
+      "antonyms": [
+        "Disperse",
+        "scatter",
+        "apart"
+      ],
+      "other_forms": "Assembly (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We ________d in the meeting room after lunch."
+    },
+    {
+      "word": "ACUTE",
+      "type": "adj",
+      "turkish": "Keskin, ciddi, şiddetli",
+      "sentence_en": "The two roads meet at an acute angle.",
+      "sentence_tr": "İki yol keskin bir noktada birleşiyor.",
+      "synonyms": [
+        "Critical",
+        "serious",
+        "sharp",
+        "intense",
+        "severe"
+      ],
+      "antonyms": [
+        "Be distant",
+        "remote",
+        "detached"
+      ],
+      "other_forms": "Acutely (adv), acuteness (n) ADHERE to (v) Türkçe Karşılığı : Bağlı olmak, uymak Örnek Cümle : She adhered to her principles throughout her life. Çevirisi : Hayatı boyunca prensiplerine bağlı kalmıştır. Eş ya da Yakın Anlamlılar : Stick to, be attached, comply with Zıt Anlamlılar : Be distant, remote, detached Diğer Halleri : Adherent (adj), adherence (n), adhesive (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The two roads meet at an ________ angle."
+    },
+    {
+      "word": "ADVANCE",
+      "type": "v",
+      "turkish": "İlerlemek, gelişim göstermek",
+      "sentence_en": "The troops advanced on the city.",
+      "sentence_tr": "Birlikler şehre doğru ilerledi.",
+      "synonyms": [
+        "Proceed",
+        "progress",
+        "promote",
+        "improve",
+        "rise",
+        "increase"
+      ],
+      "antonyms": [
+        "Regress",
+        "decrease",
+        "recession"
+      ],
+      "other_forms": "Advancement (n), advance (n) ---PAGE_271--- 264 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The troops ________d on the city."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "overcome   a"
+        },
+        {
+          "id": 2,
+          "word": "relish   b"
+        },
+        {
+          "id": 3,
+          "word": "reversal   c"
+        },
+        {
+          "id": 4,
+          "word": "merge   d"
+        },
+        {
+          "id": 5,
+          "word": "miracle   e"
+        },
+        {
+          "id": 1,
+          "word": "prudent   a"
+        },
+        {
+          "id": 2,
+          "word": "persuade   b"
+        },
+        {
+          "id": 3,
+          "word": "irritate   c"
+        },
+        {
+          "id": 4,
+          "word": "humble   d"
+        },
+        {
+          "id": 5,
+          "word": "dilemma   e"
+        },
+        {
+          "id": 1,
+          "word": "evaluate   a"
+        },
+        {
+          "id": 2,
+          "word": "evolve   b"
+        },
+        {
+          "id": 3,
+          "word": "fake   c"
+        },
+        {
+          "id": 4,
+          "word": "slippery   d"
+        },
+        {
+          "id": 5,
+          "word": "breed   e"
+        },
+        {
+          "id": 1,
+          "word": "bribery   a"
+        },
+        {
+          "id": 2,
+          "word": "assemble   b"
+        },
+        {
+          "id": 3,
+          "word": "acute   c"
+        },
+        {
+          "id": 4,
+          "word": "adhere to   d"
+        },
+        {
+          "id": 5,
+          "word": "advance   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "unite, join"
+        },
+        {
+          "key": "b",
+          "def": "repeal, annulment"
+        },
+        {
+          "key": "c",
+          "def": "wonder, marvel"
+        },
+        {
+          "key": "d",
+          "def": "conquer, surmount"
+        },
+        {
+          "key": "e",
+          "def": "like, enjoy"
+        },
+        {
+          "key": "a",
+          "def": "anger, annoy"
+        },
+        {
+          "key": "b",
+          "def": "modest"
+        },
+        {
+          "key": "c",
+          "def": "controversy"
+        },
+        {
+          "key": "d",
+          "def": "convince"
+        },
+        {
+          "key": "e",
+          "def": "wise, sensible, cautious"
+        },
+        {
+          "key": "a",
+          "def": "develop"
+        },
+        {
+          "key": "b",
+          "def": "icy, oily"
+        },
+        {
+          "key": "c",
+          "def": "produce"
+        },
+        {
+          "key": "d",
+          "def": "assess, appraise"
+        },
+        {
+          "key": "e",
+          "def": "false, imitation"
+        },
+        {
+          "key": "a",
+          "def": "proceed, progress, promo te, improve, rise, increase"
+        },
+        {
+          "key": "b",
+          "def": "critical, serious, sharp, intense, severe"
+        },
+        {
+          "key": "c",
+          "def": "corruption"
+        },
+        {
+          "key": "d",
+          "def": "stick to, be attached, comply with"
+        },
+        {
+          "key": "e",
+          "def": "compile, come together, meet, convene"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "relish   a"
+        },
+        {
+          "id": 2,
+          "word": "merge   b"
+        },
+        {
+          "id": 3,
+          "word": "persuade   c"
+        },
+        {
+          "id": 4,
+          "word": "irritate   d"
+        },
+        {
+          "id": 1,
+          "word": "humble   a"
+        },
+        {
+          "id": 2,
+          "word": "evolve   b"
+        },
+        {
+          "id": 3,
+          "word": "fake   c"
+        },
+        {
+          "id": 4,
+          "word": "slippery   d"
+        },
+        {
+          "id": 1,
+          "word": "breed   a"
+        },
+        {
+          "id": 2,
+          "word": "assemble   b"
+        },
+        {
+          "id": 3,
+          "word": "adhere to   c"
+        },
+        {
+          "id": 4,
+          "word": "advance   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "cheer up"
+        },
+        {
+          "key": "b",
+          "def": "deter, discourage"
+        },
+        {
+          "key": "c",
+          "def": "separate"
+        },
+        {
+          "key": "d",
+          "def": "dislike, hate, detest"
+        },
+        {
+          "key": "a",
+          "def": "real"
+        },
+        {
+          "key": "b",
+          "def": "firm, safe"
+        },
+        {
+          "key": "c",
+          "def": "proud, arrogant"
+        },
+        {
+          "key": "d",
+          "def": "perish, deteriorate"
+        },
+        {
+          "key": "a",
+          "def": "disperse, scatter, apart"
+        },
+        {
+          "key": "b",
+          "def": "kill, become extinct"
+        },
+        {
+          "key": "c",
+          "def": "regress, decrease, recession"
+        },
+        {
+          "key": "d",
+          "def": "be distant, remote, detached"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “surmount” ve Türkçesi “aşmak, üstesinden gelmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "persuade",
+          "B": "merge",
+          "C": "relish",
+          "D": "overcome",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Genellikle “with” edatı ile kullanılan, eş anlamlısı “unite” ve Türkçesi “birleşmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "separate",
+          "B": "irritate",
+          "C": "merge",
+          "D": "evolve",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “controversy” ve Türkçesi “ikilem, çelişki” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "reversal",
+          "B": "assembly",
+          "C": "bribery",
+          "D": "miracle",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “corruption” ve Türkçesi “rüşvet, yolsuzluk” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "breed",
+          "B": "bribery",
+          "C": "assembly",
+          "D": "acuteness",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “assess” ve Türkçesi “değerlendirmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "evaluate",
+          "B": "deteriorate",
+          "C": "scatter",
+          "D": "perish",
+          "E": "assemble"
+        }
+      }
+    ]
+  }
+}

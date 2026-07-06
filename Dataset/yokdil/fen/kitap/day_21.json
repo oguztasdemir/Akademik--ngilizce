@@ -1,0 +1,681 @@
+{
+  "day": 21,
+  "words": [
+    {
+      "word": "SORT",
+      "type": "v",
+      "turkish": "Sıralamak, sınıflandırmak",
+      "sentence_en": "You can use the computer to sort the newspaper articles alphabetically, by date, or by subject.",
+      "sentence_tr": "Gazete makalelerini alfabetik, tarihe göre ya da konu olarak sınıflandırmak için bilgisayarı kullanabilirsin.",
+      "synonyms": [
+        "Classify",
+        "arrange"
+      ],
+      "antonyms": [],
+      "other_forms": "Sort (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "You can use the computer to ________ the newspaper articles alphabetically, by date, or by subject."
+    },
+    {
+      "word": "VIRTUALLY",
+      "type": "adv",
+      "turkish": "Hemen hemen, neredeyse",
+      "sentence_en": "That wine stain on my shirt has virtually disappeared.",
+      "sentence_tr": "Gömleğimdeki o şarap lekesi neredeyse yok oldu.",
+      "synonyms": [
+        "Almost",
+        "practically",
+        "nearly",
+        "approximately",
+        "wellnigh"
+      ],
+      "antonyms": [
+        "Exactly",
+        "directly",
+        "definitely"
+      ],
+      "other_forms": "Virtual (adj)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "That wine stain on my shirt has ________ disappeared."
+    },
+    {
+      "word": "APPALLING",
+      "type": "adj",
+      "turkish": "Korkutucu, ürkütücü",
+      "sentence_en": "Prisoners are being kept in most appalling conditions.",
+      "sentence_tr": "Mahkumlar çok ürkütücü koşullarda tutuluyor.",
+      "synonyms": [
+        "Terrifying",
+        "shocking",
+        "frightful",
+        "dreadful",
+        "awful"
+      ],
+      "antonyms": [
+        "Reassuring"
+      ],
+      "other_forms": "Appall (v), appalled (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Prisoners are being kept in most ________ conditions."
+    },
+    {
+      "word": "ANXIOUS",
+      "type": "adj",
+      "turkish": "Endişeli, kaygılı",
+      "sentence_en": "The drought has made farmers anxious about the harvest.",
+      "sentence_tr": "Kuraklık çiftçileri hasat konusunda kaygılandırdı.",
+      "synonyms": [
+        "Worried",
+        "concerned",
+        "troubled",
+        "apprehensive"
+      ],
+      "antonyms": [
+        "Calm",
+        "confident",
+        "cool"
+      ],
+      "other_forms": "Anxiety (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The drought has made farmers ________ about the harvest."
+    },
+    {
+      "word": "ACHIEVE",
+      "type": "v",
+      "turkish": "Başarmak, üstesinden gelmek",
+      "sentence_en": "I've been working all day, but I feel as if I achieved nothing.",
+      "sentence_tr": "Tüm gün çalıştım ancak hiçbirşey yapmamışım gibi geliyor.",
+      "synonyms": [
+        "Succeed",
+        "accomplish",
+        "attain",
+        "acquire",
+        "gain",
+        "earn"
+      ],
+      "antonyms": [
+        "Fail",
+        "neglect",
+        "lose"
+      ],
+      "other_forms": "Achievable (adj), achiever (n), achievement (n) ---PAGE_149--- 142 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr EMERGE from (v) Türkçe Karşılığı : -den çıkmak, -den gelişmek, -den ortaya çıkmak Örnek Cümle : These problems emerge from unknown factors. Çevirisi : Bu problemler bilinmeyen faktörlerden ortaya çıkıyor. Eş ya da Yakın Anlamlılar : Develope out of, arise from, result from Zıt Anlamlılar : Lead to, give rise to, result in Diğer Halleri : Emergence (n), emerging (adj)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "I've been working all day, but I feel as if I ________d nothing."
+    },
+    {
+      "word": "COLLIDE",
+      "type": "v",
+      "turkish": "Çarpışmak",
+      "sentence_en": "The two lorries collided at the crossroads.",
+      "sentence_tr": "İki kamyon kavşakta çarpıştı.",
+      "synonyms": [
+        "Crash",
+        "strike",
+        "bump into"
+      ],
+      "antonyms": [],
+      "other_forms": "Collision (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The two lorries ________d at the crossroads."
+    },
+    {
+      "word": "CONVICT",
+      "type": "v",
+      "turkish": "Mahkum etmek, tutuklamak, suçlamak",
+      "sentence_en": "He has twice been convicted of robbery/arson.",
+      "sentence_tr": "İki kez soygun nedeniyle tutuklandı.",
+      "synonyms": [
+        "Find guilty"
+      ],
+      "antonyms": [
+        "Acquit",
+        "release"
+      ],
+      "other_forms": "Conviction (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He has twice been ________ed of robbery/arson."
+    },
+    {
+      "word": "CORROBORATE",
+      "type": "v",
+      "turkish": "Doğrulamak, teyit etmek",
+      "sentence_en": "Recent research seems to corroborate his theory.",
+      "sentence_tr": "Son araştırma onun teorisini doğrular nitelikte.",
+      "synonyms": [
+        "Confirm",
+        "back up",
+        "support"
+      ],
+      "antonyms": [
+        "Refuse",
+        "reject",
+        "invalidate"
+      ],
+      "other_forms": "Corroboration (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Recent research seems to ________ his theory."
+    },
+    {
+      "word": "MISERABLE",
+      "type": "adj",
+      "turkish": "Sefil, mutsuz, neşesiz",
+      "sentence_en": "She's miserable living on her own.",
+      "sentence_tr": "Mutsuz bir şekilde tek başına yaşıyor.",
+      "synonyms": [
+        "Unhappy",
+        "cheerless",
+        "awful"
+      ],
+      "antonyms": [
+        "Happy",
+        "glad"
+      ],
+      "other_forms": "Miserably (adv), misery (n) ---PAGE_150--- 143 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She's ________ living on her own."
+    },
+    {
+      "word": "OMIT",
+      "type": "v",
+      "turkish": "Çıkarmak",
+      "sentence_en": "She was omitted from the list of contributors to the report.",
+      "sentence_tr": "Rapora katkıda bulunanlar listesinden çıkarıldı.",
+      "synonyms": [
+        "Delete",
+        "leave out"
+      ],
+      "antonyms": [
+        "Include"
+      ],
+      "other_forms": "Omission (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She was ________ted from the list of contributors to the report."
+    },
+    {
+      "word": "OCCUPY",
+      "type": "v",
+      "turkish": "İşgal etmek",
+      "sentence_en": "The bathroom's occupied - I think John's in there.",
+      "sentence_tr": "Banyo dolu, sanırım John içerde.",
+      "synonyms": [
+        "Inhabit",
+        "reside",
+        "lodge in"
+      ],
+      "antonyms": [
+        "Evacuate"
+      ],
+      "other_forms": "Occupancy (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The bathroom's occupied - I think John's in there. (________)"
+    },
+    {
+      "word": "IMMINENT",
+      "type": "adj",
+      "turkish": "Yakında olmasından korkulan, yakın, yaklaşan",
+      "sentence_en": "A strike is imminent.",
+      "sentence_tr": "Yakında bir grev olacak.",
+      "synonyms": [
+        "Approaching"
+      ],
+      "antonyms": [
+        "Distant"
+      ],
+      "other_forms": "Imminence (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A strike is ________."
+    },
+    {
+      "word": "ILLUSION",
+      "type": "n",
+      "turkish": "Yanılgı",
+      "sentence_en": "He had no illusions about his talents as a singer.",
+      "sentence_tr": "Bir şarkıcı olarak yetenekleriyle ilgili hiçbir yanılgısı yoktu.",
+      "synonyms": [
+        "Deception",
+        "mirage"
+      ],
+      "antonyms": [
+        "Reality"
+      ],
+      "other_forms": "illusionist (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He had no ________s about his talents as a singer."
+    },
+    {
+      "word": "STATIONARY",
+      "type": "adj",
+      "turkish": "Hareketsiz, sabit",
+      "sentence_en": "The rate of inflation has been stationary for several months.",
+      "sentence_tr": "Enflasyon oranı birkaç aydır sabit.",
+      "synonyms": [
+        "Immobile",
+        "at rest"
+      ],
+      "antonyms": [
+        "Mobile ---PAGE_151--- 144 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The rate of inflation has been ________ for several months."
+    },
+    {
+      "word": "SPARK",
+      "type": "v",
+      "turkish": "Kıvılcım saçmak, başlatmak",
+      "sentence_en": "You can start a fire by rubbing two dry pieces of wood together until it sparks.",
+      "sentence_tr": "İki kuru odun parçasını kıvılcım çıkana dek birbirine sürterek ateş yakabilirsin.",
+      "synonyms": [
+        "Generate",
+        "produce",
+        "initiate"
+      ],
+      "antonyms": [],
+      "other_forms": "Spark (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "You can start a fire by rubbing two dry pieces of wood together until it ________s."
+    },
+    {
+      "word": "INTENTIONAL",
+      "type": "adj",
+      "turkish": "Kasıtlı, kasti, bile bile yapılan",
+      "sentence_en": "Did you leave his name out by accident or was it intentional?",
+      "sentence_tr": "İsmini kasıtlı olarak mı yoksa kazara mı çıkardın?",
+      "synonyms": [
+        "Deliberate",
+        "on purpose",
+        "planned"
+      ],
+      "antonyms": [
+        "Accidental"
+      ],
+      "other_forms": "Intend (v), intent (n), intention (n), intention (n) LACK of (n) Türkçe Karşılığı : Yoksun olma, eksiklik Örnek Cümle : Her only problem is lack of confidence. Çevirisi : Onun tek problemi kendine güveninin olmaması. Eş ya da Yakın Anlamlılar : Deficiency, shortness Zıt Anlamlılar : Plenty, abundance Diğer Halleri : Lack (n), lacking (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Did you leave his name out by accident or was it ________?"
+    },
+    {
+      "word": "PROMOTE",
+      "type": "v",
+      "turkish": "Terfi etmek, ilerlemek",
+      "sentence_en": "It has long been known that regular exercise promotes all-round good health.",
+      "sentence_tr": "Düzenli egzersizin her bakımdan sağlığı olumlu etkilediği uzun zamandır bilinmektedir.",
+      "synonyms": [
+        "Give a higher position to smb.",
+        "aid",
+        "foster"
+      ],
+      "antonyms": [],
+      "other_forms": "Promoter (n), promotion (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "It has long been known that regular exercise ________s all-round good health."
+    },
+    {
+      "word": "RARE",
+      "type": "adj",
+      "turkish": "Nadir, kıt, az bulunan",
+      "sentence_en": "The museum is full of rare and precious treasures.",
+      "sentence_tr": "Müze nadir ve değerli hazinelerle dolu.",
+      "synonyms": [
+        "Scarce"
+      ],
+      "antonyms": [
+        "Plentiful",
+        "abundant"
+      ],
+      "other_forms": "Rarity (n), rarely (adv) ---PAGE_152--- 145 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The museum is full of ________ and precious treasures."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "sort   a"
+        },
+        {
+          "id": 2,
+          "word": "virtually   b"
+        },
+        {
+          "id": 3,
+          "word": "appalling   c"
+        },
+        {
+          "id": 4,
+          "word": "anxious   d"
+        },
+        {
+          "id": 5,
+          "word": "achieve   e"
+        },
+        {
+          "id": 1,
+          "word": "emerge   a"
+        },
+        {
+          "id": 2,
+          "word": "collide   b"
+        },
+        {
+          "id": 3,
+          "word": "convict   c"
+        },
+        {
+          "id": 4,
+          "word": "corroborate   d"
+        },
+        {
+          "id": 5,
+          "word": "miserable   e"
+        },
+        {
+          "id": 1,
+          "word": "omit   a"
+        },
+        {
+          "id": 2,
+          "word": "occupy   b"
+        },
+        {
+          "id": 3,
+          "word": "imminent   c"
+        },
+        {
+          "id": 4,
+          "word": "illusion   d"
+        },
+        {
+          "id": 5,
+          "word": "stationary   e"
+        },
+        {
+          "id": 1,
+          "word": "spark   a"
+        },
+        {
+          "id": 2,
+          "word": "intentional   b"
+        },
+        {
+          "id": 3,
+          "word": "lack   c"
+        },
+        {
+          "id": 4,
+          "word": "promote   d"
+        },
+        {
+          "id": 5,
+          "word": "rare   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "terrifying, shocking, fr ightful, dreadful, awful"
+        },
+        {
+          "key": "b",
+          "def": "worried, concerned, tr oubled, apprehensive"
+        },
+        {
+          "key": "c",
+          "def": "succeed, accomplish , attain, acquire, gain"
+        },
+        {
+          "key": "d",
+          "def": "almost, practically, n early, approximately"
+        },
+        {
+          "key": "e",
+          "def": "classify, arrange"
+        },
+        {
+          "key": "a",
+          "def": "crash, strike, bump into"
+        },
+        {
+          "key": "b",
+          "def": "confirm, back up, support"
+        },
+        {
+          "key": "c",
+          "def": "unhappy, cheerless, awful"
+        },
+        {
+          "key": "d",
+          "def": "develope out of, arise from, result from"
+        },
+        {
+          "key": "e",
+          "def": "find guilty"
+        },
+        {
+          "key": "a",
+          "def": "deception, mirage"
+        },
+        {
+          "key": "b",
+          "def": "approaching"
+        },
+        {
+          "key": "c",
+          "def": "immobile, at rest"
+        },
+        {
+          "key": "d",
+          "def": "delete, leave out"
+        },
+        {
+          "key": "e",
+          "def": "inhabit, resid e, lodge in"
+        },
+        {
+          "key": "a",
+          "def": "scarce"
+        },
+        {
+          "key": "b",
+          "def": "deficiency, shortness"
+        },
+        {
+          "key": "c",
+          "def": "generate, produce, initiate"
+        },
+        {
+          "key": "d",
+          "def": "give a higher posit ion to smb"
+        },
+        {
+          "key": "e",
+          "def": "deliberate, on purpose, planned"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "virtually   a"
+        },
+        {
+          "id": 2,
+          "word": "appalling   b"
+        },
+        {
+          "id": 3,
+          "word": "anxious   c"
+        },
+        {
+          "id": 4,
+          "word": "achieve   d"
+        },
+        {
+          "id": 5,
+          "word": "emerge from   e"
+        },
+        {
+          "id": 1,
+          "word": "convict   a"
+        },
+        {
+          "id": 2,
+          "word": "corroborate   b"
+        },
+        {
+          "id": 3,
+          "word": "miserable   c"
+        },
+        {
+          "id": 4,
+          "word": "omit   d"
+        },
+        {
+          "id": 5,
+          "word": "occupy   e"
+        },
+        {
+          "id": 1,
+          "word": "imminent   a"
+        },
+        {
+          "id": 2,
+          "word": "illusion   b"
+        },
+        {
+          "id": 3,
+          "word": "stationary   c"
+        },
+        {
+          "id": 4,
+          "word": "intentional   d"
+        },
+        {
+          "id": 5,
+          "word": "rare   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "calm, confident, cool"
+        },
+        {
+          "key": "b",
+          "def": "fail, neglect, lose"
+        },
+        {
+          "key": "c",
+          "def": "lead to, give rise to, result in"
+        },
+        {
+          "key": "d",
+          "def": "reassuring"
+        },
+        {
+          "key": "e",
+          "def": "exactly, directly, definitely"
+        },
+        {
+          "key": "a",
+          "def": "evacuate"
+        },
+        {
+          "key": "b",
+          "def": "happy, glad"
+        },
+        {
+          "key": "c",
+          "def": "acquit, release"
+        },
+        {
+          "key": "d",
+          "def": "include"
+        },
+        {
+          "key": "e",
+          "def": "refuse, reject, invalidate"
+        },
+        {
+          "key": "a",
+          "def": "mobile"
+        },
+        {
+          "key": "b",
+          "def": "accidental"
+        },
+        {
+          "key": "c",
+          "def": "plentiful, abundant"
+        },
+        {
+          "key": "d",
+          "def": "reality"
+        },
+        {
+          "key": "e",
+          "def": "distant"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “approaching” ve Türkçesi “yakında, eli kulağında” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "awful",
+          "B": "imminent",
+          "C": "concerned",
+          "D": "apprehensive",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Genellikle “about” edatı ile kullanılan, eş anlamlısı “worried” ve Türkçesi “endişeli” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "anxious",
+          "B": "appalling",
+          "C": "miserable",
+          "D": "cheerless",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Zıt anlamlısı “evacuate” ve Türkçesi “işgal etmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "promote",
+          "B": "initiate",
+          "C": "foster",
+          "D": "spark",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “unhappy” ve Türkçesi “çaresiz, sefil” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "accidental",
+          "B": "deliberate",
+          "C": "scarce",
+          "D": "miserable",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “find guilty” ve Türkçesi “suçlamak, mahkum etmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "corroborate",
+          "B": "invalidate",
+          "C": "convict",
+          "D": "strike",
+          "E": "crash"
+        }
+      }
+    ]
+  }
+}

@@ -7,7 +7,8 @@ import signal
 
 # Global subprocess handles
 backend_process = None
-frontend_process = None
+web_process = None
+mobile_process = None
 
 def signal_handler(sig, frame):
     print("\n[main.py] Kapatma sinyali alındı. Sunucular sonlandırılıyor...")
@@ -15,7 +16,7 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 def cleanup():
-    global backend_process, frontend_process
+    global backend_process, web_process, mobile_process
     # Terminate backend
     if backend_process:
         print("[main.py] Backend sunucusu kapatılıyor...")
@@ -25,14 +26,23 @@ def cleanup():
         except Exception:
             backend_process.kill()
             
-    # Terminate frontend
-    if frontend_process:
-        print("[main.py] Frontend sunucusu kapatılıyor...")
+    # Terminate Web Gui
+    if web_process:
+        print("[main.py] Web Gui sunucusu kapatılıyor...")
         try:
-            frontend_process.terminate()
-            frontend_process.wait(timeout=3)
+            web_process.terminate()
+            web_process.wait(timeout=3)
         except Exception:
-            frontend_process.kill()
+            web_process.kill()
+
+    # Terminate Mobil Gui
+    if mobile_process:
+        print("[main.py] Mobil Gui sunucusu kapatılıyor...")
+        try:
+            mobile_process.terminate()
+            mobile_process.wait(timeout=3)
+        except Exception:
+            mobile_process.kill()
     print("[main.py] Tüm işlemler temizlendi. İyi günler!")
 
 # Register signal handlers for clean exit
@@ -75,23 +85,26 @@ def free_port(port):
         print(f"[main.py] Port temizlenirken hata oluştu: {e}")
 
 def main():
-    global backend_process, frontend_process
+    global backend_process, web_process, mobile_process
     
     root_dir = os.path.abspath(os.path.dirname(__file__))
-    backend_dir = os.path.join(root_dir, "yokdil_app", "backend")
-    frontend_dir = os.path.join(root_dir, "yokdil_app", "frontend")
+    backend_dir = os.path.join(root_dir, "Web Gui", "backend")
+    web_dir = os.path.join(root_dir, "Web Gui")
+    mobile_dir = os.path.join(root_dir, "Mobil Gui")
     
-    # Clean up conflicting ports 5000 and 5173 before starting
+    # Clean up conflicting ports 5000, 5173, and 5174 before starting
     free_port(5000)
     free_port(5173)
+    free_port(5174)
     
     print("=" * 60)
-    print("      YÖKDİL FEN BİLİMLERİ HAZIRLIK SİSTEMİ BAŞLATILIYOR")
+    print("      YÖKDİL HAZIRLIK SİSTEMİ BAŞLATILIYOR (WEB & MOBİL)")
     print("=" * 60)
     
     # 1. Check and install dependencies
     run_npm_install(backend_dir)
-    run_npm_install(frontend_dir)
+    run_npm_install(web_dir)
+    run_npm_install(mobile_dir)
     
     # 2. Start Express Backend
     print("[main.py] Backend sunucusu başlatılıyor (Port 5000)...")
@@ -106,27 +119,43 @@ def main():
         print(f"[main.py] HATA: Backend başlatılamadı: {e}")
         sys.exit(1)
 
-    # 3. Start Vite Frontend
-    print("[main.py] Frontend sunucusu başlatılıyor (Port 5173)...")
+    # 3. Start Web Gui Frontend
+    print("[main.py] Web Gui sunucusu başlatılıyor (Port 5173)...")
     try:
-        frontend_process = subprocess.Popen(
+        web_process = subprocess.Popen(
             ["npm", "run", "dev"],
-            cwd=frontend_dir,
+            cwd=web_dir,
             text=True,
             shell=True
         )
     except Exception as e:
-        print(f"[main.py] HATA: Frontend başlatılamadı: {e}")
+        print(f"[main.py] HATA: Web Gui başlatılamadı: {e}")
         cleanup()
         sys.exit(1)
 
-    # 4. Wait for warmup and open browser
+    # 4. Start Mobil Gui Frontend
+    print("[main.py] Mobil Gui sunucusu başlatılıyor (Port 5174)...")
+    try:
+        mobile_process = subprocess.Popen(
+            ["npm", "run", "dev"],
+            cwd=mobile_dir,
+            text=True,
+            shell=True
+        )
+    except Exception as e:
+        print(f"[main.py] HATA: Mobil Gui başlatılamadı: {e}")
+        cleanup()
+        sys.exit(1)
+
+    # 5. Wait for warmup and open browser
     print("[main.py] Sunucuların ısınması bekleniyor (3 saniye)...")
     time.sleep(3)
     
     app_url = "http://localhost:5173/"
-    print(f"[main.py] Tarayıcı açılıyor: {app_url}")
+    mobile_url = "http://localhost:5174/"
+    print(f"[main.py] Tarayıcılar açılıyor:\n  Web Gui: {app_url}\n  Mobil Gui: {mobile_url}")
     webbrowser.open(app_url)
+    webbrowser.open(mobile_url)
     
     print("\n" + "=" * 60)
     print("  Sistem başarıyla çalıştırıldı!")
@@ -140,8 +169,11 @@ def main():
             if backend_process.poll() is not None:
                 print("[main.py] UYARI: Backend beklenmedik şekilde kapandı!")
                 break
-            if frontend_process.poll() is not None:
-                print("[main.py] UYARI: Frontend beklenmedik şekilde kapandı!")
+            if web_process.poll() is not None:
+                print("[main.py] UYARI: Web Gui beklenmedik şekilde kapandı!")
+                break
+            if mobile_process.poll() is not None:
+                print("[main.py] UYARI: Mobil Gui beklenmedik şekilde kapandı!")
                 break
             time.sleep(1)
     except KeyboardInterrupt:

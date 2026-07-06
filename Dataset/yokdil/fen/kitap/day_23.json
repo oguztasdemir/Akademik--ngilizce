@@ -1,0 +1,718 @@
+{
+  "day": 23,
+  "words": [
+    {
+      "word": "SACRIFICE",
+      "type": "v",
+      "turkish": "Fedakarlık yapmak, kurban etmek",
+      "sentence_en": "Many women sacrifice careers for their family.",
+      "sentence_tr": "Birçok kadın ailesi için kariyerlerini feda ediyor.",
+      "synonyms": [
+        "Relinguish",
+        "abandon"
+      ],
+      "antonyms": [],
+      "other_forms": "Sacrifice (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Many women ________ careers for their family."
+    },
+    {
+      "word": "ANNUL",
+      "type": "v",
+      "turkish": "İptal etmek, kabul edilmemek, geçersiz sayılmak (evlilik, yasa vs.)",
+      "sentence_en": "His second marriage was annulled since he never divorced his first wife.",
+      "sentence_tr": "İlk karısından boşanmadığı için ikinci evliliği hükümsüz sayıldı.",
+      "synonyms": [
+        "Cancel",
+        "repeal",
+        "revoke",
+        "call off"
+      ],
+      "antonyms": [
+        "Confirm",
+        "approve",
+        "affirm",
+        "endorse"
+      ],
+      "other_forms": "Annulment (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "His second marriage was ________led since he never divorced his first wife."
+    },
+    {
+      "word": "ABIDE BY",
+      "type": "v",
+      "turkish": "Uymak, kabul etmek, bağlı kalmak",
+      "sentence_en": "You had better abide by the rules.",
+      "sentence_tr": "Kurallara uysan iyi edersin.",
+      "synonyms": [
+        "Obey",
+        "comply with",
+        "accept",
+        "conform to",
+        "stick to"
+      ],
+      "antonyms": [
+        "Reject",
+        "refuse",
+        "disobey",
+        "break",
+        "violate"
+      ],
+      "other_forms": "Abiding (adj), abidingly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "You had better ________ the rules."
+    },
+    {
+      "word": "ETERNAL",
+      "type": "adj",
+      "turkish": "Sonsuz, bitmeyen",
+      "sentence_en": "Will you two never stop your eternal arguing?",
+      "sentence_tr": "Siz ikiniz bitmeyen tartışmanızı hiç mi kesmeyeceksiniz?",
+      "synonyms": [
+        "Infinite",
+        "endless"
+      ],
+      "antonyms": [
+        "Temporary"
+      ],
+      "other_forms": "Eternally (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Will you two never stop your ________ arguing?"
+    },
+    {
+      "word": "EASE",
+      "type": "v",
+      "turkish": "Kolaylaştırmak, azal(t)mak",
+      "sentence_en": "These pills should ease the pain.",
+      "sentence_tr": "Bu ilaçlar ağrıyı azaltmalı.",
+      "synonyms": [
+        "Make easier",
+        "facilitate",
+        "lessen",
+        "alleviate"
+      ],
+      "antonyms": [
+        "Aggravate",
+        "deteriorate"
+      ],
+      "other_forms": "Ease (n) ---PAGE_163--- 156 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "These pills should ________ the pain."
+    },
+    {
+      "word": "CRUEL",
+      "type": "adj",
+      "turkish": "Zalim, acımasız, merhametsiz",
+      "sentence_en": "Children can be very cruel to each other at times.",
+      "sentence_tr": "Çocuklar zaman zaman birbirlerine karşı çok acımasız olabilir.",
+      "synonyms": [
+        "Brutal",
+        "merciless",
+        "pitiless"
+      ],
+      "antonyms": [
+        "Merciful",
+        "gentle"
+      ],
+      "other_forms": "Cruelty (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Children can be very ________ to each other at times."
+    },
+    {
+      "word": "CREEP",
+      "type": "v",
+      "turkish": "Sürünmek",
+      "sentence_en": "The spider crept up the wall.",
+      "sentence_tr": "Örümcek, duvara tırmandı.",
+      "synonyms": [
+        "Crawl",
+        "sneak",
+        "wriggle"
+      ],
+      "antonyms": [
+        "Run",
+        "walk"
+      ],
+      "other_forms": "Creeping (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The spider crept up the wall. (________)"
+    },
+    {
+      "word": "DEPLETE",
+      "type": "v",
+      "turkish": "Tüketmek",
+      "sentence_en": "If we continue to deplete the Earth's natural resources, we will cause serious damage to the environment.",
+      "sentence_tr": "Yeryüzündeki doğal kaynakları tüketmeye devam edersek, çevreye ciddi ölçüde zarar vereceğiz.",
+      "synonyms": [
+        "Use up",
+        "consume",
+        "exhaust"
+      ],
+      "antonyms": [
+        "Produce",
+        "manufacture"
+      ],
+      "other_forms": "Depletion (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "If we continue to ________ the Earth's natural resources, we will cause serious damage to the environment."
+    },
+    {
+      "word": "DELICATE",
+      "type": "adj",
+      "turkish": "Dayanıksız, kırılgan, ince, zarif",
+      "sentence_en": "Delicate plants need to be kept in a greenhouse during the winter.",
+      "sentence_tr": "Hassas bitkilerin kış boyunca bir serada muhafaza edilmesi gerekir.",
+      "synonyms": [
+        "Fragile",
+        "subtle",
+        "sensitive"
+      ],
+      "antonyms": [
+        "Coarse",
+        "thick",
+        "strong"
+      ],
+      "other_forms": "Delicacy (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "________ plants need to be kept in a greenhouse during the winter."
+    },
+    {
+      "word": "COMMENCE",
+      "type": "v",
+      "turkish": "Başla(t)mak",
+      "sentence_en": "We will commence building work in August of next year.",
+      "sentence_tr": "İnşaata önümüzdeki yıl Ağustos ayında başlayacağız.",
+      "synonyms": [
+        "Start",
+        "begin",
+        "embark on"
+      ],
+      "antonyms": [
+        "Finish",
+        "end"
+      ],
+      "other_forms": "Commencement (n) ---PAGE_164--- 157 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We will ________ building work in August of next year."
+    },
+    {
+      "word": "CONSISTENT",
+      "type": "adj",
+      "turkish": "Sürekli, istikrarlı, tutarlı",
+      "sentence_en": "Her work is sometimes good, but the problem is she's not consistent.",
+      "sentence_tr": "Çalışması bazen iyi ama sorun onun istikrarlı olmaması.",
+      "synonyms": [
+        "Steady",
+        "constant"
+      ],
+      "antonyms": [
+        "Inconsistent",
+        "incompatible"
+      ],
+      "other_forms": "Consistency (n), consistently (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Her work is sometimes good, but the problem is she's not ________."
+    },
+    {
+      "word": "RETRIEVE",
+      "type": "v",
+      "turkish": "Geri almak, geri getirmek",
+      "sentence_en": "Computers are ideal to store and retrieve information efficiently.",
+      "sentence_tr": "Bilgisayarlar bilgiyi etkili şekilde muhafaza etmek ve tekrar kullanmak için idealdir.",
+      "synonyms": [
+        "Recover",
+        "bring back"
+      ],
+      "antonyms": [],
+      "other_forms": "Retrieval (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Computers are ideal to store and ________ information efficiently."
+    },
+    {
+      "word": "HAPHAZARD",
+      "type": "adj",
+      "turkish": "Tesadüfi",
+      "sentence_en": "He was able to overcome the problem in a haphazard manner.",
+      "sentence_tr": "Problemi tesadüfen çözebildi.",
+      "synonyms": [
+        "Random"
+      ],
+      "antonyms": [
+        "Intended",
+        "deliberate"
+      ],
+      "other_forms": "Haphazardly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He was able to overcome the problem in a ________ manner."
+    },
+    {
+      "word": "GLANCE",
+      "type": "n",
+      "turkish": "Hızlı bakış, göz atma",
+      "sentence_en": "She took a glance at her watch and slept again.",
+      "sentence_tr": "Saatine baktı ve tekrar uyudu.",
+      "synonyms": [
+        "Brief look",
+        "quick view"
+      ],
+      "antonyms": [],
+      "other_forms": "Glance (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She took a ________ at her watch and slept again."
+    },
+    {
+      "word": "IMPOVERISH",
+      "type": "v",
+      "turkish": "Fakirleştirmek",
+      "sentence_en": "Excessive farming has impoverished the soil.",
+      "sentence_tr": "Aşırı tarım toprağı fakirleştirdi.",
+      "synonyms": [
+        "Make poor",
+        "deprive"
+      ],
+      "antonyms": [
+        "Enrich"
+      ],
+      "other_forms": "Impoverished (adj), impoverishment (n) ---PAGE_165--- 158 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Excessive farming has ________ed the soil."
+    },
+    {
+      "word": "IMMUNE",
+      "type": "adj",
+      "turkish": "Bağışıklık kazanmış",
+      "sentence_en": "Most people who've had chicken pox once are immune to it for the rest of their lives.",
+      "sentence_tr": "Bir kez kızamık olan insanlar artık hayatları boyunca kızamığa bağışıktır.",
+      "synonyms": [
+        "Resistant",
+        "protected"
+      ],
+      "antonyms": [
+        "Susceptible",
+        "vulnerable",
+        "sensitive",
+        "fragile"
+      ],
+      "other_forms": "Immunization (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Most people who've had chicken pox once are ________ to it for the rest of their lives."
+    },
+    {
+      "word": "INHERIT",
+      "type": "v",
+      "turkish": "Miras almak, kalıtım yoluyla elde etmek",
+      "sentence_en": "Who will inherit the house when he dies?",
+      "sentence_tr": "Öldüğünde evi kime miras kalacak?",
+      "synonyms": [
+        "Receive",
+        "derive from a death"
+      ],
+      "antonyms": [
+        "Bequeath"
+      ],
+      "other_forms": "Inheritance (n), inheritor (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Who will ________ the house when he dies?"
+    },
+    {
+      "word": "INVALID",
+      "type": "adj",
+      "turkish": "Geçersiz",
+      "sentence_en": "I'm afraid your driving licence is invalid in Eastern Europe.",
+      "sentence_tr": "Korkarım senin sürücü belgen Doğu Avrupa’da geçerli değil.",
+      "synonyms": [
+        "Unacceptable",
+        "null and void"
+      ],
+      "antonyms": [
+        "Valid"
+      ],
+      "other_forms": "Invalidate (v), invalidation (n), invalidity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I'm afraid your driving licence is ________ in Eastern Europe."
+    },
+    {
+      "word": "PRECAUTION",
+      "type": "n",
+      "turkish": "Önlem, tedbir",
+      "sentence_en": "They failed to take the necessary precautions to avoid infection.",
+      "sentence_tr": "Enfeksiyonu önlemek için gerekli önlemleri almakta başarısız oldular.",
+      "synonyms": [
+        "Measure",
+        "step",
+        "action"
+      ],
+      "antonyms": [],
+      "other_forms": "Precautionary (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They failed to take the necessary ________s to avoid infection."
+    },
+    {
+      "word": "PROMINENT",
+      "type": "adj",
+      "turkish": "Ünlü, tanınmış, belirgin",
+      "sentence_en": "The government should be playing a more prominent role in promoting human rights.",
+      "sentence_tr": "Hükümet insan haklarını iyileştirmekte daha belirgin rol oynamalı.",
+      "synonyms": [
+        "Famous",
+        "well-known",
+        "eminent"
+      ],
+      "antonyms": [],
+      "other_forms": "Prominently (adv) ---PAGE_166--- 159 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The government should be playing a more ________ role in promoting human rights."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "sacrifice   a"
+        },
+        {
+          "id": 2,
+          "word": "annul   b"
+        },
+        {
+          "id": 3,
+          "word": "abide by   c"
+        },
+        {
+          "id": 4,
+          "word": "eternal   d"
+        },
+        {
+          "id": 5,
+          "word": "ease   e"
+        },
+        {
+          "id": 1,
+          "word": "cruel   a"
+        },
+        {
+          "id": 2,
+          "word": "creep   b"
+        },
+        {
+          "id": 3,
+          "word": "deplete   c"
+        },
+        {
+          "id": 4,
+          "word": "delicate   d"
+        },
+        {
+          "id": 5,
+          "word": "commence   e"
+        },
+        {
+          "id": 1,
+          "word": "consistent   a"
+        },
+        {
+          "id": 2,
+          "word": "retrieve   b"
+        },
+        {
+          "id": 3,
+          "word": "haphazard   c"
+        },
+        {
+          "id": 4,
+          "word": "glance   d"
+        },
+        {
+          "id": 5,
+          "word": "impoverish   e"
+        },
+        {
+          "id": 1,
+          "word": "immune   a"
+        },
+        {
+          "id": 2,
+          "word": "inherit   b"
+        },
+        {
+          "id": 3,
+          "word": "invalid   c"
+        },
+        {
+          "id": 4,
+          "word": "precaution   d"
+        },
+        {
+          "id": 5,
+          "word": "prominent   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "infinite, endless"
+        },
+        {
+          "key": "b",
+          "def": "obey, comply with, accept, conform to, stick to"
+        },
+        {
+          "key": "c",
+          "def": "make easier, facilitate, lessen, alleviate"
+        },
+        {
+          "key": "d",
+          "def": "relinguish, abandon"
+        },
+        {
+          "key": "e",
+          "def": "cancel, repeal, revoke, call off"
+        },
+        {
+          "key": "a",
+          "def": "start, begin, embark on"
+        },
+        {
+          "key": "b",
+          "def": "use up, consume, exhaust"
+        },
+        {
+          "key": "c",
+          "def": "brutal, merciless, pitiless"
+        },
+        {
+          "key": "d",
+          "def": "fragile, subtle, sensitive"
+        },
+        {
+          "key": "e",
+          "def": "crawl, sneak, wriggle"
+        },
+        {
+          "key": "a",
+          "def": "random"
+        },
+        {
+          "key": "b",
+          "def": "brief look, quick view"
+        },
+        {
+          "key": "c",
+          "def": "make poor, deprive"
+        },
+        {
+          "key": "d",
+          "def": "recover, bring back"
+        },
+        {
+          "key": "e",
+          "def": "steady, constant"
+        },
+        {
+          "key": "a",
+          "def": "receive, derive from a death"
+        },
+        {
+          "key": "b",
+          "def": "measure, step, action"
+        },
+        {
+          "key": "c",
+          "def": "famous, well"
+        },
+        {
+          "key": "d",
+          "def": "resistant, protected"
+        },
+        {
+          "key": "e",
+          "def": "unacceptable, null and void"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "annul   a"
+        },
+        {
+          "id": 2,
+          "word": "abide by   b"
+        },
+        {
+          "id": 3,
+          "word": "eternal   c"
+        },
+        {
+          "id": 4,
+          "word": "ease   d"
+        },
+        {
+          "id": 5,
+          "word": "cruel   e"
+        },
+        {
+          "id": 1,
+          "word": "creep   a"
+        },
+        {
+          "id": 2,
+          "word": "deplete   b"
+        },
+        {
+          "id": 3,
+          "word": "delicate   c"
+        },
+        {
+          "id": 4,
+          "word": "commence   d"
+        },
+        {
+          "id": 5,
+          "word": "consistent   e"
+        },
+        {
+          "id": 1,
+          "word": "haphazard   a"
+        },
+        {
+          "id": 2,
+          "word": "impoverish   b"
+        },
+        {
+          "id": 3,
+          "word": "immune   c"
+        },
+        {
+          "id": 4,
+          "word": "inherit   d"
+        },
+        {
+          "id": 5,
+          "word": "invalid   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "temporary"
+        },
+        {
+          "key": "b",
+          "def": "aggravate, deteriorate"
+        },
+        {
+          "key": "c",
+          "def": "merciful, gentle"
+        },
+        {
+          "key": "d",
+          "def": "reject, refuse, dis obey, break, violate"
+        },
+        {
+          "key": "e",
+          "def": "confirm, approve, affirm, endorse"
+        },
+        {
+          "key": "a",
+          "def": "inconsistent, incompatible"
+        },
+        {
+          "key": "b",
+          "def": "coarse, thick, strong"
+        },
+        {
+          "key": "c",
+          "def": "run, walk"
+        },
+        {
+          "key": "d",
+          "def": "finish, end"
+        },
+        {
+          "key": "e",
+          "def": "produce, manufacture"
+        },
+        {
+          "key": "a",
+          "def": "bequeath"
+        },
+        {
+          "key": "b",
+          "def": "susceptible, vulnerabl e, sensitive, fragile"
+        },
+        {
+          "key": "c",
+          "def": "valid"
+        },
+        {
+          "key": "d",
+          "def": "intended, deliberate"
+        },
+        {
+          "key": "e",
+          "def": "enrich"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “revoke” ve Türkçesi “geçersiz kılmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "confirm",
+          "B": "conform",
+          "C": "annul",
+          "D": "endorse",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Genellikle “by” edatı ile kullanılan ve Türkçesi “uymak, bağlı kalmak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "comply",
+          "B": "conform",
+          "C": "stick",
+          "D": "obey",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Phrasal verb olarak eş anlamlısı “use up” ve Türkçesi “tüketmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "deplete",
+          "B": "creep",
+          "C": "embark",
+          "D": "retrieve",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “measure” ve Türkçesi “önlem” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "consistency",
+          "B": "retrieval",
+          "C": "glance",
+          "D": "precaution",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “well-known” ve Türkçesi “ünlü, tanımış” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "valid",
+          "B": "prominent",
+          "C": "vulnerable",
+          "D": "haphazard",
+          "E": "delicate"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,668 @@
+{
+  "day": 42,
+  "words": [
+    {
+      "word": "SUBTLE",
+      "type": "adj",
+      "turkish": "Hassas, ince, kolay fark edilmeyen",
+      "sentence_en": "There is a subtle difference between these two plans.",
+      "sentence_tr": "Bu iki plan arasında ince bir fark var.",
+      "synonyms": [
+        "Delicate",
+        "indirect"
+      ],
+      "antonyms": [
+        "Direct"
+      ],
+      "other_forms": "Subtly (adv)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "There is a ________ difference between these two plans."
+    },
+    {
+      "word": "SUCCUMB",
+      "type": "v",
+      "turkish": "Boyun eğmek, yenik düşmek",
+      "sentence_en": "Thousands of animals have succumbed to the disease in the past few months.",
+      "sentence_tr": "Son birkaç ay içinde binlerce hayvan hastalığa yenik düştü.",
+      "synonyms": [
+        "Yield in",
+        "give in"
+      ],
+      "antonyms": [
+        "Rebel against"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Thousands of animals have ________ed to the disease in the past few months."
+    },
+    {
+      "word": "SUMMIT",
+      "type": "n",
+      "turkish": "Zirve",
+      "sentence_en": "The climbers were able to reach the summit of Mont Blanc.",
+      "sentence_tr": "Dağcılar Mont Blanc’in zirvesine ulaşmayı başardı.",
+      "synonyms": [
+        "Zenith",
+        "top",
+        "peak"
+      ],
+      "antonyms": [
+        "Bottom"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The climbers were able to reach the ________ of Mont Blanc."
+    },
+    {
+      "word": "INTERVAL",
+      "type": "n",
+      "turkish": "Ara",
+      "sentence_en": "We see each other at regular intervals - usually about once a month.",
+      "sentence_tr": "Belirli aralıklarla görüşüyoruz - genelde ayda bir.",
+      "synonyms": [
+        "Break",
+        "gap"
+      ],
+      "antonyms": [
+        "Continuity"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We see each other at regular ________s - usually about once a month."
+    },
+    {
+      "word": "STAGGERING",
+      "type": "adj",
+      "turkish": "Şaşırtıcı, hayret veren, yavaş ilerleyen",
+      "sentence_en": "Bill has just announced a staggering project.",
+      "sentence_tr": "Bill az önce şaşırtıcı bir proje duyurdu.",
+      "synonyms": [
+        "Astounding",
+        "surprising",
+        "sluggish"
+      ],
+      "antonyms": [
+        "Familiar",
+        "usual"
+      ],
+      "other_forms": "Stagger (v), staggered (adj) ---PAGE_296--- 289 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Bill has just announced a ________ project."
+    },
+    {
+      "word": "STAGNANT",
+      "type": "adj",
+      "turkish": "Durgun, hareketsiz",
+      "sentence_en": "A stagnant economy is dangerous in the long-term.",
+      "sentence_tr": "Durağan bir ekonomi uzun vadede tehlikelidir.",
+      "synonyms": [
+        "Sluggish",
+        "inactive"
+      ],
+      "antonyms": [
+        "Active"
+      ],
+      "other_forms": "Stagnate (v), stagnation (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A ________ economy is dangerous in the long-term."
+    },
+    {
+      "word": "IMPLEMENT",
+      "type": "v",
+      "turkish": "Uygulamak",
+      "sentence_en": "The changes to the national health system will be implemented next year.",
+      "sentence_tr": "Ulusal sağlık sistemindeki değişiklikler gelecek yıl uygulanacak.",
+      "synonyms": [
+        "Carry out",
+        "execute"
+      ],
+      "antonyms": [],
+      "other_forms": "Implement (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The changes to the national health system will be ________ed next year."
+    },
+    {
+      "word": "MEASURE",
+      "type": "n",
+      "turkish": "Önlem, ölçü, miktar, ölçüm",
+      "sentence_en": "The government has to take some measures to curb inflation.",
+      "sentence_tr": "Hükümet enflasyonu frenlemek için bazı önlemler almak zorunda.",
+      "synonyms": [
+        "Step",
+        "precaution",
+        "action"
+      ],
+      "antonyms": [],
+      "other_forms": "Measure (ölçmek) (v), Measurement (ölçüm) (n)",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The government has to take some ________s to curb inflation."
+    },
+    {
+      "word": "DECADENCE",
+      "type": "n",
+      "turkish": "Çürüme, bozulma",
+      "sentence_en": "Western decadence affected the whole world.",
+      "sentence_tr": "Batıdaki bozulma tüm dünyayı etkiledi.",
+      "synonyms": [
+        "Corruption"
+      ],
+      "antonyms": [],
+      "other_forms": "Decay (v)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Western ________ affected the whole world."
+    },
+    {
+      "word": "DESERVE",
+      "type": "v",
+      "turkish": "Haketmek, layık olmak",
+      "sentence_en": "I hope they get the punishment they deserve.",
+      "sentence_tr": "Umarım hakettikleri cezayı alırlar.",
+      "synonyms": [
+        "Merit",
+        "to be entitled to"
+      ],
+      "antonyms": [],
+      "other_forms": "Deserved (adj), deserving (adj) ---PAGE_297--- 290 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "I hope they get the punishment they ________."
+    },
+    {
+      "word": "FAMILIAR",
+      "type": "adj",
+      "turkish": "Aşina, tanıdık",
+      "sentence_en": "There were one or two familiar faces.",
+      "sentence_tr": "Bir iki tane tanıdık sima vardı.",
+      "synonyms": [
+        "Acquainted"
+      ],
+      "antonyms": [
+        "Strange"
+      ],
+      "other_forms": "Familiarity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "There were one or two ________ faces."
+    },
+    {
+      "word": "EXPLORE",
+      "type": "v",
+      "turkish": "Araştırmak, tetkik yapmak, keşfetmek",
+      "sentence_en": "The best way to explore the countryside is on foot.",
+      "sentence_tr": "Şehri tanımanın en güzel yolu yürümektir.",
+      "synonyms": [
+        "Research",
+        "investigate",
+        "probe"
+      ],
+      "antonyms": [],
+      "other_forms": "Exploration (n)",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "The best way to ________ the countryside is on foot."
+    },
+    {
+      "word": "SOLITARY",
+      "type": "adj",
+      "turkish": "Yalnız",
+      "sentence_en": "In the distance was a solitary building",
+      "sentence_tr": "Uzaklarda tek bir bina vardı.",
+      "synonyms": [
+        "Lonely",
+        "lonesome"
+      ],
+      "antonyms": [],
+      "other_forms": "Sole (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "In the distance was a ________ building"
+    },
+    {
+      "word": "SCEPTICAL",
+      "type": "adj",
+      "turkish": "Şüpheci, kuşkulu",
+      "sentence_en": "Many experts remain sceptical about/of his claims.",
+      "sentence_tr": "Birçok uzman onun iddialarından kuşku duymaya devam ediyor.",
+      "synonyms": [
+        "Doubtful",
+        "dubious",
+        "disbelieving"
+      ],
+      "antonyms": [
+        "Undoubtful"
+      ],
+      "other_forms": "Sceptic (adj), scepticism (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Many experts remain ________ about/of his claims."
+    },
+    {
+      "word": "UNIFY",
+      "type": "v",
+      "turkish": "Birleştirmek",
+      "sentence_en": "If the new leader does manage to unify his warring party, it will be quite an achievement.",
+      "sentence_tr": "Yeni lider kavgalı partisini birleştirebilirse büyük bir başarı olacaktır.",
+      "synonyms": [
+        "Unite",
+        "join",
+        "combine"
+      ],
+      "antonyms": [
+        "Seperate"
+      ],
+      "other_forms": "Unified (adj), unification (n) ---PAGE_298--- 291 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "If the new leader does manage to ________ his warring party, it will be quite an achievement."
+    },
+    {
+      "word": "URGENT",
+      "type": "adj",
+      "turkish": "Acil, önemli",
+      "sentence_en": "The plumbing in this building is in urgent need of repair.",
+      "sentence_tr": "Bu binadaki su tesisatı acil tamir gerektiriyor.",
+      "synonyms": [
+        "Immediate",
+        "imperative"
+      ],
+      "antonyms": [
+        "Trivial",
+        "insignificant"
+      ],
+      "other_forms": "Urgency (n), urgently (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The plumbing in this building is in ________ need of repair."
+    },
+    {
+      "word": "UNBIASED",
+      "type": "adj",
+      "turkish": "Önyargısız",
+      "sentence_en": "An unbiased opinion will ease the process.",
+      "sentence_tr": "Önyargısız bir düşünce süreci kolaylaştıracaktır.",
+      "synonyms": [
+        "Unprejudiced",
+        "fair",
+        "impartial"
+      ],
+      "antonyms": [
+        "Biased"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "An ________ opinion will ease the process."
+    },
+    {
+      "word": "TERRAIN",
+      "type": "n",
+      "turkish": "Bölge, arazi",
+      "sentence_en": "His car handles particularly well on rough terrain.",
+      "sentence_tr": "Arabası özellikle engebeli arazide iyi yol tutuyor.",
+      "synonyms": [
+        "Ground",
+        "territory"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "His car handles particularly well on rough ________."
+    },
+    {
+      "word": "TENET",
+      "type": "n",
+      "turkish": "Görüş, ilke, inanç",
+      "sentence_en": "It is a tenet of contemporary psychology that an individual's mental health is supported by having good social relationships.",
+      "sentence_tr": "İnsanın zihinsel sağlığının sağlıklı sosyal ilişkilerle desteklendiği çağdaş bir psikoloji görüşüdür.",
+      "synonyms": [
+        "Belief",
+        "opinion"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "It is a ________ of contemporary psychology that an individual's mental health is supported by having good social relationships."
+    },
+    {
+      "word": "ACCUMULATE",
+      "type": "v",
+      "turkish": "Birik(tir)mek",
+      "sentence_en": "A thick layer of dust has accumulated in the room.",
+      "sentence_tr": "Odada kalın bir toz tabakası birikti.",
+      "synonyms": [
+        "Gather",
+        "collect",
+        "pile up",
+        "store"
+      ],
+      "antonyms": [
+        "Seperate",
+        "disperse",
+        "dissipate",
+        "scatter"
+      ],
+      "other_forms": "Accumulation (n), accumulative (adj) ---PAGE_299--- 292 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "A thick layer of dust has ________d in the room."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "subtle   a"
+        },
+        {
+          "id": 2,
+          "word": "succumb   b"
+        },
+        {
+          "id": 3,
+          "word": "summit   c"
+        },
+        {
+          "id": 4,
+          "word": "interval   d"
+        },
+        {
+          "id": 5,
+          "word": "staggering   e"
+        },
+        {
+          "id": 1,
+          "word": "stagnant   a"
+        },
+        {
+          "id": 2,
+          "word": "implement   b"
+        },
+        {
+          "id": 3,
+          "word": "measure   c"
+        },
+        {
+          "id": 4,
+          "word": "decadence   d"
+        },
+        {
+          "id": 5,
+          "word": "deserve   e"
+        },
+        {
+          "id": 1,
+          "word": "familiar   a"
+        },
+        {
+          "id": 2,
+          "word": "explore   b"
+        },
+        {
+          "id": 3,
+          "word": "solitary   c"
+        },
+        {
+          "id": 4,
+          "word": "sceptical   d"
+        },
+        {
+          "id": 5,
+          "word": "unify   e"
+        },
+        {
+          "id": 1,
+          "word": "urgent   a"
+        },
+        {
+          "id": 2,
+          "word": "unbiased   b"
+        },
+        {
+          "id": 3,
+          "word": "terrain   c"
+        },
+        {
+          "id": 4,
+          "word": "tenet   d"
+        },
+        {
+          "id": 5,
+          "word": "accumulate   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "break, gap"
+        },
+        {
+          "key": "b",
+          "def": "zenith, top, peak"
+        },
+        {
+          "key": "c",
+          "def": "astounding, surprising, sluggish"
+        },
+        {
+          "key": "d",
+          "def": "delicate, indirect"
+        },
+        {
+          "key": "e",
+          "def": "yield in, give in"
+        },
+        {
+          "key": "a",
+          "def": "carry out, execute"
+        },
+        {
+          "key": "b",
+          "def": "corruption"
+        },
+        {
+          "key": "c",
+          "def": "merit, to be entitled to"
+        },
+        {
+          "key": "d",
+          "def": "sluggish, inactive"
+        },
+        {
+          "key": "e",
+          "def": "step, precaution, action"
+        },
+        {
+          "key": "a",
+          "def": "lonely, lonesome"
+        },
+        {
+          "key": "b",
+          "def": "doubtful, dubious, disbelieving"
+        },
+        {
+          "key": "c",
+          "def": "unite, join, combine"
+        },
+        {
+          "key": "d",
+          "def": "research, investigate, probe"
+        },
+        {
+          "key": "e",
+          "def": "acquainted"
+        },
+        {
+          "key": "a",
+          "def": "gather, collect, pile up, store"
+        },
+        {
+          "key": "b",
+          "def": "ground, territory"
+        },
+        {
+          "key": "c",
+          "def": "immediate, imperative"
+        },
+        {
+          "key": "d",
+          "def": "belief, opinion"
+        },
+        {
+          "key": "e",
+          "def": "unprejudiced, fair, impartial"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "subtle   a"
+        },
+        {
+          "id": 2,
+          "word": "succumb   b"
+        },
+        {
+          "id": 3,
+          "word": "summit   c"
+        },
+        {
+          "id": 4,
+          "word": "interval   d"
+        },
+        {
+          "id": 1,
+          "word": "staggering   a"
+        },
+        {
+          "id": 2,
+          "word": "stagnant   b"
+        },
+        {
+          "id": 3,
+          "word": "familiar   c"
+        },
+        {
+          "id": 4,
+          "word": "sceptical   d"
+        },
+        {
+          "id": 1,
+          "word": "unify   a"
+        },
+        {
+          "id": 2,
+          "word": "urgent   b"
+        },
+        {
+          "id": 3,
+          "word": "unbiased   c"
+        },
+        {
+          "id": 4,
+          "word": "accumulate   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "continuity"
+        },
+        {
+          "key": "b",
+          "def": "bottom"
+        },
+        {
+          "key": "c",
+          "def": "rebel against"
+        },
+        {
+          "key": "d",
+          "def": "direct"
+        },
+        {
+          "key": "a",
+          "def": "strange"
+        },
+        {
+          "key": "b",
+          "def": "undoubtful"
+        },
+        {
+          "key": "c",
+          "def": "familiar, usual"
+        },
+        {
+          "key": "d",
+          "def": "active"
+        },
+        {
+          "key": "a",
+          "def": "trivial, insignificant"
+        },
+        {
+          "key": "b",
+          "def": "seperate"
+        },
+        {
+          "key": "c",
+          "def": "disperse, dissipate, scatter"
+        },
+        {
+          "key": "d",
+          "def": "prejudiced"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Phrasal verb olarak eş anlamlısı “carry out” ve Türkçesi “uygulamak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "unify",
+          "B": "implement",
+          "C": "explore",
+          "D": "give in",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “precaution” ve Türkçesi “önlem” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "meausure",
+          "B": "decadence",
+          "C": "tenet",
+          "D": "exploration",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “lonesome” ve Türkçesi “yalnız” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "sceptical",
+          "B": "undoubtful",
+          "C": "urgent",
+          "D": "familiar",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “territory” ve Türkçesi “bölge, alan” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "tenet",
+          "B": "belief",
+          "C": "step",
+          "D": "terrain",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “inactive” ve Türkçesi “hareketsiz, sabit” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "delicate",
+          "B": "staggering",
+          "C": "stagnant",
+          "D": "acquainted",
+          "E": "subtle"
+        }
+      }
+    ]
+  }
+}

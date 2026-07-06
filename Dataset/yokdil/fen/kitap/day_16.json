@@ -1,0 +1,667 @@
+{
+  "day": 16,
+  "words": [
+    {
+      "word": "NOURISH",
+      "type": "v",
+      "turkish": "Beslemek",
+      "sentence_en": "Children need plenty of good fresh food to nourish them.",
+      "sentence_tr": "Çocukların beslenmeleri için bol miktarda taze yiyeceğe ihtiyaçları vardır.",
+      "synonyms": [
+        "Feed",
+        "nurture"
+      ],
+      "antonyms": [
+        "Starve"
+      ],
+      "other_forms": "Nourishement (n), nourishing (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Children need plenty of good fresh food to ________ them."
+    },
+    {
+      "word": "PASSION",
+      "type": "n",
+      "turkish": "Tutku, hırs",
+      "sentence_en": "Football arouses a good deal of passion among its supporters.",
+      "sentence_tr": "Futbol, taraftarlar arasında çok fazla tutku yaratır.",
+      "synonyms": [
+        "Love",
+        "desire",
+        "greed"
+      ],
+      "antonyms": [
+        "Hatred",
+        "anger"
+      ],
+      "other_forms": "Passionate (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Football arouses a good deal of ________ among its supporters."
+    },
+    {
+      "word": "PENETRATE",
+      "type": "v",
+      "turkish": "Girmek, nüfuz etmek",
+      "sentence_en": "Amazingly, the bullet did not penetrate his brain.",
+      "sentence_tr": "Şaşırtıcı şekilde, mermi beynine girmedi.",
+      "synonyms": [
+        "Enter",
+        "go in"
+      ],
+      "antonyms": [
+        "Exit",
+        "leave",
+        "set off"
+      ],
+      "other_forms": "Penetration (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Amazingly, the bullet did not ________ his brain."
+    },
+    {
+      "word": "PERENNIALLY",
+      "type": "adv",
+      "turkish": "Sürekli, kalıcı",
+      "sentence_en": "We perennially face the problem of not having enough money.",
+      "sentence_tr": "Sürekli yeteri kadar paraya sahip olamama sıkıntısıyla yüz yüzeyiz.",
+      "synonyms": [
+        "Constantly",
+        "always"
+      ],
+      "antonyms": [
+        "Temporarily"
+      ],
+      "other_forms": "Perennial (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "We ________ face the problem of not having enough money."
+    },
+    {
+      "word": "RECURRENCE",
+      "type": "n",
+      "turkish": "(hastalık) depreşme, nüksetme, tekrarlama, yineleme",
+      "sentence_en": "The doctor told him to go to the hospital if there was a recurrence of his symptoms.",
+      "sentence_tr": "Doktor ona eğer belirtileri nüksederse hastaneye gitmesini söyledi.",
+      "synonyms": [
+        "Reappearance",
+        "repetition"
+      ],
+      "antonyms": [],
+      "other_forms": "Recur (v) ---PAGE_114--- 107 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The doctor told him to go to the hospital if there was a ________ of his symptoms."
+    },
+    {
+      "word": "SUCCEED",
+      "type": "v",
+      "turkish": "İzlemek, yerini almak",
+      "sentence_en": "During the succeeding months he began to wonder if he had made a mistake.",
+      "sentence_tr": "Takip eden aylar içerisinde hata yapıp yapmadığını merak etmeye başladı.",
+      "synonyms": [
+        "Follow",
+        "come after"
+      ],
+      "antonyms": [],
+      "other_forms": "Succeeding (adj), succession (n), successive (adj), successively (adv) FAR-",
+      "priority": "Yüksek Sıklık",
+      "sentence_blanked": "During the ________ing months he began to wonder if he had made a mistake."
+    },
+    {
+      "word": "FETCHED",
+      "type": "adj",
+      "turkish": "İnanılmaz, gerçekten uzak",
+      "sentence_en": "He told us a far-fetched story.",
+      "sentence_tr": "Bize inanılmaz bir hikaye anlattı.",
+      "synonyms": [
+        "Incredible",
+        "fantastic",
+        "unbelievable"
+      ],
+      "antonyms": [
+        "Credible"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He told us a far-________ story."
+    },
+    {
+      "word": "INGENIOUS",
+      "type": "adj",
+      "turkish": "Hünerli, marifetli, akıllı",
+      "sentence_en": "Johnny is so ingenious. He can make most remarkable sculptures from the most ordinary materials.",
+      "sentence_tr": "Johny çok marifetli. En sıradan malzemelerle bile çok güzel heykeller yapabiliyor.",
+      "synonyms": [
+        "Clever",
+        "creative",
+        "highly skilled"
+      ],
+      "antonyms": [
+        "Unskillful",
+        "uninventive"
+      ],
+      "other_forms": "Ingenuity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Johnny is so ________. He can make most remarkable sculptures from the most ordinary materials."
+    },
+    {
+      "word": "INHABIT",
+      "type": "v",
+      "turkish": "Yaşamak",
+      "sentence_en": "These remote islands are inhabited only by birds and small animals.",
+      "sentence_tr": "Bu uzak adalarda sadece kuşlar ve küçük hayvanlar yaşar.",
+      "synonyms": [
+        "Live on"
+      ],
+      "antonyms": [],
+      "other_forms": "Inhabitant (n), inhabitable (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "These remote islands are ________ed only by birds and small animals."
+    },
+    {
+      "word": "DETECT",
+      "type": "v",
+      "turkish": "Farketmek, tespit etmek",
+      "sentence_en": "Some sounds cannot be detected by the human ear.",
+      "sentence_tr": "Bazı sesler insan kulağıyla duyulamaz.",
+      "synonyms": [
+        "Notice",
+        "discover"
+      ],
+      "antonyms": [
+        "Ignore"
+      ],
+      "other_forms": "Detection (n), detectable (adj), detection (n), detector (n) ---PAGE_115--- 108 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "Some sounds cannot be ________ed by the human ear."
+    },
+    {
+      "word": "UPHEAVAL",
+      "type": "n",
+      "turkish": "Ani değişiklik, kargaşa, isyan, baş kaldırı",
+      "sentence_en": "The long garbage strike in 1970 caused much political upheaval.",
+      "sentence_tr": "1970’deki uzun çöp grevi büyük politik kargaşaya sebep oldu.",
+      "synonyms": [
+        "Uprising",
+        "rebellion",
+        "disruption",
+        "turmoil"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The long garbage strike in 1970 caused much political ________."
+    },
+    {
+      "word": "UTMOST",
+      "type": "adj",
+      "turkish": "En üstün, azami",
+      "sentence_en": "Speed was of the utmost importance.",
+      "sentence_tr": "Hız en önemli şeydi.",
+      "synonyms": [
+        "Greatest",
+        "maximum",
+        "highest"
+      ],
+      "antonyms": [
+        "Minor",
+        "lowly"
+      ],
+      "other_forms": "Utmost (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Speed was of the ________ importance."
+    },
+    {
+      "word": "WRANGLE",
+      "type": "v",
+      "turkish": "Tartışmak",
+      "sentence_en": "They had been wrangling with the authorities about/over parking spaces.",
+      "sentence_tr": "Yetkililerle park alanları yüzünden tartışıyorlardı.",
+      "synonyms": [
+        "Dispute",
+        "argue"
+      ],
+      "antonyms": [],
+      "other_forms": "Wrangle (n), wrangling (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "They had been wrangling with the authorities about/over parking spaces. (________)"
+    },
+    {
+      "word": "WITNESS",
+      "type": "v",
+      "turkish": "Tanık olmak, görmek",
+      "sentence_en": "They were staying in the capital at the time of the riots and witnessed several street battles.",
+      "sentence_tr": "Ayaklanmalar sırasında başkentte kalıyorlardı ve birkaç sokak çatışmasına tanık oldular.",
+      "synonyms": [
+        "See",
+        "observe"
+      ],
+      "antonyms": [
+        "Stand against",
+        "oppose",
+        "confront ---PAGE_116--- 109 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr"
+      ],
+      "other_forms": "Witness (n) YIELD to/in (v) Türkçe Karşılığı : Boyun eğmek, teslim olmak Örnek Cümle : Despite renewed pressure to give up the occupied territory, they will not yield. Çevirisi : İşgal ettikleri bölgeden vazgeçmeleri için yeniden başlayan baskılara ragmen boyun eğmeyecekler. Eş ya da Yakın Anlamlılar : Give in to, accept Zıt Anlamlılar : Stand against, oppose, confront ---PAGE_116--- 109 60 GÜNDE YDS KELİMELERİ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "They were staying in the capital at the time of the riots and ________ed several street battles."
+    },
+    {
+      "word": "YELL",
+      "type": "v",
+      "turkish": "Bağırmak, haykırmak",
+      "sentence_en": "Our neighbours were yelling to each other this morning.",
+      "sentence_tr": "Komşularımız bu sabah birbirlerine bağırıyorlardı.",
+      "synonyms": [
+        "Shout",
+        "cry",
+        "scream"
+      ],
+      "antonyms": [
+        "Whisper"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Our neighbours were ________ing to each other this morning."
+    },
+    {
+      "word": "SENSELESS",
+      "type": "adj",
+      "turkish": "Anlamsız",
+      "sentence_en": "A senseless argument was started by the chairman.",
+      "sentence_tr": "Başkan tarafından anlamsız bir münakaşa başlatıldı.",
+      "synonyms": [
+        "Pointless",
+        "meaningless"
+      ],
+      "antonyms": [
+        "Meaningful",
+        "sensible"
+      ],
+      "other_forms": "Sense (n), sensible (adj), sensibly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "A ________ argument was started by the chairman."
+    },
+    {
+      "word": "SENTIMENT",
+      "type": "n",
+      "turkish": "Duygu, his, aşırı duyarlılık, fikir, düşünce",
+      "sentence_en": "Nationalist sentiment has increased in the area since the bombing.",
+      "sentence_tr": "Bombalamadan beri bölgede milli duyarlılık arttı.",
+      "synonyms": [
+        "Feeling"
+      ],
+      "antonyms": [],
+      "other_forms": "Sentimental (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Nationalist ________ has increased in the area since the bombing."
+    },
+    {
+      "word": "SEVER",
+      "type": "v",
+      "turkish": "Bağını kopartmak, kesmek, ayırmak",
+      "sentence_en": "Electricity cables have been severed by the storm.",
+      "sentence_tr": "Elektrik telleri fırtına nedeniyle koptu.",
+      "synonyms": [
+        "Cut off",
+        "break"
+      ],
+      "antonyms": [
+        "Join",
+        "connect"
+      ],
+      "other_forms": "Severance (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Electricity cables have been ________ed by the storm."
+    },
+    {
+      "word": "ACCOMPLISH",
+      "type": "v",
+      "turkish": "Başarmak",
+      "sentence_en": "He accomplished the mission in less than five minutes.",
+      "sentence_tr": "Beş dakikadan kısa bir sürede işi başarıyla tamamladı.",
+      "synonyms": [
+        "Achieve",
+        "perform",
+        "complete",
+        "succeed in doing"
+      ],
+      "antonyms": [
+        "Fail"
+      ],
+      "other_forms": "Accomplished (adj), accomplishment (n) ---PAGE_117--- 110 SUAT GÜRCAN & DIRVAN GÜRBÜZ www.iremyayincilik.com.tr www.iremyayincilik.com.tr",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He ________ed the mission in less than five minutes."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "nourish   a"
+        },
+        {
+          "id": 2,
+          "word": "passion   b"
+        },
+        {
+          "id": 3,
+          "word": "penetrate   c"
+        },
+        {
+          "id": 4,
+          "word": "perennially   d"
+        },
+        {
+          "id": 5,
+          "word": "recurrence   e"
+        },
+        {
+          "id": 1,
+          "word": "succeed   a"
+        },
+        {
+          "id": 2,
+          "word": "far"
+        },
+        {
+          "id": 3,
+          "word": "ingenious   c"
+        },
+        {
+          "id": 4,
+          "word": "inhabit   d"
+        },
+        {
+          "id": 5,
+          "word": "detect   e"
+        },
+        {
+          "id": 1,
+          "word": "upheaval   a"
+        },
+        {
+          "id": 2,
+          "word": "utmost   b"
+        },
+        {
+          "id": 3,
+          "word": "wrangle   c"
+        },
+        {
+          "id": 4,
+          "word": "witness   d"
+        },
+        {
+          "id": 5,
+          "word": "yield to   e"
+        },
+        {
+          "id": 1,
+          "word": "yell   a"
+        },
+        {
+          "id": 2,
+          "word": "senseless   b"
+        },
+        {
+          "id": 3,
+          "word": "sentiment   c"
+        },
+        {
+          "id": 4,
+          "word": "sever   d"
+        },
+        {
+          "id": 5,
+          "word": "accomplish   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "enter, go in"
+        },
+        {
+          "key": "b",
+          "def": "constantly, always"
+        },
+        {
+          "key": "c",
+          "def": "reappearance, repetition"
+        },
+        {
+          "key": "d",
+          "def": "love, desire, greed"
+        },
+        {
+          "key": "e",
+          "def": "feed, nurture"
+        },
+        {
+          "key": "a",
+          "def": "live on"
+        },
+        {
+          "key": "b",
+          "def": "clever, creative, highly skilled"
+        },
+        {
+          "key": "c",
+          "def": "notice, discover"
+        },
+        {
+          "key": "d",
+          "def": "follow, come after"
+        },
+        {
+          "key": "e",
+          "def": "incredible, fantastic, unbelievable"
+        },
+        {
+          "key": "a",
+          "def": "give in to, accept"
+        },
+        {
+          "key": "b",
+          "def": "dispute, argue"
+        },
+        {
+          "key": "c",
+          "def": "uprising, rebellion , disruption, turmoil"
+        },
+        {
+          "key": "d",
+          "def": "see, observe"
+        },
+        {
+          "key": "e",
+          "def": "greatest, maximum, highest"
+        },
+        {
+          "key": "a",
+          "def": "pointless, meaningless"
+        },
+        {
+          "key": "b",
+          "def": "cut off, break"
+        },
+        {
+          "key": "c",
+          "def": "achieve, succeed in doing"
+        },
+        {
+          "key": "d",
+          "def": "shout, cry, scream"
+        },
+        {
+          "key": "e",
+          "def": "feeling"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "nourish   a"
+        },
+        {
+          "id": 2,
+          "word": "passion   b"
+        },
+        {
+          "id": 3,
+          "word": "penetrate   c"
+        },
+        {
+          "id": 4,
+          "word": "perennially   d"
+        },
+        {
+          "id": 1,
+          "word": "far"
+        },
+        {
+          "id": 2,
+          "word": "ingenious   b"
+        },
+        {
+          "id": 3,
+          "word": "detect   c"
+        },
+        {
+          "id": 4,
+          "word": "utmost   d"
+        },
+        {
+          "id": 5,
+          "word": "yield to   e"
+        },
+        {
+          "id": 1,
+          "word": "yell   a"
+        },
+        {
+          "id": 2,
+          "word": "senseless   b"
+        },
+        {
+          "id": 3,
+          "word": "sever   c"
+        },
+        {
+          "id": 4,
+          "word": "accomplish   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "temporarily"
+        },
+        {
+          "key": "b",
+          "def": "exit, leave, set off"
+        },
+        {
+          "key": "c",
+          "def": "hatred, anger"
+        },
+        {
+          "key": "d",
+          "def": "starve"
+        },
+        {
+          "key": "a",
+          "def": "unskillful, uninventive"
+        },
+        {
+          "key": "b",
+          "def": "minor, lowly"
+        },
+        {
+          "key": "c",
+          "def": "stand against, oppose, confront"
+        },
+        {
+          "key": "d",
+          "def": "credible"
+        },
+        {
+          "key": "e",
+          "def": "ignore"
+        },
+        {
+          "key": "a",
+          "def": "join, connect"
+        },
+        {
+          "key": "b",
+          "def": "fail"
+        },
+        {
+          "key": "c",
+          "def": "whisper"
+        },
+        {
+          "key": "d",
+          "def": "meaningful, sensible"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “constantly” ve Türkçesi “sürekli olarak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "successively",
+          "B": "sentimentally",
+          "C": "sensibly",
+          "D": "perennially",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “repetition” ve Türkçesi “nüksetme, yineleme” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "succeed",
+          "B": "penetrate",
+          "C": "recurrence",
+          "D": "accomplish",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Hem “başarmak” hem de “takip etmek” anlamına gelen kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "accomplish",
+          "B": "complete",
+          "C": "achieve",
+          "D": "witness",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “give in” ve Türkçesi “boyun eğmek” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "sever",
+          "B": "yield",
+          "C": "yell",
+          "D": "whisper",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Eş anlamlısı “revolt” ve Türkçesi “ayaklanma” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "upheaval",
+          "B": "ingenuity",
+          "C": "detection",
+          "D": "passion",
+          "E": "recurrence"
+        }
+      }
+    ]
+  }
+}

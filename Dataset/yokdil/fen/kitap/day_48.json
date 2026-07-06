@@ -1,0 +1,663 @@
+{
+  "day": 48,
+  "words": [
+    {
+      "word": "QUALIFY",
+      "type": "v",
+      "turkish": "Hak kazanmak/kazandırmak, hafifletmek, nitelemek",
+      "sentence_en": "She hopes to qualify as a lawyer at the end of the year.",
+      "sentence_tr": "Yıl sonunda avukat olmaya hak kazanmayı umud ediyor.",
+      "synonyms": [
+        "Certify",
+        "entitle",
+        "suit",
+        "fit",
+        "prepare"
+      ],
+      "antonyms": [
+        "Disqualify"
+      ],
+      "other_forms": "Qualification (n), qualified (adj), qualifier (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "She hopes to ________ as a lawyer at the end of the year."
+    },
+    {
+      "word": "TACTFUL",
+      "type": "adj",
+      "turkish": "Nazik, incelik içeren, nazik ve anlayışlı",
+      "sentence_en": "Mentioning his baldness wasn't very tactful.",
+      "sentence_tr": "Onun kelliğinden bahsetmen çok hoş değildi.",
+      "synonyms": [
+        "Sensitive",
+        "thoughtful"
+      ],
+      "antonyms": [
+        "Rude"
+      ],
+      "other_forms": "Tactfully (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Mentioning his baldness wasn't very ________."
+    },
+    {
+      "word": "SUSTAIN",
+      "type": "v",
+      "turkish": "Sürdürmek",
+      "sentence_en": "The economy looks set to sustain its growth into next year as well.",
+      "sentence_tr": "Ekonomi gelişimini gelecek yıl da sürdürecek gibi görünüyor.",
+      "synonyms": [
+        "Maintain",
+        "keep"
+      ],
+      "antonyms": [
+        "End"
+      ],
+      "other_forms": "Sustainable (adj) TAKE sth.",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The economy looks set to ________ its growth into next year as well."
+    },
+    {
+      "word": "INTO ACCOUNT",
+      "type": "v",
+      "turkish": "Gözönüne almak, hesaba katmak",
+      "sentence_en": "You should take the difficulties of a private business into account before you embark on.",
+      "sentence_tr": "Başlamadan önce özel bir girişimin zorluklarını göz önüne almalısın.",
+      "synonyms": [
+        "Consider"
+      ],
+      "antonyms": [
+        "Ignore"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "You should take the difficulties of a private business ________ before you embark on."
+    },
+    {
+      "word": "PREREQUISITE",
+      "type": "n",
+      "turkish": "Önkoşul, önceden gerekli olan şey",
+      "sentence_en": "Passing a written exam is a prerequisite for taking the advanced course.",
+      "sentence_tr": "Yazılı bir sınavı geçmek ileri seviyedeki kursu almak için bir önkoşuldur.",
+      "synonyms": [
+        "Requirement",
+        "precondition ---PAGE_338--- 331 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ"
+      ],
+      "antonyms": [],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Passing a written exam is a ________ for taking the advanced course."
+    },
+    {
+      "word": "SPORADIC",
+      "type": "adj",
+      "turkish": "Aralıklı, arasıra meydana gelen",
+      "sentence_en": "More than 100 people have been killed this year in sporadic outbursts of ethnic violence.",
+      "sentence_tr": "Belli aralıklarla meydana gelen etnik şiddetten kaynaklanan olaylarda bu yıl 100’den fazla insan öldü.",
+      "synonyms": [
+        "Irregular",
+        "intermittent"
+      ],
+      "antonyms": [
+        "Regular",
+        "permanent"
+      ],
+      "other_forms": "Sporadically (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "More than 100 people have been killed this year in ________ outbursts of ethnic violence."
+    },
+    {
+      "word": "FAIRLY",
+      "type": "adv",
+      "turkish": "Adil şekilde",
+      "sentence_en": "The money was not distributed fairly.",
+      "sentence_tr": "Para adil şekilde dağıtılmadı.",
+      "synonyms": [
+        "Equitably",
+        "justly"
+      ],
+      "antonyms": [
+        "Subjectively"
+      ],
+      "other_forms": "Fairly (adj), fair (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The money was not distributed ________."
+    },
+    {
+      "word": "GRIEF",
+      "type": "n",
+      "turkish": "Üzüntü, kader",
+      "sentence_en": "Her grief at her son's death was terrible.",
+      "sentence_tr": "Oğlunun ölümüne olan üzüntüsü çok fazlaydı.",
+      "synonyms": [
+        "Sorrow",
+        "sadness"
+      ],
+      "antonyms": [
+        "Joy",
+        "delight",
+        "happiness"
+      ],
+      "other_forms": "Grievance (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Her ________ at her son's death was terrible."
+    },
+    {
+      "word": "MALIGN",
+      "type": "adj",
+      "turkish": "Kötü",
+      "sentence_en": "Foreign domination had a malign influence on local politics.",
+      "sentence_tr": "Yabancı egemenliğinin iç politika üzerinde negatif bir etkisi oldu.",
+      "synonyms": [
+        "Bad",
+        "negative"
+      ],
+      "antonyms": [
+        "Good",
+        "positive",
+        "benign"
+      ],
+      "other_forms": "Malignant (adj), malign (v), malignity (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Foreign domination had a ________ influence on local politics."
+    },
+    {
+      "word": "OBEY",
+      "type": "v",
+      "turkish": "Uymak",
+      "sentence_en": "The soldiers refused to obey the orders.",
+      "sentence_tr": "Askerler emirlere itaat etmeyi reddetti.",
+      "synonyms": [
+        "Abide by",
+        "comply with"
+      ],
+      "antonyms": [
+        "Disobey",
+        "resist",
+        "challenge",
+        "violate"
+      ],
+      "other_forms": "Obedience (n), obedient (adj) ---PAGE_339--- 332 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "The soldiers refused to ________ the orders."
+    },
+    {
+      "word": "LOYAL",
+      "type": "adj",
+      "turkish": "Sadık",
+      "sentence_en": "Even if all her other friends deserted her, Mary remained loyal.",
+      "sentence_tr": "Tüm arkadaşları onu terk ettiğinde bile, Mary onlara sadık kaldı.",
+      "synonyms": [
+        "Faithful"
+      ],
+      "antonyms": [
+        "Disloyal Condemn (v) Türkçe Karşılığı : Kınamak",
+        "yermek Örnek Cümle : The terrorist actions have been condemned. Çevirisi : Terör eylemleri kınandı. Eş ya da Yakın Anlamlılar : Denounce Zıt Anlamlılar : Praise",
+        "approve",
+        "commend"
+      ],
+      "other_forms": "Loyalty (n) loyally (adv) Eş ya da Yakın Anlamlılar : Faithful Zıt Anlamlılar : Disloyal Condemn (v) Türkçe Karşılığı : Kınamak, yermek Örnek Cümle : The terrorist actions have been condemned. Çevirisi : Terör eylemleri kınandı. Eş ya da Yakın Anlamlılar : Denounce Zıt Anlamlılar : Praise, approve, commend Diğer Halleri : Condemnable (adj), condemnation (n) Detriment (n) Türkçe Karşılığı : Zarar, ziyan Örnek Cümle : Are you sure that I can follow this diet without detriment to my health? Çevirisi : Bu diyeti sağlığıma zarar vermeden uygulayabileceğime emin misiniz? Eş ya da Yakın Anlamlılar : Harm, damage Zıt Anlamlılar : Benefit, remedy, improvement Diğer Halleri : Detrimental (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Even if all her other friends deserted her, Mary remained ________."
+    },
+    {
+      "word": "EMPIRICAL",
+      "type": "adj",
+      "turkish": "Deneysel",
+      "sentence_en": "This theory needs to be backed up with solid empirical evidence.",
+      "sentence_tr": "Bu teorinin sağlam, deneysel kanıtlarla desteklenmesi gerekiyor.",
+      "synonyms": [
+        "Experimental",
+        "empirical"
+      ],
+      "antonyms": [],
+      "other_forms": "Empirically (adv), empiricism (n), empiricist (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This theory needs to be backed up with solid ________ evidence."
+    },
+    {
+      "word": "EVIDENCE",
+      "type": "n",
+      "turkish": "Kanıt, delil",
+      "sentence_en": "The police have found no evidence of a terrorist link with the murder.",
+      "sentence_tr": "Polis cinayetle ilgili terörist bağlantısının olduğuna dair hiç bir kanıt bulamadı.",
+      "synonyms": [
+        "Proof"
+      ],
+      "antonyms": [
+        "Disproof",
+        "concealment"
+      ],
+      "other_forms": "Evidenced (adj) ---PAGE_340--- 333 www.iremyayincilik.com.tr www.iremyayincilik.com.tr 60 GÜNDE YDS KELİMELERİ",
+      "priority": "Çok Yüksek Sıklık",
+      "sentence_blanked": "The police have found no ________ of a terrorist link with the murder."
+    },
+    {
+      "word": "SENSIBLE",
+      "type": "adj",
+      "turkish": "Akıllı, mantıklı, aklı başında, akla uygun",
+      "sentence_en": "He made sensible decisions despite the pressures.",
+      "sentence_tr": "Baskılara rağmen mantıklı kararlar verdi.",
+      "synonyms": [
+        "Reasonable",
+        "rational",
+        "logical"
+      ],
+      "antonyms": [
+        "Unreasonable",
+        "illogical",
+        "absurd"
+      ],
+      "other_forms": "Sensibly (adv)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He made ________ decisions despite the pressures."
+    },
+    {
+      "word": "WEALTH",
+      "type": "n",
+      "turkish": "Zenginlik, servet",
+      "sentence_en": "During a successful business career, she accumulated a great amount of wealth.",
+      "sentence_tr": "Başarılı meslek hayatı boyunca, büyük miktarda servet biriktirdi.",
+      "synonyms": [
+        "Prosperity",
+        "affluence"
+      ],
+      "antonyms": [
+        "Poverty",
+        "indigence"
+      ],
+      "other_forms": "Wealthy (adj)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "During a successful business career, she accumulated a great amount of ________."
+    },
+    {
+      "word": "TORTURE",
+      "type": "v",
+      "turkish": "İşkence yapmak",
+      "sentence_en": "Half of the prisoners died after torture and starvation.",
+      "sentence_tr": "İşkence ve açlıktan sonra mahkumların yarısı öldü.",
+      "synonyms": [
+        "Torment",
+        "make suffer"
+      ],
+      "antonyms": [],
+      "other_forms": "Torture (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "Half of the prisoners died after ________ and starvation."
+    },
+    {
+      "word": "VERSATILE",
+      "type": "adj",
+      "turkish": "Çok yönlü",
+      "sentence_en": "He's a very versatile young actor who's as happy in horror films as he is in TV comedies.",
+      "sentence_tr": "TV komedilerinde olduğu kadar korku filmlerinde de mutlu olan çok yönlü genç bir oyuncudur.",
+      "synonyms": [
+        "Many-skilled",
+        "ingenious"
+      ],
+      "antonyms": [],
+      "other_forms": "Versatility (n)",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "He's a very ________ young actor who's as happy in horror films as he is in TV comedies."
+    },
+    {
+      "word": "UTILITY",
+      "type": "n",
+      "turkish": "Yararlılık, fayda",
+      "sentence_en": "This car’s basic utility lies in being able to drive where other vehicles can't go.",
+      "sentence_tr": "Bu aracın asıl faydası diğer araçların gidemeyeceği yerlerde kullanılabilmesidir.",
+      "synonyms": [
+        "Usefulness",
+        "effectiveness"
+      ],
+      "antonyms": [
+        "Futility",
+        "uselessness ---PAGE_341--- 334 www.iremyayincilik.com.tr www.iremyayincilik.com.tr SUAT GÜRCAN & DIRVAN GÜRBÜZ"
+      ],
+      "other_forms": "",
+      "priority": "Orta Sıklık",
+      "sentence_blanked": "This car’s basic ________ lies in being able to drive where other vehicles can't go."
+    }
+  ],
+  "exercises": {
+    "synonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "qualify   a"
+        },
+        {
+          "id": 2,
+          "word": "tactful   b"
+        },
+        {
+          "id": 3,
+          "word": "sustain   c"
+        },
+        {
+          "id": 4,
+          "word": "take into account   d"
+        },
+        {
+          "id": 5,
+          "word": "prerequisite   e"
+        },
+        {
+          "id": 1,
+          "word": "sporadic   a"
+        },
+        {
+          "id": 2,
+          "word": "fairly   b"
+        },
+        {
+          "id": 3,
+          "word": "grief   c"
+        },
+        {
+          "id": 4,
+          "word": "malign   d"
+        },
+        {
+          "id": 5,
+          "word": "obey   e"
+        },
+        {
+          "id": 1,
+          "word": "loyal   a"
+        },
+        {
+          "id": 2,
+          "word": "condemn   b"
+        },
+        {
+          "id": 3,
+          "word": "detriment   c"
+        },
+        {
+          "id": 4,
+          "word": "empirical   d"
+        },
+        {
+          "id": 5,
+          "word": "evidence   e"
+        },
+        {
+          "id": 1,
+          "word": "sensible   a"
+        },
+        {
+          "id": 2,
+          "word": "wealth   b"
+        },
+        {
+          "id": 3,
+          "word": "torture   c"
+        },
+        {
+          "id": 4,
+          "word": "versatile   d"
+        },
+        {
+          "id": 5,
+          "word": "utility   e"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "consider"
+        },
+        {
+          "key": "b",
+          "def": "maintain, keep"
+        },
+        {
+          "key": "c",
+          "def": "requirement, precondition"
+        },
+        {
+          "key": "d",
+          "def": "certify, entitle, suit, fit, prepare"
+        },
+        {
+          "key": "e",
+          "def": "sensitive, thoughtful"
+        },
+        {
+          "key": "a",
+          "def": "sorrow, sadness"
+        },
+        {
+          "key": "b",
+          "def": "bad, negative"
+        },
+        {
+          "key": "c",
+          "def": "abide by, comply with"
+        },
+        {
+          "key": "d",
+          "def": "equitably, justly"
+        },
+        {
+          "key": "e",
+          "def": "irregular, intermittent"
+        },
+        {
+          "key": "a",
+          "def": "proof"
+        },
+        {
+          "key": "b",
+          "def": "harm, damage"
+        },
+        {
+          "key": "c",
+          "def": "faithful"
+        },
+        {
+          "key": "d",
+          "def": "experimental, empirical"
+        },
+        {
+          "key": "e",
+          "def": "denounce"
+        },
+        {
+          "key": "a",
+          "def": "prosperity, affluence"
+        },
+        {
+          "key": "b",
+          "def": "many"
+        },
+        {
+          "key": "c",
+          "def": "usefulness, effectiveness"
+        },
+        {
+          "key": "d",
+          "def": "reasonable, rational, logical"
+        },
+        {
+          "key": "e",
+          "def": "torment, make suffer"
+        }
+      ]
+    },
+    "antonym_matching": {
+      "left": [
+        {
+          "id": 1,
+          "word": "tactful   a"
+        },
+        {
+          "id": 2,
+          "word": "sustain   b"
+        },
+        {
+          "id": 3,
+          "word": "take into account   c"
+        },
+        {
+          "id": 4,
+          "word": "sporadic   d"
+        },
+        {
+          "id": 5,
+          "word": "fairly   e"
+        },
+        {
+          "id": 1,
+          "word": "grief   a"
+        },
+        {
+          "id": 2,
+          "word": "malign   b"
+        },
+        {
+          "id": 3,
+          "word": "obey   c"
+        },
+        {
+          "id": 4,
+          "word": "condemn   d"
+        },
+        {
+          "id": 5,
+          "word": "detriment   e"
+        },
+        {
+          "id": 1,
+          "word": "evidence   a"
+        },
+        {
+          "id": 2,
+          "word": "sensible   b"
+        },
+        {
+          "id": 3,
+          "word": "wealth   c"
+        },
+        {
+          "id": 4,
+          "word": "utility   d"
+        }
+      ],
+      "right": [
+        {
+          "key": "a",
+          "def": "subjectively"
+        },
+        {
+          "key": "b",
+          "def": "ignore"
+        },
+        {
+          "key": "c",
+          "def": "rude"
+        },
+        {
+          "key": "d",
+          "def": "regular, permanent"
+        },
+        {
+          "key": "e",
+          "def": "end"
+        },
+        {
+          "key": "a",
+          "def": "good, positive, benign"
+        },
+        {
+          "key": "b",
+          "def": "praise, approve, commend"
+        },
+        {
+          "key": "c",
+          "def": "benefit, remedy, improvement"
+        },
+        {
+          "key": "d",
+          "def": "joy, delight, happiness"
+        },
+        {
+          "key": "e",
+          "def": "disobey, resist, challenge, violate"
+        },
+        {
+          "key": "a",
+          "def": "futility, uselessness"
+        },
+        {
+          "key": "b",
+          "def": "poverty, indigence"
+        },
+        {
+          "key": "c",
+          "def": "unreasonable, illogical, absurd"
+        },
+        {
+          "key": "d",
+          "def": "disproof, concealment"
+        }
+      ]
+    },
+    "multiple_choice": [
+      {
+        "id": 1,
+        "question": "Eş anlamlısı “entitle” ve Türkçesi “hak kazan (dır)mak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "condemn",
+          "B": "maintain",
+          "C": "qualify",
+          "D": "abide",
+          "E": ""
+        }
+      },
+      {
+        "id": 2,
+        "question": "Eş anlamlısı “consider” ve Türkçesi “hesaba katmak, dikkate almak” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "comply",
+          "B": "praise",
+          "C": "torture",
+          "D": "disobey",
+          "E": ""
+        }
+      },
+      {
+        "id": 3,
+        "question": "Eş anlamlısı “requirement” ve Türkçesi “ön koşul, gereklilik” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "prerequisite",
+          "B": "qualification",
+          "C": "grief",
+          "D": "malignity",
+          "E": ""
+        }
+      },
+      {
+        "id": 4,
+        "question": "Eş anlamlısı “reasonable” ve Türkçesi “mantıklı, makul” olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "sensitive",
+          "B": "illogical",
+          "C": "empirical",
+          "D": "sensible",
+          "E": ""
+        }
+      },
+      {
+        "id": 5,
+        "question": "Zıt anlamlısı “benefit” ve Türkçesi “zarar, ziyan olan kelime aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "remedy",
+          "B": "detriment",
+          "C": "concealment",
+          "D": "torment",
+          "E": "utility"
+        }
+      }
+    ]
+  }
+}
