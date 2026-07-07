@@ -1,0 +1,688 @@
+import React from 'react';
+import { Calendar, Star, Trophy, ArrowRight, Award } from 'lucide-react';
+
+const CampDashboard = ({
+  campType,
+  setCampType,
+  totalDone,
+  totalSupermaster,
+  selectedCategory,
+  currentDay,
+  completedDaysMap,
+  totalCampDays,
+  startDailyStudy,
+  setReportCardDay,
+  getAIAnalysis,
+  viewMode,
+  setViewMode,
+  selectedMonth,
+  setSelectedMonth,
+  selectedWeek,
+  setSelectedWeek,
+  grammarDoneCount,
+  currentGrammarDay,
+  grammarDoneMap,
+  startGrammarStudy,
+  grammarCampDb
+}) => {
+
+  const getMonthStats = (monthNum) => {
+    const start = (monthNum - 1) * 28 + 1;
+    const end = Math.min(monthNum * 28, totalCampDays);
+    const totalDaysInMonth = end - start + 1;
+
+    let completed = 0;
+    let totalScore = 0;
+    for (let d = start; d <= end; d++) {
+      if (completedDaysMap[d]) {
+        completed++;
+        totalScore += completedDaysMap[d].score || 0;
+      }
+    }
+    const avgScore = completed > 0 ? Math.round(totalScore / completed) : 0;
+    return { completed, totalDaysInMonth, avgScore };
+  };
+
+  const getWeekStats = (weekNum) => {
+    const start = (weekNum - 1) * 7 + 1;
+    const end = Math.min(weekNum * 7, totalCampDays);
+    const totalDaysInWeek = end - start + 1;
+
+    let completed = 0;
+    let totalScore = 0;
+    for (let d = start; d <= end; d++) {
+      if (completedDaysMap[d]) {
+        completed++;
+        totalScore += completedDaysMap[d].score || 0;
+      }
+    }
+    const avgScore = completed > 0 ? Math.round(totalScore / completed) : 0;
+    return { completed, totalDaysInWeek, avgScore };
+  };
+
+  const renderDayItem = (dayNum) => {
+    const completedObj = completedDaysMap[dayNum];
+    const isCompleted = !!completedObj;
+    const isPassed = completedObj ? completedObj.isPassed : false;
+    const score = completedObj ? completedObj.score : null;
+
+    const isActive = dayNum === currentDay;
+    const isMonthlyCamp = (dayNum % 28 === 0) || (dayNum === totalCampDays);
+    const isSecCamp = !isMonthlyCamp && ((dayNum % 7 === 0) || (dayNum === totalCampDays));
+    const secCampNum = Math.ceil(dayNum / 7);
+    const monthlyCampNum = Math.ceil(dayNum / 28);
+
+    let border = isMonthlyCamp 
+      ? '1.5px solid rgba(239, 68, 68, 0.4)' 
+      : (isSecCamp ? '1.5px solid rgba(251, 191, 36, 0.4)' : '1px solid rgba(255, 255, 255, 0.06)');
+    let bg = isMonthlyCamp 
+      ? 'rgba(239, 68, 68, 0.02)' 
+      : (isSecCamp ? 'rgba(251, 191, 36, 0.02)' : 'rgba(255, 255, 255, 0.02)');
+    let badgeText = 'Çalışma Başlatılmadı';
+    let badgeBg = 'rgba(255, 255, 255, 0.05)';
+    let badgeColor = '#94a3b8';
+
+    if (isCompleted) {
+      if (isPassed) {
+        bg = isMonthlyCamp 
+          ? 'rgba(239, 68, 68, 0.06)' 
+          : (isSecCamp ? 'rgba(251, 191, 36, 0.06)' : 'rgba(16, 185, 129, 0.05)');
+        border = isMonthlyCamp 
+          ? '1.5px solid rgba(239, 68, 68, 0.7)' 
+          : (isSecCamp ? '1.5px solid rgba(251, 191, 36, 0.7)' : '1px solid rgba(16, 185, 129, 0.25)');
+        badgeText = `Başarılı (%${score})`;
+        badgeBg = 'rgba(16, 185, 129, 0.15)';
+        badgeColor = '#34d399';
+      } else {
+        bg = 'rgba(239, 68, 68, 0.05)';
+        border = '1px solid rgba(239, 68, 68, 0.25)';
+        badgeText = `Başarısız (%${score})`;
+        badgeBg = 'rgba(239, 68, 68, 0.15)';
+        badgeColor = '#f87171';
+      }
+    } else if (isActive) {
+      bg = isMonthlyCamp 
+        ? 'rgba(239, 68, 68, 0.08)' 
+        : (isSecCamp ? 'rgba(251, 191, 36, 0.08)' : 'rgba(99, 102, 241, 0.05)');
+      border = isMonthlyCamp 
+        ? '1.5px solid rgba(239, 68, 68, 0.9)' 
+        : (isSecCamp ? '1.5px solid rgba(251, 191, 36, 0.9)' : '1.5px solid rgba(99, 102, 241, 0.4)');
+      badgeText = 'Sıradaki Hedef';
+      badgeBg = isMonthlyCamp 
+        ? 'rgba(239, 68, 68, 0.15)' 
+        : (isSecCamp ? 'rgba(251, 191, 36, 0.15)' : 'rgba(99, 102, 241, 0.15)');
+      badgeColor = isMonthlyCamp 
+        ? '#f87171' 
+        : (isSecCamp ? '#fbbf24' : '#a5b4fc');
+    }
+
+    const dayName = isMonthlyCamp 
+      ? `Aylık Genel Test ${monthlyCampNum} 🏆` 
+      : (isSecCamp ? `Haftanın Kampı ${secCampNum} 🏆` : `${dayNum}. Gün Akademik Kelimeleri`);
+    const dayDesc = isMonthlyCamp 
+      ? `${monthlyCampNum}. Ay Sonu Genel Değerlendirme Testi` 
+      : (isSecCamp ? `${secCampNum}. Hafta Sonu Genel Bölüm Tekrarı` : `Spaced Repetition & 20 Seçilmiş Kelime Kartı`);
+
+    return (
+      <div
+        key={dayNum}
+        onClick={() => {
+          if (isCompleted) {
+            setReportCardDay(dayNum);
+          } else {
+            startDailyStudy(dayNum);
+          }
+        }}
+        style={{
+          background: bg,
+          border: border,
+          borderRadius: '16px',
+          padding: '16px 20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          cursor: 'pointer',
+          transition: 'all 0.2s',
+          gap: '12px',
+          boxShadow: isMonthlyCamp 
+            ? '0 0 15px rgba(239, 68, 68, 0.08)' 
+            : (isSecCamp ? '0 0 15px rgba(251, 191, 36, 0.08)' : 'none')
+        }}
+        className="hover-card"
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            borderRadius: '12px', 
+            background: isMonthlyCamp 
+              ? 'rgba(239, 68, 68, 0.12)' 
+              : (isSecCamp ? 'rgba(251, 191, 36, 0.12)' : (isActive ? 'rgba(99, 102, 241, 0.12)' : 'rgba(255, 255, 255, 0.04)')), 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            fontWeight: '900', 
+            color: isMonthlyCamp ? '#f87171' : (isSecCamp ? '#fbbf24' : (isActive ? '#a5b4fc' : 'white')), 
+            fontSize: '1.05rem', 
+            border: isMonthlyCamp 
+              ? '1px solid rgba(239, 68, 68, 0.25)' 
+              : (isSecCamp ? '1px solid rgba(251, 191, 36, 0.25)' : '1px solid rgba(255, 255, 255, 0.06)') 
+          }}>
+            {isMonthlyCamp ? '🔥' : (isSecCamp ? '👑' : dayNum)}
+          </div>
+          <div style={{ textAlign: 'left' }}>
+            <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
+              {dayName}
+            </h4>
+            <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginTop: '2px' }}>
+              {dayDesc}
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{
+            padding: '6px 12px',
+            borderRadius: '8px',
+            fontSize: '0.72rem',
+            fontWeight: 'bold',
+            background: badgeBg,
+            color: badgeColor
+          }}>
+            {badgeText}
+          </span>
+          <ArrowRight className="h-4 w-4 text-slate-500" />
+        </div>
+      </div>
+    );
+  };
+
+  const aiReport = getAIAnalysis();
+
+  return (
+    <div className="space-y-6">
+      {/* Camp Type Switcher */}
+      <div style={{ display: 'flex', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '4px', maxWidth: '400px', margin: '0 auto 10px auto' }}>
+        <button
+          onClick={() => setCampType('vocabulary')}
+          style={{
+            flex: 1,
+            padding: '10px 16px',
+            borderRadius: '10px',
+            background: campType === 'vocabulary' ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+            border: campType === 'vocabulary' ? '1px solid rgba(99, 102, 241, 0.3)' : 'none',
+            color: campType === 'vocabulary' ? '#a5b4fc' : '#94a3b8',
+            fontWeight: 'bold',
+            fontSize: '0.85rem',
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px'
+          }}
+        >
+          📖 Kelime Kampı
+        </button>
+        <button
+          onClick={() => setCampType('grammar')}
+          style={{
+            flex: 1,
+            padding: '10px 16px',
+            borderRadius: '10px',
+            background: campType === 'grammar' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+            border: campType === 'grammar' ? '1px solid rgba(16, 185, 129, 0.3)' : 'none',
+            color: campType === 'grammar' ? '#a7f3d0' : '#94a3b8',
+            fontWeight: 'bold',
+            fontSize: '0.85rem',
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px'
+          }}
+        >
+          🧠 Dilbilgisi Kampı
+        </button>
+      </div>
+
+      {campType === 'vocabulary' ? (
+        <>
+          {/* Vocabulary Camp Menu */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ background: 'rgba(99, 102, 241, 0.12)', padding: '12px', borderRadius: '12px', color: '#6366f1' }}>
+                <Calendar className="h-6 w-6" />
+              </div>
+              <div>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Kelime İlerlemesi</span>
+                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>{totalDone} / 60 Gün</strong>
+              </div>
+            </div>
+
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ background: 'rgba(16, 185, 129, 0.12)', padding: '12px', borderRadius: '12px', color: '#10b981' }}>
+                <Star className="h-6 w-6" />
+              </div>
+              <div>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Supermaster Kelimeler</span>
+                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>{totalSupermaster} / {selectedCategory === 'fen' ? 1730 : 1744}</strong>
+              </div>
+            </div>
+
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ background: 'rgba(245, 158, 11, 0.12)', padding: '12px', borderRadius: '12px', color: '#f59e0b' }}>
+                <Trophy className="h-6 w-6" />
+              </div>
+              <div>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Aktif Hedef Gün</span>
+                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>Gün #{currentDay}</strong>
+              </div>
+            </div>
+          </div>
+
+          {/* Start Daily Button Card */}
+          <div className="glass-card text-center" style={{ padding: '36px 20px', borderRadius: '24px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(16, 185, 129, 0.04) 100%)', border: '1.5px solid rgba(99, 102, 241, 0.25)' }}>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'white', margin: 0 }}>
+              Akademik Kelime Master Kampı 🚀
+            </h2>
+            <p style={{ fontSize: '0.94rem', color: '#cbd5e1', maxWidth: '520px', margin: '8px auto 24px auto', lineHeight: 1.6 }}>
+              Her gün 5 kelimeyi; anlam, eş anlam, boşluk doldurma ve soru stratejileriyle çalışarak hafızanıza sabitleyin. Akıllı spaced repetition algoritması öğrenemediğiniz kelimeleri sonraki günlerde tekrar karşınıza çıkaracaktır.
+            </p>
+
+            {(() => {
+              const completedObj = completedDaysMap[currentDay];
+              const isPassed = completedObj ? completedObj.isPassed : false;
+              
+              if (completedObj && isPassed) {
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                      🎉 Bugünün kelime kampını %{completedObj.score} başarıyla tamamladınız!
+                    </div>
+                    <button
+                      onClick={() => startDailyStudy(currentDay)}
+                      className="btn-secondary"
+                      style={{ padding: '8px 24px', fontSize: '0.8rem', borderRadius: '10px', cursor: 'pointer' }}
+                    >
+                      Tekrar Çalış (Puan Yükselt)
+                    </button>
+                  </div>
+                );
+              } else {
+                return (
+                  <button
+                    onClick={() => startDailyStudy(currentDay)}
+                    className="btn-primary"
+                    style={{ padding: '14px 36px', fontSize: '0.94rem', fontWeight: 'bold', borderRadius: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    Gün #{currentDay} Çalışmasını Başlat <ArrowRight className="h-4 w-4" />
+                  </button>
+                );
+              }
+            })()}
+          </div>
+
+          {/* AI Analysis section */}
+          {aiReport && (
+            <div className="glass-card animate-scale-in" style={{ padding: '24px', borderRadius: '20px', background: 'rgba(99, 102, 241, 0.05)', border: '1.5px solid rgba(99, 102, 241, 0.2)', textAlign: 'left', marginTop: '24px', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                <Award className="h-5 w-5 text-indigo-400 animate-pulse" />
+                <h4 style={{ fontSize: '1.02rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
+                  🤖 Yapay Zeka Kelime İlişki Analiz Raporu
+                </h4>
+              </div>
+
+              <p style={{ fontSize: '0.86rem', color: '#cbd5e1', lineHeight: 1.5, margin: '0 0 12px 0' }}>
+                Son yaptığınız çalışmalara göre analiz edilen <strong>{aiReport.totalWrong} hatalı kelime</strong> üzerinden kurulan anlamsal ve gramatik ilişkiler:
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px 14px', borderRadius: '10px', borderLeft: '3.5px solid #6366f1' }}>
+                  <span style={{ fontSize: '0.78rem', color: '#a5b4fc', fontWeight: 'bold', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Gramer (Sözcük Türü) Analizi</span>
+                  <span style={{ fontSize: '0.86rem', color: '#f1f5f9', display: 'block', marginTop: '3px', lineHeight: 1.4 }}>
+                    En çok hata yapılan sözcük türü: <strong>{aiReport.primaryType}</strong>. {aiReport.typeTip}
+                  </span>
+                </div>
+
+                {aiReport.semanticInsight && (
+                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px 14px', borderRadius: '10px', borderLeft: '3.5px solid #10b981' }}>
+                    <span style={{ fontSize: '0.78rem', color: '#a7f3d0', fontWeight: 'bold', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Anlamsal Kümeleme (Semantic Cluster)</span>
+                    <span style={{ fontSize: '0.86rem', color: '#f1f5f9', display: 'block', marginTop: '3px', lineHeight: 1.4 }} dangerouslySetInnerHTML={{ __html: aiReport.semanticInsight }} />
+                  </div>
+                )}
+
+                {aiReport.synonymPairs && aiReport.synonymPairs.length > 0 && (
+                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px 14px', borderRadius: '10px', borderLeft: '3.5px solid #fbbf24' }}>
+                    <span style={{ fontSize: '0.78rem', color: '#fde047', fontWeight: 'bold', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Eş Anlamlı Karışıklık Riski</span>
+                    <span style={{ fontSize: '0.86rem', color: '#f1f5f9', display: 'block', marginTop: '3px', lineHeight: 1.4 }}>
+                      Şu kelimeler benzer akademik anlamları sebebiyle zihninizde karışıyor olabilir: <strong>{aiReport.synonymPairs.join(', ')}</strong>. Bunları eş anlam kartlarıyla tekrar etmelisiniz.
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Day List Panels with Filters */}
+          <div>
+            {/* Filter Bar */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+              {['daily', 'weekly', 'monthly'].map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => {
+                    setViewMode(mode);
+                    setSelectedMonth(null);
+                    setSelectedWeek(null);
+                  }}
+                  className="glass-button"
+                  style={{
+                    padding: '8px 18px',
+                    borderRadius: '10px',
+                    fontSize: '0.78rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    background: viewMode === mode ? 'var(--primary-gradient)' : 'rgba(255,255,255,0.02)',
+                    border: viewMode === mode ? '1px solid var(--primary-light)' : '1px solid rgba(255,255,255,0.08)',
+                    color: viewMode === mode ? 'white' : '#cbd5e1',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {mode === 'daily' ? '📅 Günlük Görünüm' : mode === 'weekly' ? '🔁 Haftalık Görünüm' : '🔥 Aylık Görünüm'}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {viewMode === 'daily' && (
+                Array.from({ length: totalCampDays }).map((_, i) => renderDayItem(i + 1))
+              )}
+
+              {viewMode === 'weekly' && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {Array.from({ length: Math.ceil(totalCampDays / 7) }).map((_, wIdx) => {
+                    const weekNum = wIdx + 1;
+                    const wStats = getWeekStats(weekNum);
+                    const isWeekExpanded = selectedWeek === weekNum;
+                    const wProgressPct = Math.round((wStats.completed / wStats.totalDaysInWeek) * 100);
+
+                    return (
+                      <div key={weekNum} className="glass-card" style={{ padding: '16px 20px', borderRadius: '16px', border: isWeekExpanded ? '1px solid var(--primary-light)' : '1px solid rgba(255,255,255,0.06)' }}>
+                        <div onClick={() => setSelectedWeek(isWeekExpanded ? null : weekNum)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                          <div style={{ textAlign: 'left' }}>
+                            <h4 style={{ margin: 0, fontSize: '0.98rem', color: 'white', fontWeight: 'bold' }}>
+                              Hafta {weekNum} Değerlendirmesi {isWeekExpanded ? '▼' : '▶'}
+                            </h4>
+                            <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginTop: '2px' }}>
+                              Ortalama Başarı: <strong style={{ color: '#fbbf24' }}>%{wStats.avgScore}</strong> | İlerleme: {wStats.completed}/{wStats.totalDaysInWeek} Gün
+                            </span>
+                          </div>
+                          <div style={{ width: '100px', textAlign: 'right' }}>
+                            <div style={{ height: '5px', width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden', marginBottom: '2px' }}>
+                              <div style={{ height: '100%', width: `${wProgressPct}%`, background: 'linear-gradient(90deg, #6366f1, #34d399)', borderRadius: '2px' }}></div>
+                            </div>
+                            <span style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 'bold' }}>%{wProgressPct}</span>
+                          </div>
+                        </div>
+
+                        {isWeekExpanded && (
+                          <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px', paddingLeft: '8px' }}>
+                            {Array.from({ length: wStats.totalDaysInWeek }).map((_, dIdx) => {
+                              const dNum = (weekNum - 1) * 7 + dIdx + 1;
+                              return renderDayItem(dNum);
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {viewMode === 'monthly' && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {Array.from({ length: Math.ceil(totalCampDays / 28) }).map((_, mIdx) => {
+                    const monthNum = mIdx + 1;
+                    const stats = getMonthStats(monthNum);
+                    const isExpanded = selectedMonth === monthNum;
+                    const progressPct = Math.round((stats.completed / stats.totalDaysInMonth) * 100);
+                    
+                    return (
+                      <div key={monthNum} className="glass-card" style={{ padding: '20px', borderRadius: '18px', border: isExpanded ? '1px solid var(--primary-light)' : '1px solid rgba(255,255,255,0.06)', transition: 'all 0.2s' }}>
+                        <div onClick={() => setSelectedMonth(isExpanded ? null : monthNum)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                          <div style={{ textAlign: 'left' }}>
+                            <h4 style={{ margin: 0, fontSize: '1.05rem', color: 'white', fontWeight: 'bold' }}>
+                              {monthNum}. Ay Değerlendirmesi {isExpanded ? '▼' : '▶'}
+                            </h4>
+                            <span style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block', marginTop: '4px' }}>
+                              Ortalama Başarı: <strong style={{ color: '#fbbf24' }}>%{stats.avgScore}</strong> | İlerleme: {stats.completed}/{stats.totalDaysInMonth} Gün
+                            </span>
+                          </div>
+                          <div style={{ width: '120px', textAlign: 'right' }}>
+                            <div style={{ height: '6px', width: '100%', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '3px', overflow: 'hidden', marginBottom: '4px' }}>
+                              <div style={{ height: '100%', width: `${progressPct}%`, background: 'linear-gradient(90deg, #6366f1, #10b981)', borderRadius: '3px' }}></div>
+                            </div>
+                            <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'bold' }}>%{progressPct} Tamamlandı</span>
+                          </div>
+                        </div>
+
+                        {isExpanded && (
+                          <div style={{ marginTop: '16px', paddingLeft: '12px', borderLeft: '2px solid rgba(255,255,255,0.08)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {(() => {
+                              const startWeek = (monthNum - 1) * 4 + 1;
+                              const endWeek = Math.min(monthNum * 4, Math.ceil(totalCampDays / 7));
+                              const weeks = Array.from({ length: endWeek - startWeek + 1 }, (_, wIdx) => startWeek + wIdx);
+
+                              return weeks.map(weekNum => {
+                                const wStats = getWeekStats(weekNum);
+                                const isWeekExpanded = selectedWeek === weekNum;
+                                const wProgressPct = Math.round((wStats.completed / wStats.totalDaysInWeek) * 100);
+
+                                return (
+                                  <div key={weekNum} style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '12px', padding: '12px 16px' }}>
+                                    <div onClick={() => setSelectedWeek(isWeekExpanded ? null : weekNum)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                                      <div style={{ textAlign: 'left' }}>
+                                        <h5 style={{ margin: 0, fontSize: '0.9rem', color: '#cbd5e1', fontWeight: 'bold' }}>
+                                          Hafta {weekNum} {isWeekExpanded ? '▼' : '▶'}
+                                        </h5>
+                                        <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                                          Ortalama: <strong style={{ color: '#fbbf24' }}>%{wStats.avgScore}</strong> | {wStats.completed}/{wStats.totalDaysInWeek} Gün
+                                        </span>
+                                      </div>
+                                      <div style={{ width: '90px' }}>
+                                        <div style={{ height: '4px', width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden', marginBottom: '2px' }}>
+                                          <div style={{ height: '100%', width: `${wProgressPct}%`, background: 'linear-gradient(90deg, #6366f1, #34d399)', borderRadius: '2px' }}></div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {isWeekExpanded && (
+                                      <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '8px', paddingLeft: '8px' }}>
+                                        {Array.from({ length: wStats.totalDaysInWeek }).map((_, dIdx) => {
+                                          const dNum = (weekNum - 1) * 7 + dIdx + 1;
+                                          return renderDayItem(dNum);
+                                        })}
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              });
+                            })()}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Grammar Camp Menu */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ background: 'rgba(16, 185, 129, 0.12)', padding: '12px', borderRadius: '12px', color: '#10b981' }}>
+                <Calendar className="h-6 w-6" />
+              </div>
+              <div>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Gramer İlerlemesi</span>
+                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>{grammarDoneCount} / 30 Gün</strong>
+              </div>
+            </div>
+
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ background: 'rgba(245, 158, 11, 0.12)', padding: '12px', borderRadius: '12px', color: '#f59e0b' }}>
+                <Trophy className="h-6 w-6" />
+              </div>
+              <div>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Aktif Hedef Gün</span>
+                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>Gün #{currentGrammarDay}</strong>
+              </div>
+            </div>
+          </div>
+
+          {/* Start Grammar Camp Card */}
+          <div className="glass-card text-center" style={{ padding: '36px 20px', borderRadius: '24px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(99, 102, 241, 0.04) 100%)', border: '1.5px solid rgba(16, 185, 129, 0.25)' }}>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'white', margin: 0 }}>
+              Akademik Dilbilgisi (Grammar) Kampı 🧠
+            </h2>
+            <p style={{ fontSize: '0.94rem', color: '#cbd5e1', maxWidth: '520px', margin: '8px auto 24px auto', lineHeight: 1.6 }}>
+              YÖKDİL ve YDS sınavlarında en çok test edilen gramer konularını (Zamanlar, Bağlaçlar, Kısaltmalar, Edatlar) interaktif konu özetleri ve mini testlerle 30 günde tamamlayın.
+            </p>
+
+            {(() => {
+              const completedObj = grammarDoneMap[currentGrammarDay];
+              const isPassed = completedObj ? completedObj.isPassed : false;
+              
+              if (completedObj && isPassed) {
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                      🎉 Bugünün dilbilgisi çalışmasını %{completedObj.score} başarıyla tamamladınız!
+                    </div>
+                    <button
+                      onClick={() => startGrammarStudy(currentGrammarDay)}
+                      className="btn-secondary"
+                      style={{ padding: '8px 24px', fontSize: '0.8rem', borderRadius: '10px', cursor: 'pointer' }}
+                    >
+                      Tekrar Çalış (Puan Yükselt)
+                    </button>
+                  </div>
+                );
+              } else {
+                return (
+                  <button
+                    onClick={() => startGrammarStudy(currentGrammarDay)}
+                    className="btn-primary"
+                    style={{ padding: '14px 36px', fontSize: '0.94rem', fontWeight: 'bold', borderRadius: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#10b981', borderColor: '#10b981' }}
+                  >
+                    Gün #{currentGrammarDay} Gramer Çalışmasını Başlat <ArrowRight className="h-4 w-4" />
+                  </button>
+                );
+              }
+            })()}
+          </div>
+
+          {/* Grammar 30 Day List Panels */}
+          <div>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>Günlük Kamp</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {Array.from({ length: 30 }).map((_, i) => {
+                const dayNum = i + 1;
+                const completedObj = grammarDoneMap[dayNum];
+                const isCompleted = !!completedObj;
+                const isPassed = completedObj ? completedObj.isPassed : false;
+                const score = completedObj ? completedObj.score : null;
+
+                const isActive = dayNum === currentGrammarDay;
+                const dayData = grammarCampDb[String(dayNum)];
+
+                let border = '1px solid rgba(255, 255, 255, 0.06)';
+                let bg = 'rgba(255, 255, 255, 0.02)';
+                let badgeText = 'Çalışma Başlatılmadı';
+                let badgeBg = 'rgba(255, 255, 255, 0.05)';
+                let badgeColor = '#94a3b8';
+
+                if (isCompleted) {
+                  if (isPassed) {
+                    bg = 'rgba(16, 185, 129, 0.05)';
+                    border = '1px solid rgba(16, 185, 129, 0.25)';
+                    badgeText = `Başarılı (%${score})`;
+                    badgeBg = 'rgba(16, 185, 129, 0.15)';
+                    badgeColor = '#34d399';
+                  } else {
+                    bg = 'rgba(239, 68, 68, 0.05)';
+                    border = '1px solid rgba(239, 68, 68, 0.25)';
+                    badgeText = `Başarısız (%${score})`;
+                    badgeBg = 'rgba(239, 68, 68, 0.15)';
+                    badgeColor = '#f87171';
+                  }
+                } else if (isActive) {
+                  bg = 'rgba(16, 185, 129, 0.05)';
+                  border = '1.5px solid rgba(16, 185, 129, 0.4)';
+                  badgeText = 'Sıradaki Hedef';
+                  badgeBg = 'rgba(16, 185, 129, 0.15)';
+                  badgeColor = '#a7f3d0';
+                }
+
+                return (
+                  <div
+                    key={dayNum}
+                    onClick={() => startGrammarStudy(dayNum)}
+                    style={{
+                      background: bg,
+                      border: border,
+                      borderRadius: '16px',
+                      padding: '16px 20px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      gap: '12px'
+                    }}
+                    className="hover-card"
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: isActive ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', color: isActive ? '#a7f3d0' : 'white', fontSize: '1.05rem', border: '1px solid rgba(255,255,255,0.06)' }}>
+                        {dayNum}
+                      </div>
+                      <div style={{ textAlign: 'left' }}>
+                        <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
+                          {dayData?.title || `${dayNum}. Gün Dilbilgisi Konusu`}
+                        </h4>
+                        <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginTop: '2px' }}>
+                          Konu Anlatımı & 5 Pekiştirme Sorusu
+                        </span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        fontSize: '0.72rem',
+                        fontWeight: 'bold',
+                        background: badgeBg,
+                        color: badgeColor
+                      }}>
+                        {badgeText}
+                      </span>
+                      <ArrowRight className="h-4 w-4 text-slate-500" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default CampDashboard;

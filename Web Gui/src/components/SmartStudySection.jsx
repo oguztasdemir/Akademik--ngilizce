@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Check, AlertCircle, Award, ArrowRight, BookOpen, Edit3, HelpCircle, Trophy } from 'lucide-react';
+import { Trophy } from 'lucide-react';
+import SmartStudyDashboard from './SmartStudy/SmartStudyDashboard';
+import SmartStudyFlow from './SmartStudy/SmartStudyFlow';
 
 const CATEGORY_WORDS = {
   fen: [
@@ -20,7 +22,7 @@ const CATEGORY_WORDS = {
       meaning: "keşfetmek", 
       type: "verb", 
       sentence: "Astronomers discover a new habitable planet.", 
-      translation: "Gökbilimciler yaşanabilir yeni bir gezegen keşfeder.",
+      translation: "Gökbilimciler yaşanabilir yeni bir gezegen keşfeter.",
       synonyms: "find, unearth, detect",
       collocation: "discover a planet, discover a cure",
       examQuestion: "Astronomers hope to ________ a new habitable planet in the distant solar system using the new telescope.",
@@ -261,9 +263,6 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
   const [strategyCorrect, setStrategyCorrect] = useState(null);
   const [showStrategyTip, setShowStrategyTip] = useState(false);
 
-  // Smart Hint System State
-  const [hintLevel, setHintLevel] = useState(0);
-
   // Spaced Repetition (Known/Learned Word Tracking) States
   const [onlyStudyWrong, setOnlyStudyWrong] = useState(false); // only study unknown words
   const [knownWords, setKnownWords] = useState(() => {
@@ -275,10 +274,8 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
   });
 
   const categoryKnownWords = knownWords.filter(w => w.category === (selectedCategory || 'fen'));
-
   const allWords = CATEGORY_WORDS[selectedCategory || 'fen'] || CATEGORY_WORDS.fen;
   const categoryUnknownWords = allWords.filter(w => !categoryKnownWords.some(ck => ck.word === w.word));
-
   const [studyWords, setStudyWords] = useState([]);
 
   // Shuffles array utility
@@ -306,22 +303,6 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
       localStorage.setItem('yokdil_smart_study_known_words', JSON.stringify(updated));
       return updated;
     });
-  };
-
-  // Helper to generate hints
-  const getSpellingHint = (word, level) => {
-    if (level === 0) return '';
-    const chars = word.split('');
-    if (level === 1) {
-      return chars.map((c, i) => {
-        if (i === 0 || i === chars.length - 1 || c === ' ' || c === '-') return c;
-        return '_';
-      }).join(' ');
-    }
-    return chars.map((c, i) => {
-      if (i < 3 || i === chars.length - 1 || c === ' ' || c === '-') return c;
-      return '_';
-    }).join(' ');
   };
 
   // Phase 2: Meaning Selection State
@@ -383,20 +364,12 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
   const getOptionTranslation = (opt) => {
     if (!opt) return '';
     const cleaned = opt.toLowerCase().trim();
-    // Look up in studyWords first
     const match = studyWords.find(w => w.word.toLowerCase() === cleaned || (w.synonyms && w.synonyms.split(',').map(s => s.trim().toLowerCase()).includes(cleaned)));
-    if (match) {
-      if (match.word.toLowerCase() === cleaned) {
-        return match.meaning;
-      }
-      return match.meaning;
-    }
-    // Search in CATEGORY_WORDS
+    if (match) return match.meaning;
     for (const cat of Object.keys(CATEGORY_WORDS)) {
       const match2 = CATEGORY_WORDS[cat].find(w => w.word.toLowerCase() === cleaned);
       if (match2) return match2.meaning;
     }
-    // Search for match in other words' synonyms
     for (const cat of Object.keys(CATEGORY_WORDS)) {
       const match3 = CATEGORY_WORDS[cat].find(w => w.synonyms && w.synonyms.split(',').map(s => s.trim().toLowerCase()).includes(cleaned));
       if (match3) return match3.meaning;
@@ -407,15 +380,12 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
   const getEnglishForMeaningOption = (turkishTr) => {
     if (!turkishTr) return '';
     const cleanTr = turkishTr.toLowerCase().trim();
-    // 1. Search in words
     let match = words.find(w => w.meaning && w.meaning.toLowerCase().trim() === cleanTr);
     if (match) return match.word;
-    // 2. Search in CATEGORY_WORDS
     for (const cat of Object.keys(CATEGORY_WORDS)) {
       const match2 = CATEGORY_WORDS[cat].find(w => w.meaning && w.meaning.toLowerCase().trim() === cleanTr);
       if (match2) return match2.word;
     }
-    // 3. Simple static fallback for standard distractors
     const staticMap = {
       'açıklamak': 'explain',
       'önlemek': 'prevent',
@@ -423,8 +393,7 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
       'saptamak': 'determine',
       'iyileştirmek': 'improve'
     };
-    if (staticMap[cleanTr]) return staticMap[cleanTr];
-    return '';
+    return staticMap[cleanTr] || '';
   };
 
   const getMeaningOptions = (correctMeaning, activeWords = words) => {
@@ -462,14 +431,12 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
 
   const handleStartStudy = (limit) => {
     setWordLimit(limit);
-    
     let activeWords = [];
     if (onlyStudyWrong) {
       activeWords = shuffleArray(categoryUnknownWords).slice(0, limit);
     } else {
       activeWords = [...shuffleArray(categoryUnknownWords), ...shuffleArray(categoryKnownWords)].slice(0, limit);
     }
-
     setStudyWords(activeWords);
     if (activeWords.length > 0) {
       setMeaningOptions(getMeaningOptions(activeWords[0].meaning, activeWords));
@@ -479,20 +446,17 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     setCurrentIdx(0);
   };
 
-  // Handler for Phase 1 (Word Navigation)
   const handleWordRead = (idx) => {
     setReadWords(prev => ({ ...prev, [idx]: true }));
     if (currentIdx < words.length - 1) {
       setCurrentIdx(currentIdx + 1);
     } else {
-      // Unlocked next phase
       setPhase(2);
       setCurrentIdx(0);
       setMeaningOptions(getMeaningOptions(words[0].meaning, words));
     }
   };
 
-  // Handler for Phase 2 (Meaning Selection)
   const handleMeaningCheck = (opt) => {
     if (meaningChecked) return;
     setMeaningSelected(opt);
@@ -525,7 +489,6 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     }
   };
 
-  // Handler for Phase 3 (Synonym Selection)
   const handleSynonymCheck = (opt) => {
     if (synonymChecked) return;
     setSynonymSelected(opt);
@@ -560,7 +523,6 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     }
   };
 
-  // Handler for Phase 4 (Cloze Blank Fill)
   const handleClozeCheck = (opt) => {
     if (clozeChecked) return;
     setClozeSelected(opt);
@@ -592,7 +554,6 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     }
   };
 
-  // Handler for Phase 5 (Strategy & Cloze Question)
   const handleStrategyCheck = (opt) => {
     if (strategyChecked) return;
     setStrategySelected(opt);
@@ -619,12 +580,10 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     if (nextIdx < words.length) {
       setCurrentIdx(nextIdx);
     } else {
-      // Completed all phases (End of Study -> Phase 6)
       setPhase(6);
-      if (awardPetXP) awardPetXP(50); // Give +50 XP
+      if (awardPetXP) awardPetXP(50);
       if (triggerConfetti) triggerConfetti();
       
-      // Award crystals (via localStorage)
       const currentCrystals = parseInt(localStorage.getItem('yokdil_crystals') || '0', 10);
       localStorage.setItem('yokdil_crystals', String(currentCrystals + 5));
       window.dispatchEvent(new Event('custom-pet-updated'));
@@ -636,19 +595,15 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
     setPhase(1);
     setCurrentIdx(0);
     setReadWords({});
-    
     setMeaningSelected(null);
     setMeaningChecked(false);
     setMeaningCorrect(null);
-    
     setSynonymSelected(null);
     setSynonymChecked(false);
     setSynonymCorrect(null);
-    
     setClozeSelected(null);
     setClozeChecked(false);
     setClozeCorrect(null);
-
     setStrategySelected(null);
     setStrategyChecked(false);
     setStrategyCorrect(null);
@@ -657,73 +612,11 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
 
   if (!studyStarted) {
     return (
-      <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)', minHeight: '520px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center', maxWidth: '480px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
-            <div style={{
-              width: '64px',
-              height: '64px',
-              borderRadius: '50%',
-              background: 'rgba(99, 102, 241, 0.1)',
-              border: '1.5px solid rgba(99, 102, 241, 0.3)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#818cf8'
-            }}>
-              <BookOpen className="h-8 w-8" />
-            </div>
-          </div>
-
-          <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>SİSTEMATİK AKILLI ÇALIŞMA</span>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: '8px 0' }}>Kelime Öğrenim Kampı</h2>
-          <p style={{ fontSize: '0.88rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '28px' }}>
-            Bu modülde seçtiğiniz sayıda akademik kelimeyi; önce inceleyerek öğrenir, ardından doğru anlamını seçeneklerden bularak test edersiniz.
-          </p>
-
-          <span style={{ fontSize: '0.78rem', color: '#f8fafc', fontWeight: 'bold', display: 'block', marginBottom: '12px' }}>
-            Çalışmak istediğiniz kelime sayısını seçin:
-          </span>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '24px' }}>
-            {[5, 10, 15, 20].map((num) => (
-              <button
-                key={num}
-                onClick={() => setWordLimit(num)}
-                style={{
-                  padding: '12px',
-                  borderRadius: '10px',
-                  background: wordLimit === num ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                  border: wordLimit === num ? '1.5px solid #6366f1' : '1px solid rgba(255, 255, 255, 0.08)',
-                  color: wordLimit === num ? '#a5b4fc' : 'white',
-                  fontSize: '0.84rem',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                {num} Kelime {num === 5 ? '(Hızlı)' : num === 10 ? '(Standart)' : num === 15 ? '(Detaylı)' : '(Kamp)'}
-              </button>
-            ))}
-          </div>
-
-
-          <button
-            onClick={() => handleStartStudy(wordLimit)}
-            className="btn-primary"
-            style={{
-              width: '100%',
-              padding: '14px',
-              borderRadius: '12px',
-              fontWeight: 'bold',
-              fontSize: '0.88rem',
-              cursor: 'pointer'
-            }}
-          >
-            Çalışmayı Başlat 🚀
-          </button>
-        </div>
-      </div>
+      <SmartStudyDashboard
+        wordLimit={wordLimit}
+        setWordLimit={setWordLimit}
+        handleStartStudy={handleStartStudy}
+      />
     );
   }
 
@@ -754,706 +647,46 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
   }
 
   return (
-    <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)', minHeight: '520px' }}>
-      
-      {/* Header and Progress Bar */}
-      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '18px', marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-          <div>
-            <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>SİSTEMATİK AKILLI ÇALIŞMA</span>
-            <h3 style={{ fontSize: '1.38rem', fontWeight: '900', color: 'white', margin: '4px 0 0 0' }}>Kelime Öğrenim Kampı ({wordLimit} Kelime)</h3>
-          </div>
-          
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <span className={`badge ${phase >= 1 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              📖 1. Öğren
-            </span>
-            <span className={`badge ${phase >= 2 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              🧠 2. Anlam
-            </span>
-            <span className={`badge ${phase >= 3 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              🔄 3. Eş Anlam
-            </span>
-            <span className={`badge ${phase >= 4 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              📝 4. Boşluk Doldurma
-            </span>
-            <span className={`badge ${phase >= 5 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              💡 5. Soru Taktikleri
-            </span>
-          </div>
-        </div>
- 
-        {/* Dynamic Progress Bar */}
-        <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', marginTop: '16px', overflow: 'hidden' }}>
-          <div style={{
-            height: '100%',
-            width: `${((phase - 1) * 20) + ((currentIdx + 1) / words.length * 20)}%`,
-            background: 'linear-gradient(90deg, #6366f1 0%, #10b981 100%)',
-            transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-          }} />
-        </div>
-      </div>
-
-      {/* PHASE 1: LEARN WORDS */}
-      {phase === 1 && (
-        <div className="space-y-6">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 1: Modadil Akademik Kelime Kartı <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
-            </h4>
-            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Kelimelerin anlam, eş anlam ve collocation yapılarını inceleyin.</span>
-          </div>
-
-          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '24px', gap: '8px' }}>
-              <span style={{ fontSize: '0.62rem', color: '#818cf8', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>İNGİLİZCE KELİME</span>
-              <h1 style={{ fontSize: '2.4rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em', wordBreak: 'break-all' }}>
-                {words[currentIdx].word}
-              </h1>
-              <span className="badge" style={{ fontSize: '0.68rem', background: 'rgba(99, 102, 241, 0.15)', border: '1px solid rgba(99,102,241,0.3)', color: '#a5b4fc', textTransform: 'uppercase', fontWeight: '800' }}>
-                {words[currentIdx].type}
-              </span>
-              
-              <div style={{ margin: '14px 0', height: '1px', width: '48px', background: 'rgba(255,255,255,0.08)' }} />
-
-              <span style={{ fontSize: '0.62rem', color: '#34d399', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>TÜRKÇE ANLAMI</span>
-              <h2 style={{ fontSize: '1.58rem', fontWeight: '800', color: '#34d399', margin: 0 }}>
-                {words[currentIdx].meaning}
-              </h2>
-            </div>
-
-            {/* Modadil Synonyms & Collocations Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '20px 0' }}>
-              {/* Eş Anlamlılar (Synonyms) */}
-              <div style={{ background: 'rgba(99, 102, 241, 0.04)', border: '1px solid rgba(99, 102, 241, 0.15)', padding: '14px 18px', borderRadius: '16px', textAlign: 'left' }}>
-                <span style={{ fontSize: '0.64rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px' }}>
-                  🔄 EŞ ANLAMLILAR (SYNONYMS)
-                </span>
-                <p style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700', margin: 0 }}>
-                  {words[currentIdx].synonyms || "Yok"}
-                </p>
-              </div>
-
-              {/* Birlikte Kullanılanlar (Collocations) */}
-              <div style={{ background: 'rgba(16, 185, 129, 0.04)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '14px 18px', borderRadius: '16px', textAlign: 'left' }}>
-                <span style={{ fontSize: '0.64rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px' }}>
-                  🔗 COLLOCATIONS / BİRLİKTE KULLANIM
-                </span>
-                <p style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700', margin: 0, fontStyle: 'italic' }}>
-                  {words[currentIdx].collocation || "Yok"}
-                </p>
-              </div>
-            </div>
-
-            {/* Academic Sentence Box */}
-            <div style={{ textAlign: 'center' }}>
-              <span style={{ fontSize: '0.68rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>Örnek Akademik Cümle (YÖKDİL)</span>
-              <p style={{ fontSize: '0.98rem', color: 'white', lineHeight: 1.6, margin: '0 auto', fontWeight: '500', maxWidth: '500px' }}>
-                {words[currentIdx].sentence}
-              </p>
-              <p style={{ fontSize: '0.84rem', color: '#94a3b8', fontStyle: 'italic', marginTop: '8px', marginBottom: 0, maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
-                {words[currentIdx].translation}
-              </p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', flexWrap: 'wrap', gap: '12px' }}>
-            <button
-              onClick={() => setCurrentIdx(prev => Math.max(0, prev - 1))}
-              disabled={currentIdx === 0}
-              className="btn-secondary"
-              style={{ padding: '10px 20px', fontSize: '0.8rem', cursor: 'pointer' }}
-            >
-              Önceki Kelime
-            </button>
-
-            <button
-              onClick={() => handleWordRead(currentIdx)}
-              className="btn-primary"
-              style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-            >
-              Öğrendim, Sıradaki <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* PHASE 2: MEANING SELECTION PRACTICE */}
-      {phase === 2 && (
-        <div className="space-y-6">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 2: Kelimenin Anlamını Eşleştirin <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
-            </h4>
-            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-              İngilizce kelimenin doğru Türkçe anlamını bulun.
-            </span>
-          </div>
-
-          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center', textAlign: 'center' }}>
-              <span style={{ fontSize: '0.62rem', color: '#818cf8', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>SORULAN KELİME</span>
-              <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em' }}>
-                {words[currentIdx].word}
-              </h2>
-
-              {/* Options Grid */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '400px', marginTop: '16px' }}>
-                {meaningOptions.map((opt, i) => {
-                  const isSelected = meaningSelected === opt;
-                  const isCorrectAnswer = opt === words[currentIdx].meaning;
-                  let bg = 'rgba(255, 255, 255, 0.03)';
-                  let border = '1px solid rgba(255, 255, 255, 0.08)';
-                  let color = 'white';
-
-                  if (meaningChecked) {
-                    if (isCorrectAnswer) {
-                      bg = 'rgba(16, 185, 129, 0.15)';
-                      border = '1.5px solid #10b981';
-                      color = '#a7f3d0';
-                    } else if (isSelected) {
-                      bg = 'rgba(239, 68, 68, 0.15)';
-                      border = '1.5px solid #ef4444';
-                      color = '#fca5a5';
-                    }
-                  } else if (isSelected) {
-                    bg = 'rgba(99, 102, 241, 0.15)';
-                    border = '1.5px solid #6366f1';
-                    color = '#a5b4fc';
-                  }
-
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => handleMeaningCheck(opt)}
-                      disabled={meaningChecked}
-                      style={{
-                        padding: '14px 20px',
-                        borderRadius: '12px',
-                        background: bg,
-                        border: border,
-                        color: color,
-                        fontSize: '0.94rem',
-                        fontWeight: 'bold',
-                        cursor: meaningChecked ? 'default' : 'pointer',
-                        transition: 'all 0.2s',
-                        outline: 'none',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <span>{opt}</span>
-                      {meaningChecked && (() => {
-                        const eng = getEnglishForMeaningOption(opt);
-                        return eng ? (
-                          <span style={{ fontSize: '0.8rem', opacity: 0.85, fontWeight: '700', color: isCorrectAnswer ? '#67e8f9' : '#cbd5e1' }}>
-                            ({eng})
-                          </span>
-                        ) : null;
-                      })()}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Feedback Box */}
-              {meaningChecked && (
-                <div className={`glass-card animate-scale-in`} style={{
-                  padding: '12px 24px',
-                  borderRadius: '12px',
-                  background: meaningCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                  border: meaningCorrect ? '1.5px solid rgba(16, 185, 129, 0.3)' : '1.5px solid rgba(239, 68, 68, 0.3)',
-                  color: meaningCorrect ? '#a7f3d0' : '#fca5a5',
-                  marginTop: '12px',
-                  fontSize: '0.82rem',
-                  fontWeight: 'bold',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  {meaningCorrect ? (
-                    <>
-                      <Check className="h-4 w-4 text-emerald-400" /> Tebrikler! Doğru Eşleşme. (+10 XP)
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru cevap: "{words[currentIdx].meaning}" olmalıydı.
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', flexWrap: 'wrap', gap: '12px' }}>
-            {!meaningChecked ? (
-              <button
-                onClick={handleMeaningDontKnow}
-                className="btn-secondary"
-                style={{ padding: '10px 16px', fontSize: '0.8rem', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
-              >
-                Bilmiyorum 🤷‍♂️
-              </button>
-            ) : (
-              <button
-                onClick={handleMeaningNext}
-                className="btn-primary"
-                style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}
-              >
-                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* PHASE 3: SYNONYM SELECTION PRACTICE */}
-      {phase === 3 && (
-        <div className="space-y-6">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 3: Eş Anlam Eşleştirin <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
-            </h4>
-            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-              İngilizce kelimenin en yakın anlamlısını (synonym) seçeneklerden bulun.
-            </span>
-          </div>
-
-          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center', textAlign: 'center' }}>
-              <span style={{ fontSize: '0.62rem', color: '#818cf8', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>SORULAN KELİME</span>
-              <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'white', margin: 0, letterSpacing: '-0.02em' }}>
-                {words[currentIdx].word}
-              </h2>
-
-              {/* Options Grid */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '400px', marginTop: '16px' }}>
-                {synonymOptions.map((opt, i) => {
-                  const isSelected = synonymSelected === opt;
-                  const correctVal = words[currentIdx].synonyms ? words[currentIdx].synonyms.split(',')[0].trim() : '';
-                  const isCorrectAnswer = opt === correctVal;
-                  let bg = 'rgba(255, 255, 255, 0.03)';
-                  let border = '1px solid rgba(255, 255, 255, 0.08)';
-                  let color = 'white';
-
-                  if (synonymChecked) {
-                    if (isCorrectAnswer) {
-                      bg = 'rgba(16, 185, 129, 0.15)';
-                      border = '1.5px solid #10b981';
-                      color = '#a7f3d0';
-                    } else if (isSelected) {
-                      bg = 'rgba(239, 68, 68, 0.15)';
-                      border = '1.5px solid #ef4444';
-                      color = '#fca5a5';
-                    }
-                  } else if (isSelected) {
-                    bg = 'rgba(99, 102, 241, 0.15)';
-                    border = '1.5px solid #6366f1';
-                    color = '#a5b4fc';
-                  }
-
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => handleSynonymCheck(opt)}
-                      disabled={synonymChecked}
-                      style={{
-                        padding: '14px 20px',
-                        borderRadius: '12px',
-                        background: bg,
-                        border: border,
-                        color: color,
-                        fontSize: '0.94rem',
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        cursor: synonymChecked ? 'default' : 'pointer',
-                        transition: 'all 0.2s',
-                        outline: 'none'
-                      }}
-                    >
-                      {opt}{synonymChecked && getOptionTranslation(opt) && ` (${getOptionTranslation(opt)})`}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Feedback Box */}
-              {synonymChecked && (
-                <div className={`glass-card animate-scale-in`} style={{
-                  padding: '12px 24px',
-                  borderRadius: '12px',
-                  background: synonymCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                  border: synonymCorrect ? '1.5px solid rgba(16, 185, 129, 0.3)' : '1.5px solid rgba(239, 68, 68, 0.3)',
-                  color: synonymCorrect ? '#a7f3d0' : '#fca5a5',
-                  marginTop: '12px',
-                  fontSize: '0.82rem',
-                  fontWeight: 'bold',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  {synonymCorrect ? (
-                    <>
-                      <Check className="h-4 w-4 text-emerald-400" /> Tebrikler! Eş Anlam Doğru. (+10 XP)
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru eş anlamlısı: "{words[currentIdx].synonyms.split(',')[0].trim()}" olmalıydı.
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', flexWrap: 'wrap', gap: '12px' }}>
-            {!synonymChecked ? (
-              <button
-                onClick={handleSynonymDontKnow}
-                className="btn-secondary"
-                style={{ padding: '10px 16px', fontSize: '0.8rem', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
-              >
-                Bilmiyorum 🤷‍♂️
-              </button>
-            ) : (
-              <button
-                onClick={handleSynonymNext}
-                className="btn-primary"
-                style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}
-              >
-                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* PHASE 4: CLOZE / SENTENCE FILL PRACTICE */}
-      {phase === 4 && (
-        <div className="space-y-6">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 4: Cümle Boşluk Doldurma <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
-            </h4>
-            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-              Cümle içindeki boşluğa gelebilecek en uygun kelimeyi seçin.
-            </span>
-          </div>
-
-          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'center' }}>
-              <span style={{ fontSize: '0.62rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>AKADEMİK CÜMLE</span>
-              
-              <p style={{ fontSize: '1.18rem', color: 'white', lineHeight: 1.6, fontWeight: '500', margin: '8px 0', wordBreak: 'break-word' }}>
-                {words[currentIdx].sentence.replace(new RegExp(`\\b${words[currentIdx].word}\\b`, 'gi'), '________')}
-              </p>
-
-              <span style={{ fontSize: '0.84rem', color: '#94a3b8', fontStyle: 'italic', display: 'block', marginBottom: '12px' }}>
-                Çevirisi: {words[currentIdx].translation}
-              </span>
-
-              {/* Options Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', width: '100%', maxWidth: '500px', margin: '16px auto 0 auto' }}>
-                {clozeOptions.map((opt, i) => {
-                  const isSelected = clozeSelected === opt;
-                  const isCorrectAnswer = opt === words[currentIdx].word;
-                  let bg = 'rgba(255, 255, 255, 0.03)';
-                  let border = '1px solid rgba(255, 255, 255, 0.08)';
-                  let color = 'white';
-
-                  if (clozeChecked) {
-                    if (isCorrectAnswer) {
-                      bg = 'rgba(16, 185, 129, 0.15)';
-                      border = '1.5px solid #10b981';
-                      color = '#a7f3d0';
-                    } else if (isSelected) {
-                      bg = 'rgba(239, 68, 68, 0.15)';
-                      border = '1.5px solid #ef4444';
-                      color = '#fca5a5';
-                    }
-                  } else if (isSelected) {
-                    bg = 'rgba(99, 102, 241, 0.15)';
-                    border = '1.5px solid #6366f1';
-                    color = '#a5b4fc';
-                  }
-
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => handleClozeCheck(opt)}
-                      disabled={clozeChecked}
-                      style={{
-                        padding: '12px',
-                        borderRadius: '10px',
-                        background: bg,
-                        border: border,
-                        color: color,
-                        fontSize: '0.88rem',
-                        fontWeight: 'bold',
-                        cursor: clozeChecked ? 'default' : 'pointer',
-                        transition: 'all 0.2s',
-                        outline: 'none'
-                      }}
-                    >
-                      {opt}{clozeChecked && getOptionTranslation(opt) && ` (${getOptionTranslation(opt)})`}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Feedback Box */}
-              {clozeChecked && (
-                <div className={`glass-card animate-scale-in`} style={{
-                  padding: '12px 24px',
-                  borderRadius: '12px',
-                  background: clozeCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                  border: clozeCorrect ? '1.5px solid rgba(16, 185, 129, 0.3)' : '1.5px solid rgba(239, 68, 68, 0.3)',
-                  color: clozeCorrect ? '#a7f3d0' : '#fca5a5',
-                  marginTop: '12px',
-                  fontSize: '0.82rem',
-                  fontWeight: 'bold',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  alignSelf: 'center'
-                }}>
-                  {clozeCorrect ? (
-                    <>
-                      <Check className="h-4 w-4 text-emerald-400" /> Harika! Cümle tamamlandı. (+10 XP)
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru kelime: "{words[currentIdx].word}" olmalıydı.
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', flexWrap: 'wrap', gap: '12px' }}>
-            {!clozeChecked ? (
-              <button
-                onClick={handleClozeDontKnow}
-                className="btn-secondary"
-                style={{ padding: '10px 16px', fontSize: '0.8rem', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
-              >
-                Bilmiyorum 🤷‍♂️
-              </button>
-            ) : (
-              <button
-                onClick={handleClozeNext}
-                className="btn-primary"
-                style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}
-              >
-                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* PHASE 5: STRATEGY & QUESTION PRACTICE */}
-      {phase === 5 && (
-        <div className="space-y-6">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 5: YÖKDİL Sınav Sorusu ve Çözüm Stratejisi <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
-            </h4>
-            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-              Kelimelerin gerçek YÖKDİL cümlelerinde nasıl sorulduğunu görün.
-            </span>
-          </div>
-
-          <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(99, 102, 241, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left' }}>
-              <span style={{ fontSize: '0.62rem', color: '#fbbf24', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>YÖKDİL SORU KALIBI</span>
-              <p style={{ fontSize: '1.05rem', color: 'white', lineHeight: 1.6, fontWeight: '500', margin: 0 }}>
-                {words[currentIdx].examQuestion}
-              </p>
-
-              {/* Options Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', width: '100%', marginTop: '16px' }}>
-                {words[currentIdx].examOptions.map((opt, i) => {
-                  const isSelected = strategySelected === opt;
-                  const isCorrectAnswer = opt === words[currentIdx].word;
-                  let bg = 'rgba(255, 255, 255, 0.03)';
-                  let border = '1px solid rgba(255, 255, 255, 0.08)';
-                  let color = 'white';
-
-                  if (strategyChecked) {
-                    if (isCorrectAnswer) {
-                      bg = 'rgba(16, 185, 129, 0.15)';
-                      border = '1.5px solid #10b981';
-                      color = '#a7f3d0';
-                    } else if (isSelected) {
-                      bg = 'rgba(239, 68, 68, 0.15)';
-                      border = '1.5px solid #ef4444';
-                      color = '#fca5a5';
-                    }
-                  } else if (isSelected) {
-                    bg = 'rgba(99, 102, 241, 0.15)';
-                    border = '1.5px solid #6366f1';
-                    color = '#a5b4fc';
-                  }
-
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => handleStrategyCheck(opt)}
-                      disabled={strategyChecked}
-                      style={{
-                        padding: '14px',
-                        borderRadius: '12px',
-                        background: bg,
-                        border: border,
-                        color: color,
-                        fontSize: '0.92rem',
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        cursor: strategyChecked ? 'default' : 'pointer',
-                        transition: 'all 0.2s',
-                        outline: 'none'
-                      }}
-                    >
-                      {opt}{strategyChecked && getOptionTranslation(opt) && ` (${getOptionTranslation(opt)})`}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Toggle Modadil Strategy Tip Button */}
-              <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <button
-                  onClick={() => setShowStrategyTip(prev => !prev)}
-                  style={{
-                    alignSelf: 'flex-start',
-                    background: 'rgba(245, 158, 11, 0.1)',
-                    border: '1.5px dashed rgba(245, 158, 11, 0.3)',
-                    color: '#f59e0b',
-                    padding: '8px 16px',
-                    borderRadius: '10px',
-                    fontSize: '0.78rem',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
-                >
-                  💡 Modadil Soru Çözüm Stratejisini Gör {showStrategyTip ? '▲' : '▼'}
-                </button>
-
-                {showStrategyTip && (
-                  <div className="glass-card animate-scale-in" style={{ padding: '16px 20px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.2)', color: '#fef3c7', fontSize: '0.86rem', lineHeight: 1.5 }}>
-                    <strong style={{ color: '#fbbf24', display: 'block', marginBottom: '4px' }}>Taktik Rehberi:</strong>
-                    {words[currentIdx].strategy}
-                  </div>
-                )}
-              </div>
-
-              {/* Correct / Incorrect Feedback Box */}
-              {strategyChecked && (
-                <div className={`glass-card animate-scale-in`} style={{
-                  padding: '12px 24px',
-                  borderRadius: '12px',
-                  background: strategyCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                  border: strategyCorrect ? '1.5px solid rgba(16, 185, 129, 0.3)' : '1.5px solid rgba(239, 68, 68, 0.3)',
-                  color: strategyCorrect ? '#a7f3d0' : '#fca5a5',
-                  marginTop: '12px',
-                  fontSize: '0.82rem',
-                  fontWeight: 'bold',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  {strategyCorrect ? (
-                    <>
-                      <Check className="h-4 w-4 text-emerald-400" /> Tebrikler! Doğru Seçim. (+10 XP)
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="h-4 w-4 text-rose-400" /> Hatalı! Doğru cevap: "{words[currentIdx].word}" olmalıydı.
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', flexWrap: 'wrap', gap: '12px' }}>
-            {!strategyChecked ? (
-              <button
-                onClick={handleStrategyDontKnow}
-                className="btn-secondary"
-                style={{ padding: '10px 16px', fontSize: '0.8rem', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
-              >
-                Bilmiyorum 🤷‍♂️
-              </button>
-            ) : (
-              <button
-                onClick={handleStrategyNext}
-                className="btn-primary"
-                style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}
-              >
-                Sıradaki Soru <ArrowRight className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* PHASE 6: SUMMARY / CELEBRATION */}
-      {phase === 6 && (
-        <div className="space-y-6 text-center py-8">
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              borderRadius: '50%',
-              background: 'rgba(16, 185, 129, 0.1)',
-              border: '2px solid #10b981',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(16, 185, 129, 0.3)',
-              animation: 'scaleIn 0.5s'
-            }}>
-              <Trophy className="h-10 w-10 text-emerald-400" />
-            </div>
-          </div>
-
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0 }}>
-            Tebrikler! Modadil Kelime Kampını Tamamladınız! 🎉
-          </h2>
-          <p style={{ fontSize: '0.94rem', color: '#94a3b8', maxWidth: '480px', margin: '12px auto 0 auto', lineHeight: 1.6 }}>
-            Seçtiğiniz akademik kelimeleri; anlam okuma, Türkçe anlam eşleştirme, eş anlam bulma, cümle boşluk doldurma ve sınav soru taktikleri aşamalarını başarıyla tamamlayarak hafızanıza kazıdınız.
-          </p>
-
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', margin: '28px 0', flexWrap: 'wrap' }}>
-            <div className="glass-card" style={{ padding: '16px 24px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <span style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', display: 'block' }}>Kazanılan Ödül</span>
-              <span style={{ fontSize: '1.5rem', fontWeight: '900', color: '#10b981', display: 'block', marginTop: '4px' }}>+50 Evcil Hayvan XP</span>
-            </div>
-            <div className="glass-card" style={{ padding: '16px 24px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <span style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', display: 'block' }}>Ekstra Kristal</span>
-              <span style={{ fontSize: '1.5rem', fontWeight: '900', color: '#fbbf24', display: 'block', marginTop: '4px' }}>+5 Kristal 💎</span>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '24px' }}>
-            <button
-              onClick={resetStudy}
-              className="btn-primary"
-              style={{ padding: '12px 28px', fontSize: '0.85rem', cursor: 'pointer' }}
-            >
-              Tekrar Çalış
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+    <SmartStudyFlow
+      words={words}
+      currentIdx={currentIdx}
+      setCurrentIdx={setCurrentIdx}
+      phase={phase}
+      wordLimit={wordLimit}
+      meaningOptions={meaningOptions}
+      meaningSelected={meaningSelected}
+      meaningChecked={meaningChecked}
+      meaningCorrect={meaningCorrect}
+      handleMeaningCheck={handleMeaningCheck}
+      getEnglishForMeaningOption={getEnglishForMeaningOption}
+      handleMeaningDontKnow={handleMeaningDontKnow}
+      handleMeaningNext={handleMeaningNext}
+      synonymOptions={synonymOptions}
+      synonymSelected={synonymSelected}
+      synonymChecked={synonymChecked}
+      synonymCorrect={synonymCorrect}
+      handleSynonymCheck={handleSynonymCheck}
+      getOptionTranslation={getOptionTranslation}
+      handleSynonymDontKnow={handleSynonymDontKnow}
+      handleSynonymNext={handleSynonymNext}
+      clozeOptions={clozeOptions}
+      clozeSelected={clozeSelected}
+      clozeChecked={clozeChecked}
+      clozeCorrect={clozeCorrect}
+      handleClozeCheck={handleClozeCheck}
+      handleClozeDontKnow={handleClozeDontKnow}
+      handleClozeNext={handleClozeNext}
+      strategySelected={strategySelected}
+      strategyChecked={strategyChecked}
+      strategyCorrect={strategyCorrect}
+      handleStrategyCheck={handleStrategyCheck}
+      showStrategyTip={showStrategyTip}
+      setShowStrategyTip={setShowStrategyTip}
+      handleStrategyDontKnow={handleStrategyDontKnow}
+      handleStrategyNext={handleStrategyNext}
+      resetStudy={resetStudy}
+      handleWordRead={handleWordRead}
+    />
   );
 };
 
