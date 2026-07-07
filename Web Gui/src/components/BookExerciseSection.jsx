@@ -17,6 +17,7 @@ const formatWordType = (type) => {
 };
 
 const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selectedDay, setSelectedDay, completedDays, setCompletedDays, addMistake }) => {
+  const totalDays = 54;
   const [currentDayData, setCurrentDayData] = useState(null);
   const [loadingDay, setLoadingDay] = useState(false);
   const [showEvaluationChoice, setShowEvaluationChoice] = useState(false);
@@ -366,7 +367,6 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
     }
   }, [selectedDay, isEvaluationMode, showEvaluationChoice]);
 
-  const totalDays = 54;
   
   const findCorrectRightKey = (leftItem, rightList, wordsList, isAntonym = false) => {
     if (!leftItem || !rightList || !wordsList) return null;
