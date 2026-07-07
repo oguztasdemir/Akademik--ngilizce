@@ -10,7 +10,8 @@ const ParagraphsSection = ({
   playSpeechAudio,
   notebook,
   handleAddCustomWord,
-  logStudyActivity
+  logStudyActivity,
+  addMistake
 }) => {
   const [passages, setPassages] = useState([]);
   const [selectedPassage, setSelectedPassage] = useState(null);
@@ -114,6 +115,19 @@ const ParagraphsSection = ({
             english: origin === 'en' ? rawWord : data.translation,
             turkish: origin === 'en' ? data.translation : rawWord,
             sentenceIdx: sIdx
+          });
+        }
+
+        if (origin === 'en' && addMistake) {
+          const enSentences = selectedPassage && selectedPassage.passage ? selectedPassage.passage.split(/(?<=[.?!])\s+/) : [];
+          const trSentences = selectedPassage && selectedPassage.translation ? selectedPassage.translation.split(/(?<=[.?!])\s+/) : [];
+          addMistake({
+            type: 'word',
+            word: cleanWord,
+            meaning: data.translation,
+            source: 'reading',
+            sentence: enSentences[sIdx] || '',
+            translation: trSentences[sIdx] || ''
           });
         }
 

@@ -181,11 +181,15 @@ app.post(['/api/translate', '/api/:category/translate'], async (req, res) => {
       }
     }
 
-    // Check 3: Reverse Turkish -> English Match
+    // Check 3: Reverse Turkish -> English Match (Safe stemming)
     let reverseMatch = null;
+    const stripTurkishSuffixes = (w) => {
+      return w.replace(/(dan|den|tan|ten|da|de|ta|te|ya|ye|a|e|ın|in|un|ün|ı|i|u|ü|la|le|lar|ler|nız|niz|nuz|nüz|mız|miz|muz|müz)$/g, "");
+    };
+    const strippedWord = stripTurkishSuffixes(cleanWord);
     for (const [en, tr] of Object.entries(dictData)) {
       const trMeanings = tr.toLowerCase().split(/[;,]/).map(s => s.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ""));
-      if (trMeanings.includes(cleanWord) || trMeanings.some(m => m.startsWith(cleanWord) || cleanWord.startsWith(m))) {
+      if (trMeanings.includes(cleanWord) || (strippedWord.length >= 3 && trMeanings.some(m => stripTurkishSuffixes(m) === strippedWord))) {
         reverseMatch = en;
         break;
       }

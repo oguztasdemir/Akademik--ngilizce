@@ -23,6 +23,8 @@ import AuthModal from './components/AuthModal';
 import SmartStudySection from './components/SmartStudySection';
 import CampSection from './components/CampSection';
 import BookExerciseSection from './components/BookExerciseSection';
+import { renderMarkdown } from './utils/markdown';
+import achievementsData from '@dataset/yokdil/achievements.json';
 
 import fallbackExamsFen from '@dataset/yokdil/fen/exams.json';
 import fallbackExamsSosyal from '@dataset/yokdil/sosyal/exams.json';
@@ -77,164 +79,6 @@ const ROOM_BACKGROUNDS = {
     gradient: 'linear-gradient(135deg, rgba(49,16,132,0.5) 0%, rgba(3,0,30,0.6) 100%)',
     border: 'rgba(139,92,246,0.15)'
   }
-};
-
-const parseInlineMarkdown = (text) => {
-  if (!text) return '';
-  const regex = /(\*\*([^*]+)\*\*)|(\*([^*]+)\*)|(`([^`]+)`)/g;
-  const tokens = [];
-  let match;
-  let lastIdx = 0;
-
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIdx) {
-      tokens.push(text.substring(lastIdx, match.index));
-    }
-
-    if (match[1]) { // bold
-      tokens.push(<strong key={match.index} className="font-extrabold text-white">{match[2]}</strong>);
-    } else if (match[3]) { // italic
-      tokens.push(<em key={match.index} className="italic text-slate-200">{match[4]}</em>);
-    } else if (match[5]) { // inline code
-      tokens.push(<code key={match.index} className="px-1.5 py-0.5 rounded bg-white/10 text-indigo-300 text-xs font-mono font-bold">{match[6]}</code>);
-    }
-    lastIdx = regex.lastIndex;
-  }
-
-  if (lastIdx < text.length) {
-    tokens.push(text.substring(lastIdx));
-  }
-
-  return tokens.length > 0 ? tokens : text;
-};
-
-const renderMarkdown = (text) => {
-  if (!text) return null;
-  const lines = text.split('\n');
-  const elements = [];
-
-  let inTable = false;
-  let tableRows = [];
-
-  lines.forEach((line, index) => {
-    const trimmedLine = line.trim();
-
-    // Parse table row
-    if (trimmedLine.startsWith('|')) {
-      inTable = true;
-      const cells = trimmedLine.split('|').map(c => c.trim()).filter((c, i, arr) => i > 0 && i < arr.length - 1);
-
-      // Skip separator row (e.g. |---|---|)
-      if (cells.every(c => c.match(/^:+|-+:*$/) || c === '')) {
-        return;
-      }
-
-      tableRows.push(cells);
-      return;
-    }
-
-    // If table ends, flush it
-    if (inTable && !trimmedLine.startsWith('|')) {
-      inTable = false;
-      if (tableRows.length > 0) {
-        elements.push(
-          <div key={`table-${index}`} className="overflow-x-auto my-4 rounded-xl border border-white/5 bg-white/1">
-            <table className="min-w-full divide-y divide-white/5">
-              <thead className="bg-indigo-500/10">
-                <tr>
-                  {tableRows[0].map((cell, idx) => (
-                    <th key={idx} className="px-4 py-3 text-left text-xs font-bold text-indigo-300 uppercase tracking-wider">
-                      {parseInlineMarkdown(cell)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5 bg-transparent">
-                {tableRows.slice(1).map((row, rowIdx) => (
-                  <tr key={rowIdx} className="hover:bg-white/2 transition-colors">
-                    {row.map((cell, cellIdx) => (
-                      <td key={cellIdx} className="px-4 py-3 text-xs text-slate-300">
-                        {parseInlineMarkdown(cell)}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
-        tableRows = [];
-      }
-    }
-
-    if (trimmedLine.startsWith('# ')) {
-      elements.push(
-        <h1 key={index} className="text-xl font-extrabold text-slate-100 mt-6 mb-3 border-b border-white/10 pb-2">
-          {parseInlineMarkdown(trimmedLine.substring(2))}
-        </h1>
-      );
-    } else if (trimmedLine.startsWith('## ')) {
-      elements.push(
-        <h2 key={index} className="text-lg font-bold text-indigo-400 mt-5 mb-2">
-          {parseInlineMarkdown(trimmedLine.substring(3))}
-        </h2>
-      );
-    } else if (trimmedLine.startsWith('### ')) {
-      elements.push(
-        <h3 key={index} className="text-base font-semibold text-emerald-400 mt-4 mb-2">
-          {parseInlineMarkdown(trimmedLine.substring(4))}
-        </h3>
-      );
-    } else if (trimmedLine.startsWith('* ') || trimmedLine.startsWith('- ')) {
-      const isSub = line.startsWith('    ') || line.startsWith('\t');
-      elements.push(
-        <div key={index} className={`flex items-start gap-2 text-slate-300 text-sm leading-relaxed ${isSub ? 'pl-8' : 'pl-4'} mb-1`}>
-          <span className="text-indigo-400 mt-1.5 flex-shrink-0 text-[10px]">•</span>
-          <div>{parseInlineMarkdown(trimmedLine.substring(2))}</div>
-        </div>
-      );
-    } else if (!trimmedLine) {
-      // Empty line spacer
-    } else {
-      elements.push(
-        <p key={index} className="text-slate-300 text-sm leading-relaxed mb-3">
-          {parseInlineMarkdown(trimmedLine)}
-        </p>
-      );
-    }
-  });
-
-  // Flush final table if file ends with one
-  if (inTable && tableRows.length > 0) {
-    elements.push(
-      <div key={`table-final`} className="overflow-x-auto my-4 rounded-xl border border-white/5 bg-white/1">
-        <table className="min-w-full divide-y divide-white/5">
-          <thead className="bg-indigo-500/10">
-            <tr>
-              {tableRows[0].map((cell, idx) => (
-                <th key={idx} className="px-4 py-3 text-left text-xs font-bold text-indigo-300 uppercase tracking-wider">
-                  {parseInlineMarkdown(cell)}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5 bg-transparent">
-            {tableRows.slice(1).map((row, rowIdx) => (
-              <tr key={rowIdx} className="hover:bg-white/2 transition-colors">
-                {row.map((cell, cellIdx) => (
-                  <td key={cellIdx} className="px-4 py-3 text-xs text-slate-300">
-                    {parseInlineMarkdown(cell)}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-
-  return <div className="space-y-1">{elements}</div>;
 };
 
 // Web Audio API Sound Synthesizers for Gamification
@@ -686,7 +530,25 @@ function App() {
     localStorage.setItem('yokdil_active_outfit', key);
   };
 
-  const getAchievementTier = (id, value) => {
+  const getAchievementTier = (id, value, target) => {
+    if (target !== undefined) {
+      const completed = value >= target;
+      const progress = Math.min(100, Math.round((value / target) * 100));
+      const lvlParts = id.split('_lvl_');
+      const lvl = lvlParts.length > 1 ? parseInt(lvlParts[1], 10) : 1;
+      let tierName = `Seviye ${lvl}`;
+      if (completed) {
+        tierName += " ⭐";
+      }
+      return {
+        tierName,
+        nextTarget: target,
+        progress: Math.max(0, Math.min(100, progress)),
+        isMax: true,
+        completed
+      };
+    }
+
     let thresholds = [10, 50, 200, 500];
     let names = ["Bronz 🥉", "Gümüş 🥈", "Altın 🥇", "Elmas 💎"];
 
@@ -721,6 +583,29 @@ function App() {
       isMax: tierIndex === thresholds.length - 1,
       completed: tierIndex >= 0
     };
+  };
+
+  const getAchievementsList = () => {
+    const solvedCount = getStats().solved;
+    const correctCount = getStats().correct;
+    const wordCount = Object.keys(wordStats).length;
+    const lectureCount = dailyLecturesStudied;
+    const streakCount = studyStreak;
+    const gemCount = gems;
+
+    const valueMap = {
+      first_step: solvedCount,
+      correct_strike: correctCount,
+      word_master: wordCount,
+      grammar_master: lectureCount,
+      on_fire: streakCount,
+      gem_collector: gemCount
+    };
+
+    return achievementsData.map(ach => ({
+      ...ach,
+      value: valueMap[ach.category] || 0
+    }));
   };
 
   // Explanation state
@@ -1409,6 +1294,31 @@ function App() {
     }
 
     loadQuestionExplanation(qIndex);
+  };
+
+  const addMistake = (mistakeObj) => {
+    setMistakes(prev => {
+      // Prevent duplicates based on unique keys for each type
+      let isDuplicate = false;
+      if (mistakeObj.type === 'word') {
+        isDuplicate = prev.some(m => m.type === 'word' && m.word.toLowerCase() === mistakeObj.word.toLowerCase());
+      } else if (mistakeObj.type === 'exam_question') {
+        isDuplicate = prev.some(m => m.type === 'exam_question' && m.examId === mistakeObj.examId && m.qNumber === mistakeObj.qNumber);
+      } else if (mistakeObj.type === 'camp_question') {
+        isDuplicate = prev.some(m => m.type === 'camp_question' && m.day === mistakeObj.day && m.questionText === mistakeObj.questionText);
+      } else if (mistakeObj.type === 'reading_question') {
+        isDuplicate = prev.some(m => m.type === 'reading_question' && m.bookId === mistakeObj.bookId && m.questionText === mistakeObj.questionText);
+      } else {
+        // Fallback for old style exam mistakes
+        isDuplicate = prev.some(m => m.examId === mistakeObj.examId && m.qNumber === mistakeObj.qNumber && !m.type);
+      }
+
+      if (isDuplicate) return prev;
+      
+      const newMistakes = [...prev, { ...mistakeObj, id: Date.now() + Math.random().toString(36).substring(2, 7) }];
+      localStorage.setItem('yokdil_mistakes', JSON.stringify(newMistakes));
+      return newMistakes;
+    });
   };
 
   const recordWordStat = (word, isCorrect) => {
@@ -2565,12 +2475,12 @@ function App() {
                 ) : (
                   <div 
                     className="category-back-btn" 
-                    onClick={() => { setSelectedCategory(null); setSelectedExam(null); setQuizActive(false); }} 
-                    title="Sınav Seçimine Dön"
+                    onClick={() => setSidebarCollapsed(!sidebarCollapsed)} 
+                    title={sidebarCollapsed ? "Sol Paneli Aç" : "Sol Paneli Kapat"}
                   >
-                    <i className="fa-solid fa-arrow-left" style={{ fontSize: '0.82rem' }}></i>
+                    <i className={`fa-solid ${sidebarCollapsed ? 'fa-indent' : 'fa-outdent'}`} style={{ fontSize: '0.82rem' }}></i>
                     <span className="mobile-hide-text" style={{ fontSize: '0.82rem', fontFamily: 'var(--font-heading)' }}>
-                      Geri Git ({selectedCategory === 'fen' ? 'Fen' : selectedCategory === 'sosyal' ? 'Sosyal' : 'Sağlık'})
+                      {sidebarCollapsed ? 'Sol Paneli Aç' : 'Sol Paneli Kapat'}
                     </span>
                   </div>
                 )}
@@ -2654,25 +2564,22 @@ function App() {
                 <div className="menu-list landing-menu">
                   <button className="menu-item subject-card ml-card" onClick={() => { setSelectedCategory('fen'); setActiveTab('dashboard'); setSelectedExam(null); setQuizActive(false); }}>
                     <div className="menu-icon subject-icon" style={{ borderColor: '#2B6CB0', color: '#4299E1' }}><i className="fa-solid fa-flask"></i></div>
-                    <div className="menu-text">
-                      <h4>Fen Bilimleri</h4>
-                      <p>9 sınav (2018-2026) ve 720 soru (Tamamı temiz JSON olarak yüklendi).</p>
+                    <div className="menu-text" style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                      <h4 style={{ margin: 0 }}>Fen Bilimleri</h4>
                     </div>
                     <i className="fa-solid fa-chevron-right arrow-icon"></i>
                   </button>
                   <button className="menu-item subject-card gai-card" onClick={() => { setSelectedCategory('sosyal'); setActiveTab('dashboard'); setSelectedExam(null); setQuizActive(false); }}>
                     <div className="menu-icon subject-icon" style={{ borderColor: '#805AD5', color: '#B794F4' }}><i className="fa-solid fa-gavel"></i></div>
-                    <div className="menu-text">
-                      <h4>Sosyal Bilimler</h4>
-                      <p>9 sınav (2018-2026) ve 720 soru (Tamamı temiz JSON olarak yüklendi).</p>
+                    <div className="menu-text" style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                      <h4 style={{ margin: 0 }}>Sosyal Bilimler</h4>
                     </div>
                     <i className="fa-solid fa-chevron-right arrow-icon"></i>
                   </button>
                   <button className="menu-item subject-card ds-card" onClick={() => { setSelectedCategory('saglik'); setActiveTab('dashboard'); setSelectedExam(null); setQuizActive(false); }}>
                     <div className="menu-icon subject-icon" style={{ borderColor: '#059669', color: '#34D399' }}><i className="fa-solid fa-heart-pulse"></i></div>
-                    <div className="menu-text">
-                      <h4>Sağlık Bilimleri</h4>
-                      <p>9 sınav (2018-2026) ve 720 soru (Tamamı temiz JSON olarak yüklendi).</p>
+                    <div className="menu-text" style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                      <h4 style={{ margin: 0 }}>Sağlık Bilimleri</h4>
                     </div>
                     <i className="fa-solid fa-chevron-right arrow-icon"></i>
                   </button>
@@ -3033,16 +2940,9 @@ function App() {
                     🏆 Başarı Rozetleriniz & Koleksiyonunuz
                   </h3>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginBottom: '20px' }}>
-                     {[
-                      { id: 'first_step', name: 'Soru Avcısı 🏁', value: getStats().solved, desc: 'Toplam çözülen akademik soru.' },
-                      { id: 'correct_strike', name: 'İsabet Şampiyonu 🎯', value: getStats().correct, desc: 'Doğru çözülen akademik soru.' },
-                      { id: 'word_master', name: 'Kelime Sihirbazı 🦁', value: Object.keys(wordStats).length, desc: 'Defterdeki çalışılan kelime.' },
-                      { id: 'grammar_master', name: 'Derskolik 🎓', value: dailyLecturesStudied, desc: 'Bugün tamamlanan ders notu.' },
-                      { id: 'on_fire', name: 'Seri Canavarı 🔥', value: studyStreak, desc: 'Çalışılan ardışık gün serisi.' },
-                      { id: 'gem_collector', name: 'Kristal Zengini 💎', value: gems, desc: 'Kazanılan toplam kristal/gem.' }
-                    ].map(ach => {
-                      const tier = getAchievementTier(ach.id, ach.value);
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginBottom: '20px', maxHeight: '300px', overflowY: 'auto', paddingRight: '6px' }}>
+                     {getAchievementsList().map(ach => {
+                      const tier = getAchievementTier(ach.id, ach.value, ach.target);
                       return (
                         <div
                           key={ach.id}
@@ -3555,6 +3455,7 @@ function App() {
               incrementDailyQuestions={incrementDailyQuestions}
               incrementDailyWords={incrementDailyWords}
               autoPronounceEnabled={autoPronounceEnabled}
+              addMistake={addMistake}
             />
 
             {/* TAB 3.5: PARAGRAPHS SECTION */}
@@ -3568,6 +3469,7 @@ function App() {
               notebook={notebook}
               handleAddCustomWord={handleAddCustomWord}
               logStudyActivity={logStudyActivity}
+              addMistake={addMistake}
             />
 
             {/* TAB 3.6: YDS BOOK EXERCISES SECTION */}
@@ -3579,6 +3481,7 @@ function App() {
               setSelectedDay={setBookSelectedDay}
               completedDays={bookCompletedDays}
               setCompletedDays={setBookCompletedDays}
+              addMistake={addMistake}
             />
 
             {/* TAB 4: LECTURES SECTION */}
@@ -3649,6 +3552,7 @@ function App() {
                   selectedCategory={selectedCategory}
                   awardPetXP={awardPetXP}
                   triggerConfetti={triggerConfetti}
+                  addMistake={addMistake}
                 />
               </section>
             )}
@@ -3661,6 +3565,9 @@ function App() {
                   awardPetXP={awardPetXP}
                   triggerConfetti={triggerConfetti}
                   examsDb={{ fen: fallbackExamsFen, sosyal: fallbackExamsSosyal, saglik: fallbackExamsSaglik }}
+                  dictDb={{ fen: fallbackDictFen, sosyal: fallbackDictSosyal, saglik: fallbackDictSaglik }}
+                  recordWordStat={recordWordStat}
+                  addMistake={addMistake}
                 />
               </section>
             )}
@@ -3692,16 +3599,9 @@ function App() {
                 </div>
 
                 <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(251, 191, 36, 0.15)' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
-                    {[
-                      { id: 'first_step', name: 'Soru Avcısı 🏁', value: getStats().solved, desc: 'Toplam çözülen akademik soru.' },
-                      { id: 'correct_strike', name: 'İsabet Şampiyonu 🎯', value: getStats().correct, desc: 'Doğru çözülen akademik soru.' },
-                      { id: 'word_master', name: 'Kelime Sihirbazı 🦁', value: Object.keys(wordStats).length, desc: 'Defterdeki çalışılan kelime.' },
-                      { id: 'grammar_master', name: 'Derskolik 🎓', value: dailyLecturesStudied, desc: 'Bugün tamamlanan ders notu.' },
-                      { id: 'on_fire', name: 'Seri Canavarı 🔥', value: studyStreak, desc: 'Çalışılan ardışık gün serisi.' },
-                      { id: 'gem_collector', name: 'Kristal Zengini 💎', value: gems, desc: 'Kazanılan toplam kristal/gem.' }
-                    ].map(ach => {
-                      const tier = getAchievementTier(ach.id, ach.value);
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', maxHeight: '600px', overflowY: 'auto', paddingRight: '10px' }}>
+                    {getAchievementsList().map(ach => {
+                      const tier = getAchievementTier(ach.id, ach.value, ach.target);
                       return (
                         <div
                           key={ach.id}

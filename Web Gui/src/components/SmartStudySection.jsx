@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check, AlertCircle, Award, ArrowRight, BookOpen, Edit3, HelpCircle, Trophy } from 'lucide-react';
 
 const CATEGORY_WORDS = {
@@ -723,6 +723,32 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti }) =>
             Çalışmayı Başlat 🚀
           </button>
         </div>
+      </div>
+    );
+  }
+
+  if (!words || words.length === 0 || !words[currentIdx]) {
+    return (
+      <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)', textAlign: 'center', color: 'white', minHeight: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <Trophy size={48} style={{ color: '#fbbf24', marginBottom: '16px' }} />
+        <h3 style={{ margin: '0 0 8px 0', fontSize: '1.4rem', fontWeight: 'bold' }}>Tebrikler! 🎉</h3>
+        <p style={{ color: '#94a3b8', margin: '0 0 24px 0', fontSize: '0.9rem' }}>Bu kategori için çalışılacak kelime bulunamadı veya tüm kelimeleri başarıyla tamamladınız.</p>
+        <button
+          onClick={() => {
+            const category = selectedCategory || 'fen';
+            localStorage.removeItem(`yokdil_smart_study_session_${category}`);
+            localStorage.setItem('yokdil_smart_study_known_words', '[]');
+            setKnownWords([]);
+            setStudyStarted(false);
+            setStudyWords([]);
+            setPhase(1);
+            setCurrentIdx(0);
+          }}
+          className="btn-primary"
+          style={{ padding: '10px 20px', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold' }}
+        >
+          Çalışmayı Sıfırla ve Yeniden Başlat 🔄
+        </button>
       </div>
     );
   }

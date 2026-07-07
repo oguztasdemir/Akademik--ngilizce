@@ -839,6 +839,11 @@ const VocabularySection = ({
   const handleMatchSelect = (item, side) => {
     if (matchedWords.has(item.id)) return;
 
+    // Clear previous error highlights immediately when selecting another word
+    if (matchErrors.size > 0) {
+      setMatchErrors(new Set());
+    }
+
     if (side === 'left') {
       setActiveLeft(item);
       if (activeRight) {
@@ -856,6 +861,7 @@ const VocabularySection = ({
     if (incrementDailyQuestions) incrementDailyQuestions();
     if (leftItem.id === rightItem.id) {
       setMatchedWords(prev => new Set([...prev, leftItem.id]));
+      setMatchErrors(new Set()); // Ensure errors are cleared on correct match
       setActiveLeft(null);
       setActiveRight(null);
       if (recordWordStat) {
@@ -863,15 +869,17 @@ const VocabularySection = ({
         if (wordObj) recordWordStat(wordObj.english, true);
       }
     } else {
-      // If mismatch, keep them visually identical (no red flashing/shake) but record error score
+      // Mismatch: add both IDs to matchErrors to highlight them in red
+      setMatchErrors(new Set([leftItem.id, rightItem.id]));
       if (recordWordStat) {
         const wordObj = pool.find(w => w.id === leftItem.id);
         if (wordObj) recordWordStat(wordObj.english, false);
+        const rightWordObj = pool.find(w => w.id === rightItem.id);
+        if (rightWordObj) recordWordStat(rightWordObj.english, false);
       }
-      setTimeout(() => {
-        setActiveLeft(null);
-        setActiveRight(null);
-      }, 300);
+      // Reset selections so user can try again immediately, keeping red highlights visible
+      setActiveLeft(null);
+      setActiveRight(null);
     }
   };
 
@@ -1527,13 +1535,6 @@ const VocabularySection = ({
         <div className="space-y-4">
           <div className="flex justify-between items-center text-[10px] text-slate-400" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '0.78rem', fontWeight: 'bold' }}>Kelime Eşleştirme (5 Çift - Mobil Uyumlu 📱)</span>
-            <button 
-              onClick={() => startMatchingGame()}
-              className="text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1"
-              style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', border: 'none', background: 'none' }}
-            >
-              <RefreshCw className="h-3 w-3" /> Yeniden Dağıt
-            </button>
           </div>
 
           {/* Mode Switcher */}
@@ -1621,11 +1622,58 @@ const VocabularySection = ({
             </div>
           </div>
 
-          {matchedWords.size === 5 && (
-            <div className="glass-card p-4 border border-emerald-500/20 bg-emerald-500/5 text-center rounded-2xl flex items-center justify-center gap-2" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', padding: '16px', marginTop: '16px' }}>
-              <CheckCircle className="h-5 w-5 text-emerald-400" />
-              <span className="text-xs font-bold text-emerald-400" style={{ color: '#34d399' }}>Tebrikler! 5 kelimenin tamamını başarıyla eşleştirdiniz.</span>
+          {matchedWords.size === 5 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
+              <div className="glass-card p-4 border border-emerald-500/20 bg-emerald-500/5 text-center rounded-2xl flex items-center justify-center gap-2" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', padding: '14px' }}>
+                <CheckCircle className="h-5 w-5 text-emerald-400" />
+                <span className="text-xs font-bold text-emerald-400" style={{ color: '#34d399' }}>Tebrikler! 5 kelimenin tamamını başarıyla eşleştirdiniz.</span>
+              </div>
+              <button
+                onClick={() => startMatchingGame()}
+                className="btn-primary animate-pulse"
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  fontSize: '0.88rem',
+                  fontWeight: 'bold',
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  border: 'none',
+                  borderRadius: '12px',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)'
+                }}
+              >
+                Sonraki 5 Kelimeye Geç ➡️
+              </button>
             </div>
+          ) : (
+            <button 
+              onClick={() => startMatchingGame()}
+              className="btn-secondary"
+              style={{ 
+                width: '100%', 
+                marginTop: '16px', 
+                padding: '10px', 
+                fontSize: '0.82rem', 
+                fontWeight: 'bold', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                gap: '6px',
+                cursor: 'pointer',
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                color: '#cbd5e1',
+                borderRadius: '10px'
+              }}
+            >
+              <RefreshCw className="h-4 w-4" /> Kartları Yeniden Karıştır / Dağıt
+            </button>
           )}
         </div>
       )}

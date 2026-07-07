@@ -13,7 +13,7 @@ const formatWordType = (type) => {
   return type;
 };
 
-const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selectedDay, setSelectedDay, completedDays, setCompletedDays }) => {
+const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selectedDay, setSelectedDay, completedDays, setCompletedDays, addMistake }) => {
   const [currentDayData, setCurrentDayData] = useState(null);
   const [loadingDay, setLoadingDay] = useState(false);
   const [showEvaluationChoice, setShowEvaluationChoice] = useState(false);
@@ -157,6 +157,128 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
   const [quizAnswers, setQuizAnswers] = useState({}); // { questionId: selectedOption }
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [activeQuizQIdx, setActiveQuizQIdx] = useState(0);
+  const [viewMode, setViewMode] = useState('daily'); // 'daily', 'weekly', 'monthly'
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedWeek, setSelectedWeek] = useState(null);
+  const [reportCardDay, setReportCardDay] = useState(null);
+  const [reportCardWords, setReportCardWords] = useState([]);
+  const [loadingReportCard, setLoadingReportCard] = useState(false);
+
+  useEffect(() => {
+    if (!reportCardDay) {
+      setReportCardWords([]);
+      return;
+    }
+
+    const loadReportData = async () => {
+      setLoadingReportCard(true);
+      
+      const isMonthly = (reportCardDay % 28 === 0) || (reportCardDay === totalDays);
+      const isSec = !isMonthly && ((reportCardDay % 7 === 0) || (reportCardDay === totalDays));
+      
+      let days = [reportCardDay];
+      if (isMonthly) {
+        const currentMonthIdx = Math.ceil(reportCardDay / 28);
+        const startDay = Math.max(1, (currentMonthIdx - 1) * 28 + 1);
+        days = Array.from({ length: reportCardDay - startDay + 1 }, (_, idx) => startDay + idx);
+      } else if (isSec) {
+        const currentWeekIdx = Math.ceil(reportCardDay / 7);
+        const startDay = Math.max(1, (currentWeekIdx - 1) * 7 + 1);
+        days = Array.from({ length: reportCardDay - startDay + 1 }, (_, idx) => startDay + idx);
+      }
+
+      const tempWords = [];
+      for (const d of days) {
+        try {
+          const res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/kitap/day_${d}.json`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.words) {
+              tempWords.push(...data.words);
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      setReportCardWords(tempWords);
+      setLoadingReportCard(false);
+    };
+
+    loadReportData();
+  }, [reportCardDay, totalDays]);
+
+  const handlePrintPDF = (dayNum, wordsList) => {
+    const printWindow = window.open('', '_blank', 'width=800,height=900');
+    if (!printWindow) {
+      alert("Popup engelleyiciyi devre dışı bırakın!");
+      return;
+    }
+
+    const isMonthly = (dayNum % 28 === 0) || (dayNum === totalDays);
+    const isSec = !isMonthly && ((dayNum % 7 === 0) || (dayNum === totalDays));
+    const titleText = isMonthly 
+      ? `YDS Kitap Aylık Genel Değerlendirme Raporu - Ay ${Math.ceil(dayNum / 28)}` 
+      : (isSec ? `YDS Kitap Haftalık Değerlendirme Raporu - Hafta ${Math.ceil(dayNum / 7)}` : `YDS Kitap Günlük Çalışma Raporu - Gün ${dayNum}`);
+
+    let wordsRows = wordsList.map((w, idx) => `
+      <tr style="border-bottom: 1px solid #e2e8f0;">
+        <td style="padding: 10px; font-weight: bold; color: #1e293b;">${idx + 1}. ${w.word}</td>
+        <td style="padding: 10px; color: #475569; font-style: italic;">${w.type || ''}</td>
+        <td style="padding: 10px; color: #0f172a; font-weight: 500;">${w.turkish || ''}</td>
+        <td style="padding: 10px; color: #475569; font-size: 0.85rem;">${w.sentence_en || ''}</td>
+      </tr>
+    `).join('');
+
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${titleText}</title>
+          <style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #1e293b; background-color: #ffffff; }
+            h1 { color: #818cf8; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 1.8rem; }
+            .meta-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; }
+            .meta-item { font-size: 0.9rem; color: #475569; }
+            .meta-item strong { color: #0f172a; font-size: 1.1rem; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th { background-color: #f1f5f9; color: #475569; text-align: left; padding: 12px; font-size: 0.9rem; border-bottom: 2px solid #cbd5e1; }
+            @media print {
+              body { padding: 0; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <h1>📝 ${titleText}</h1>
+          <div class="meta-box">
+            <div class="meta-item">Kategori: <strong>YDS Kelime Kitabı</strong></div>
+            <div class="meta-item">Tamamlanma Durumu: <strong>✓ Başarıyla Tamamlandı</strong></div>
+          </div>
+          <h3>📚 Kelime Listesi (${wordsList.length} Sözcük)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Kelime</th>
+                <th>Tür</th>
+                <th>Türkçe Anlamı</th>
+                <th>Örnek Cümle</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${wordsRows}
+            </tbody>
+          </table>
+          <script>
+            window.onload = function() {
+              window.print();
+              setTimeout(function() { window.close(); }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
 
   // Load session state from localStorage on mount
   useEffect(() => {
@@ -179,7 +301,10 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
 
   // Save session state to localStorage on state change
   useEffect(() => {
-    if (!selectedDay) return;
+    if (!selectedDay) {
+      localStorage.removeItem(`yokdil_book_exercise_session`);
+      return;
+    }
     const sessionObj = {
       selectedDay,
       phase,
@@ -206,6 +331,94 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
       if (isEvaluationMode) {
         return;
       }
+
+      const isMonthlyCamp = selectedDay % 28 === 0;
+      const isSecCamp = selectedDay % 7 === 0;
+      if (isSecCamp || isMonthlyCamp) {
+        setLoadingDay(true);
+        setCurrentDayData(null);
+
+        const startDay = isMonthlyCamp ? selectedDay - 27 : selectedDay - 6;
+        const endDay = selectedDay;
+
+        const loadWeeklyData = async () => {
+          const allWords = [];
+          const synonymLeft = [];
+          const synonymRight = [];
+          const synonymAnswers = {};
+          const antonymLeft = [];
+          const antonymRight = [];
+          const antonymAnswers = {};
+          const allQuestions = [];
+
+          try {
+            for (let d = startDay; d <= endDay; d++) {
+              if (d <= 0) continue;
+              const res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/kitap/day_${d}.json`);
+              if (res.ok) {
+                const data = await res.json();
+                if (data.words) allWords.push(...data.words);
+                
+                const sm = data.exercises?.synonym_matching;
+                if (sm) {
+                  if (sm.left) synonymLeft.push(...sm.left);
+                  if (sm.right) synonymRight.push(...sm.right);
+                  if (sm.answers) Object.assign(synonymAnswers, sm.answers);
+                }
+                const am = data.exercises?.antonym_matching;
+                if (am) {
+                  if (am.left) antonymLeft.push(...am.left);
+                  if (am.right) antonymRight.push(...am.right);
+                  if (am.answers) Object.assign(antonymAnswers, am.answers);
+                }
+                
+                const mc = data.multiple_choice || (data.exercises && data.exercises.multiple_choice);
+                if (mc) allQuestions.push(...mc);
+              }
+            }
+
+            const shuffledQuestions = [...allQuestions].sort(() => 0.5 - Math.random());
+            const mappedQuestions = shuffledQuestions.map((q, idx) => ({
+              ...q,
+              id: idx + 1
+            }));
+
+            const mergedData = {
+              day: selectedDay,
+              isEvaluation: true,
+              isSectionCamp: !isMonthlyCamp,
+              isMonthlyCamp: isMonthlyCamp,
+              words: allWords,
+              exercises: {
+                synonym_matching: {
+                  left: synonymLeft.slice(0, 15),
+                  right: synonymRight.slice(0, 15),
+                  border: isMonthlyCamp ? 'rgba(239, 68, 68, 0.7)' : 'rgba(251, 191, 36, 0.7)',
+                  answers: synonymAnswers
+                },
+                antonym_matching: {
+                  left: antonymLeft.slice(0, 15),
+                  right: antonymRight.slice(0, 15),
+                  answers: antonymAnswers
+                },
+                multiple_choice: isMonthlyCamp ? mappedQuestions.slice(0, 30) : mappedQuestions
+              }
+            };
+
+            setCurrentDayData(mergedData);
+            setLoadingDay(false);
+          } catch (e) {
+            console.error("Weekly aggregation failed:", e);
+            alert("Haftalık bölüm sonu kampı verileri yüklenirken hata oluştu.");
+            setSelectedDay(null);
+            setLoadingDay(false);
+          }
+        };
+
+        loadWeeklyData();
+        return;
+      }
+
       setLoadingDay(true);
       setCurrentDayData(null);
       fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/kitap/day_${selectedDay}.json`)
@@ -365,6 +578,85 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
 
   return (
     <div className="section-container animate-fade-in" style={{ color: 'white' }}>
+      {reportCardDay && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15, 23, 42, 0.8)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div className="glass-card" style={{ width: '100%', maxWidth: '600px', maxHeight: '85vh', overflowY: 'auto', borderRadius: '24px', padding: '28px', border: '1.5px solid var(--primary-light)', background: 'rgba(15, 23, 42, 0.95)', color: 'white', textAlign: 'left' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: 'bold', margin: 0, color: 'white' }}>
+                📊 Genel Değerlendirme Karnesi (YDS Kitap)
+              </h3>
+              <button 
+                onClick={() => setReportCardDay(null)} 
+                style={{ background: 'transparent', border: 'none', color: '#cbd5e1', fontSize: '1.2rem', cursor: 'pointer' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {(() => {
+              const isMonthly = (reportCardDay % 28 === 0) || (reportCardDay === totalDays);
+              const isSec = !isMonthly && ((reportCardDay % 7 === 0) || (reportCardDay === totalDays));
+              
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                    <div className="glass-card" style={{ flex: 1, minWidth: '130px', padding: '14px', borderRadius: '14px', background: 'rgba(99, 102, 241, 0.08)', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
+                      <span style={{ fontSize: '0.68rem', color: '#a5b4fc', textTransform: 'uppercase', display: 'block' }}>Rapor Günü</span>
+                      <strong style={{ fontSize: '1.15rem', color: 'white' }}>
+                        {isMonthly ? `Aylık Genel Test ${Math.ceil(reportCardDay / 28)}` : (isSec ? `Haftalık Kamp ${Math.ceil(reportCardDay / 7)}` : `${reportCardDay}. Gün`)}
+                      </strong>
+                    </div>
+                    <div className="glass-card" style={{ flex: 1, minWidth: '130px', padding: '14px', borderRadius: '14px', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                      <span style={{ fontSize: '0.68rem', color: '#34d399', textTransform: 'uppercase', display: 'block' }}>Durum</span>
+                      <strong style={{ fontSize: '1.15rem', color: '#34d399' }}>✓ Tamamlandı</strong>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: '#cbd5e1', marginBottom: '8px' }}>
+                      📚 Çalışılan Kelimeler ({reportCardWords.length} Adet)
+                    </h4>
+                    {loadingReportCard ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', color: '#94a3b8' }}>
+                        <span style={{ fontSize: '0.82rem' }}>Veriler yükleniyor...</span>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '200px', overflowY: 'auto', paddingRight: '4px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '12px' }} className="custom-scrollbar">
+                        {reportCardWords.map((w, idx) => (
+                          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.8rem' }}>
+                            <span style={{ fontWeight: 'bold', color: 'white' }}>{w.word} <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}>({formatWordType(w.type)})</span></span>
+                            <span style={{ color: '#a5b4fc' }}>{w.turkish}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
+                    <button 
+                      onClick={() => handlePrintPDF(reportCardDay, reportCardWords)}
+                      className="btn-primary"
+                      style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: '#3b82f6', borderColor: '#3b82f6', cursor: 'pointer' }}
+                    >
+                      🖨️ PDF Olarak İndir / Yazdır
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setReportCardDay(null);
+                        handleDaySelect(reportCardDay);
+                      }}
+                      className="btn-secondary"
+                      style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
+                    >
+                      🔄 Çalışmayı Yeniden Başlat
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
       {/* Top Header progress bar if a day is selected */}
       {selectedDay ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
@@ -420,6 +712,34 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
       {/* 1. DAY SELECTION LIST VIEW */}
       {!selectedDay && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '40px' }}>
+          {/* Filter Bar */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+            {['daily', 'weekly', 'monthly'].map((mode) => (
+              <button
+                key={mode}
+                onClick={() => {
+                  setViewMode(mode);
+                  setSelectedMonth(null);
+                  setSelectedWeek(null);
+                }}
+                className="glass-button"
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '10px',
+                  fontSize: '0.78rem',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  background: viewMode === mode ? 'var(--primary-gradient)' : 'rgba(255,255,255,0.02)',
+                  border: viewMode === mode ? '1px solid var(--primary-light)' : '1px solid rgba(255,255,255,0.08)',
+                  color: viewMode === mode ? 'white' : '#cbd5e1',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {mode === 'daily' ? '📅 Günlük Görünüm' : mode === 'weekly' ? '🔁 Haftalık Görünüm' : '🔥 Aylık Görünüm'}
+              </button>
+            ))}
+          </div>
+
           {/* Search bar */}
           <div style={{ marginBottom: '16px' }}>
             <input
@@ -441,12 +761,39 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
             />
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {Array.from({ length: totalDays }, (_, idx) => {
-              const dayNum = idx + 1;
+          {(() => {
+            const getMonthStats = (monthNum) => {
+              const start = (monthNum - 1) * 28 + 1;
+              const end = Math.min(monthNum * 28, totalDays);
+              const totalDaysInMonth = end - start + 1;
+
+              let completed = 0;
+              for (let d = start; d <= end; d++) {
+                if (completedDays.includes(d)) {
+                  completed++;
+                }
+              }
+              return { completed, totalDaysInMonth };
+            };
+
+            const getWeekStats = (weekNum) => {
+              const start = (weekNum - 1) * 7 + 1;
+              const end = Math.min(weekNum * 7, totalDays);
+              const totalDaysInWeek = end - start + 1;
+
+              let completed = 0;
+              for (let d = start; d <= end; d++) {
+                if (completedDays.includes(d)) {
+                  completed++;
+                }
+              }
+              return { completed, totalDaysInWeek };
+            };
+
+            const renderDayItem = (dayNum) => {
               const isCompleted = completedDays.includes(dayNum);
               
-              // Filter logic
+              // Filter logic for search
               const searchLower = searchTerm.toLowerCase().trim();
               if (searchLower) {
                 const matchesDay = `gün ${dayNum}`.includes(searchLower) || String(dayNum).includes(searchLower);
@@ -455,10 +802,47 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                 if (!matchesDay && !matchesCompleted && !matchesPending) return null;
               }
 
+              const isMonthlyCamp = (dayNum % 28 === 0) || (dayNum === totalDays);
+              const isSecCamp = !isMonthlyCamp && ((dayNum % 7 === 0) || (dayNum === totalDays));
+              const secCampNum = Math.ceil(dayNum / 7);
+              const monthlyCampNum = Math.ceil(dayNum / 28);
+
+              let border = isMonthlyCamp 
+                ? '1.5px solid rgba(239, 68, 68, 0.4)' 
+                : (isSecCamp ? '1.5px solid rgba(251, 191, 36, 0.4)' : '1px solid rgba(255, 255, 255, 0.06)');
+              let bg = isMonthlyCamp 
+                ? 'rgba(239, 68, 68, 0.02)' 
+                : (isSecCamp ? 'rgba(251, 191, 36, 0.02)' : 'rgba(255, 255, 255, 0.02)');
+              let badgeText = isCompleted ? '✓ Tamamlandı' : 'Başlanmadı';
+              let badgeBg = isCompleted ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)';
+              let badgeColor = isCompleted ? '#34d399' : '#94a3b8';
+
+              if (isCompleted) {
+                bg = isMonthlyCamp 
+                  ? 'rgba(239, 68, 68, 0.06)' 
+                  : (isSecCamp ? 'rgba(251, 191, 36, 0.06)' : 'rgba(16, 185, 129, 0.04)');
+                border = isMonthlyCamp 
+                  ? '1.5px solid rgba(239, 68, 68, 0.7)' 
+                  : (isSecCamp ? '1.5px solid rgba(251, 191, 36, 0.7)' : '1px solid rgba(16, 185, 129, 0.25)');
+              }
+
+              const dayName = isMonthlyCamp 
+                ? `Aylık Genel Test ${monthlyCampNum} 🏆` 
+                : (isSecCamp ? `Haftanın Kampı ${secCampNum} 🏆` : `${dayNum}. Gün Çalışması`);
+              const dayDesc = isMonthlyCamp 
+                ? `${monthlyCampNum}. Ay Sonu Genel Değerlendirme Testi` 
+                : (isSecCamp ? `${secCampNum}. Hafta Sonu Genel Bölüm Tekrarı` : `Kelime Kartları, Eş/Zıt Anlam Alıştırmaları ve Çoktan Seçmeli Test`);
+
               return (
                 <div
                   key={dayNum}
-                  onClick={() => handleDaySelect(dayNum)}
+                  onClick={() => {
+                    if (isCompleted) {
+                      setReportCardDay(dayNum);
+                    } else {
+                      handleDaySelect(dayNum);
+                    }
+                  }}
                   className={`glass-card day-selector-row ${isCompleted ? 'completed' : ''}`}
                   style={{
                     display: 'flex',
@@ -466,15 +850,14 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                     justifyContent: 'space-between',
                     padding: '16px 24px',
                     borderRadius: '16px',
-                    border: isCompleted 
-                      ? '1px solid rgba(16, 185, 129, 0.25)' 
-                      : '1px solid rgba(255, 255, 255, 0.06)',
-                    background: isCompleted
-                      ? 'rgba(16, 185, 129, 0.04)'
-                      : 'rgba(255, 255, 255, 0.02)',
+                    border: border,
+                    background: bg,
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
-                    textAlign: 'left'
+                    textAlign: 'left',
+                    boxShadow: isMonthlyCamp 
+                      ? '0 0 15px rgba(239, 68, 68, 0.08)' 
+                      : (isSecCamp ? '0 0 15px rgba(251, 191, 36, 0.08)' : 'none')
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -482,22 +865,27 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: isCompleted ? 'rgba(16, 185, 129, 0.15)' : 'rgba(99, 102, 241, 0.1)',
+                      background: isCompleted 
+                        ? (isMonthlyCamp ? 'rgba(239, 68, 68, 0.15)' : (isSecCamp ? 'rgba(251, 191, 36, 0.15)' : 'rgba(16, 185, 129, 0.15)')) 
+                        : (isMonthlyCamp ? 'rgba(239, 68, 68, 0.12)' : (isSecCamp ? 'rgba(251, 191, 36, 0.12)' : 'rgba(99, 102, 241, 0.1)')),
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: isCompleted ? '#10b981' : '#818cf8',
+                      color: isCompleted 
+                        ? (isMonthlyCamp ? '#f87171' : (isSecCamp ? '#fbbf24' : '#10b981')) 
+                        : (isMonthlyCamp ? '#f87171' : (isSecCamp ? '#fbbf24' : '#818cf8')),
                       fontWeight: 'bold',
-                      fontSize: '0.95rem'
+                      fontSize: '0.95rem',
+                      border: (isSecCamp || isMonthlyCamp) ? `1px solid ${isMonthlyCamp ? 'rgba(239, 68, 68, 0.25)' : 'rgba(251, 191, 36, 0.25)'}` : 'none'
                     }}>
-                      {dayNum}
+                      {isMonthlyCamp ? '🔥' : (isSecCamp ? '👑' : dayNum)}
                     </div>
                     <div>
                       <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '750', color: 'white' }}>
-                        {dayNum}. Gün Çalışması
+                        {dayName}
                       </h4>
                       <p style={{ margin: '2px 0 0 0', fontSize: '0.76rem', color: '#94a3b8' }}>
-                        Kelime Kartları, Eş/Zıt Anlam Alıştırmaları ve Çoktan Seçmeli Test
+                        {dayDesc}
                       </p>
                     </div>
                   </div>
@@ -508,11 +896,13 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                       fontWeight: 'bold',
                       padding: '4px 10px',
                       borderRadius: '8px',
-                      background: isCompleted ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.04)',
-                      color: isCompleted ? '#34d399' : '#94a3b8',
-                      border: isCompleted ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(255, 255, 255, 0.05)'
+                      background: badgeBg,
+                      color: badgeColor,
+                      border: isCompleted 
+                        ? (isSecCamp ? '1px solid rgba(251, 191, 36, 0.2)' : '1px solid rgba(16, 185, 129, 0.2)') 
+                        : '1px solid rgba(255, 255, 255, 0.05)'
                     }}>
-                      {isCompleted ? '✓ Tamamlandı' : 'Başlanmadı'}
+                      {badgeText}
                     </span>
                     <button
                       className="btn-primary"
@@ -521,7 +911,9 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                         fontSize: '0.78rem',
                         fontWeight: 'bold',
                         borderRadius: '10px',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        background: isMonthlyCamp && !isCompleted ? '#ef4444' : (isSecCamp && !isCompleted ? '#f59e0b' : ''),
+                        borderColor: isMonthlyCamp && !isCompleted ? '#ef4444' : (isSecCamp && !isCompleted ? '#f59e0b' : '')
                       }}
                     >
                       {isCompleted ? 'Tekrar Et' : 'Başlat 🚀'}
@@ -529,9 +921,135 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                   </div>
                 </div>
               );
-            })}
+            };
+
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {viewMode === 'daily' && (
+                  Array.from({ length: totalDays }).map((_, i) => renderDayItem(i + 1))
+                )}
+
+                {viewMode === 'weekly' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    {Array.from({ length: Math.ceil(totalDays / 7) }).map((_, wIdx) => {
+                      const weekNum = wIdx + 1;
+                      const wStats = getWeekStats(weekNum);
+                      const isWeekExpanded = selectedWeek === weekNum;
+                      const wProgressPct = Math.round((wStats.completed / wStats.totalDaysInWeek) * 100);
+
+                      return (
+                        <div key={weekNum} className="glass-card" style={{ padding: '16px 20px', borderRadius: '16px', border: isWeekExpanded ? '1px solid var(--primary-light)' : '1px solid rgba(255,255,255,0.06)' }}>
+                          <div onClick={() => setSelectedWeek(isWeekExpanded ? null : weekNum)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                            <div style={{ textAlign: 'left' }}>
+                              <h4 style={{ margin: 0, fontSize: '0.98rem', color: 'white', fontWeight: 'bold' }}>
+                                Hafta {weekNum} Değerlendirmesi {isWeekExpanded ? '▼' : '▶'}
+                              </h4>
+                              <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginTop: '2px' }}>
+                                İlerleme: {wStats.completed}/{wStats.totalDaysInWeek} Gün
+                              </span>
+                            </div>
+                            <div style={{ width: '100px', textAlign: 'right' }}>
+                              <div style={{ height: '5px', width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden', marginBottom: '2px' }}>
+                                <div style={{ height: '100%', width: `${wProgressPct}%`, background: 'linear-gradient(90deg, #6366f1, #34d399)', borderRadius: '2px' }}></div>
+                              </div>
+                              <span style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 'bold' }}>%{wProgressPct}</span>
+                            </div>
+                          </div>
+
+                          {isWeekExpanded && (
+                            <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px', paddingLeft: '8px' }}>
+                              {Array.from({ length: wStats.totalDaysInWeek }).map((_, dIdx) => {
+                                const dNum = (weekNum - 1) * 7 + dIdx + 1;
+                                return renderDayItem(dNum);
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {viewMode === 'monthly' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    {Array.from({ length: Math.ceil(totalDays / 28) }).map((_, mIdx) => {
+                      const monthNum = mIdx + 1;
+                      const stats = getMonthStats(monthNum);
+                      const isExpanded = selectedMonth === monthNum;
+                      const progressPct = Math.round((stats.completed / stats.totalDaysInMonth) * 100);
+
+                      return (
+                        <div key={monthNum} className="glass-card" style={{ padding: '20px', borderRadius: '18px', border: isExpanded ? '1px solid var(--primary-light)' : '1px solid rgba(255,255,255,0.06)', transition: 'all 0.2s' }}>
+                          <div onClick={() => setSelectedMonth(isExpanded ? null : monthNum)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                            <div style={{ textAlign: 'left' }}>
+                              <h4 style={{ margin: 0, fontSize: '1.05rem', color: 'white', fontWeight: 'bold' }}>
+                                {monthNum}. Ay Değerlendirmesi {isExpanded ? '▼' : '▶'}
+                              </h4>
+                              <span style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block', marginTop: '4px' }}>
+                                İlerleme: {stats.completed}/{stats.totalDaysInMonth} Gün
+                              </span>
+                            </div>
+                            <div style={{ width: '120px', textAlign: 'right' }}>
+                              <div style={{ height: '6px', width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden', marginBottom: '4px' }}>
+                                <div style={{ height: '100%', width: `${progressPct}%`, background: 'linear-gradient(90deg, #6366f1, #10b981)', borderRadius: '3px' }}></div>
+                              </div>
+                              <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'bold' }}>%{progressPct} Tamamlandı</span>
+                            </div>
+                          </div>
+
+                          {isExpanded && (
+                            <div style={{ marginTop: '16px', paddingLeft: '12px', borderLeft: '2px solid rgba(255,255,255,0.08)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                              {(() => {
+                                const startWeek = (monthNum - 1) * 4 + 1;
+                                const endWeek = Math.min(monthNum * 4, Math.ceil(totalDays / 7));
+                                const weeks = Array.from({ length: endWeek - startWeek + 1 }, (_, wIdx) => startWeek + wIdx);
+
+                                return weeks.map(weekNum => {
+                                  const wStats = getWeekStats(weekNum);
+                                  const isWeekExpanded = selectedWeek === weekNum;
+                                  const wProgressPct = Math.round((wStats.completed / wStats.totalDaysInWeek) * 100);
+
+                                  return (
+                                    <div key={weekNum} style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '12px', padding: '12px 16px' }}>
+                                      <div onClick={() => setSelectedWeek(isWeekExpanded ? null : weekNum)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                                        <div style={{ textAlign: 'left' }}>
+                                          <h5 style={{ margin: 0, fontSize: '0.9rem', color: '#cbd5e1', fontWeight: 'bold' }}>
+                                            Hafta {weekNum} {isWeekExpanded ? '▼' : '▶'}
+                                          </h5>
+                                          <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                                            {wStats.completed}/{wStats.totalDaysInWeek} Gün
+                                          </span>
+                                        </div>
+                                        <div style={{ width: '90px' }}>
+                                          <div style={{ height: '4px', width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden', marginBottom: '2px' }}>
+                                            <div style={{ height: '100%', width: `${wProgressPct}%`, background: 'linear-gradient(90deg, #6366f1, #34d399)', borderRadius: '2px' }}></div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {isWeekExpanded && (
+                                        <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '8px', paddingLeft: '8px' }}>
+                                          {Array.from({ length: wStats.totalDaysInWeek }).map((_, dIdx) => {
+                                            const dNum = (weekNum - 1) * 7 + dIdx + 1;
+                                            return renderDayItem(dNum);
+                                          })}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                });
+                              })()}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
           </div>
-        </div>
       )}
 
       {/* 2. INNER DAY WORKSPACE (WORDS & EXERCISES) */}
@@ -709,6 +1227,20 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                 >
                   Önceki Kelime
                 </button>
+
+                {((selectedDay % 7 === 0) || (selectedDay % 28 === 0) || (selectedDay === totalDays)) && (
+                  <button
+                    onClick={() => {
+                      setPhase(2);
+                      setMatches({});
+                      setMatchLeftSelected(null);
+                    }}
+                    className="btn-secondary"
+                    style={{ padding: '10px 16px', fontSize: '0.8rem', borderColor: 'rgba(239, 68, 68, 0.4)', color: '#f87171', background: 'rgba(239, 68, 68, 0.05)', fontWeight: 'bold', cursor: 'pointer' }}
+                  >
+                    ⏩ Kartları Geç ve Alıştırmaya Başla
+                  </button>
+                )}
 
                 <button
                   onClick={() => {
@@ -1037,7 +1569,20 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                           <button
                             key={optKey}
                             disabled={isAnswered}
-                            onClick={() => setQuizAnswers(prev => ({ ...prev, [q.id]: optKey }))}
+                            onClick={() => {
+                              setQuizAnswers(prev => ({ ...prev, [q.id]: optKey }));
+                              if (optKey !== q.answer && addMistake) {
+                                addMistake({
+                                  type: 'reading_question',
+                                  bookId: selectedDay,
+                                  passageTitle: `Okuma Kitabı - Gün #${selectedDay}`,
+                                  questionText: q.question,
+                                  options: Object.values(q.options),
+                                  correctAnswer: q.options[q.answer] || q.answer,
+                                  userAnswer: optVal
+                                });
+                              }
+                            }}
                             style={{
                               display: 'flex',
                               alignItems: 'center',

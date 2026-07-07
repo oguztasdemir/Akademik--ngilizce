@@ -48,9 +48,8 @@ const GAMES_CATALOG = [
   { id: 'synonym', name: '5. Eş Anlam Eşleştirme', desc: 'Akademik kelimeleri benzer anlamlı İngilizce kelimeleriyle eşleştirin.', color: '#a855f7', icon: 'fa-equals' },
   { id: 'antonym', name: '6. Zıt Anlam Eşleştirme', desc: 'Kelimeleri zıt anlamlı İngilizce kelimeleriyle eşleştirin.', color: '#f43f5e', icon: 'fa-right-left' },
   { id: 'tf_run', name: '7. Doğru / Yanlış Çeviri', desc: 'Karşınıza çıkan çevirinin doğru mu yanlış mı olduğunu hızlıca seçin.', color: '#06b6d4', icon: 'fa-circle-check' },
-  { id: 'word_type', name: '8. Kelime Türü Boksör', desc: 'Kelimeleri doğru dilbilgisi sepetine (Noun, Verb, Adj, Adv) fırlatın!', color: '#84cc16', icon: 'fa-box-open' },
-  { id: 'cloze', name: '9. Cümle Tamamlama', desc: 'Akademik cümlelerdeki boşluğa uygun olan kelimeyi yerleştirin.', color: '#f59e0b', icon: 'fa-pen-clip' },
-  { id: 'definition', name: '10. Tanım Bulmaca', desc: 'İngilizce tanımı verilen akademik kelimeyi tahmin edin.', color: '#14b8a6', icon: 'fa-book-bookmark' }
+  { id: 'cloze', name: '8. Cümle Tamamlama', desc: 'Akademik cümlelerdeki boşluğa uygun olan kelimeyi yerleştirin.', color: '#f59e0b', icon: 'fa-pen-clip' },
+  { id: 'definition', name: '9. Tanım Bulmaca', desc: 'İngilizce tanımı verilen akademik kelimeyi tahmin edin.', color: '#14b8a6', icon: 'fa-book-bookmark' }
 ];
 
 const GamesSection = ({ selectedCategory, awardPetXp }) => {
@@ -121,7 +120,6 @@ const GamesSection = ({ selectedCategory, awardPetXp }) => {
           {activeGame === 'synonym' && <SynonymGame vocab={vocabList} awardPetXp={awardPetXp} />}
           {activeGame === 'antonym' && <AntonymGame vocab={vocabList} awardPetXp={awardPetXp} />}
           {activeGame === 'tf_run' && <TrueFalseGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'word_type' && <WordTypeGame vocab={vocabList} awardPetXp={awardPetXp} />}
           {activeGame === 'cloze' && <ClozeGame vocab={vocabList} awardPetXp={awardPetXp} />}
           {activeGame === 'definition' && <DefinitionGame vocab={vocabList} awardPetXp={awardPetXp} />}
         </div>
@@ -817,115 +815,7 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
 };
 
 // ----------------------------------------------------
-// GAME 8: WORD TYPE BOXER (Kelime Türü Sınıflandırma)
-// ----------------------------------------------------
-const WordTypeGame = ({ vocab, awardPetXp }) => {
-  const [current, setCurrent] = useState(null);
-  const [score, setScore] = useState(0);
-  const [selectedType, setSelectedType] = useState(null);
-  const [showFeedback, setShowFeedback] = useState(false);
-
-  const loadQuestion = () => {
-    setSelectedType(null);
-    setShowFeedback(false);
-    setCurrent(vocab[Math.floor(Math.random() * vocab.length)]);
-  };
-
-  useEffect(() => { loadQuestion(); }, [vocab]);
-
-  const handleClassify = (type) => {
-    if (showFeedback) return;
-    setSelectedType(type);
-    setShowFeedback(true);
-    
-    const isCorrect = type === current.type;
-    if (isCorrect) {
-      setScore(s => s + 1);
-      awardPetXp(10);
-    }
-    
-    setTimeout(() => {
-      loadQuestion();
-    }, 1500);
-  };
-
-  const getBtnStyle = (t) => {
-    if (!showFeedback) {
-      return { padding: '12px', fontWeight: 'bold', cursor: 'pointer' };
-    }
-    const isCorrect = t === current.type;
-    const isSelected = selectedType === t;
-    
-    if (isCorrect) {
-      return {
-        padding: '12px',
-        fontWeight: 'bold',
-        background: 'rgba(16, 185, 129, 0.2)',
-        borderColor: '#10b981',
-        color: '#34d399',
-        boxShadow: '0 0 10px rgba(16, 185, 129, 0.2)',
-        cursor: 'default'
-      };
-    }
-    if (isSelected) {
-      return {
-        padding: '12px',
-        fontWeight: 'bold',
-        background: 'rgba(239, 68, 68, 0.2)',
-        borderColor: '#ef4444',
-        color: '#f87171',
-        boxShadow: '0 0 10px rgba(239, 68, 68, 0.2)',
-        cursor: 'default'
-      };
-    }
-    return {
-      padding: '12px',
-      fontWeight: 'bold',
-      opacity: 0.4,
-      cursor: 'default'
-    };
-  };
-
-  return (
-    <div className="glass-card" style={{ padding: '24px', borderRadius: '20px', display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ fontSize: '0.78rem', color: '#84cc16', fontWeight: 'bold' }}>📦 KELİME TÜRÜ SINIFLANDIRICI</div>
-        <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>Skor: {score}</div>
-      </div>
-      {current && (
-        <div style={{ textAlign: 'center', padding: '14px' }}>
-          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Bu kelimenin türü (Part of Speech) nedir?</div>
-          <div style={{ fontSize: '1.6rem', color: '#a3e635', fontWeight: '900' }}>{current.english}</div>
-        </div>
-      )}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-        {['Noun', 'Verb', 'Adjective', 'Adverb'].map(t => (
-          <button key={t} onClick={() => handleClassify(t)} className="btn-secondary" style={getBtnStyle(t)} disabled={showFeedback}>
-            {t}
-          </button>
-        ))}
-      </div>
-      {showFeedback && (
-        <div style={{
-          textAlign: 'center',
-          fontSize: '0.85rem',
-          fontWeight: 'bold',
-          color: selectedType === current.type ? '#34d399' : '#f87171',
-          padding: '8px',
-          borderRadius: '10px',
-          background: selectedType === current.type ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)'
-        }}>
-          {selectedType === current.type 
-            ? `✔️ Doğru! "${current.english}" bir ${current.type}. +10 XP` 
-            : `❌ Yanlış! Doğru cevap: "${current.english}" bir ${current.type} olmalıydı.`}
-        </div>
-      )}
-    </div>
-  );
-};
-
-// ----------------------------------------------------
-// GAME 9: CLOZE GAME (Cümle Doldurma)
+// GAME 8: CLOZE GAME (Cümle Doldurma)
 // ----------------------------------------------------
 const ClozeGame = ({ vocab, awardPetXp }) => {
   const [current, setCurrent] = useState(null);
@@ -1116,8 +1006,11 @@ const DefinitionGame = ({ vocab, awardPetXp }) => {
         <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>Skor: {score}</div>
       </div>
       {current && (
-        <div style={{ padding: '14px', background: 'rgba(0,0,0,0.15)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.02)', lineHeight: 1.6, fontStyle: 'italic', color: '#cbd5e1' }}>
-          "{current.definition}"
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Aşağıdaki İngilizce tanımı verilen kelimeyi bulunuz:</div>
+          <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '14px', border: '1px solid rgba(20, 184, 166, 0.15)', lineHeight: 1.6, fontStyle: 'italic', color: '#e2e8f0', fontWeight: '500' }}>
+            "{current.definition}"
+          </div>
         </div>
       )}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
