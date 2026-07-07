@@ -80,49 +80,7 @@ const QuizSection = ({
   };
 
   const renderInteractiveQuestion = (text, qNum) => {
-    const cleaned = cleanQuestionText(text, qNum);
-    const words = cleaned.split(/\s+/);
-    const hasChosenCurrent = answers[currentQuizIndex] !== undefined;
-    
-    return words.map((word, idx) => {
-      const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-      return (
-        <span
-          key={idx}
-          onClick={(e) => {
-            if (!hasChosenCurrent) return; // Do not translate until answered
-            if (handleTextSelection) {
-              handleTextSelection({
-                clientX: e.clientX,
-                clientY: e.clientY,
-                target: e.target,
-                customText: cleanWord
-              });
-            }
-          }}
-          style={{
-            cursor: hasChosenCurrent ? 'pointer' : 'default',
-            padding: '1px 2px',
-            borderRadius: '4px',
-            display: 'inline-block'
-          }}
-          onMouseEnter={(e) => { 
-            if (hasChosenCurrent) {
-              e.target.style.color = '#818cf8'; 
-              e.target.style.background = 'rgba(99,102,241,0.08)'; 
-            }
-          }}
-          onMouseLeave={(e) => { 
-            if (hasChosenCurrent) {
-              e.target.style.color = 'inherit'; 
-              e.target.style.background = 'transparent'; 
-            }
-          }}
-        >
-          {word}{' '}
-        </span>
-      );
-    });
+    return cleanQuestionText(text, qNum);
   };
 
   const getCollocations = (text) => {
@@ -256,9 +214,17 @@ const QuizSection = ({
                   handleTextSelection(e);
                 }
               }}
+              onTouchEnd={(e) => {
+                const hasChosenCurrent = answers[currentQuizIndex] !== undefined;
+                if (hasChosenCurrent && handleTextSelection) {
+                  setTimeout(() => {
+                    handleTextSelection(e);
+                  }, 100);
+                }
+              }}
               onDoubleClick={handleDoubleClick}
               className="duo-question-title"
-              style={{ fontSize: fontSize === 'sm' ? '1rem' : fontSize === 'lg' ? '1.35rem' : fontSize === 'xl' ? '1.5rem' : '1.15rem', cursor: 'pointer', lineHeight: '1.6', textAlign: 'left' }}
+              style={{ fontSize: fontSize === 'sm' ? '1rem' : fontSize === 'lg' ? '1.35rem' : fontSize === 'xl' ? '1.5rem' : '1.15rem', cursor: 'pointer', lineHeight: '1.6', textAlign: 'left', userSelect: 'text', WebkitUserSelect: 'text' }}
             >
               {renderInteractiveQuestion(
                 selectedExam.questions[currentQuizIndex - 1].text,

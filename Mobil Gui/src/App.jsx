@@ -690,12 +690,14 @@ function App() {
     let thresholds = [10, 50, 200, 500];
     let names = ["Bronz 🥉", "Gümüş 🥈", "Altın 🥇", "Elmas 💎"];
 
-    if (id === 'word_master') {
+    if (id === 'word_master' || id === 'correct_strike') {
       thresholds = [5, 25, 100, 300];
     } else if (id === 'grammar_master') {
       thresholds = [1, 5, 15, 35];
     } else if (id === 'on_fire') {
       thresholds = [1, 3, 7, 30];
+    } else if (id === 'gem_collector') {
+      thresholds = [100, 500, 1500, 4000];
     }
 
     let tierIndex = -1;
@@ -1792,6 +1794,66 @@ function App() {
       setSelectedText(text);
       setShowPopover(true);
       setTranslating(true);
+      const cleanWord = text.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
+      const getLocalTranslation = (txt) => {
+        const dict = dictionaryList || [];
+        let match = dict.find(item => item.english.toLowerCase() === txt);
+        if (match) return match.turkish;
+
+        let lemmas = [txt];
+        if (txt.endsWith('s')) lemmas.push(txt.slice(0, -1));
+        if (txt.endsWith('d')) lemmas.push(txt.slice(0, -1));
+        if (txt.endsWith('ed')) lemmas.push(txt.slice(0, -2));
+        if (txt.endsWith('ing')) lemmas.push(txt.slice(0, -3));
+        if (txt.endsWith('ies')) lemmas.push(txt.slice(0, -3) + 'y');
+        if (txt.endsWith('ied')) lemmas.push(txt.slice(0, -3) + 'y');
+
+        for (const lem of lemmas) {
+          let m = dict.find(item => item.english.toLowerCase() === lem);
+          if (m) return m.turkish;
+        }
+
+        const words = txt.split(' ');
+        if (words.length > 1) {
+          const meanings = [];
+          for (const w of words) {
+            let m = dict.find(item => item.english.toLowerCase() === w);
+            if (m) {
+              meanings.push(`${w}: ${m.turkish}`);
+            } else {
+              let wLemmas = [w];
+              if (w.endsWith('s')) wLemmas.push(w.slice(0, -1));
+              if (w.endsWith('d')) wLemmas.push(w.slice(0, -1));
+              if (w.endsWith('ed')) wLemmas.push(w.slice(0, -2));
+              if (w.endsWith('ing')) wLemmas.push(w.slice(0, -3));
+              if (w.endsWith('ies')) wLemmas.push(w.slice(0, -3) + 'y');
+              if (w.endsWith('ied')) wLemmas.push(w.slice(0, -3) + 'y');
+              let foundLem = false;
+              for (const lem of wLemmas) {
+                let m2 = dict.find(item => item.english.toLowerCase() === lem);
+                if (m2) {
+                  meanings.push(`${w}: ${m2.turkish}`);
+                  foundLem = true;
+                  break;
+                }
+              }
+              if (!foundLem) {
+                meanings.push(`${w}: (sözlükte yok)`);
+              }
+            }
+          }
+          return meanings.join(' | ');
+        }
+        return null;
+      };
+
+      const localTr = getLocalTranslation(cleanWord);
+      if (localTr) {
+        setTranslationResult({ word: text, translation: localTr, source: 'local_dict' });
+        setTranslating(false);
+        return;
+      }
+
       const category = selectedCategory || 'fen';
       const res = await fetch(`${BACKEND_URL}/api/${category}/translate`, {
         method: 'POST',
@@ -2502,25 +2564,12 @@ function App() {
                   </div>
                 ) : (
                   <div 
-                    className="logo" 
+                    className="category-back-btn" 
                     onClick={() => { setSelectedCategory(null); setSelectedExam(null); setQuizActive(false); }} 
-                    style={{ 
-                      cursor: 'pointer', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: '8px',
-                      background: 'rgba(99, 102, 241, 0.12)',
-                      padding: '8px 14px',
-                      borderRadius: '10px',
-                      border: '1.5px solid rgba(99, 102, 241, 0.3)',
-                      color: '#a5b4fc',
-                      fontWeight: 'bold',
-                      boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-                    }}
                     title="Sınav Seçimine Dön"
                   >
                     <i className="fa-solid fa-arrow-left" style={{ fontSize: '0.82rem' }}></i>
-                    <span style={{ fontSize: '0.82rem', fontFamily: 'var(--font-heading)' }}>
+                    <span className="mobile-hide-text" style={{ fontSize: '0.82rem', fontFamily: 'var(--font-heading)' }}>
                       Geri Git ({selectedCategory === 'fen' ? 'Fen' : selectedCategory === 'sosyal' ? 'Sosyal' : 'Sağlık'})
                     </span>
                   </div>
@@ -2611,21 +2660,21 @@ function App() {
                     </div>
                     <i className="fa-solid fa-chevron-right arrow-icon"></i>
                   </button>
-                  <button className="menu-item subject-card gai-card" style={{ opacity: 0.6, cursor: 'not-allowed' }} title="Geliştirilme Aşamasında - Yakında!">
+                  <button className="menu-item subject-card gai-card" onClick={() => { setSelectedCategory('sosyal'); setActiveTab('dashboard'); setSelectedExam(null); setQuizActive(false); }}>
                     <div className="menu-icon subject-icon" style={{ borderColor: '#805AD5', color: '#B794F4' }}><i className="fa-solid fa-gavel"></i></div>
                     <div className="menu-text">
-                      <h4>Sosyal Bilimler <span style={{ fontSize: '0.65rem', background: '#4A5568', color: '#fff', padding: '1px 6px', borderRadius: '4px', marginLeft: '6px', fontWeight: 'bold' }}>Yakında</span></h4>
-                      <p>Sosyal bilimler sınavları ve kelimeleri yakında eklenecektir (Geliştirilme Aşamasında).</p>
+                      <h4>Sosyal Bilimler</h4>
+                      <p>9 sınav (2018-2026) ve 720 soru (Tamamı temiz JSON olarak yüklendi).</p>
                     </div>
-                    <i className="fa-solid fa-lock arrow-icon" style={{ color: '#718096' }}></i>
+                    <i className="fa-solid fa-chevron-right arrow-icon"></i>
                   </button>
-                  <button className="menu-item subject-card ds-card" style={{ opacity: 0.6, cursor: 'not-allowed' }} title="Geliştirilme Aşamasında - Yakında!">
+                  <button className="menu-item subject-card ds-card" onClick={() => { setSelectedCategory('saglik'); setActiveTab('dashboard'); setSelectedExam(null); setQuizActive(false); }}>
                     <div className="menu-icon subject-icon" style={{ borderColor: '#059669', color: '#34D399' }}><i className="fa-solid fa-heart-pulse"></i></div>
                     <div className="menu-text">
-                      <h4>Sağlık Bilimleri <span style={{ fontSize: '0.65rem', background: '#4A5568', color: '#fff', padding: '1px 6px', borderRadius: '4px', marginLeft: '6px', fontWeight: 'bold' }}>Yakında</span></h4>
-                      <p>Tıp ve sağlık bilimleri sınavları ve kelimeleri yakında eklenecektir (Geliştirilme Aşamasında).</p>
+                      <h4>Sağlık Bilimleri</h4>
+                      <p>9 sınav (2018-2026) ve 720 soru (Tamamı temiz JSON olarak yüklendi).</p>
                     </div>
-                    <i className="fa-solid fa-lock arrow-icon" style={{ color: '#718096' }}></i>
+                    <i className="fa-solid fa-chevron-right arrow-icon"></i>
                   </button>
                 </div>
               </section>
@@ -2985,11 +3034,13 @@ function App() {
                   </h3>
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginBottom: '20px' }}>
-                    {[
+                     {[
                       { id: 'first_step', name: 'Soru Avcısı 🏁', value: getStats().solved, desc: 'Toplam çözülen akademik soru.' },
+                      { id: 'correct_strike', name: 'İsabet Şampiyonu 🎯', value: getStats().correct, desc: 'Doğru çözülen akademik soru.' },
                       { id: 'word_master', name: 'Kelime Sihirbazı 🦁', value: Object.keys(wordStats).length, desc: 'Defterdeki çalışılan kelime.' },
                       { id: 'grammar_master', name: 'Derskolik 🎓', value: dailyLecturesStudied, desc: 'Bugün tamamlanan ders notu.' },
-                      { id: 'on_fire', name: 'Seri Canavarı 🔥', value: studyStreak, desc: 'Çalışılan ardışık gün serisi.' }
+                      { id: 'on_fire', name: 'Seri Canavarı 🔥', value: studyStreak, desc: 'Çalışılan ardışık gün serisi.' },
+                      { id: 'gem_collector', name: 'Kristal Zengini 💎', value: gems, desc: 'Kazanılan toplam kristal/gem.' }
                     ].map(ach => {
                       const tier = getAchievementTier(ach.id, ach.value);
                       return (
@@ -3644,9 +3695,11 @@ function App() {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
                     {[
                       { id: 'first_step', name: 'Soru Avcısı 🏁', value: getStats().solved, desc: 'Toplam çözülen akademik soru.' },
+                      { id: 'correct_strike', name: 'İsabet Şampiyonu 🎯', value: getStats().correct, desc: 'Doğru çözülen akademik soru.' },
                       { id: 'word_master', name: 'Kelime Sihirbazı 🦁', value: Object.keys(wordStats).length, desc: 'Defterdeki çalışılan kelime.' },
                       { id: 'grammar_master', name: 'Derskolik 🎓', value: dailyLecturesStudied, desc: 'Bugün tamamlanan ders notu.' },
-                      { id: 'on_fire', name: 'Seri Canavarı 🔥', value: studyStreak, desc: 'Çalışılan ardışık gün serisi.' }
+                      { id: 'on_fire', name: 'Seri Canavarı 🔥', value: studyStreak, desc: 'Çalışılan ardışık gün serisi.' },
+                      { id: 'gem_collector', name: 'Kristal Zengini 💎', value: gems, desc: 'Kazanılan toplam kristal/gem.' }
                     ].map(ach => {
                       const tier = getAchievementTier(ach.id, ach.value);
                       return (
@@ -3881,8 +3934,8 @@ function App() {
             position: 'fixed',
             left: floatPos ? `${floatPos.x}px` : 'auto',
             top: floatPos ? `${floatPos.y}px` : 'auto',
-            right: floatPos ? 'auto' : '24px',
-            bottom: floatPos ? 'auto' : '24px',
+            right: floatPos ? 'auto' : (window.innerWidth < 768 ? '16px' : '24px'),
+            bottom: floatPos ? 'auto' : (window.innerWidth < 768 ? '86px' : '24px'),
             zIndex: 9999
           }}
         >

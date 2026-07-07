@@ -16,6 +16,68 @@ const formatWordType = (type) => {
 const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selectedDay, setSelectedDay, completedDays, setCompletedDays }) => {
   const [currentDayData, setCurrentDayData] = useState(null);
   const [loadingDay, setLoadingDay] = useState(false);
+  const [showEvaluationChoice, setShowEvaluationChoice] = useState(false);
+  const [isEvaluationMode, setIsEvaluationMode] = useState(false);
+
+  const startNormalStudy = () => {
+    setShowEvaluationChoice(false);
+    setIsEvaluationMode(false);
+  };
+
+  const loadEvaluationData = async (targetDay) => {
+    setLoadingDay(true);
+    setCurrentDayData(null);
+    setIsEvaluationMode(true);
+    setShowEvaluationChoice(false);
+    
+    const startDay = targetDay - 9;
+    const endDay = targetDay;
+    const allQuestions = [];
+    const allWords = [];
+    
+    try {
+      for (let d = startDay; d <= endDay; d++) {
+        const res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/kitap/day_${d}.json`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.words) {
+            allWords.push(...data.words);
+          }
+          const mc = data.multiple_choice || (data.exercises && data.exercises.multiple_choice);
+          if (mc) {
+            allQuestions.push(...mc);
+          }
+        }
+      }
+      
+      const shuffledQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
+      const mappedQuestions = shuffledQuestions.map((q, idx) => ({
+        ...q,
+        id: idx + 1
+      }));
+      
+      const evalData = {
+        day: targetDay,
+        isEvaluation: true,
+        words: allWords.slice(0, 15),
+        exercises: {
+          multiple_choice: mappedQuestions
+        }
+      };
+      
+      setCurrentDayData(evalData);
+      setPhase(4);
+      setQuizAnswers({});
+      setQuizSubmitted(false);
+      setLoadingDay(false);
+    } catch (e) {
+      console.error("Evaluation loading failed:", e);
+      alert("Genel değerlendirme testi verileri yüklenirken hata oluştu.");
+      setSelectedDay(null);
+      setLoadingDay(false);
+    }
+  };
+
   const [phase, setPhase] = useState(1); // 1: Learn, 2: Synonym Match, 3: Antonym Match, 4: Quiz, 5: Summary
   const [currentWordIdx, setCurrentWordIdx] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -94,6 +156,7 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
   // Quiz state
   const [quizAnswers, setQuizAnswers] = useState({}); // { questionId: selectedOption }
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [activeQuizQIdx, setActiveQuizQIdx] = useState(0);
 
   // Load session state from localStorage on mount
   useEffect(() => {
@@ -107,6 +170,7 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
         if (typeof parsed.synonymQuestionIdx === 'number') setSynonymQuestionIdx(parsed.synonymQuestionIdx);
         if (parsed.quizAnswers) setQuizAnswers(parsed.quizAnswers);
         if (typeof parsed.quizSubmitted === 'boolean') setQuizSubmitted(parsed.quizSubmitted);
+        if (typeof parsed.activeQuizQIdx === 'number') setActiveQuizQIdx(parsed.activeQuizQIdx);
       } catch (e) {
         console.error("Error loading book exercise session:", e);
       }
@@ -122,16 +186,26 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
       currentWordIdx,
       synonymQuestionIdx,
       quizAnswers,
-      quizSubmitted
+      quizSubmitted,
+      activeQuizQIdx
     };
     localStorage.setItem(`yokdil_book_exercise_session`, JSON.stringify(sessionObj));
-  }, [selectedDay, phase, currentWordIdx, synonymQuestionIdx, quizAnswers, quizSubmitted]);
+  }, [selectedDay, phase, currentWordIdx, synonymQuestionIdx, quizAnswers, quizSubmitted, activeQuizQIdx]);
 
   // Local CompletedDays storage synchronization lifted to App.jsx
 
   // Load day data dynamically
   useEffect(() => {
     if (selectedDay) {
+      if (selectedDay % 10 === 0 && !isEvaluationMode) {
+        if (showEvaluationChoice) {
+          setCurrentDayData(null);
+          return;
+        }
+      }
+      if (isEvaluationMode) {
+        return;
+      }
       setLoadingDay(true);
       setCurrentDayData(null);
       fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/kitap/day_${selectedDay}.json`)
@@ -150,7 +224,7 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
           setLoadingDay(false);
         });
     }
-  }, [selectedDay]);
+  }, [selectedDay, isEvaluationMode, showEvaluationChoice]);
 
 
 
@@ -246,6 +320,14 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
     setSynonymQuestionIdx(0);
     setSynonymSelectedOption(null);
     setSynonymShowFeedback(false);
+    setActiveQuizQIdx(0);
+    if (dayNum % 10 === 0) {
+      setShowEvaluationChoice(true);
+      setIsEvaluationMode(false);
+    } else {
+      setShowEvaluationChoice(false);
+      setIsEvaluationMode(false);
+    }
   };
 
   // Synonym / Antonym Matching Logic
@@ -453,7 +535,39 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
       )}
 
       {/* 2. INNER DAY WORKSPACE (WORDS & EXERCISES) */}
-      {selectedDay && (!currentDayData || loadingDay) && (
+      {selectedDay && showEvaluationChoice && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '320px', color: 'white', gap: '20px', padding: '40px 20px', textAlign: 'center', background: 'rgba(15, 23, 42, 0.4)', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ width: '60px', height: '60px', borderRadius: '18px', background: 'rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#818cf8', fontSize: '1.8rem' }}>
+            <Award size={36} />
+          </div>
+          <div>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 8px 0', color: 'white' }}>{selectedDay}. Gün Değerlendirme Seçeneği</h2>
+            <p style={{ fontSize: '0.86rem', color: '#94a3b8', maxWidth: '400px', lineHeight: '1.5', margin: 0 }}>
+              Tebrikler! {selectedDay}. güne ulaştınız. Bu milat günde 10 günlük birikiminizi karıştırarak genel değerlendirme testi yapabilir ya da normal günlük kelime çalışmasını başlatabilirsiniz.
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', width: '100%', maxWidth: '440px', marginTop: '10px' }}>
+            <button 
+              onClick={() => loadEvaluationData(selectedDay)}
+              className="btn-primary"
+              style={{ flex: '1 1 180px', padding: '14px', borderRadius: '12px', fontWeight: 'bold', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', border: 'none', cursor: 'pointer', color: 'white' }}
+            >
+              <span style={{ fontSize: '0.9rem' }}>Genel Değerlendirme Testi</span>
+              <span style={{ fontSize: '0.68rem', opacity: 0.8 }}>({selectedDay - 9}-{selectedDay}. Günleri Karıştır)</span>
+            </button>
+            <button 
+              onClick={startNormalStudy}
+              className="glass-button"
+              style={{ flex: '1 1 180px', padding: '14px', borderRadius: '12px', fontWeight: 'bold', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', color: 'white' }}
+            >
+              <span style={{ fontSize: '0.9rem' }}>Normal Gün Çalışması</span>
+              <span style={{ fontSize: '0.68rem', opacity: 0.8 }}>({selectedDay}. Günün Kelimeleri)</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {selectedDay && !showEvaluationChoice && (!currentDayData || loadingDay) && (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', color: 'white', gap: '12px', padding: '40px' }}>
           <i className="fa-solid fa-circle-notch fa-spin" style={{ fontSize: '2rem', color: 'var(--primary)' }}></i>
           <p style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: '600' }}>Günlük ders içeriği yükleniyor...</p>
@@ -873,40 +987,28 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
 
           {/* PHASE 4: MULTIPLE CHOICE QUIZ */}
           {phase === 4 && currentDayData.exercises.multiple_choice && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                <div>
-                  <h3 className="font-heading" style={{ fontSize: '1.2rem', fontWeight: '800', margin: 0 }}>
-                    Adım 4: Çoktan Seçmeli Test
-                  </h3>
-                </div>
-                
-                {quizSubmitted && (
-                  <button
-                    onClick={() => {
-                      setPhase(5);
-                      // Add to completed days
-                      if (!completedDays.includes(selectedDay)) {
-                        setCompletedDays(prev => [...prev, selectedDay]);
-                      }
-                    }}
-                    className="btn-primary"
-                    style={{ padding: '10px 20px', fontSize: '0.82rem', fontWeight: 'bold' }}
-                  >
-                    Sonuçları Gör ve Bitir 🏆
-                  </button>
-                )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '600px', margin: '0 auto', paddingBottom: '40px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 className="font-heading" style={{ fontSize: '1.2rem', fontWeight: '800', margin: 0 }}>
+                  Adım 4: Çoktan Seçmeli Test
+                </h3>
+                <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 'bold' }}>
+                  Soru {activeQuizQIdx + 1} / {currentDayData.exercises.multiple_choice.length}
+                </span>
               </div>
 
-              {currentDayData.exercises.multiple_choice.map((q) => {
+              {(() => {
+                const q = currentDayData.exercises.multiple_choice[activeQuizQIdx];
+                if (!q) return null;
                 const selectedOpt = quizAnswers[q.id];
+                const isAnswered = selectedOpt !== undefined;
                 const isCorrect = selectedOpt === q.answer;
-                
+
                 return (
-                  <div key={q.id} className="glass-card" style={{ padding: '24px', borderRadius: '24px' }}>
-                    <div style={{ display: 'flex', alignItems: 'start', gap: '12px', marginBottom: '16px' }}>
+                  <div className="glass-card animate-scale-in" style={{ padding: '24px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.3)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ display: 'flex', alignItems: 'start', gap: '12px', marginBottom: '20px' }}>
                       <span style={{
-                        background: 'rgba(99,102,241,0.12)',
+                        background: 'rgba(99,102,241,0.15)',
                         color: '#818cf8',
                         width: '32px',
                         height: '32px',
@@ -917,9 +1019,9 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                         fontWeight: '700',
                         flexShrink: 0
                       }}>
-                        {q.id}
+                        {activeQuizQIdx + 1}
                       </span>
-                      <p style={{ fontSize: '1.05rem', fontWeight: '600', color: 'white', lineHeight: '1.5', margin: 0 }}>
+                      <p style={{ fontSize: '1.05rem', fontWeight: '600', color: 'white', lineHeight: '1.5', margin: 0, textAlign: 'left' }}>
                         {q.question}
                       </p>
                     </div>
@@ -928,13 +1030,13 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                       {Object.entries(q.options).map(([optKey, optVal]) => {
                         if (!optVal) return null;
                         const isSelected = selectedOpt === optKey;
-                        const showCorrect = quizSubmitted && q.answer === optKey;
-                        const showWrong = quizSubmitted && isSelected && !isCorrect;
-                        
+                        const showCorrect = isAnswered && q.answer === optKey;
+                        const showWrong = isAnswered && isSelected && !isCorrect;
+
                         return (
                           <button
                             key={optKey}
-                            disabled={quizSubmitted}
+                            disabled={isAnswered}
                             onClick={() => setQuizAnswers(prev => ({ ...prev, [q.id]: optKey }))}
                             style={{
                               display: 'flex',
@@ -959,7 +1061,7 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                                     ? '1px solid var(--primary-light)'
                                     : '1px solid rgba(255,255,255,0.05)',
                               color: showCorrect ? '#10b981' : showWrong ? '#f87171' : 'white',
-                              cursor: quizSubmitted ? 'default' : 'pointer'
+                              cursor: isAnswered ? 'default' : 'pointer'
                             }}
                           >
                             <span style={{
@@ -969,11 +1071,11 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                             }}>
                               {optKey})
                             </span>
-                            <span>{optVal}</span>
-                            {quizSubmitted && (() => {
+                            <span style={{ fontSize: '0.9rem' }}>{optVal}</span>
+                            {isAnswered && (() => {
                               const tr = getTranslation(optVal);
                               return tr ? (
-                                <span style={{ fontSize: '0.8rem', opacity: 0.85, fontWeight: '700', marginLeft: 'auto', marginRight: '12px', color: showCorrect ? '#67e8f9' : '#cbd5e1' }}>
+                                <span style={{ fontSize: '0.8rem', opacity: 0.85, fontWeight: '750', marginLeft: 'auto', marginRight: '12px', color: showCorrect ? '#67e8f9' : '#cbd5e1' }}>
                                   ({tr})
                                 </span>
                               ) : null;
@@ -982,29 +1084,37 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
                         );
                       })}
                     </div>
+
+                    {isAnswered && (
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '16px' }}>
+                        {activeQuizQIdx < currentDayData.exercises.multiple_choice.length - 1 ? (
+                          <button
+                            onClick={() => setActiveQuizQIdx(prev => prev + 1)}
+                            className="btn-primary"
+                            style={{ padding: '10px 20px', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 'bold' }}
+                          >
+                            Sonraki Soru ➡️
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setQuizSubmitted(true);
+                              setPhase(5);
+                              if (!completedDays.includes(selectedDay)) {
+                                setCompletedDays(prev => [...prev, selectedDay]);
+                              }
+                            }}
+                            className="btn-primary"
+                            style={{ padding: '10px 20px', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 'bold', background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)' }}
+                          >
+                            Sonuçları Gör ve Bitir 🏁
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 );
-              })}
-
-              {/* Submit Action */}
-              <div style={{ display: 'flex', justifyContent: 'end', gap: '12px', paddingBottom: '40px' }}>
-                {!quizSubmitted && (
-                  <button
-                    disabled={Object.keys(quizAnswers).length < currentDayData.exercises.multiple_choice.length}
-                    onClick={() => setQuizSubmitted(true)}
-                    className="btn-primary"
-                    style={{ 
-                      padding: '12px 24px', 
-                      borderRadius: '14px', 
-                      fontWeight: '700',
-                      opacity: Object.keys(quizAnswers).length < currentDayData.exercises.multiple_choice.length ? 0.5 : 1,
-                      cursor: Object.keys(quizAnswers).length < currentDayData.exercises.multiple_choice.length ? 'not-allowed' : 'pointer'
-                    }}
-                  >
-                    Cevapları Kontrol Et
-                  </button>
-                )}
-              </div>
+              })()}
             </div>
           )}
 
@@ -1029,7 +1139,10 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
 
               <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: '10px 0' }}>Tebrikler!</h2>
               <p style={{ fontSize: '0.9rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '24px' }}>
-                {selectedDay}. Gün çalışmasını başarıyla tamamladınız. Kelimeleri öğrendiniz, alıştırmaları çözdünüz ve kendinizi test ettiniz.
+                {currentDayData.isEvaluation 
+                  ? `${selectedDay - 9}-${selectedDay}. Günler Genel Değerlendirme Testini başarıyla tamamladınız! 10 günlük birikiminiz başarıyla ölçüldü.`
+                  : `${selectedDay}. Gün çalışmasını başarıyla tamamladınız. Kelimeleri öğrendiniz, alıştırmaları çözdünüz ve kendinizi test ettiniz.`
+                }
               </p>
 
               {/* Score card */}

@@ -3418,9 +3418,16 @@ body.light-theme .setting-item {
     .nav-settings,
     .nav-paragraphs,
     .nav-smart-study,
-    .nav-book-exercises {
+    .nav-book-exercises,
+    .nav-achievements,
+    .nav-camp {
         display: none !important;
     }
+
+    .mobile-hide-text {
+        display: none !important;
+    }
+
 
     .sidebar-logo,
     .sidebar-subtitle,
@@ -4592,3 +4599,28 @@ body.light-theme .setting-item {
         display: none !important;
     }
 }
+
+.category-back-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(99, 102, 241, 0.12);
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(99, 102, 241, 0.3);
+    color: #a5b4fc;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.category-back-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.45);
+}
+
+.category-back-btn i {
+    color: #a5b4fc !important;
+    -webkit-text-fill-color: initial !important;
+}

@@ -162,6 +162,76 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
   const [activeDayWords, setActiveDayWords] = useState({});
   const [allWordsDb, setAllWordsDb] = useState({});
   const [selectedDay, setSelectedDay] = useState(1);
+  const [showEvaluationChoice, setShowEvaluationChoice] = useState(false);
+  const [isEvaluationMode, setIsEvaluationMode] = useState(false);
+  const [showCardDetails, setShowCardDetails] = useState(false);
+
+  useEffect(() => {
+    setShowCardDetails(false);
+  }, [currentIdx]);
+
+  const loadVocabEvaluationData = async (targetDay) => {
+    setIsEvaluationMode(true);
+    setShowEvaluationChoice(false);
+    const category = selectedCategory || 'fen';
+    const allWords = [];
+    
+    try {
+      for (let d = targetDay - 9; d <= targetDay; d++) {
+        const dailyKelimeKey = `@dataset/yokdil/${category}/gunluk_kamp/kelime/day_${d}.json`;
+        const loadDailyKelime = getCampModule(dailyKelimeKey);
+        if (loadDailyKelime) {
+          const mod = await loadDailyKelime();
+          const data = mod.default || mod;
+          if (data.words) {
+            allWords.push(...data.words);
+          }
+        }
+      }
+      
+      const selectedWords = [...allWords].sort(() => 0.5 - Math.random()).slice(0, 15);
+      setStudyWords(selectedWords);
+      setPhase(5);
+      setCurrentIdx(0);
+      setIsStudying(true);
+    } catch (e) {
+      console.error("Vocab evaluation loading failed:", e);
+      alert("Kelime genel değerlendirme testi verileri yüklenirken hata oluştu.");
+      setIsStudying(false);
+    }
+  };
+
+  const loadGrammarEvaluationData = async (targetDay) => {
+    setIsEvaluationMode(true);
+    setShowEvaluationChoice(false);
+    const category = selectedCategory || 'fen';
+    const allQuestions = [];
+    
+    try {
+      for (let d = targetDay - 9; d <= targetDay; d++) {
+        const grammarKey = `@dataset/yokdil/${category}/gunluk_kamp/grammar/day_${d}.json`;
+        const loadGrammar = getCampModule(grammarKey);
+        if (loadGrammar) {
+          const mod = await loadGrammar();
+          const data = mod.default || mod;
+          if (data.questions) {
+            allQuestions.push(...data.questions);
+          }
+        }
+      }
+      
+      const selectedQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
+      setGrammarQuestions(selectedQuestions);
+      setPhase(2);
+      setGrammarIdx(0);
+      setIsStudying(true);
+    } catch (e) {
+      console.error("Grammar evaluation loading failed:", e);
+      alert("Dilbilgisi genel değerlendirme testi verileri yüklenirken hata oluştu.");
+      setIsStudying(false);
+    }
+  };
+
   const [sentenceIdx, setSentenceIdx] = useState(0);
 
   useEffect(() => {
@@ -1082,10 +1152,28 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
     ].sort(() => Math.random() - 0.5);
   };
 
-  // Spaced Repetition Daily Word Selection & Dynamic Camp JSON Loading
   const startDailyStudy = async (dayNum, resumeIdx = null, resumePhase = null) => {
     const category = selectedCategory || 'fen';
     setSelectedDay(dayNum);
+    
+    if (dayNum % 10 === 0 && resumeIdx === null && !isEvaluationMode) {
+      setShowEvaluationChoice(true);
+      setIsEvaluationMode(false);
+      setIsStudying(true);
+      return;
+    }
+
+    await proceedVocabNormalStudy(dayNum, resumeIdx, resumePhase);
+  };
+
+  const startVocabNormalStudy = async (dayNum) => {
+    setShowEvaluationChoice(false);
+    setIsEvaluationMode(false);
+    await proceedVocabNormalStudy(dayNum);
+  };
+
+  const proceedVocabNormalStudy = async (dayNum, resumeIdx = null, resumePhase = null) => {
+    const category = selectedCategory || 'fen';
 
     const dailyKelimeKey = `@dataset/yokdil/${category}/gunluk_kamp/kelime/day_${dayNum}.json`;
     const wordsKey = `@dataset/yokdil/${category}/kelimeler.json`;
@@ -1472,6 +1560,25 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
   const startGrammarStudy = async (dayNum, resumeIdx = null, resumePhase = null) => {
     const category = selectedCategory || 'fen';
     setSelectedDay(dayNum);
+
+    if (dayNum % 10 === 0 && resumeIdx === null && !isEvaluationMode) {
+      setShowEvaluationChoice(true);
+      setIsEvaluationMode(false);
+      setIsStudying(true);
+      return;
+    }
+
+    await proceedGrammarNormalStudy(dayNum, resumeIdx, resumePhase);
+  };
+
+  const startGrammarNormalStudy = async (dayNum) => {
+    setShowEvaluationChoice(false);
+    setIsEvaluationMode(false);
+    await proceedGrammarNormalStudy(dayNum);
+  };
+
+  const proceedGrammarNormalStudy = async (dayNum, resumeIdx = null, resumePhase = null) => {
+    const category = selectedCategory || 'fen';
 
     const grammarKey = `@dataset/yokdil/${category}/gunluk_kamp/grammar/day_${dayNum}.json`;
     const loadGrammar = getCampModule(grammarKey);
@@ -2024,6 +2131,53 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
   }
 
   // Study Flow View
+  if (showEvaluationChoice) {
+    return (
+      <div className="glass-card" style={{ padding: '40px 24px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)', minHeight: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: '20px' }}>
+        <div style={{ width: '60px', height: '60px', borderRadius: '18px', background: 'rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#818cf8', fontSize: '1.8rem' }}>
+          <Award size={36} />
+        </div>
+        <div>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 8px 0', color: 'white' }}>{selectedDay}. Gün Değerlendirme Seçeneği</h2>
+          <p style={{ fontSize: '0.86rem', color: '#94a3b8', maxWidth: '400px', lineHeight: '1.5', margin: 0 }}>
+            Tebrikler! Kampın {selectedDay}. gününe ulaştınız. Bu milat günde son 10 günlük kamp birikiminizi karıştırarak genel değerlendirme testi yapabilir ya da normal günlük kamp çalışmasını başlatabilirsiniz.
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', width: '100%', maxWidth: '440px', marginTop: '10px' }}>
+          <button 
+            onClick={async () => {
+              if (campType === 'grammar') {
+                await loadGrammarEvaluationData(selectedDay);
+              } else {
+                await loadVocabEvaluationData(selectedDay);
+              }
+            }}
+            className="btn-primary"
+            style={{ flex: '1 1 180px', padding: '14px', borderRadius: '12px', fontWeight: 'bold', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', border: 'none', cursor: 'pointer', color: 'white' }}
+          >
+            <span style={{ fontSize: '0.9rem' }}>Genel Değerlendirme Testi</span>
+            <span style={{ fontSize: '0.68rem', opacity: 0.8 }}>({selectedDay - 9}-{selectedDay}. Günleri Karıştır)</span>
+          </button>
+          <button 
+            onClick={() => {
+              setShowEvaluationChoice(false);
+              if (campType === 'grammar') {
+                startGrammarNormalStudy(selectedDay);
+              } else {
+                startVocabNormalStudy(selectedDay);
+              }
+            }}
+            className="glass-button"
+            style={{ flex: '1 1 180px', padding: '14px', borderRadius: '12px', fontWeight: 'bold', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', color: 'white' }}
+          >
+            <span style={{ fontSize: '0.9rem' }}>Normal Gün Çalışması</span>
+            <span style={{ fontSize: '0.68rem', opacity: 0.8 }}>({selectedDay}. Günün Kampı)</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (campType === 'grammar') {
     return (
       <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)', minHeight: '520px' }}>
@@ -2340,18 +2494,18 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
 
   // Vocabulary Study Flow View
   return (
-    <div className="glass-card" style={{ padding: '16px 20px', borderRadius: '20px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)' }}>
+    <div className="glass-card" style={{ padding: '10px 12px', borderRadius: '18px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)' }}>
       
       {/* Flow Header and Progress */}
-      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '8px', marginBottom: '12px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>GÜN #{selectedDay} KAMP ÇALIŞMASI</span>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: '900', color: 'white', margin: 0 }}>Kelime Kampı ({studyWords.length} Kelime)</h3>
+      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '6px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <span style={{ fontSize: '0.58rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>GÜN #{selectedDay} KAMP</span>
+            <h3 style={{ fontSize: '0.9rem', fontWeight: '900', color: 'white', margin: 0 }}>Kelime Kampı ({studyWords.length} Kelime)</h3>
           </div>
           
           {/* Dynamic Progress Bar */}
-          <div style={{ flex: 1, minWidth: '150px', maxWidth: '350px', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', overflow: 'hidden' }}>
+          <div style={{ flex: 1, minWidth: '100px', maxWidth: '200px', height: '4px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', overflow: 'hidden' }}>
             <div style={{
               height: '100%',
               width: `${phase === 6 ? 100 : (((phase - 1) * 20) + ((currentIdx + 1) / studyWords.length * 20))}%`,
@@ -2364,25 +2518,25 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
 
       {/* PHASE 1: LEARN CARD */}
       {phase === 1 && (
-        <div className="space-y-4">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
-              Adım 1: Modadil Akademik Kelime Kartı <span style={{ color: '#10b981' }}>({currentIdx + 1}/{studyWords.length})</span>
+        <div className="space-y-3">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
+            <h4 style={{ fontSize: '0.78rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
+              Kelime Kartı <span style={{ color: '#10b981' }}>({currentIdx + 1}/{studyWords.length})</span>
             </h4>
           </div>
 
           <div className="glass-card animate-scale-in" style={{ 
-            padding: '20px 24px', 
-            borderRadius: '24px', 
+            padding: '14px 16px', 
+            borderRadius: '16px', 
             background: 'rgba(15, 23, 42, 0.65)', 
             border: '1px solid rgba(16, 185, 129, 0.25)',
             boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 0 1px rgba(255, 255, 255, 0.03)',
             backdropFilter: 'blur(12px)',
-            minHeight: '400px',
+            minHeight: 'auto',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            gap: '20px'
+            gap: '14px'
           }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '6px' }}>
               <span style={{ fontSize: '0.65rem', color: '#10b981', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em' }}>İNGİLİZCE KELİME</span>
@@ -2431,58 +2585,83 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
               </h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '10px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '12px 0' }}>
-              <div style={{ background: 'rgba(99, 102, 241, 0.03)', border: '1px solid rgba(99, 102, 241, 0.1)', padding: '8px 10px', borderRadius: '12px' }}>
-                <span style={{ fontSize: '0.58rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
-                  🔄 EŞ ANLAMLILAR
-                </span>
-                {getSynonymsList(studyWords[currentIdx]).length > 0 ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {getSynonymsList(studyWords[currentIdx]).map((item, idx) => (
-                      <div key={idx} style={{ fontSize: '0.78rem', color: 'white', fontWeight: '700', lineHeight: '1.2' }}>
-                        {item.eng} {item.tr && <span style={{ color: '#a5b4fc', fontWeight: '500', fontSize: '0.72rem' }}>({item.tr})</span>}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
-                )}
-              </div>
+            <button 
+              onClick={() => setShowCardDetails(!showCardDetails)} 
+              className="glass-button" 
+              style={{ 
+                padding: '8px 12px', 
+                fontSize: '0.72rem', 
+                width: '100%', 
+                margin: '4px 0', 
+                borderRadius: '10px',
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                gap: '6px',
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                color: '#a5b4fc',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              {showCardDetails ? 'Detayları Kapat 🔼' : 'Eş/Zıt Anlamları & Birlikte Kullanımları Göster 🔽'}
+            </button>
 
-              <div style={{ background: 'rgba(239, 68, 68, 0.03)', border: '1px solid rgba(239, 68, 68, 0.15)', padding: '8px 10px', borderRadius: '12px' }}>
-                <span style={{ fontSize: '0.58rem', color: '#f87171', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
-                  🔀 ZIT ANLAMLILAR
-                </span>
-                {getAntonymsList(studyWords[currentIdx]).length > 0 ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {getAntonymsList(studyWords[currentIdx]).map((item, idx) => (
-                      <div key={idx} style={{ fontSize: '0.78rem', color: 'white', fontWeight: '700', lineHeight: '1.2' }}>
-                        {item.eng} {item.tr && <span style={{ color: '#fca5a5', fontWeight: '500', fontSize: '0.72rem' }}>({item.tr})</span>}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
-                )}
-              </div>
+            {showCardDetails && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '10px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '12px 0' }}>
+                <div style={{ background: 'rgba(99, 102, 241, 0.03)', border: '1px solid rgba(99, 102, 241, 0.1)', padding: '8px 10px', borderRadius: '12px' }}>
+                  <span style={{ fontSize: '0.58rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
+                    🔄 EŞ ANLAMLILAR
+                  </span>
+                  {getSynonymsList(studyWords[currentIdx]).length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {getSynonymsList(studyWords[currentIdx]).map((item, idx) => (
+                        <div key={idx} style={{ fontSize: '0.78rem', color: 'white', fontWeight: '700', lineHeight: '1.2' }}>
+                          {item.eng} {item.tr && <span style={{ color: '#a5b4fc', fontWeight: '500', fontSize: '0.72rem' }}>({item.tr})</span>}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
+                  )}
+                </div>
 
-              <div style={{ background: 'rgba(16, 185, 129, 0.03)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '8px 10px', borderRadius: '12px' }}>
-                <span style={{ fontSize: '0.58rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
-                  🔗 BİRLİKTE KULLANIMLAR (COLLOCATIONS)
-                </span>
-                {getCollocationsList(studyWords[currentIdx]).length > 0 ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {getCollocationsList(studyWords[currentIdx]).map((item, idx) => (
-                      <div key={idx} style={{ fontSize: '0.78rem', color: 'white', fontWeight: '700', fontStyle: 'italic', lineHeight: '1.2' }}>
-                        {item.eng} {item.tr && <span style={{ color: '#a7f3d0', fontWeight: '500', fontSize: '0.72rem', fontStyle: 'normal' }}>({item.tr})</span>}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
-                )}
+                <div style={{ background: 'rgba(239, 68, 68, 0.03)', border: '1px solid rgba(239, 68, 68, 0.15)', padding: '8px 10px', borderRadius: '12px' }}>
+                  <span style={{ fontSize: '0.58rem', color: '#f87171', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
+                    🔀 ZIT ANLAMLILAR
+                  </span>
+                  {getAntonymsList(studyWords[currentIdx]).length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {getAntonymsList(studyWords[currentIdx]).map((item, idx) => (
+                        <div key={idx} style={{ fontSize: '0.78rem', color: 'white', fontWeight: '700', lineHeight: '1.2' }}>
+                          {item.eng} {item.tr && <span style={{ color: '#fca5a5', fontWeight: '500', fontSize: '0.72rem' }}>({item.tr})</span>}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
+                  )}
+                </div>
+
+                <div style={{ background: 'rgba(16, 185, 129, 0.03)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '8px 10px', borderRadius: '12px' }}>
+                  <span style={{ fontSize: '0.58rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
+                    🔗 BİRLİKTE KULLANIMLAR
+                  </span>
+                  {getCollocationsList(studyWords[currentIdx]).length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {getCollocationsList(studyWords[currentIdx]).map((item, idx) => (
+                        <div key={idx} style={{ fontSize: '0.78rem', color: 'white', fontWeight: '700', fontStyle: 'italic', lineHeight: '1.2' }}>
+                          {item.eng} {item.tr && <span style={{ color: '#a7f3d0', fontWeight: '500', fontSize: '0.72rem', fontStyle: 'normal' }}>({item.tr})</span>}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px 16px', borderRadius: '16px', background: 'rgba(251, 191, 36, 0.03)', border: '1px dashed rgba(251, 191, 36, 0.2)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
@@ -3097,10 +3276,16 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb })
           </div>
 
           <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0 }}>
-            Tebrikler! Gün #{selectedDay} Başarıyla Tamamlandı! 🎉
+            {isEvaluationMode 
+              ? `Tebrikler! ${selectedDay - 9}-${selectedDay}. Günler Genel Değerlendirme Testi Başarıyla Tamamlandı! 🏆`
+              : `Tebrikler! Gün #${selectedDay} Başarıyla Tamamlandı! 🎉`
+            }
           </h2>
           <p style={{ fontSize: '0.94rem', color: '#94a3b8', maxWidth: '480px', margin: '12px auto 0 auto', lineHeight: 1.6 }}>
-            Bugünün akademik kelimelerini; anlam okuma, anlam testi, eş anlam bulma, zıt anlam bulma ve çoktan seçmeli kelime testi ile başarıyla çalıştınız.
+            {isEvaluationMode
+              ? `Son 10 günlük birikiminiz Cloze Test yöntemiyle başarıyla ölçüldü ve değerlendirildi.`
+              : `Bugünün akademik kelimelerini; anlam okuma, anlam testi, eş anlam bulma, zıt anlam bulma ve çoktan seçmeli kelime testi ile başarıyla çalıştınız.`
+            }
           </p>
 
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', margin: '28px 0', flexWrap: 'wrap' }}>

@@ -15,38 +15,7 @@ const LecturesSection = ({
   handleTextSelection
 }) => {
   const renderInteractiveSentence = (text) => {
-    if (!text) return '';
-    const words = text.split(/\s+/);
-    return words.map((word, idx) => {
-      const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-      return (
-        <React.Fragment key={idx}>
-          <span
-            onClick={(e) => {
-              if (handleTextSelection) {
-                handleTextSelection({
-                  clientX: e.clientX,
-                  clientY: e.clientY,
-                  target: e.target,
-                  customText: cleanWord
-                });
-              }
-            }}
-            style={{
-              cursor: 'pointer',
-              padding: '1px 2px',
-              borderRadius: '4px',
-              display: 'inline'
-            }}
-            onMouseEnter={(e) => { e.target.style.color = '#818cf8'; e.target.style.background = 'rgba(99,102,241,0.08)'; }}
-            onMouseLeave={(e) => { e.target.style.color = 'inherit'; e.target.style.background = 'transparent'; }}
-          >
-            {word}
-          </span>
-          {' '}
-        </React.Fragment>
-      );
-    });
+    return text || '';
   };
 
   const [lectureStep, setLectureStep] = useState(1); // 1 = explanation slides, 2 = exercise quiz
@@ -446,8 +415,21 @@ const LecturesSection = ({
                           <span>Soru {exerciseIdx + 1} / {exerciseList.length}</span>
                         </div>
 
-                        <div className="text-sm font-semibold text-slate-200 text-center leading-relaxed py-4 border-y border-white/5" style={{ fontSize: '1rem', color: '#e2e8f0', cursor: 'pointer' }}>
-                          {renderInteractiveSentence(currentEx.sentence)}
+                        <div 
+                          onMouseUp={(e) => {
+                            if (handleTextSelection) handleTextSelection(e);
+                          }}
+                          onTouchEnd={(e) => {
+                            if (handleTextSelection) {
+                              setTimeout(() => {
+                                handleTextSelection(e);
+                              }, 100);
+                            }
+                          }}
+                          className="text-sm font-semibold text-slate-200 text-center leading-relaxed py-4 border-y border-white/5" 
+                          style={{ fontSize: '1rem', color: '#e2e8f0', cursor: 'pointer', userSelect: 'text', WebkitUserSelect: 'text' }}
+                        >
+                          {currentEx.sentence}
                         </div>
 
                         {/* Options Grid with premium styled borders */}
