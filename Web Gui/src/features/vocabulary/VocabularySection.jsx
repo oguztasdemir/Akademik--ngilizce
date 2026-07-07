@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, HelpCircle, Check, Eye, Trash2, ArrowRight, Star, RefreshCw, CheckCircle, Sparkles, Mic, Volume2, X } from 'lucide-react';
-import VocabularyListView from './Vocabulary/VocabularyListView';
-import VocabularyLeitner from './Vocabulary/VocabularyLeitner';
-import VocabularyMatching from './Vocabulary/VocabularyMatching';
-import VocabularyMcq from './Vocabulary/VocabularyMcq';
-import VocabularySpelling from './Vocabulary/VocabularySpelling';
-import { VocabularySentenceBuilder, VocabularyDuel } from './Vocabulary/VocabularyScrambled';
-import { VocabularyDictation, VocabularyPronunciation } from './Vocabulary/VocabularyVoice';
+import VocabularyListView from './components/VocabularyListView';
+import VocabularyLeitner from './components/VocabularyLeitner';
+import VocabularyMatching from './components/VocabularyMatching';
+import VocabularyMcq from './components/VocabularyMcq';
+import VocabularySpelling from './components/VocabularySpelling';
+import { VocabularySentenceBuilder, VocabularyDuel } from './components/VocabularyScrambled';
+import { VocabularyDictation, VocabularyPronunciation } from './components/VocabularyVoice';
 
 const ALL_SENTENCES = {
   "evaluate": { en: "Scientists evaluate the laboratory results carefully.", tr: "Bilim insanları laboratuvar sonuçlarını dikkatle değerlendirir." },

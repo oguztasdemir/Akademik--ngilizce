@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import grammarCampDb from '@dataset/yokdil/genel/grammar_camp.json';
-import { handlePrintPDF } from './Camp/CampPrint';
-import CampDashboard from './Camp/CampDashboard';
-import CampStudy from './Camp/CampStudy';
-import CampGrammar from './Camp/CampGrammar';
+import { handlePrintPDF } from './components/CampPrint';
+import CampDashboard from './components/CampDashboard';
+import CampStudy from './components/CampStudy';
+import CampGrammar from './components/CampGrammar';
 
 const campModules = import.meta.glob('@dataset/**/*.json');
 

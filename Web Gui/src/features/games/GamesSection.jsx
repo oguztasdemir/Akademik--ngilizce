@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import CardMatchGame from './Games/CardMatchGame';
-import WordShooterGame from './Games/WordShooterGame';
-import HangmanGame from './Games/HangmanGame';
-import SpellingGame from './Games/SpellingGame';
-import SynonymGame from './Games/SynonymGame';
-import AntonymGame from './Games/AntonymGame';
-import TrueFalseGame from './Games/TrueFalseGame';
-import ClozeGame from './Games/ClozeGame';
-import DefinitionGame from './Games/DefinitionGame';
+import CardMatchGame from './components/CardMatchGame';
+import WordShooterGame from './components/WordShooterGame';
+import HangmanGame from './components/HangmanGame';
+import SpellingGame from './components/SpellingGame';
+import SynonymGame from './components/SynonymGame';
+import AntonymGame from './components/AntonymGame';
+import TrueFalseGame from './components/TrueFalseGame';
+import ClozeGame from './components/ClozeGame';
+import DefinitionGame from './components/DefinitionGame';
 
 // Vocabulary database fallback for instant client-side games
 const MINI_GAME_VOCAB = {

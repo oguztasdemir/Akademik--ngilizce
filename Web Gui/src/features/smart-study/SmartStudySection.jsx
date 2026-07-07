@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy } from 'lucide-react';
-import SmartStudyDashboard from './SmartStudy/SmartStudyDashboard';
-import SmartStudyFlow from './SmartStudy/SmartStudyFlow';
+import SmartStudyDashboard from './components/SmartStudyDashboard';
+import SmartStudyFlow from './components/SmartStudyFlow';
 
 const CATEGORY_WORDS = {
   fen: [

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MascotPet, { ANIMAL_CATALOG, ACCESSORY_HATS, ACCESSORY_GLASSES, ACCESSORY_CLOTHES, ACCESSORY_ITEMS } from './MascotPet';
+import MascotPet, { ANIMAL_CATALOG, ACCESSORY_HATS, ACCESSORY_GLASSES, ACCESSORY_CLOTHES, ACCESSORY_ITEMS } from '../../components/common/MascotPet';
 
 const ROOM_BACKGROUNDS = {
   cozy: {

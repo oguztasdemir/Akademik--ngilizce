@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Award, Volume2, ArrowRight, Check, X } from 'lucide-react';
-import { handlePrintPDF } from './BookExercise/BookExercisePrint';
-import BookExerciseDashboard from './BookExercise/BookExerciseDashboard';
-import BookExerciseStudy from './BookExercise/BookExerciseStudy';
+import { handlePrintPDF } from './components/BookExercisePrint';
+import BookExerciseDashboard from './components/BookExerciseDashboard';
+import BookExerciseStudy from './components/BookExerciseStudy';
 
 const formatWordType = (type) => {
   if (!type) return '';

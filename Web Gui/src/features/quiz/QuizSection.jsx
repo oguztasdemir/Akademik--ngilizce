@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MascotOwl from './MascotOwl';
+import MascotOwl from '../../components/common/MascotOwl';
 
 const cleanQuestionText = (text, qNum) => {
   if (!text) return '';

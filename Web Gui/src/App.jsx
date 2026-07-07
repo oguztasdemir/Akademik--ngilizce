@@ -5,25 +5,26 @@ import {
 } from 'lucide-react';
 
 // Import Modular Components
-import MascotOwl from './components/MascotOwl';
-import MascotPet from './components/MascotPet';
-import Confetti from './components/Confetti';
-import TranslationPopover from './components/TranslationPopover';
-import Sidebar from './components/Sidebar';
-import QuizSection from './components/QuizSection';
-import VocabularySection from './components/VocabularySection';
-import LecturesSection from './components/LecturesSection';
-import PerformanceSection from './components/PerformanceSection';
-import SettingsSection from './components/SettingsSection';
-import PetSection from './components/PetSection';
-import GamesSection from './components/GamesSection';
-import MistakeInbox from './components/MistakeInbox';
-import ParagraphsSection from './components/ParagraphsSection';
-import AuthModal from './components/AuthModal';
-import SmartStudySection from './components/SmartStudySection';
-import CampSection from './components/CampSection';
-import BookExerciseSection from './components/BookExerciseSection';
+import MascotOwl from './components/common/MascotOwl';
+import MascotPet from './components/common/MascotPet';
+import Confetti from './components/common/Confetti';
+import TranslationPopover from './components/common/TranslationPopover';
+import Sidebar from './components/layout/Sidebar';
+import QuizSection from './features/quiz/QuizSection';
+import VocabularySection from './features/vocabulary/VocabularySection';
+import LecturesSection from './features/lectures/LecturesSection';
+import PerformanceSection from './features/performance/PerformanceSection';
+import SettingsSection from './features/settings/SettingsSection';
+import PetSection from './features/pet/PetSection';
+import GamesSection from './features/games/GamesSection';
+import MistakeInbox from './features/mistakes/MistakeInbox';
+import ParagraphsSection from './features/paragraphs/ParagraphsSection';
+import AuthModal from './components/common/AuthModal';
+import SmartStudySection from './features/smart-study/SmartStudySection';
+import CampSection from './features/camp/CampSection';
+import BookExerciseSection from './features/book-exercise/BookExerciseSection';
 import { renderMarkdown } from './utils/markdown';
+import { playCorrectSound, playIncorrectSound, playGoalSound } from './utils/audio';
 import achievementsData from '@dataset/yokdil/achievements.json';
 
 import fallbackExamsFen from '@dataset/yokdil/fen/exams.json';
@@ -81,85 +82,6 @@ const ROOM_BACKGROUNDS = {
   }
 };
 
-// Web Audio API Sound Synthesizers for Gamification
-const playCorrectSound = () => {
-  if (localStorage.getItem('yokdil_sound_enabled') === 'false') return;
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = 'sine';
-    const now = ctx.currentTime;
-
-    // Melodic positive C5 -> E5 arpeggio
-    osc.frequency.setValueAtTime(523.25, now); // C5
-    gain.gain.setValueAtTime(0.12, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-    osc.start(now);
-    osc.stop(now + 0.12);
-
-    const osc2 = ctx.createOscillator();
-    const gain2 = ctx.createGain();
-    osc2.connect(gain2);
-    gain2.connect(ctx.destination);
-    osc2.type = 'sine';
-    osc2.frequency.setValueAtTime(659.25, now + 0.08); // E5
-    gain2.gain.setValueAtTime(0.12, now + 0.08);
-    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-    osc2.start(now + 0.08);
-    osc2.stop(now + 0.22);
-  } catch (e) {
-    console.error("Audio error:", e);
-  }
-};
-
-const playIncorrectSound = () => {
-  if (localStorage.getItem('yokdil_sound_enabled') === 'false') return;
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = 'sawtooth';
-    const now = ctx.currentTime;
-
-    // Sad downturned sliding buzz
-    osc.frequency.setValueAtTime(150, now);
-    osc.frequency.linearRampToValueAtTime(90, now + 0.25);
-    gain.gain.setValueAtTime(0.12, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-    osc.start(now);
-    osc.stop(now + 0.25);
-  } catch (e) {
-    console.error("Audio error:", e);
-  }
-};
-
-const playGoalSound = () => {
-  if (localStorage.getItem('yokdil_sound_enabled') === 'false') return;
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const notes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
-    const now = ctx.currentTime;
-    notes.forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, now + idx * 0.1);
-      gain.gain.setValueAtTime(0.12, now + idx * 0.1);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.22);
-      osc.start(now + idx * 0.1);
-      osc.stop(now + idx * 0.1 + 0.22);
-    });
-  } catch (e) {
-    console.error("Audio error:", e);
-  }
-};
 
 const getTopicName = (key) => {
   const mapping = {
