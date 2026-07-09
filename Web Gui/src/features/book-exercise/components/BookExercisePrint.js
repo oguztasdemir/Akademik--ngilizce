@@ -39,6 +39,45 @@ export const handlePrintPDF = (dayNum, wordsList, totalDays) => {
         </style>
       </head>
       <body>
+        <div class="print-control-bar" style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #1e1b4b;
+          color: white;
+          padding: 12px 24px;
+          border-bottom: 2px solid #6366f1;
+          font-family: system-ui, -apple-system, sans-serif;
+          margin-bottom: 20px;
+          border-radius: 8px;
+        ">
+          <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="window.print()" style="
+              background: #6366f1;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+              transition: all 0.2s;
+            ">🖨️ Raporu Dışarı Aktar / Yazdır</button>
+            <button onclick="window.close()" style="
+              background: rgba(255,255,255,0.1);
+              color: white;
+              border: 1px solid rgba(255,255,255,0.2);
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+            ">Kapat</button>
+          </div>
+        </div>
+
         <h1>📝 ${titleText}</h1>
         <div class="meta-box">
           <div class="meta-item">Kategori: <strong>YDS Kelime Kitabı</strong></div>
@@ -58,12 +97,7 @@ export const handlePrintPDF = (dayNum, wordsList, totalDays) => {
             ${wordsRows}
           </tbody>
         </table>
-        <script>
-          window.onload = function() {
-            window.print();
-            setTimeout(function() { window.close(); }, 500);
-          };
-        </script>
+
       </body>
     </html>
   `);

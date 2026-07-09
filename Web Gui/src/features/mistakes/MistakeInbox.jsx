@@ -14,9 +14,10 @@ const MistakeInbox = ({
   wordStats = {},
   vocabPracticeList = [],
   notebook = [],
-  recordWordStat
+  recordWordStat,
+  questionStats = {}
 }) => {
-  const [mistakeSection, setMistakeSection] = useState('tests'); // 'tests', 'camp', 'reading', 'vocabulary'
+  const [mistakeSection, setMistakeSection] = useState('summary'); // 'summary', 'tests', 'camp', 'reading', 'vocabulary'
   
   // Test mistakes states
   const [activeMistakeIndex, setActiveMistakeIndex] = useState(null);
@@ -216,6 +217,12 @@ const MistakeInbox = ({
         overflowX: 'auto'
       }}>
         <button 
+          onClick={() => { setMistakeSection('summary'); }}
+          style={mistakeSection === 'summary' ? activeTabStyle : inactiveTabStyle}
+        >
+          🎯 Genel Analiz
+        </button>
+        <button 
           onClick={() => { setMistakeSection('tests'); setActiveMistakeIndex(null); }}
           style={mistakeSection === 'tests' ? activeTabStyle : inactiveTabStyle}
         >
@@ -240,6 +247,134 @@ const MistakeInbox = ({
           📇 Bilinmeyen Kelimeler ({allWordMistakes.length})
         </button>
       </div>
+
+      {/* SECTION 0: GENERAL ANALYTICS & FEEDBACK */}
+      {mistakeSection === 'summary' && (() => {
+        // Calculate statistics for feedback
+        const totalSolvedExamQuestions = Object.values(questionStats || {}).reduce((acc, exam) => {
+          return acc + Object.values(exam || {}).reduce((sum, q) => sum + (q.correct || 0) + (q.wrong || 0), 0);
+        }, 0);
+
+        const totalWrongExamQuestions = examMistakesList.length;
+        const examMistakeRatio = totalSolvedExamQuestions > 0 ? (totalWrongExamQuestions / totalSolvedExamQuestions) * 100 : 0;
+
+        const totalCheckedWords = Object.keys(wordStats || {}).length;
+        const totalWrongWords = allWordMistakes.length;
+        const vocabMistakeRatio = totalCheckedWords > 0 ? (totalWrongWords / totalCheckedWords) * 100 : 0;
+
+        let feedbackMessage = "";
+        let weakPointTitle = "";
+        let feedbackLevel = "Normal"; 
+        
+        if (totalWrongExamQuestions > 0 && examMistakeRatio > 35) {
+          weakPointTitle = "Sınav Çözüm Teknikleri";
+          feedbackLevel = "Kritik";
+          feedbackMessage = `Deneme sınavlarında yaptığınız hataların oranı (%${examMistakeRatio.toFixed(0)}) kritik seviyede yüksek. Gramer formüllerine ve cümle bağlaçlarına tekrar odaklanmanız ve soru çözüm açıklamalarını dikkatlice incelemeniz tavsiye edilir.`;
+        } else if (totalWrongWords > 0 && vocabMistakeRatio > 35) {
+          weakPointTitle = "Kelime Dağarcığı";
+          feedbackLevel = "Kritik";
+          feedbackMessage = `Kelime çalışmalarınızda yanlış yapma sıklığınız (%${vocabMistakeRatio.toFixed(0)}) yüksek seviyede. Kelime defterinizi Excel veya Word olarak dışarı aktarıp fiziksel tekrarlar yapmanız ve aralıklı tekrar (Spaced Repetition) sistemini her gün kullanmanız yararlı olacaktır.`;
+        } else if (campMistakesList.length > 5) {
+          weakPointTitle = "Kelime Kampları";
+          feedbackLevel = "Orta";
+          feedbackMessage = "Kelime kamplarında çözdüğünüz günlerde biriken hatalarınız bulunuyor. Kamp günlerinde öğrendiğiniz sözcükleri sadece anlam bazlı değil, eş anlamlılarıyla ve boşluk doldurma pratikleriyle beraber pekiştirin.";
+        } else if (readingMistakesList.length > 5) {
+          weakPointTitle = "Okuma Paragrafları";
+          feedbackLevel = "Orta";
+          feedbackMessage = "Akademik okuma metinlerinde anlamını bilmediğiniz kelime sayısı artış gösteriyor. Paragraf okurken kelimeleri tek tek çevirmek yerine, kelime gruplarını üst üste seçerek cümlenin genel anlamını kavramaya çalışmalısınız.";
+        } else {
+          weakPointTitle = "Gelişim Dengeli";
+          feedbackLevel = "Başarılı";
+          feedbackMessage = "Hata oranlarınız oldukça dengeli ve kontrol altında! Düzenli tekrarlarınız sayesinde akademik gelişiminiz emin adımlarla ilerliyor. Yeni deneme sınavları çözerek kendinizi test etmeye devam edebilirsiniz.";
+        }
+
+        return (
+          <div className="space-y-6">
+            {/* Header KPI Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px' }}>
+              
+              {/* Card 1 */}
+              <div className="glass-card" style={{ padding: '16px', borderRadius: '18px', background: 'rgba(239, 68, 68, 0.03)', border: '1px solid rgba(239, 68, 68, 0.15)', textAlign: 'left' }}>
+                <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#f87171', textTransform: 'uppercase' }}>Sınav Hataları</span>
+                <h4 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '4px 0', color: 'white' }}>{totalWrongExamQuestions} Soru</h4>
+                <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden', marginTop: '6px' }}>
+                  <div style={{ width: `${Math.min(examMistakeRatio, 100)}%`, height: '100%', background: '#ef4444' }} />
+                </div>
+                <span style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>Hata Oranı: %{examMistakeRatio.toFixed(0)}</span>
+              </div>
+
+              {/* Card 2 */}
+              <div className="glass-card" style={{ padding: '16px', borderRadius: '18px', background: 'rgba(245, 158, 11, 0.03)', border: '1px solid rgba(245, 158, 11, 0.15)', textAlign: 'left' }}>
+                <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#fbbf24', textTransform: 'uppercase' }}>Bilinmeyen Kelimeler</span>
+                <h4 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '4px 0', color: 'white' }}>{totalWrongWords} Kelime</h4>
+                <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden', marginTop: '6px' }}>
+                  <div style={{ width: `${Math.min(vocabMistakeRatio, 100)}%`, height: '100%', background: '#fbbf24' }} />
+                </div>
+                <span style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>Hata Oranı: %{vocabMistakeRatio.toFixed(0)}</span>
+              </div>
+
+              {/* Card 3 */}
+              <div className="glass-card" style={{ padding: '16px', borderRadius: '18px', background: 'rgba(99, 102, 241, 0.03)', border: '1px solid rgba(99, 102, 241, 0.15)', textAlign: 'left' }}>
+                <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase' }}>Kamp Hataları</span>
+                <h4 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '4px 0', color: 'white' }}>{campMistakesList.length} Soru</h4>
+                <span style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>Gözden geçirilmeyi bekliyor</span>
+              </div>
+
+              {/* Card 4 */}
+              <div className="glass-card" style={{ padding: '16px', borderRadius: '18px', background: 'rgba(16, 185, 129, 0.03)', border: '1px solid rgba(16, 185, 129, 0.15)', textAlign: 'left' }}>
+                <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#34d399', textTransform: 'uppercase' }}>Okuma Hataları</span>
+                <h4 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '4px 0', color: 'white' }}>{readingMistakesList.length} Soru</h4>
+                <span style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>Hizalama & eşleme notları</span>
+              </div>
+            </div>
+
+            {/* AI Coaching & Feedback Panel */}
+            <div className="glass-card" style={{
+              padding: '24px',
+              borderRadius: '24px',
+              border: '1px solid rgba(255, 255, 255, 0.06)',
+              background: 'rgba(15, 23, 42, 0.4)',
+              textAlign: 'left'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                <div style={{
+                  padding: '8px 14px',
+                  borderRadius: '12px',
+                  fontSize: '0.68rem',
+                  fontWeight: 'bold',
+                  background: feedbackLevel === 'Kritik' ? 'rgba(239, 68, 68, 0.15)' : (feedbackLevel === 'Orta' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)'),
+                  color: feedbackLevel === 'Kritik' ? '#f87171' : (feedbackLevel === 'Orta' ? '#fbbf24' : '#34d399'),
+                  border: '1px solid'
+                }}>
+                  {feedbackLevel === 'Kritik' ? '⚠️ YÜKSEK HATA HASSASİYETİ' : (feedbackLevel === 'Orta' ? '⚡ GELİŞİM ALANI' : '✨ AKADEMİK ETKİNLİK DENGELİ')}
+                </div>
+                <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500' }}>Öncelikli Odak: <strong>{weakPointTitle}</strong></span>
+              </div>
+
+              <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: 'white', margin: '0 0 8px 0' }}>🤖 Akıllı Hata Analiz Feedback</h4>
+              <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: '1.6', margin: 0 }}>
+                {feedbackMessage}
+              </p>
+            </div>
+
+            {/* Smart Advice Action Steps */}
+            <div className="glass-card" style={{ padding: '20px 24px', borderRadius: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'left' }}>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'white', margin: '0 0 14px 0' }}>📋 Önerilen Eylem Adımları:</h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#cbd5e1' }}>
+                  <span style={{ color: '#6366f1', fontWeight: 'bold' }}>1.</span> Gramer Formül Kartlarını indirip gözden geçirin.
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#cbd5e1' }}>
+                  <span style={{ color: '#6366f1', fontWeight: 'bold' }}>2.</span> Hatalı olduğunuz sınav sorularını "Sınav Hataları" sekmesinde maraton olarak çözün.
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#cbd5e1' }}>
+                  <span style={{ color: '#6366f1', fontWeight: 'bold' }}>3.</span> Kelime Defterinizi yazdırıp kelime kartı eşleştirmelerini tekrarlayın.
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* SECTION 1: TEST MISTAKES */}
       {mistakeSection === 'tests' && (

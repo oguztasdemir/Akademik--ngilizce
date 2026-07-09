@@ -171,6 +171,45 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
       </head>
       <body>
+        <div class="print-control-bar" style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #1e1b4b;
+          color: white;
+          padding: 12px 24px;
+          border-bottom: 2px solid #6366f1;
+          font-family: system-ui, -apple-system, sans-serif;
+          margin-bottom: 20px;
+          border-radius: 8px;
+        ">
+          <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="window.print()" style="
+              background: #6366f1;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+              transition: all 0.2s;
+            ">🖨️ Raporu Dışarı Aktar / Yazdır</button>
+            <button onclick="window.close()" style="
+              background: rgba(255,255,255,0.1);
+              color: white;
+              border: 1px solid rgba(255,255,255,0.2);
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+            ">Kapat</button>
+          </div>
+        </div>
+
         <h1>📝 ${titleText}</h1>
         <div class="meta-box">
           <div class="meta-item">Kategori: <strong>YÖKDİL ${categoryText}</strong></div>
@@ -178,12 +217,7 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
           ${stats ? `<div class="meta-item">Başarı Oranı: <strong>%${stats.score || '100'}</strong></div>` : ''}
         </div>
         ${bodyContent}
-        <script>
-          window.onload = function() {
-            window.print();
-            setTimeout(function() { window.close(); }, 500);
-          };
-        </script>
+
       </body>
     </html>
   `);
@@ -330,6 +364,45 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
         </style>
       </head>
       <body>
+        <div class="print-control-bar" style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #1e1b4b;
+          color: white;
+          padding: 12px 24px;
+          border-bottom: 2px solid #6366f1;
+          font-family: system-ui, -apple-system, sans-serif;
+          margin-bottom: 20px;
+          border-radius: 8px;
+        ">
+          <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="window.print()" style="
+              background: #6366f1;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+              transition: all 0.2s;
+            ">🖨️ Raporu Dışarı Aktar / Yazdır</button>
+            <button onclick="window.close()" style="
+              background: rgba(255,255,255,0.1);
+              color: white;
+              border: 1px solid rgba(255,255,255,0.2);
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+            ">Kapat</button>
+          </div>
+        </div>
+
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2.5px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 20px;">
           <h1 style="margin: 0; border: none; padding: 0;">📋 Kelime Kampı Karne Raporu</h1>
           <span style="font-size: 0.9rem; color: #64748b;">\${new Date().toLocaleDateString()}</span>
@@ -370,12 +443,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
           </tbody>
         </table>
         
-        <script>
-          window.onload = function() {
-            window.print();
-            setTimeout(function() { window.close(); }, 500);
-          };
-        </script>
+
       </body>
     </html>
   `);
@@ -430,6 +498,45 @@ export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, 
         </style>
       </head>
       <body>
+        <div class="print-control-bar" style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #1e1b4b;
+          color: white;
+          padding: 12px 24px;
+          border-bottom: 2px solid #6366f1;
+          font-family: system-ui, -apple-system, sans-serif;
+          margin-bottom: 20px;
+          border-radius: 8px;
+        ">
+          <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="window.print()" style="
+              background: #6366f1;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+              transition: all 0.2s;
+            ">🖨️ Raporu Dışarı Aktar / Yazdır</button>
+            <button onclick="window.close()" style="
+              background: rgba(255,255,255,0.1);
+              color: white;
+              border: 1px solid rgba(255,255,255,0.2);
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+            ">Kapat</button>
+          </div>
+        </div>
+
         <h2>📋 Kelime Kampı Karne Raporu (${new Date().toLocaleDateString()})</h2>
         <p><strong>Alan:</strong> YÖKDİL ${categoryText}</p>
         <p><strong>Çalışma Modu:</strong> ${modeText}</p>

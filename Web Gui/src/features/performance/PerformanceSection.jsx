@@ -29,6 +29,12 @@ const PerformanceSection = ({
           <meta charset="utf-8">
           <style>
             body { font-family: 'Inter', system-ui, sans-serif; padding: 30px; color: #1e293b; }
+            @media print {
+              .print-control-bar {
+                display: none !important;
+              }
+            }
+
             h1 { color: #4f46e5; border-bottom: 2.5px solid #f1f5f9; padding-bottom: 10px; margin-top: 0; }
             h3 { color: #1e1b4b; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 4px; margin-top: 24px; }
             .kpi-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
@@ -40,6 +46,45 @@ const PerformanceSection = ({
           </style>
         </head>
         <body>
+        <div class="print-control-bar" style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #1e1b4b;
+          color: white;
+          padding: 12px 24px;
+          border-bottom: 2px solid #6366f1;
+          font-family: system-ui, -apple-system, sans-serif;
+          margin-bottom: 20px;
+          border-radius: 8px;
+        ">
+          <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="window.print()" style="
+              background: #6366f1;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+              transition: all 0.2s;
+            ">🖨️ Raporu Dışarı Aktar / Yazdır</button>
+            <button onclick="window.close()" style="
+              background: rgba(255,255,255,0.1);
+              color: white;
+              border: 1px solid rgba(255,255,255,0.2);
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+            ">Kapat</button>
+          </div>
+        </div>
+
           <h1>📊 YÖKDİL Akademik Gelişim Raporu</h1>
           <p>Rapor Tarihi: ${new Date().toLocaleDateString()}</p>
 
@@ -71,7 +116,7 @@ const PerformanceSection = ({
           </table>
 
           <script>
-            window.onload = function() { window.print(); setTimeout(function() { window.close(); }, 500); };
+            
           </script>
         </body>
       </html>

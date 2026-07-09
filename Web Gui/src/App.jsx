@@ -3541,8 +3541,7 @@ function App() {
               handleTextSelection={handleTextSelection}
             />
 
-            {/* TAB 5: MISTAKE INBOX SECTION */}
-            <MistakeInbox
+             <MistakeInbox
               activeTab={activeTab}
               mistakes={mistakes}
               setMistakes={setMistakes}
@@ -3556,6 +3555,7 @@ function App() {
               vocabPracticeList={vocabPracticeList}
               notebook={notebook}
               recordWordStat={recordWordStat}
+              questionStats={questionStats}
             />
 
             {/* TAB 7: PERFORMANCE SECTION */}

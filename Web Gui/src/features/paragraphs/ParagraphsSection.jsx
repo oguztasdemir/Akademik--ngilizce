@@ -442,10 +442,13 @@ const ParagraphsSection = ({
           style.color = '#a5b4fc';
           style.border = '1px dashed #818cf8';
         } else if (isSavedHighlight) {
-          style.background = 'rgba(99, 102, 241, 0.25)';
-          style.border = '1px solid #818cf8';
-          style.color = '#e0e7ff';
-          style.fontWeight = 'bold';
+          style.background = 'rgba(99, 102, 241, 0.45)';
+          style.border = '2px solid #818cf8';
+          style.color = '#ffffff';
+          style.fontWeight = '800';
+          style.boxShadow = '0 0 12px rgba(99, 102, 241, 0.8)';
+          style.borderRadius = '6px';
+          style.transform = 'scale(1.08)';
         } else if (sIdx === hoveredSentenceIdx) {
           style.background = 'rgba(99, 102, 241, 0.12)';
           style.borderBottom = '1.5px dashed rgba(99, 102, 241, 0.5)';
@@ -534,10 +537,13 @@ const ParagraphsSection = ({
           style.color = '#a7f3d0';
           style.border = '1px dashed #10b981';
         } else if (isSavedHighlight) {
-          style.background = 'rgba(16, 185, 129, 0.25)';
-          style.border = '1px solid #10b981';
-          style.color = '#ecfdf5';
-          style.fontWeight = 'bold';
+          style.background = 'rgba(16, 185, 129, 0.45)';
+          style.border = '2px solid #10b981';
+          style.color = '#ffffff';
+          style.fontWeight = '800';
+          style.boxShadow = '0 0 12px rgba(16, 185, 129, 0.8)';
+          style.borderRadius = '6px';
+          style.transform = 'scale(1.08)';
         } else if (sIdx === hoveredSentenceIdx) {
           style.background = 'rgba(16, 185, 129, 0.12)';
           style.borderBottom = '1.5px dashed rgba(16, 185, 129, 0.5)';
@@ -672,77 +678,7 @@ const ParagraphsSection = ({
       }
       setTranslatedWord(null);
     }}>
-      {/* Translation Sidebar Card (Fixed to Bottom-Right) */}
-      {translatedWord && (
-        <div 
-          className="translation-sidebar-card"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div style={{ fontWeight: 'bold', color: '#818cf8', fontSize: '1rem', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>
-                {translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")}
-              </span>
-              <button 
-                onClick={() => playSpeechAudio && playSpeechAudio(translatedWord)}
-                style={{ background: 'rgba(99,102,241,0.1)', border: 'none', color: '#818cf8', cursor: 'pointer', padding: '6px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                title="Sesli Oku"
-              >
-                <Volume2 className="h-4 w-4" />
-              </button>
-            </div>
-            <button 
-              onClick={() => setTranslatedWord(null)}
-              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0 4px', fontSize: '1.2rem', fontWeight: 'bold', lineHeight: 1 }}
-            >
-              ×
-            </button>
-          </div>
-          <p style={{ margin: '0 0 12px 0', fontSize: '0.82rem', color: '#f8fafc', lineHeight: 1.5 }}>
-            {translationText}
-          </p>
-          {notebook && handleAddCustomWord && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const cleanW = translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim();
-                  if (cleanW && translationText && !translationText.includes('Çeviriliyor') && !translationText.includes('Çeviri hatası')) {
-                    handleAddCustomWord(cleanW, translationText);
-                  }
-                }}
-                disabled={
-                  (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) ||
-                  translationText.includes('Çeviriliyor') || 
-                  translationText.includes('hata') || 
-                  translationText.includes('Mevcut Değil')
-                }
-                style={{
-                  background: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) 
-                    ? 'rgba(16, 185, 129, 0.2)' 
-                    : 'rgba(99, 102, 241, 0.25)',
-                  border: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) 
-                    ? '1px solid #10b981' 
-                    : '1px solid #6366f1',
-                  color: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) 
-                    ? '#34d399' 
-                    : '#a5b4fc',
-                  padding: '6px 12px',
-                  borderRadius: '8px',
-                  fontSize: '0.72rem',
-                  fontWeight: 'bold',
-                  cursor: (notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) ? 'default' : 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                {(notebook && notebook.some(item => item.english.toLowerCase() === translatedWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim().toLowerCase())) 
-                  ? '✓ Defterde' 
-                  : 'Deftere Ekle'}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+
 
       {loading ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '20px' }}>
