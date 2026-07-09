@@ -176,6 +176,27 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   const [studyMode, setStudyMode] = useState(null);
 
 const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [swipeOffsetX, setSwipeOffsetX] = useState(0);
+
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    const diff = e.targetTouches[0].clientX - touchStartX;
+    setSwipeOffsetX(diff);
+  };
+
+  const handleTouchEnd = () => {
+    const threshold = 100;
+    if (swipeOffsetX > threshold) {
+      handleCikmisSwipe(true);
+    } else if (swipeOffsetX < -threshold) {
+      handleCikmisSwipe(false);
+    }
+    setSwipeOffsetX(0);
+  };
   const [cikmisSwipeResults, setCikmisSwipeResults] = useState({});
   const [cikmisMatchingRound, setCikmisMatchingRound] = useState(0);
   const [cikmisMatchingCards, setCikmisMatchingCards] = useState([]);
@@ -1570,6 +1591,9 @@ const handleCikmisSwipeBack = () => {
 
           <div 
             onClick={() => setCikmisCardFlipped(!cikmisCardFlipped)}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
             className="glass-card" 
             style={{ 
               width: '100%', 
@@ -1585,7 +1609,10 @@ const handleCikmisSwipeBack = () => {
               cursor: 'pointer', 
               position: 'relative', 
               textAlign: 'center',
-              boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)'
+              boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+              transform: `translateX(${swipeOffsetX}px) rotate(${swipeOffsetX * 0.04}deg)`,
+              transition: swipeOffsetX === 0 ? 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)' : 'none',
+              touchAction: 'none'
             }}
           >
             {!cikmisCardFlipped ? (
