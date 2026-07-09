@@ -231,6 +231,14 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
   studiedWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
   unstudiedWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
 
+  const knownWords = studiedWords.filter(w => w.status === true);
+  const unknownWords = studiedWords.filter(w => w.status === false);
+  const totalWordsCount = studiedWords.length + unstudiedWords.length;
+  const studiedWordsCount = studiedWords.length;
+  const unstudiedWordsCount = unstudiedWords.length;
+  const knowledgePercent = studiedWordsCount > 0 ? ((knownWords.length / studiedWordsCount) * 100).toFixed(0) : 0;
+  const reportDateTime = new Date().toLocaleString('tr-TR');
+
   const renderStudiedRows = () => {
     if (studiedWords.length === 0) {
       return `<tr><td colspan="4" style="padding: 16px; text-align: center; color: #94a3b8; font-style: italic;">Henüz bu modda çalışılmış kelime bulunmamaktadır.</td></tr>`;
@@ -239,12 +247,12 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
       let statusHtml = '';
       if (mode === 'swipe') {
         statusHtml = w.status 
-          ? `<span class="badge-bildigim">Bildiğim</span>`
-          : `<span class="badge-bilmedigim">Bilmediğim</span>`;
+          ? `<span class="badge-bildigim" style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.72rem;">Bildiğim</span>`
+          : `<span class="badge-bilmedigim" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.72rem;">Bilmediğim</span>`;
       } else {
         statusHtml = w.status
-          ? `<span class="badge-bildigim">Doğru</span>`
-          : `<span class="badge-bilmedigim">Yanlış</span>`;
+          ? `<span class="badge-bildigim" style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.72rem;">Doğru</span>`
+          : `<span class="badge-bilmedigim" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.72rem;">Yanlış</span>`;
       }
 
       return `
@@ -281,87 +289,21 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
     <!DOCTYPE html>
     <html>
       <head>
-        <title>YOKDIL_${categoryText.replace(' ', '_')}_Kelime_Kampi_Karne</title>
+        <title>YOKDIL_${categoryText.replace(/\s+/g, '_')}_Kelime_Kampi_Karne</title>
         <meta charset="utf-8">
         <style>
-          body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: #ffffff;
-            color: #1e293b;
-            padding: 30px;
-            margin: 0;
-          }
-          th {
-            background-color: #f1f5f9;
-            color: #475569;
-            border-bottom: 2px solid #cbd5e1;
-            font-weight: 700;
-            padding: 10px;
-            text-align: left;
-            font-size: 0.8rem;
-          }
-          tr {
-            border-bottom: 1px solid #e2e8f0;
-          }
-          td {
-            padding: 10px;
-            color: #334155;
-            font-size: 0.88rem;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 24px;
-          }
-          .badge-bildigim {
-            color: #166534;
-            background-color: #dcfce7;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            display: inline-block;
-          }
-          .badge-bilmedigim {
-            color: #991b1b;
-            background-color: #fee2e2;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            display: inline-block;
-          }
-          h1 {
-            color: #4f46e5;
-            border-bottom: 2.5px solid #f1f5f9;
-            padding-bottom: 12px;
-            font-size: 1.7rem;
-            font-weight: 800;
-            margin-top: 0;
-          }
-          h3 {
-            color: #1e1b4b;
-            font-size: 1.15rem;
-            margin-top: 24px;
-            margin-bottom: 10px;
-            padding-bottom: 4px;
-            border-bottom: 2px solid #e2e8f0;
-          }
-          .meta-box {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 14px 20px;
-            margin-bottom: 24px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.88rem;
-          }
+          body { font-family: 'Inter', system-ui, -apple-system, sans-serif; padding: 30px; color: #1e293b; line-height: 1.5; }
+          h1, h2, h3 { color: #0f172a; margin-top: 0; }
+          .meta-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+          .meta-item { font-size: 0.82rem; color: #475569; }
+          table { width: 100%; border-collapse: collapse; margin-top: 14px; margin-bottom: 30px; }
+          th { background: #f1f5f9; padding: 12px 10px; text-align: left; font-size: 0.8rem; font-weight: 700; color: #475569; border-bottom: 2px solid #cbd5e1; }
+          td { padding: 10px; font-size: 0.85rem; color: #334155; }
           @media print {
-            body { padding: 0; }
-            h1 { page-break-after: avoid; }
-            h3 { page-break-after: avoid; }
-            tr { page-break-inside: avoid; }
+            .print-control-bar { display: none !important; }
           }
         </style>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
       </head>
       <body>
         <div class="print-control-bar" style="
@@ -403,33 +345,39 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
           </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2.5px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 20px;">
-          <h1 style="margin: 0; border: none; padding: 0;">📋 Kelime Kampı Karne Raporu</h1>
-          <span style="font-size: 0.9rem; color: #64748b;">\${new Date().toLocaleDateString()}</span>
-        </div>
-        
-        <div class="meta-box">
-          <div>Alan: <strong>YÖKDİL \${categoryText}</strong></div>
-          <div>Çalışma Modu: <strong>\${modeText}</strong></div>
-          <div>Çalışılan Kelime: <strong>\${studiedWords.length} Adet</strong></div>
+        <h2>📝 YÖKDİL ${categoryText} Kelime Kampı Karnesi</h2>
+
+        <!-- Comprehensive Report summary -->
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 24px; font-family: sans-serif; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          <h3 style="margin-top: 0; color: #4f46e5; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">📊 Genel Akademik Gelişim Rapor Özeti</h3>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; font-size: 0.85rem; color: #334155;">
+            <div>🗓️ <strong>Rapor Tarihi & Saati:</strong> ${reportDateTime}</div>
+            <div>🏫 <strong>Alan / Kategori:</strong> YÖKDİL ${categoryText} (${modeText})</div>
+            <div>📚 <strong>Toplam Kelime Havuzu:</strong> ${totalWordsCount} Kelime</div>
+            <div>🔄 <strong>Toplam Çalışılan:</strong> ${studiedWordsCount} Kelime (%${((studiedWordsCount/totalWordsCount)*100).toFixed(0)} Çalışıldı)</div>
+            <div>⚪ <strong>Henüz Çalışılmayan:</strong> ${unstudiedWordsCount} Kelime</div>
+            <div>🟢 <strong>Bilinen / Doğru Kelimeler:</strong> ${knownWords.length} Kelime</div>
+            <div>🔴 <strong>Bilinmeyen / Yanlış Kelimeler:</strong> ${unknownWords.length} Kelime</div>
+            <div>📈 <strong>Başarı / Bilme Oranı:</strong> <strong style="color: #10b981; font-size: 1rem;">%${knowledgePercent}</strong></div>
+          </div>
         </div>
 
-        <h3>🟢 Çalışmış ve Değerlendirilmiş Kelimeler</h3>
+        <h3>🟢 Çalışılmış ve Değerlendirilmiş Kelimeler</h3>
         <table>
           <thead>
             <tr>
-              <th style="width: 25%;">Kelime (İngilizce)</th>
-              <th style="width: 35%;">Türkçe Anlamı</th>
-              <th style="text-align: center; width: 20%;">Durum / Statü</th>
-              <th style="width: 20%; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
+              <th>Kelime (İngilizce)</th>
+              <th>Türkçe Anlamı</th>
+              <th style="text-align: center;">Durum / Statü</th>
+              <th style="border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
             </tr>
           </thead>
           <tbody>
-            \${renderStudiedRows()}
+            ${renderStudiedRows()}
           </tbody>
         </table>
 
-        <h3>⚪ Henüz Çalışılmamış / Bilinmeyen Kelimeler (\${unstudiedWords.length} Adet)</h3>
+        <h3>⚪ Henüz Çalışılmamış / Bilinmeyen Kelimeler (${unstudiedWords.length} Adet)</h3>
         <table>
           <thead>
             <tr>
@@ -439,16 +387,14 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
             </tr>
           </thead>
           <tbody>
-            \${renderUnstudiedRows()}
+            ${renderUnstudiedRows()}
           </tbody>
         </table>
-        
-
       </body>
     </html>
   `);
   printWindow.document.close();
-};;
+};
 
 export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, selectedCategory) => {
   const categoryText = selectedCategory === 'fen' ? 'Fen Bilimleri' : (selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri');
@@ -456,6 +402,14 @@ export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, 
 
   studiedWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
   unstudiedWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
+
+  const knownWords = studiedWords.filter(w => w.status === true);
+  const unknownWords = studiedWords.filter(w => w.status === false);
+  const totalWordsCount = studiedWords.length + unstudiedWords.length;
+  const studiedWordsCount = studiedWords.length;
+  const unstudiedWordsCount = unstudiedWords.length;
+  const knowledgePercent = studiedWordsCount > 0 ? ((knownWords.length / studiedWordsCount) * 100).toFixed(0) : 0;
+  const reportDateTime = new Date().toLocaleString('tr-TR');
 
   const renderStudiedRows = () => {
     if (studiedWords.length === 0) {
@@ -498,49 +452,20 @@ export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, 
         </style>
       </head>
       <body>
-        <div class="print-control-bar" style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background: #1e1b4b;
-          color: white;
-          padding: 12px 24px;
-          border-bottom: 2px solid #6366f1;
-          font-family: system-ui, -apple-system, sans-serif;
-          margin-bottom: 20px;
-          border-radius: 8px;
-        ">
-          <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
-          <div style="display: flex; gap: 8px;">
-            <button onclick="window.print()" style="
-              background: #6366f1;
-              color: white;
-              border: none;
-              padding: 8px 16px;
-              font-size: 0.8rem;
-              font-weight: bold;
-              border-radius: 6px;
-              cursor: pointer;
-              box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-              transition: all 0.2s;
-            ">🖨️ Raporu Dışarı Aktar / Yazdır</button>
-            <button onclick="window.close()" style="
-              background: rgba(255,255,255,0.1);
-              color: white;
-              border: 1px solid rgba(255,255,255,0.2);
-              padding: 8px 16px;
-              font-size: 0.8rem;
-              font-weight: bold;
-              border-radius: 6px;
-              cursor: pointer;
-            ">Kapat</button>
-          </div>
+        <h2>📋 Kelime Kampı Karne Raporu</h2>
+        
+        <!-- Comprehensive Report Summary block for Docx -->
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; margin-bottom: 20px;">
+          <h3 style="margin-top: 0; color: #4f46e5;">📊 Genel Akademik Gelişim Rapor Özeti</h3>
+          <p><strong>🗓️ Rapor Tarihi & Saati:</strong> ${reportDateTime}</p>
+          <p><strong>🏫 Alan / Kategori:</strong> YÖKDİL ${categoryText} (${modeText})</p>
+          <p><strong>📚 Toplam Kelime Havuzu:</strong> ${totalWordsCount} Kelime</p>
+          <p><strong>🔄 Toplam Çalışılan:</strong> ${studiedWordsCount} Kelime (%${((studiedWordsCount/totalWordsCount)*100).toFixed(0)} Çalışıldı)</p>
+          <p><strong>⚪ Henüz Çalışılmayan:</strong> ${unstudiedWordsCount} Kelime</p>
+          <p><strong>🟢 Bilinen / Doğru Kelimeler:</strong> ${knownWords.length} Kelime</p>
+          <p><strong>🔴 Bilinmeyen / Yanlış Kelimeler:</strong> ${unknownWords.length} Kelime</p>
+          <p><strong>📈 Başarı / Bilme Oranı:</strong> <strong>%${knowledgePercent}</strong></p>
         </div>
-
-        <h2>📋 Kelime Kampı Karne Raporu (${new Date().toLocaleDateString()})</h2>
-        <p><strong>Alan:</strong> YÖKDİL ${categoryText}</p>
-        <p><strong>Çalışma Modu:</strong> ${modeText}</p>
-        <p><strong>Çalışılan Kelime Sayısı:</strong> ${studiedWords.length} Adet</p>
 
         <h3>🟢 Çalışılmış ve Değerlendirilmiş Kelimeler</h3>
         <table>
@@ -578,7 +503,7 @@ export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, 
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `YOKDIL_${categoryText.replace(' ', '_')}_Kelime_Kampi_Karne.doc`;
+  a.download = `YOKDIL_${categoryText.replace(/\s+/g, '_')}_Kelime_Kampi_Karne.doc`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -591,6 +516,14 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
 
   studiedWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
   unstudiedWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
+
+  const knownWords = studiedWords.filter(w => w.status === true);
+  const unknownWords = studiedWords.filter(w => w.status === false);
+  const totalWordsCount = studiedWords.length + unstudiedWords.length;
+  const studiedWordsCount = studiedWords.length;
+  const unstudiedWordsCount = unstudiedWords.length;
+  const knowledgePercent = studiedWordsCount > 0 ? ((knownWords.length / studiedWordsCount) * 100).toFixed(0) : 0;
+  const reportDateTime = new Date().toLocaleString('tr-TR');
 
   const escapeXml = (str) => {
     if (!str) return '';
@@ -612,11 +545,17 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
     allWords.push({ english: w.english, turkish: w.turkish, status: 'Çalışılmadı' });
   });
 
-  const knownWords = studiedWords.filter(w => w.status === true);
-  const unknownWords = [
-    ...studiedWords.filter(w => w.status === false),
-    ...unstudiedWords
-  ];
+  const buildHeaderRows = (title) => `
+   <Row><Cell ss:MergeAcross="3"><Data ss:Type="String">${escapeXml(title)}</Data></Cell></Row>
+   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Rapor Tarihi ve Saati:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="String">${escapeXml(reportDateTime)}</Data></Cell></Row>
+   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Toplam Kelime Havuzu:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${totalWordsCount}</Data></Cell></Row>
+   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Toplam Çalışılan Kelime:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${studiedWordsCount}</Data></Cell></Row>
+   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Çalışılmayan (Kalan):</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${unstudiedWordsCount}</Data></Cell></Row>
+   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Bilinen / Doğru Kelimeler:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${knownWords.length}</Data></Cell></Row>
+   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Bilinmeyen / Yanlış Kelimeler:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${unknownWords.length}</Data></Cell></Row>
+   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Başarı / Bilme Yüzdesi:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="String">%${knowledgePercent}</Data></Cell></Row>
+   <Row></Row>
+  `;
 
   const buildSheetRows = (list) => {
     return list.map((w, idx) => `
@@ -647,6 +586,7 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
    <Column ss:Width="160"/>
    <Column ss:Width="260"/>
    <Column ss:Width="130"/>
+   ${buildHeaderRows("TÜM KELİMELER LİSTESİ")}
    <Row ss:StyleID="Header">
     <Cell><Data ss:Type="String">Sıra No</Data></Cell>
     <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
@@ -662,13 +602,14 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
    <Column ss:Width="160"/>
    <Column ss:Width="260"/>
    <Column ss:Width="130"/>
+   ${buildHeaderRows("BİLMEDİĞİM KELİMELER")}
    <Row ss:StyleID="Header">
     <Cell><Data ss:Type="String">Sıra No</Data></Cell>
     <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
     <Cell><Data ss:Type="String">Türkçe Anlamı</Data></Cell>
     <Cell><Data ss:Type="String">Durum / Statü</Data></Cell>
    </Row>
-   \${buildSheetRows(unknownWords.map(w => ({ ...w, status: w.status === undefined ? 'Çalışılmadı' : (w.status ? 'Bildiğim/Doğru' : 'Bilmediğim/Yanlış') })))}
+   ${buildSheetRows(unknownWords.map(w => ({ ...w, status: w.status === undefined ? 'Çalışılmadı' : (w.status ? 'Bildiğim/Doğru' : 'Bilmediğim/Yanlış') })))}
   </Table>
  </Worksheet>
  <Worksheet ss:Name="Bildiklerim">
@@ -677,13 +618,30 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
    <Column ss:Width="160"/>
    <Column ss:Width="260"/>
    <Column ss:Width="130"/>
+   ${buildHeaderRows("BİLDİĞİM KELİMELER")}
    <Row ss:StyleID="Header">
     <Cell><Data ss:Type="String">Sıra No</Data></Cell>
     <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
     <Cell><Data ss:Type="String">Türkçe Anlamı</Data></Cell>
     <Cell><Data ss:Type="String">Durum / Statü</Data></Cell>
    </Row>
-   \${buildSheetRows(knownWords.map(w => ({ ...w, status: mode === 'swipe' ? 'Bildiğim' : 'Doğru' })))}
+   ${buildSheetRows(knownWords.map(w => ({ ...w, status: mode === 'swipe' ? 'Bildiğim' : 'Doğru' })))}
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Çalışılmayanlar">
+  <Table>
+   <Column ss:Width="60"/>
+   <Column ss:Width="160"/>
+   <Column ss:Width="260"/>
+   <Column ss:Width="130"/>
+   ${buildHeaderRows("HENÜZ ÇALIŞILMAYAN KELİMELER")}
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Sıra No</Data></Cell>
+    <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
+    <Cell><Data ss:Type="String">Türkçe Anlamı</Data></Cell>
+    <Cell><Data ss:Type="String">Durum / Statü</Data></Cell>
+   </Row>
+   ${buildSheetRows(unstudiedWords.map(w => ({ ...w, status: 'Çalışılmadı' })))}
   </Table>
  </Worksheet>
 </Workbook>`;
@@ -692,9 +650,9 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `YOKDIL_\${categoryText.replace(' ', '_')}_Kelime_Kampi_Karne.xls`;
+  a.download = `YOKDIL_${categoryText.replace(/\s+/g, '_')}_Kelime_Kampi_Karne.xls`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-};;
+};
