@@ -12,13 +12,15 @@ export const VocabularySentenceBuilder = ({
   handleSbDontKnow,
   handleCheckSentence,
   handleNextSentence,
-  setSubTab
+  setSubTab,
+  ALL_SENTENCES
 }) => {
   return (
     <div className="space-y-4">
       {sbList.length > 0 && sbIndex < sbList.length ? (
         (() => {
           const currentWord = sbList[sbIndex];
+          const sentenceObj = ALL_SENTENCES[(currentWord.english || '').toLowerCase()] || {};
           return (
             <div className="glass-card p-6 border border-white/5 rounded-2xl space-y-5 text-left">
               <div className="flex justify-between items-center text-[10px] text-slate-400" style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -28,7 +30,7 @@ export const VocabularySentenceBuilder = ({
 
               <div>
                 <h4 style={{ fontSize: '0.72rem', fontWeight: '800', color: 'var(--primary-light)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Türkçe Anlamı:</h4>
-                <p style={{ fontSize: '0.85rem', color: 'white', margin: 0, fontWeight: '700' }}>"{currentWord.sentence_tr}"</p>
+                <p style={{ fontSize: '0.85rem', color: 'white', margin: 0, fontWeight: '700' }}>"{sentenceObj.tr || currentWord.turkish || ''}"</p>
               </div>
 
               {/* Built sentence area */}
@@ -83,7 +85,7 @@ export const VocabularySentenceBuilder = ({
                   }`} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <div>{sbResult === 'correct' ? '✔️ Harika, Doğru Cümle Yapısı!' : '❌ Sıralamada hata var!'}</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-main)', marginTop: '4px' }}>
-                      Doğru Cümle: <strong>{currentWord.sentence_en}</strong>
+                      Doğru Cümle: <strong>{sentenceObj.en || currentWord.english || ''}</strong>
                     </div>
                   </div>
                 </div>

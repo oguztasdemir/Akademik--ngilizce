@@ -198,23 +198,25 @@ const SettingsSection = ({
               <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Arayüz Teması</div>
               <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Açık veya koyu görünümü seçin.</div>
             </div>
-            <div style={{ display: 'flex', gap: '6px' }}>
-              <button 
-                onClick={() => setTheme('theme-light')} 
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                  theme === 'theme-light' ? 'bg-indigo-600 border-indigo-600 text-white shadow-md' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                }`}
+            <div>
+              <select
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: 'white',
+                  cursor: 'pointer',
+                  outline: 'none'
+                }}
               >
-                Açık
-              </button>
-              <button 
-                onClick={() => setTheme('theme-dark')} 
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                  theme === 'theme-dark' ? 'bg-indigo-600 border-indigo-600 text-white shadow-md' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                }`}
-              >
-                Koyu
-              </button>
+                <option value="theme-light" style={{ background: '#0d111c' }}>Açık</option>
+                <option value="theme-dark" style={{ background: '#0d111c' }}>Koyu</option>
+              </select>
             </div>
           </div>
 
@@ -224,18 +226,27 @@ const SettingsSection = ({
               <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Soru Metin Boyutu</div>
               <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Sınav sorularının yazı büyüklüğü.</div>
             </div>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {['sm', 'base', 'lg', 'xl'].map(sz => (
-                <button
-                   key={sz}
-                   onClick={() => setFontSize(sz)}
-                   className={`px-2.5 py-1 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                     fontSize === sz ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
-                   }`}
-                >
-                   {sz.toUpperCase()}
-                </button>
-              ))}
+            <div>
+              <select
+                value={fontSize}
+                onChange={(e) => setFontSize(e.target.value)}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: 'white',
+                  cursor: 'pointer',
+                  outline: 'none'
+                }}
+              >
+                <option value="sm" style={{ background: '#0d111c' }}>SM</option>
+                <option value="base" style={{ background: '#0d111c' }}>BASE</option>
+                <option value="lg" style={{ background: '#0d111c' }}>LG</option>
+                <option value="xl" style={{ background: '#0d111c' }}>XL</option>
+              </select>
             </div>
           </div>
 

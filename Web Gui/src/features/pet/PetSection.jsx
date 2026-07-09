@@ -3,34 +3,50 @@ import MascotPet, { ANIMAL_CATALOG, ACCESSORY_HATS, ACCESSORY_GLASSES, ACCESSORY
 
 const ROOM_BACKGROUNDS = {
   cozy: {
-    name: 'Cozy Cam 🏠',
-    gradient: 'linear-gradient(135deg, rgba(30,41,59,0.5), rgba(15,23,42,0.6))',
-    border: 'rgba(255,255,255,0.05)'
+    name: 'Cozy Oda 🏠',
+    style: {
+      backgroundImage: 'radial-gradient(circle at 90% 10%, rgba(253,224,71,0.12) 0%, transparent 50%), radial-gradient(circle at 50% 120%, rgba(99,102,241,0.15), transparent 70%), repeating-linear-gradient(90deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 24px), linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+      border: '1px solid rgba(255,255,255,0.05)'
+    }
   },
   library: {
     name: '📚 Kütüphane',
-    gradient: 'linear-gradient(135deg, rgba(69,26,3,0.5) 0%, rgba(30,27,75,0.6) 100%)',
-    border: 'rgba(217,119,6,0.15)'
+    style: {
+      backgroundImage: 'linear-gradient(0deg, transparent 48%, rgba(217,119,6,0.1) 49%, rgba(217,119,6,0.1) 52%, transparent 53%), linear-gradient(90deg, transparent 20%, rgba(217,119,6,0.05) 21%, rgba(217,119,6,0.05) 23%, transparent 24%), linear-gradient(135deg, #3b1e11 0%, #150b06 100%)',
+      backgroundSize: '100% 100%, 80px 100%, 100% 100%',
+      border: '1px solid rgba(217,119,6,0.15)'
+    }
   },
   science: {
     name: '🔬 Fen Lab',
-    gradient: 'linear-gradient(135deg, rgba(2,44,34,0.5) 0%, rgba(15,23,42,0.6) 100%)',
-    border: 'rgba(16,185,129,0.15)'
+    style: {
+      backgroundImage: 'radial-gradient(circle at 20% 80%, rgba(16,185,129,0.15) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(6,182,212,0.15) 0%, transparent 40%), linear-gradient(90deg, rgba(16,185,129,0.04) 1px, transparent 1px), linear-gradient(0deg, rgba(16,185,129,0.04) 1px, transparent 1px), linear-gradient(135deg, #062f22 0%, #021a12 100%)',
+      backgroundSize: '100% 100%, 100% 100%, 28px 28px, 28px 28px, 100% 100%',
+      border: '1px solid rgba(16,185,129,0.2)'
+    }
   },
   history: {
     name: '🏛️ Antik Harabeler',
-    gradient: 'linear-gradient(135deg, rgba(124,45,18,0.5) 0%, rgba(76,29,149,0.6) 100%)',
-    border: 'rgba(249,115,22,0.15)'
+    style: {
+      backgroundImage: 'radial-gradient(circle at 50% -20%, rgba(251,146,60,0.15) 0%, transparent 75%), repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(251,146,60,0.03) 25px, rgba(251,146,60,0.03) 26px), repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(251,146,60,0.03) 49px, rgba(251,146,60,0.03) 50px), linear-gradient(135deg, #4c1d95 0%, #1e1b4b 100%)',
+      backgroundSize: '100% 100%, 50px 26px, 50px 26px, 100% 100%',
+      border: '1px solid rgba(251,191,36,0.15)'
+    }
   },
   medical: {
     name: '🏥 Sağlık Lab',
-    gradient: 'linear-gradient(135deg, rgba(15,118,110,0.5) 0%, rgba(15,23,42,0.6) 100%)',
-    border: 'rgba(13,148,136,0.15)'
+    style: {
+      backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(20,184,166,0.15) 0%, transparent 80%), linear-gradient(90deg, rgba(20,184,166,0.04) 1px, transparent 1px), linear-gradient(0deg, rgba(20,184,166,0.04) 1px, transparent 1px), linear-gradient(135deg, #0d5c56 0%, #042f2c 100%)',
+      backgroundSize: '100% 100%, 24px 24px, 24px 24px, 100% 100%',
+      border: '1px solid rgba(13,148,136,0.2)'
+    }
   },
   space: {
     name: '🚀 Uzay İstasyonu',
-    gradient: 'linear-gradient(135deg, rgba(49,16,132,0.5) 0%, rgba(3,0,30,0.6) 100%)',
-    border: 'rgba(139,92,246,0.15)'
+    style: {
+      backgroundImage: 'radial-gradient(circle at 15% 25%, #fff 1.2px, transparent 2px), radial-gradient(circle at 75% 45%, #fff 1px, transparent 2px), radial-gradient(circle at 40% 70%, #fff 1.5px, transparent 3px), radial-gradient(circle at 85% 80%, #fff 0.8px, transparent 2px), radial-gradient(circle at 50% 20%, rgba(236,72,153,0.12) 0%, transparent 60%), linear-gradient(135deg, #1e1b4b 0%, #03001e 100%)',
+      border: '1px solid rgba(139,92,246,0.2)'
+    }
   }
 };
 
@@ -107,15 +123,128 @@ const PetSection = ({ activeTab, petXp, petLevel, petConfig, setPetConfig }) => 
             width: '100%',
             height: '240px',
             borderRadius: '16px',
-            border: `1px solid ${ROOM_BACKGROUNDS[selectedBg]?.border || 'rgba(255, 255, 255, 0.05)'}`,
-            background: ROOM_BACKGROUNDS[selectedBg]?.gradient || 'rgba(255,255,255,0.01)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',
             overflow: 'hidden',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            ...ROOM_BACKGROUNDS[selectedBg]?.style
           }}>
+            {/* Window Overlay for Cozy Room */}
+            {selectedBg === 'cozy' && (
+              <div style={{
+                position: 'absolute',
+                top: '20px',
+                right: '40px',
+                width: '60px',
+                height: '80px',
+                background: 'rgba(255, 255, 255, 0.02)',
+                border: '2px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                pointerEvents: 'none',
+                zIndex: 0
+              }}>
+                <div style={{ flex: 1, borderBottom: '1.5px solid rgba(255, 255, 255, 0.08)' }} />
+                <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '1.5px', background: 'rgba(255, 255, 255, 0.08)' }} />
+              </div>
+            )}
+
+            {/* Book Shelf Overlay for Library */}
+            {selectedBg === 'library' && (
+              <div style={{
+                position: 'absolute',
+                bottom: '10px',
+                left: '10px',
+                right: '10px',
+                height: '40px',
+                borderTop: '3px solid rgba(217,119,6,0.25)',
+                display: 'flex',
+                alignItems: 'flex-end',
+                gap: '5px',
+                paddingLeft: '20px',
+                pointerEvents: 'none',
+                zIndex: 0
+              }}>
+                <div style={{ width: '12px', height: '28px', background: 'rgba(239,68,68,0.25)', border: '1px solid rgba(239,68,68,0.4)', borderRadius: '2px 2px 0 0' }} />
+                <div style={{ width: '10px', height: '32px', background: 'rgba(59,130,246,0.25)', border: '1px solid rgba(59,130,246,0.4)', borderRadius: '2px 2px 0 0', transform: 'rotate(4deg)', transformOrigin: 'bottom center' }} />
+                <div style={{ width: '13px', height: '25px', background: 'rgba(16,185,129,0.25)', border: '1px solid rgba(16,185,129,0.4)', borderRadius: '2px 2px 0 0' }} />
+                <div style={{ width: '11px', height: '29px', background: 'rgba(245,158,11,0.2)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: '2px 2px 0 0' }} />
+              </div>
+            )}
+
+            {/* Chemistry beaker overlay for Science Lab */}
+            {selectedBg === 'science' && (
+              <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: '25px',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                border: '2px solid rgba(16,185,129,0.25)',
+                background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                color: 'rgba(16,185,129,0.4)',
+                pointerEvents: 'none',
+                zIndex: 0
+              }}>
+                ⚛️
+              </div>
+            )}
+
+            {/* Ancient Greek Columns overlay for History */}
+            {selectedBg === 'history' && (
+              <>
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: '20px',
+                  width: '20px',
+                  height: '160px',
+                  background: 'linear-gradient(to right, rgba(251,146,60,0.06), rgba(251,146,60,0.02))',
+                  borderLeft: '1.5px solid rgba(251,146,60,0.12)',
+                  borderRight: '1.5px solid rgba(251,146,60,0.12)',
+                  pointerEvents: 'none',
+                  zIndex: 0
+                }} />
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  right: '20px',
+                  width: '20px',
+                  height: '160px',
+                  background: 'linear-gradient(to left, rgba(251,146,60,0.06), rgba(251,146,60,0.02))',
+                  borderLeft: '1.5px solid rgba(251,146,60,0.12)',
+                  borderRight: '1.5px solid rgba(251,146,60,0.12)',
+                  pointerEvents: 'none',
+                  zIndex: 0
+                }} />
+              </>
+            )}
+
+            {/* Floating Moon/Planet for Space Station */}
+            {selectedBg === 'space' && (
+              <div style={{
+                position: 'absolute',
+                top: '25px',
+                left: '35px',
+                width: '45px',
+                height: '45px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 30% 30%, #fb923c 0%, #c2410c 70%, #7c2d12 100%)',
+                boxShadow: '0 0 12px rgba(251,146,60,0.25)',
+                opacity: 0.85,
+                pointerEvents: 'none',
+                zIndex: 0
+              }} />
+            )}
+
             <MascotPet
               state="joy"
               speech={null}
@@ -138,7 +267,7 @@ const PetSection = ({ activeTab, petXp, petLevel, petConfig, setPetConfig }) => 
                 height: '100%',
                 background: 'radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)',
                 pointerEvents: 'none',
-                zIndex: 0
+                zIndex: 1
               }} />
             )}
           </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import grammarCampDb from '@dataset/yokdil/genel/grammar_camp.json';
-import { handlePrintPDF } from './components/CampPrint';
+import { handlePrintPDF, handlePrintCikmisExportPDF, handlePrintCikmisExportDocx, handlePrintCikmisExportXlsx } from './components/CampPrint';
 import CampDashboard from './components/CampDashboard';
 import CampStudy from './components/CampStudy';
 import CampGrammar from './components/CampGrammar';
@@ -125,14 +125,36 @@ const formatWordType = (type) => {
   return type;
 };
 
-const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, recordWordStat, setActiveStudyInfo, dictDb, addMistake }) => {
+const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, recordWordStat, setActiveStudyInfo, dictDb, addMistake, initialCampType = 'vocabulary' }) => {
   const isInitializedRef = useRef(false);
   
   // Camp State Management
   const [progress, setProgress] = useState(null);
   const [totalCampDays, setTotalCampDays] = useState(60);
-  const [campType, setCampType] = useState('vocabulary'); // 'vocabulary' or 'grammar'
+  const [reportCardType, setReportCardType] = useState('vocabulary'); // 'vocabulary', 'grammar', 'cikmis_kelimeler'
+  const [campType, setCampType] = useState(initialCampType); // 'vocabulary', 'grammar', 'cikmis_kelimeler'
+  const [cikmisMode, setCikmisMode] = useState('detailed'); // 'swipe' or 'detailed'
   const [grammarProgress, setGrammarProgress] = useState(null);
+  const [cikmisProgress, setCikmisProgress] = useState(null);
+  const [cikmisPlanData, setCikmisPlanData] = useState({});
+  const [studyMode, setStudyMode] = useState(null); // 'selection', 'swipe', 'matching', 'quiz_en_tr', 'quiz_tr_en', 'quiz_sentence'
+  const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
+  const [cikmisSwipeResults, setCikmisSwipeResults] = useState({});
+  const [cikmisMatchingRound, setCikmisMatchingRound] = useState(0);
+  const [cikmisMatchingCards, setCikmisMatchingCards] = useState([]);
+  const [cikmisMatchingSelected, setCikmisMatchingSelected] = useState([]);
+  const [cikmisMatchingMatched, setCikmisMatchingMatched] = useState([]);
+  const [cikmisMatchingMoves, setCikmisMatchingMoves] = useState(0);
+  const [cikmisMatchingErrors, setCikmisMatchingErrors] = useState(0);
+  const [cikmisMatchingMistakes, setCikmisMatchingMistakes] = useState({});
+  const [cikmisQuizIdx, setCikmisQuizIdx] = useState(0);
+  const [cikmisQuizSelected, setCikmisQuizSelected] = useState(null);
+  const [cikmisQuizChecked, setCikmisQuizChecked] = useState(false);
+  const [cikmisQuizCorrect, setCikmisQuizCorrect] = useState(null);
+  const [cikmisQuizOptions, setCikmisQuizOptions] = useState([]);
+  const [cikmisQuizMistakes, setCikmisQuizMistakes] = useState({});
+  const [cikmisTransitionStep, setCikmisTransitionStep] = useState(null); // null or 1, 2, 3, 4
+  const [showCikmisExportModal, setShowCikmisExportModal] = useState(false);
   const [activeGrammarDay, setActiveGrammarDay] = useState(null);
   const [grammarQuestions, setGrammarQuestions] = useState([]);
   const [grammarIdx, setGrammarIdx] = useState(0);
@@ -232,18 +254,35 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
       }
 
       const tempWords = [];
-      for (const d of days) {
-        const dailyKelimeKey = `@dataset/yokdil/${category}/gunluk_camp/kelime/day_${d}.json`;
-        const loadDailyKelime = getCampModule(dailyKelimeKey);
-        if (loadDailyKelime) {
+      if (reportCardType === 'cikmis_kelimeler') {
+        const planKey = `@dataset/yokdil/${category}/cikmis_kelimeler/kamp_plan.json`;
+        const loadPlan = getCampModule(planKey);
+        if (loadPlan) {
           try {
-            const kelimeMod = await loadDailyKelime();
-            const dailyKelimeData = kelimeMod.default || kelimeMod;
-            if (dailyKelimeData && dailyKelimeData.words) {
-              tempWords.push(...dailyKelimeData.words);
+            const planMod = await loadPlan();
+            const planData = planMod.default || planMod;
+            for (const d of days) {
+              const dayWords = planData[String(d)] || [];
+              tempWords.push(...dayWords);
             }
           } catch (e) {
             console.error(e);
+          }
+        }
+      } else {
+        for (const d of days) {
+          const dailyKelimeKey = `@dataset/yokdil/${category}/gunluk_camp/kelime/day_${d}.json`;
+          const loadDailyKelime = getCampModule(dailyKelimeKey);
+          if (loadDailyKelime) {
+            try {
+              const kelimeMod = await loadDailyKelime();
+              const dailyKelimeData = kelimeMod.default || kelimeMod;
+              if (dailyKelimeData && dailyKelimeData.words) {
+                tempWords.push(...dailyKelimeData.words);
+              }
+            } catch (e) {
+              console.error(e);
+            }
           }
         }
       }
@@ -252,7 +291,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
     };
 
     loadReportData();
-  }, [reportCardDay, selectedCategory, totalCampDays]);
+  }, [reportCardDay, selectedCategory, totalCampDays, reportCardType]);
 
   useEffect(() => {
     if (isStudying && setActiveStudyInfo) {
@@ -362,11 +401,49 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
       localStorage.setItem('yokdil_grammar_camp_progress', JSON.stringify(initial));
       setGrammarProgress(initial);
     }
+
+    // Load cikmis progress
+    const rawCikmis = localStorage.getItem('yokdil_cikmis_camp_progress');
+    if (rawCikmis) {
+      try {
+        const parsed = JSON.parse(rawCikmis);
+        if (!parsed.completedDays) parsed.completedDays = {};
+        if (typeof parsed.currentDay !== 'number') parsed.currentDay = 1;
+        setCikmisProgress(parsed);
+      } catch (e) {
+        const initial = { currentDay: 1, completedDays: {} };
+        localStorage.setItem('yokdil_cikmis_camp_progress', JSON.stringify(initial));
+        setCikmisProgress(initial);
+      }
+    } else {
+      const initial = { currentDay: 1, completedDays: {} };
+      localStorage.setItem('yokdil_cikmis_camp_progress', JSON.stringify(initial));
+      setCikmisProgress(initial);
+    }
   }, []);
+
+  // Load cikmis kelimeler plan data dynamically
+  useEffect(() => {
+    const loadCikmisPlan = async () => {
+      const category = selectedCategory || 'fen';
+      const planKey = `@dataset/yokdil/${category}/cikmis_kelimeler/kamp_plan.json`;
+      const loadPlan = getCampModule(planKey);
+      if (loadPlan) {
+        try {
+          const planMod = await loadPlan();
+          const planData = planMod.default || planMod;
+          setCikmisPlanData(planData);
+        } catch (e) {
+          console.error("Cikmis plan data load error:", e);
+        }
+      }
+    };
+    loadCikmisPlan();
+  }, [selectedCategory]);
 
   // Load session state from localStorage/hash on category change or mount
   useEffect(() => {
-    if (!progress || !grammarProgress) return;
+    if (!progress || !grammarProgress || !cikmisProgress) return;
     const category = selectedCategory || 'fen';
     
     // Check hash first
@@ -388,9 +465,13 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
       
       if (campTypeFromHash === 'vocabulary') {
         currentIdxFromHash = (parseInt(hashParts[6].replace('word_', ''), 10) - 1) || 0;
-      } else {
+      } else if (campTypeFromHash === 'grammar') {
         grammarIdxFromHash = (parseInt(hashParts[6].replace('question_', ''), 10) - 1) || 0;
       }
+    } else if (hashParts.length >= 5 && hashParts[2] === 'camp' && hashParts[3] === 'cikmis_kelimeler') {
+      isStudyingFromHash = true;
+      campTypeFromHash = 'cikmis_kelimeler';
+      selectedDayFromHash = parseInt(hashParts[4].replace('day_', ''), 10) || 1;
     }
 
     if (isStudyingFromHash) {
@@ -399,8 +480,12 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
         startDailyStudy(selectedDayFromHash, currentIdxFromHash, phaseFromHash).then(() => {
           isInitializedRef.current = true;
         });
-      } else {
+      } else if (campTypeFromHash === 'grammar') {
         startGrammarStudy(selectedDayFromHash, grammarIdxFromHash, phaseFromHash).then(() => {
+          isInitializedRef.current = true;
+        });
+      } else if (campTypeFromHash === 'cikmis_kelimeler') {
+        startCikmisStudy(selectedDayFromHash).then(() => {
           isInitializedRef.current = true;
         });
       }
@@ -409,26 +494,33 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
       if (savedSession) {
         try {
           const parsed = JSON.parse(savedSession);
-          if (typeof parsed.selectedDay === 'number') setSelectedDay(parsed.selectedDay);
-          if (typeof parsed.currentIdx === 'number') setCurrentIdx(parsed.currentIdx);
-          if (typeof parsed.phase === 'number') setPhase(parsed.phase);
-          setIsStudying(false);
-          if (parsed.campType) setCampType(parsed.campType);
-          if (typeof parsed.grammarIdx === 'number') setGrammarIdx(parsed.grammarIdx);
+          if (parsed.campType === initialCampType) {
+            if (typeof parsed.selectedDay === 'number') setSelectedDay(parsed.selectedDay);
+            if (typeof parsed.currentIdx === 'number') setCurrentIdx(parsed.currentIdx);
+            if (typeof parsed.phase === 'number') setPhase(parsed.phase);
+            setIsStudying(false);
+            if (parsed.campType) setCampType(parsed.campType);
+            if (typeof parsed.grammarIdx === 'number') setGrammarIdx(parsed.grammarIdx);
+          } else {
+            setCampType(initialCampType);
+            setIsStudying(false);
+          }
           isInitializedRef.current = true;
         } catch (e) {
           console.error("Error loading camp session:", e);
+          setCampType(initialCampType);
           isInitializedRef.current = true;
         }
       } else {
+        setCampType(initialCampType);
         isInitializedRef.current = true;
       }
     }
-  }, [selectedCategory, progress, grammarProgress]);
+  }, [selectedCategory, progress, grammarProgress, cikmisProgress]);
 
   // Save session state to localStorage on state change & update URL hash
   useEffect(() => {
-    if (!progress || !grammarProgress) return;
+    if (!progress || !grammarProgress || !cikmisProgress) return;
     const category = selectedCategory || 'fen';
     const sessionObj = {
       selectedDay,
@@ -442,18 +534,20 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
 
     // Update URL hash
     if (!isInitializedRef.current) return;
-    let newHash = `#/${category}/camp`;
+    let newHash = initialCampType === 'cikmis_kelimeler' ? `#/${category}/camp/cikmis_kelimeler` : `#/${category}/camp`;
     if (isStudying) {
       if (campType === 'vocabulary') {
-        newHash += `/vocabulary/day_${selectedDay}/phase_${phase}/word_${currentIdx + 1}`;
+        newHash = `#/${category}/camp/vocabulary/day_${selectedDay}/phase_${phase}/word_${currentIdx + 1}`;
       } else if (campType === 'grammar') {
-        newHash += `/grammar/day_${selectedDay}/phase_${phase}/question_${grammarIdx + 1}`;
+        newHash = `#/${category}/camp/grammar/day_${selectedDay}/phase_${phase}/question_${grammarIdx + 1}`;
+      } else if (campType === 'cikmis_kelimeler') {
+        newHash = `#/${category}/camp/cikmis_kelimeler/day_${selectedDay}`;
       }
     }
     if (window.location.hash !== newHash) {
       window.history.pushState(null, '', newHash);
     }
-  }, [selectedDay, currentIdx, phase, isStudying, campType, grammarIdx, selectedCategory, progress, grammarProgress]);
+  }, [selectedDay, currentIdx, phase, isStudying, campType, grammarIdx, selectedCategory, progress, grammarProgress, cikmisProgress]);
 
   // Load dictionary fallbacks
   useEffect(() => {
@@ -481,7 +575,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
     loadDictionaries();
   }, [selectedCategory]);
 
-  if (!progress || !grammarProgress) {
+  if (!progress || !grammarProgress || !cikmisProgress) {
     return <div style={{ color: 'white', textAlign: 'center', padding: '40px' }}>Yükleniyor...</div>;
   }
 
@@ -493,6 +587,11 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   const saveGrammarProgress = (newProg) => {
     setGrammarProgress(newProg);
     localStorage.setItem('yokdil_grammar_camp_progress', JSON.stringify(newProg));
+  };
+
+  const saveCikmisProgress = (newProg) => {
+    setCikmisProgress(newProg);
+    localStorage.setItem('yokdil_cikmis_camp_progress', JSON.stringify(newProg));
   };
 
   const getAIAnalysis = () => {
@@ -850,6 +949,760 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
       alert("Kelime listesi yüklenirken hata oluştu.");
       setIsStudying(false);
     }
+  };
+
+  const startCikmisStudy = async (dayNum, mode = 'selection') => {
+    const category = selectedCategory || 'fen';
+    setSelectedDay(dayNum);
+    setCampType('cikmis_kelimeler');
+
+    const planKey = `@dataset/yokdil/${category}/cikmis_kelimeler/kamp_plan.json`;
+    const loadPlan = getCampModule(planKey);
+    if (!loadPlan) {
+      alert("Bu günün kelime planı bulunamadı!");
+      return;
+    }
+
+    try {
+      const planMod = await loadPlan();
+      const planData = planMod.default || planMod;
+      const dayWords = planData[String(dayNum)];
+      if (!dayWords || dayWords.length === 0) {
+        alert("Bu güne ait kelime verisi bulunamadı!");
+        return;
+      }
+
+      setStudyWords(dayWords);
+      setIsStudying(true);
+      setStudyMode(mode === 'detailed' ? 'swipe' : mode);
+      setPhase(1);
+      setCurrentIdx(0);
+      setCikmisCardFlipped(false);
+      setCikmisSwipeResults({});
+      setCikmisMatchingMistakes({});
+
+      if (mode === 'matching') {
+        setCikmisMatchingRound(0);
+        setCikmisMatchingMoves(0);
+        setCikmisMatchingErrors(0);
+        initCikmisMatchingRound(dayWords, 0);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Çıkmış kelimeler listesi yüklenirken hata oluştu.");
+      setIsStudying(false);
+    }
+  };
+
+  const initCikmisMatchingRound = (wordsList, roundIdx) => {
+    const start = roundIdx * 6;
+    const end = Math.min((roundIdx + 1) * 6, wordsList.length);
+    const roundWords = wordsList.slice(start, end);
+
+    const cardPool = [];
+    roundWords.forEach(item => {
+      cardPool.push({ id: `${item.id}-eng`, text: item.english, matchId: item.id, lang: 'eng' });
+      cardPool.push({ id: `${item.id}-tr`, text: item.turkish, matchId: item.id, lang: 'tr' });
+    });
+
+    setCikmisMatchingCards(cardPool.sort(() => 0.5 - Math.random()));
+    setCikmisMatchingSelected([]);
+    setCikmisMatchingMatched([]);
+  };
+
+  const handleCikmisMatchingCardClick = (idx) => {
+    if (cikmisMatchingSelected.length === 2 || cikmisMatchingSelected.includes(idx) || cikmisMatchingMatched.includes(cikmisMatchingCards[idx].matchId)) return;
+    const newSelected = [...cikmisMatchingSelected, idx];
+    setCikmisMatchingSelected(newSelected);
+
+    if (newSelected.length === 2) {
+      setCikmisMatchingMoves(prev => prev + 1);
+      const card1 = cikmisMatchingCards[newSelected[0]];
+      const card2 = cikmisMatchingCards[newSelected[1]];
+
+      if (card1.matchId === card2.matchId && card1.lang !== card2.lang) {
+        setCikmisMatchingMatched(prev => [...prev, card1.matchId]);
+        setCikmisMatchingSelected([]);
+
+        const roundTotal = cikmisMatchingCards.length / 2;
+        if (cikmisMatchingMatched.length + 1 === roundTotal) {
+          // Round completed!
+          const nextRound = cikmisMatchingRound + 1;
+          const totalRounds = Math.ceil(studyWords.length / 6);
+          if (nextRound < totalRounds) {
+            setTimeout(() => {
+              setCikmisMatchingRound(nextRound);
+              initCikmisMatchingRound(studyWords, nextRound);
+            }, 800);
+          } else {
+            // All rounds completed!
+            setTimeout(() => {
+              setCikmisTransitionStep(2);
+            }, 800);
+          }
+        }
+      } else {
+        setCikmisMatchingErrors(prev => prev + 1);
+        const w1 = studyWords.find(w => w.id === card1.matchId);
+        const w2 = studyWords.find(w => w.id === card2.matchId);
+        if (w1) setCikmisMatchingMistakes(prev => ({ ...prev, [w1.english]: true }));
+        if (w2) setCikmisMatchingMistakes(prev => ({ ...prev, [w2.english]: true }));
+        setTimeout(() => setCikmisMatchingSelected([]), 1000);
+      }
+    }
+  };
+
+  const generateCikmisQuizOptions = (mode, idx, currentWords = studyWords) => {
+    const current = currentWords[idx];
+    if (!current) return;
+
+    let correctVal = '';
+    let pool = [];
+
+    if (mode === 'en_tr') {
+      correctVal = current.turkish;
+      pool = currentWords.filter(w => w.id !== current.id).map(w => w.turkish);
+    } else {
+      correctVal = current.english;
+      pool = currentWords.filter(w => w.id !== current.id).map(w => w.english);
+    }
+
+    const shuffledPool = [...pool].sort(() => 0.5 - Math.random());
+    const distractors = shuffledPool.slice(0, 3);
+    const options = [correctVal, ...distractors].sort(() => 0.5 - Math.random());
+    setCikmisQuizOptions(options);
+  };
+
+  const getCikmisWordSentence = (wordObj) => {
+    const category = selectedCategory || 'fen';
+    const dict = dictDb[category] || [];
+    
+    const dictEntry = dict.find(item => 
+      item.word.toLowerCase() === wordObj.english.toLowerCase() ||
+      wordObj.english.toLowerCase().startsWith(item.word.toLowerCase()) ||
+      item.word.toLowerCase().startsWith(wordObj.english.toLowerCase())
+    );
+
+    if (dictEntry && dictEntry.sentence) {
+      return {
+        sentence: dictEntry.sentence,
+        translation: dictEntry.sentence_tr || ''
+      };
+    }
+
+    return {
+      sentence: `The word "${wordObj.english}" plays an important role in academic research.`,
+      translation: `"${wordObj.turkish}" kelimesi akademik araştırmalarda önemli bir rol oynar.`
+    };
+  };
+
+  const getBlankedCikmisSentence = (sentence, word) => {
+    if (!sentence) return '';
+    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+    let blanked = sentence.replace(regex, '______');
+    if (blanked === sentence) {
+      const parts = word.split(' ');
+      parts.forEach(p => {
+        if (p.length > 3) {
+          const looseRegex = new RegExp(p, 'gi');
+          blanked = blanked.replace(looseRegex, '______');
+        }
+      });
+    }
+    return blanked;
+  };
+
+  const handleCikmisQuizCheck = (option) => {
+    if (cikmisQuizChecked) return;
+    setCikmisQuizSelected(option);
+    setCikmisQuizChecked(true);
+
+    const currentWord = studyWords[cikmisQuizIdx];
+    let correct = false;
+
+    if (studyMode === 'quiz_en_tr') {
+      correct = option === currentWord.turkish;
+    } else if (studyMode === 'quiz_tr_en') {
+      correct = option === currentWord.english;
+    } else if (studyMode === 'quiz_sentence') {
+      correct = option.toLowerCase() === currentWord.english.toLowerCase();
+    }
+
+    setCikmisQuizCorrect(correct);
+
+    if (!correct) {
+      setCikmisQuizMistakes(prev => ({ ...prev, [currentWord.english]: true }));
+      addMistake?.(currentWord.english, currentWord.turkish, `cikmis_${studyMode}`);
+    }
+  };
+
+  const handleCikmisQuizNext = () => {
+    if (cikmisQuizIdx < studyWords.length - 1) {
+      const nextIdx = cikmisQuizIdx + 1;
+      setCikmisQuizIdx(nextIdx);
+      setCikmisQuizSelected(null);
+      setCikmisQuizChecked(false);
+      setCikmisQuizCorrect(null);
+      
+      const modeType = studyMode === 'quiz_en_tr' ? 'en_tr' : 'tr_en';
+      generateCikmisQuizOptions(modeType, nextIdx);
+    } else {
+      if (studyMode === 'quiz_en_tr') {
+        setCikmisTransitionStep(3);
+      } else if (studyMode === 'quiz_tr_en') {
+        setCikmisTransitionStep(4);
+      } else if (studyMode === 'quiz_sentence') {
+        const totalWords = studyWords.length;
+        const totalUniqueMistakes = Object.keys(cikmisQuizMistakes).length;
+        const score = Math.max(20, Math.round(((totalWords - totalUniqueMistakes) / totalWords) * 100) - Math.min(20, cikmisMatchingErrors * 2));
+        completeCikmisStudy(score);
+      }
+    }
+  };
+
+  const handleExportCikmisData = () => {
+    setShowCikmisExportModal(true);
+  };
+
+  const triggerCikmisExport = async (format) => {
+    const category = selectedCategory || 'fen';
+    const planKey = `@dataset/yokdil/${category}/cikmis_kelimeler/kamp_plan.json`;
+    const loadPlan = getCampModule(planKey);
+    if (!loadPlan) {
+      alert("Kelime planı yüklenemedi!");
+      return;
+    }
+
+    try {
+      const planMod = await loadPlan();
+      const planData = planMod.default || planMod;
+      
+      const cikmisDoneMap = cikmisProgress.completedDays || {};
+
+      const studiedWords = [];
+      const unstudiedWords = [];
+
+      for (let day = 1; day <= 60; day++) {
+        const dayWords = planData[String(day)] || [];
+        const dayRecord = cikmisDoneMap[day];
+        
+        const isCompleted = dayRecord ? (
+          cikmisMode === 'swipe'
+            ? (dayRecord.swipeCompleted !== undefined ? !!dayRecord.swipeCompleted : true)
+            : (dayRecord.detailedCompleted !== undefined ? !!dayRecord.detailedCompleted : true)
+        ) : false;
+
+        const resultsMap = dayRecord ? (
+          cikmisMode === 'swipe'
+            ? dayRecord.swipeResults || dayRecord.resultsMap || {}
+            : dayRecord.detailedResults || dayRecord.resultsMap || {}
+        ) : {};
+
+        if (isCompleted) {
+          dayWords.forEach(w => {
+            const isKnown = resultsMap[w.english] !== false;
+            studiedWords.push({
+              english: w.english,
+              turkish: w.turkish,
+              pronunciation: w.pronunciation || '',
+              status: isKnown
+            });
+          });
+        } else {
+          dayWords.forEach(w => {
+            unstudiedWords.push({
+              english: w.english,
+              turkish: w.turkish,
+              pronunciation: w.pronunciation || ''
+            });
+          });
+        }
+      }
+
+      if (format === 'pdf') {
+        handlePrintCikmisExportPDF(studiedWords, unstudiedWords, cikmisMode, category);
+      } else if (format === 'docx') {
+        handlePrintCikmisExportDocx(studiedWords, unstudiedWords, cikmisMode, category);
+      } else if (format === 'xlsx') {
+        handlePrintCikmisExportXlsx(studiedWords, unstudiedWords, cikmisMode, category);
+      }
+      setShowCikmisExportModal(false);
+    } catch (e) {
+      console.error(e);
+      alert("Veriler hazırlanırken bir hata oluştu.");
+    }
+  };
+
+  const completeCikmisStudy = (score, finalResultsMap = null) => {
+    const isPassed = score >= 60;
+    const dayNum = selectedDay;
+    const category = selectedCategory || 'fen';
+
+    const resultsMap = {};
+    if (cikmisMode === 'swipe') {
+      const activeResults = finalResultsMap || cikmisSwipeResults;
+      studyWords.forEach(w => {
+        resultsMap[w.english] = !!activeResults[w.english];
+      });
+    } else {
+      studyWords.forEach(w => {
+        resultsMap[w.english] = !cikmisMatchingMistakes[w.english] && !cikmisQuizMistakes[w.english];
+      });
+    }
+
+    const newCompleted = { ...cikmisProgress.completedDays };
+    const currentDayRecord = cikmisProgress.completedDays[dayNum] || {};
+    
+    const updatedRecord = {
+      ...currentDayRecord,
+      date: new Date().toLocaleDateString(),
+    };
+
+    if (cikmisMode === 'swipe') {
+      updatedRecord.swipeCompleted = true;
+      updatedRecord.swipeScore = score;
+      updatedRecord.swipePassed = isPassed;
+      updatedRecord.swipeResults = resultsMap;
+    } else {
+      updatedRecord.detailedCompleted = true;
+      updatedRecord.detailedScore = score;
+      updatedRecord.detailedPassed = isPassed;
+      updatedRecord.detailedResults = resultsMap;
+    }
+
+    updatedRecord.score = Math.max(updatedRecord.swipeScore || 0, updatedRecord.detailedScore || 0);
+    updatedRecord.isPassed = updatedRecord.swipePassed || updatedRecord.detailedPassed;
+
+    let oldHistory = [];
+    if (currentDayRecord.history) {
+      oldHistory = [...currentDayRecord.history];
+    } else if (currentDayRecord.score !== undefined) {
+      oldHistory = [{
+        score: currentDayRecord.score,
+        isPassed: currentDayRecord.isPassed,
+        date: currentDayRecord.date || new Date().toLocaleDateString(),
+        swipeResults: currentDayRecord.swipeResults
+      }];
+    }
+
+    updatedRecord.history = [
+      ...oldHistory,
+      {
+        score: score,
+        isPassed: isPassed,
+        date: new Date().toLocaleDateString(),
+        cikmisMode: cikmisMode,
+        resultsMap: resultsMap
+      }
+    ];
+
+    newCompleted[dayNum] = updatedRecord;
+
+    let nextDay = cikmisProgress.currentDay;
+    if (isPassed && dayNum === cikmisProgress.currentDay) {
+      nextDay = cikmisProgress.currentDay + 1;
+    }
+
+    const newProg = {
+      ...cikmisProgress,
+      currentDay: nextDay,
+      completedDays: newCompleted
+    };
+
+    saveCikmisProgress(newProg);
+    
+    if (isPassed) {
+      awardPetXP?.(45);
+      triggerConfetti?.();
+    }
+    
+    exitCamp();
+  };
+
+  const handleCikmisSwipe = (known) => {
+    const currentWord = studyWords[currentIdx];
+    const newResults = { ...cikmisSwipeResults, [currentWord.english]: known };
+    setCikmisSwipeResults(newResults);
+    
+    if (currentIdx < studyWords.length - 1) {
+      setCurrentIdx(prev => prev + 1);
+      setCikmisCardFlipped(false);
+    } else {
+      // Finished swipe!
+      const knownCount = Object.values(newResults).filter(v => v === true).length;
+      const score = Math.round((knownCount / studyWords.length) * 100);
+      
+      if (cikmisMode === 'swipe') {
+        completeCikmisStudy(score, newResults);
+      } else {
+        // Detailed mode: Transition to Step 2 (Kelime Eşleştirme)
+        setCikmisTransitionStep(1);
+      }
+    }
+  };
+
+  const renderCikmisStudy = () => {
+    // 1. Render Transition Steps
+    if (cikmisTransitionStep !== null) {
+      let stepTitle = '';
+      let stepDesc = '';
+      let buttonText = '';
+      let nextAction = () => {};
+
+      if (cikmisTransitionStep === 1) {
+        stepTitle = 'Adım 1 Tamamlandı! 🎉';
+        stepDesc = 'Hızlı kart kaydırma alıştırmasını bitirdiniz. Şimdi öğrendiklerinizi pekiştirmek için Adım 2: Kelime Eşleştirme çalışmasına geçiyorsunuz.';
+        buttonText = 'Eşleştirmeye Başla 🚀';
+        nextAction = () => {
+          setStudyMode('matching');
+          setCikmisMatchingRound(0);
+          setCikmisMatchingMoves(0);
+          setCikmisMatchingErrors(0);
+          initCikmisMatchingRound(studyWords, 0);
+          setCikmisTransitionStep(null);
+        };
+      } else if (cikmisTransitionStep === 2) {
+        stepTitle = 'Adım 2 Tamamlandı! 🧩';
+        stepDesc = 'Tebrikler, tüm kelimeleri başarıyla eşleştirdiniz! Şimdi kelimelerin Türkçe karşılıklarını test edeceğimiz Adım 3: İngilizce ➔ Türkçe Test aşamasına geçiyorsunuz.';
+        buttonText = 'Testi Başlat 🚀';
+        nextAction = () => {
+          setStudyMode('quiz_en_tr');
+          setCikmisQuizIdx(0);
+          setCikmisQuizSelected(null);
+          setCikmisQuizChecked(false);
+          setCikmisQuizCorrect(null);
+          generateCikmisQuizOptions('en_tr', 0);
+          setCikmisTransitionStep(null);
+        };
+      } else if (cikmisTransitionStep === 3) {
+        stepTitle = 'Adım 3 Tamamlandı! 🧠';
+        stepDesc = 'Harika! İngilizce kelimelerin anlamlarını başarıyla tanımladınız. Şimdi Türkçe anlamı verilen kelimenin İngilizce karşılığını seçeceğimiz Adım 4: Türkçe ➔ İngilizce Test başlıyor.';
+        buttonText = 'Testi Başlat 🚀';
+        nextAction = () => {
+          setStudyMode('quiz_tr_en');
+          setCikmisQuizIdx(0);
+          setCikmisQuizSelected(null);
+          setCikmisQuizChecked(false);
+          setCikmisQuizCorrect(null);
+          generateCikmisQuizOptions('tr_en', 0);
+          setCikmisTransitionStep(null);
+        };
+      } else if (cikmisTransitionStep === 4) {
+        stepTitle = 'Adım 4 Tamamlandı! 🏆';
+        stepDesc = 'Çok iyi! Şimdi son adım olan ve kelimeleri gerçek akademik cümle bağlamında pekiştireceğimiz Adım 5: Örnek Cümle Tamamlama testine geçiyorsunuz.';
+        buttonText = 'Son Aşamayı Başlat 🚀';
+        nextAction = () => {
+          setStudyMode('quiz_sentence');
+          setCikmisQuizIdx(0);
+          setCikmisQuizSelected(null);
+          setCikmisQuizChecked(false);
+          setCikmisQuizCorrect(null);
+          generateCikmisQuizOptions('tr_en', 0); // sentence options are English words
+          setCikmisTransitionStep(null);
+        };
+      }
+
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '20px', color: 'white', textAlign: 'center', padding: '30px', maxWidth: '500px', margin: '0 auto' }}>
+          <div className="glass-card" style={{ padding: '40px 30px', borderRadius: '24px', border: '1.5px solid rgba(99, 102, 241, 0.3)', background: 'linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(0,0,0,0.4) 100%)', boxShadow: '0 10px 40px rgba(0,0,0,0.5)' }}>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: '#a5b4fc', marginBottom: '14px', marginTop: 0 }}>{stepTitle}</h2>
+            <p style={{ fontSize: '0.92rem', color: '#e2e8f0', lineHeight: 1.6, marginBottom: '28px' }}>{stepDesc}</p>
+            <button
+              onClick={nextAction}
+              className="btn-primary"
+              style={{ width: '100%', padding: '14px', borderRadius: '12px', fontWeight: 'bold', fontSize: '0.94rem', background: '#6366f1', borderColor: '#6366f1', cursor: 'pointer' }}
+            >
+              {buttonText}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (studyMode === 'swipe') {
+      const currentWord = studyWords[currentIdx];
+      const progressPercent = Math.round(((currentIdx) / studyWords.length) * 100);
+
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '60vh', gap: '20px', color: 'white', padding: '20px', maxWidth: '500px', margin: '0 auto' }}>
+          <div style={{ width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '6px' }}>
+              <span>Kart Kaydırma Egzersizi</span>
+              <span>{currentIdx + 1} / {studyWords.length} Kelime</span>
+            </div>
+            <div style={{ height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${progressPercent}%`, background: 'linear-gradient(90deg, #ef4444, #34d399)', transition: 'width 0.2s' }}></div>
+            </div>
+          </div>
+
+          <div 
+            onClick={() => setCikmisCardFlipped(!cikmisCardFlipped)}
+            className="glass-card" 
+            style={{ 
+              width: '100%', 
+              minHeight: '260px', 
+              borderRadius: '24px', 
+              border: '2px solid rgba(255,255,255,0.08)',
+              background: 'rgba(255,255,255,0.02)',
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              padding: '30px', 
+              cursor: 'pointer', 
+              position: 'relative', 
+              textAlign: 'center',
+              boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)'
+            }}
+          >
+            {!cikmisCardFlipped ? (
+              <div>
+                <h1 style={{ fontSize: '2.4rem', fontWeight: '900', margin: 0 }}>{currentWord.english}</h1>
+                <span style={{ fontSize: '0.78rem', color: '#64748b', display: 'block', marginTop: '6px' }}>Telaffuz ve Türkçe anlamını görmek için tıkla</span>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <h1 style={{ fontSize: '2.4rem', fontWeight: '900', margin: 0, color: '#fca5a5' }}>{currentWord.english}</h1>
+                {currentWord.pronunciation && (
+                  <span style={{ fontSize: '1rem', color: '#94a3b8', fontStyle: 'italic' }}>/{currentWord.pronunciation}/</span>
+                )}
+                <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', width: '120px', margin: '4px auto' }}></div>
+                <h2 style={{ fontSize: '1.45rem', fontWeight: 'bold', margin: 0, color: '#34d399' }}>{currentWord.turkish}</h2>
+              </div>
+            )}
+          </div>
+
+          <div style={{ display: 'flex', gap: '14px', width: '100%', marginTop: '10px' }}>
+            <button 
+              onClick={() => handleCikmisSwipe(false)} 
+              className="btn-secondary" 
+              style={{ flex: 1, padding: '14px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#fca5a5', fontWeight: 'bold' }}
+            >
+              ❌ Bilmiyorum
+            </button>
+            <button 
+              onClick={() => handleCikmisSwipe(true)} 
+              className="btn-primary" 
+              style={{ flex: 1, padding: '14px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.4)', color: '#a7f3d0', fontWeight: 'bold' }}
+            >
+              ✔️ Biliyorum
+            </button>
+          </div>
+
+          <button onClick={exitCamp} className="btn-secondary" style={{ padding: '8px 18px', borderRadius: '10px', fontSize: '0.74rem', cursor: 'pointer', marginTop: '10px' }}>
+            ⬅️ Çalışmadan Çık
+          </button>
+        </div>
+      );
+    }
+
+    if (studyMode === 'matching') {
+      const totalRounds = Math.ceil(studyWords.length / 6);
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '60vh', gap: '20px', color: 'white', padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px' }}>
+            <div>
+              <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: '#6366f1', textTransform: 'uppercase' }}>🧩 KELİME EŞLEŞTİRME</span>
+              <h3 style={{ fontSize: '0.95rem', fontWeight: 'bold', color: '#94a3b8', margin: '2px 0 0 0' }}>Bölüm {cikmisMatchingRound + 1} / {totalRounds}</h3>
+            </div>
+            <div style={{ display: 'flex', gap: '14px', fontSize: '0.78rem', color: '#cbd5e1' }}>
+              <span>Hamle: <strong style={{ color: 'white' }}>{cikmisMatchingMoves}</strong></span>
+              <span>Hata: <strong style={{ color: '#f87171' }}>{cikmisMatchingErrors}</strong></span>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', width: '100%' }}>
+            {cikmisMatchingCards.map((card, idx) => {
+              const isSel = cikmisMatchingSelected.includes(idx);
+              const isMatch = cikmisMatchingMatched.includes(card.matchId);
+              
+              let cardBg = 'rgba(255,255,255,0.02)';
+              let cardBorder = '1px solid rgba(255,255,255,0.06)';
+              let cardColor = 'white';
+
+              if (isSel) {
+                cardBg = 'rgba(99, 102, 241, 0.15)';
+                cardBorder = '1.5px solid #6366f1';
+                cardColor = '#a5b4fc';
+              } else if (isMatch) {
+                cardBg = 'rgba(16, 185, 129, 0.1)';
+                cardBorder = '1px solid rgba(16, 185, 129, 0.25)';
+                cardColor = '#a7f3d0';
+              }
+
+              return (
+                <div
+                  key={card.id}
+                  onClick={() => handleCikmisMatchingCardClick(idx)}
+                  style={{
+                    height: '75px', 
+                    borderRadius: '14px', 
+                    background: cardBg,
+                    border: cardBorder, 
+                    color: cardColor,
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    fontSize: '0.8rem', 
+                    fontWeight: 'bold', 
+                    cursor: isMatch ? 'default' : 'pointer',
+                    textAlign: 'center', 
+                    padding: '8px 12px', 
+                    opacity: isMatch ? 0.35 : 1,
+                    transition: 'all 0.2s',
+                    userSelect: 'none'
+                  }}
+                  className={!isMatch ? "hover-card" : ""}
+                >
+                  {card.text}
+                </div>
+              );
+            })}
+          </div>
+
+          <button onClick={exitCamp} className="btn-secondary" style={{ padding: '8px 18px', borderRadius: '10px', fontSize: '0.74rem', cursor: 'pointer', marginTop: '10px' }}>
+            ⬅️ Çalışmadan Çık
+          </button>
+        </div>
+      );
+    }
+
+    if (studyMode === 'quiz_en_tr' || studyMode === 'quiz_tr_en' || studyMode === 'quiz_sentence') {
+      const currentWord = studyWords[cikmisQuizIdx];
+      const progressPercent = Math.round(((cikmisQuizIdx) / studyWords.length) * 100);
+      
+      let stepLabel = 'Adım 3/5: İngilizce ➔ Türkçe Test';
+      if (studyMode === 'quiz_tr_en') stepLabel = 'Adım 4/5: Türkçe ➔ İngilizce Test';
+      if (studyMode === 'quiz_sentence') stepLabel = 'Adım 5/5: Örnek Cümle Tamamlama';
+
+      let questionTopText = '';
+      let questionSubText = '';
+
+      if (studyMode === 'quiz_en_tr') {
+        questionTopText = currentWord.english;
+        questionSubText = 'Bu kelimenin doğru Türkçe karşılığını seçin:';
+      } else if (studyMode === 'quiz_tr_en') {
+        questionTopText = currentWord.turkish;
+        questionSubText = 'Bu anlamı taşıyan İngilizce akademik kelimeyi seçin:';
+      } else if (studyMode === 'quiz_sentence') {
+        const sentenceObj = getCikmisWordSentence(currentWord);
+        questionTopText = getBlankedCikmisSentence(sentenceObj.sentence, currentWord.english);
+        questionSubText = sentenceObj.translation;
+      }
+
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '60vh', gap: '20px', color: 'white', padding: '20px', maxWidth: '560px', margin: '0 auto' }}>
+          <div style={{ width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '6px' }}>
+              <span style={{ fontWeight: 'bold', color: '#a5b4fc' }}>{stepLabel}</span>
+              <span>{cikmisQuizIdx + 1} / {studyWords.length} Soru</span>
+            </div>
+            <div style={{ height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${progressPercent}%`, background: 'linear-gradient(90deg, #6366f1, #3b82f6)', transition: 'width 0.2s' }}></div>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ width: '100%', padding: '30px', borderRadius: '24px', border: '1.5px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', textAlign: 'center', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SORU</div>
+            <h2 style={{ fontSize: studyMode === 'quiz_sentence' ? '1.25rem' : '2.1rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: 1.5, wordBreak: 'break-word' }}>
+              {questionTopText}
+            </h2>
+            {questionSubText && (
+              <p style={{ fontSize: '0.86rem', color: '#cbd5e1', fontStyle: studyMode === 'quiz_sentence' ? 'italic' : 'normal', margin: '6px 0 0 0', lineHeight: 1.4 }}>
+                {questionSubText}
+              </p>
+            )}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', width: '100%', marginTop: '8px' }}>
+            {cikmisQuizOptions.map((opt, i) => {
+              const isSelected = cikmisQuizSelected === opt;
+              const isCorrectOpt = studyMode === 'quiz_en_tr' 
+                ? opt === currentWord.turkish 
+                : (studyMode === 'quiz_tr_en' ? opt === currentWord.english : opt.toLowerCase() === currentWord.english.toLowerCase());
+
+              let optBg = 'rgba(255,255,255,0.02)';
+              let optBorder = '1.5px solid rgba(255,255,255,0.08)';
+              let optColor = 'white';
+              let optOpacity = 1;
+
+              if (cikmisQuizChecked) {
+                if (isCorrectOpt) {
+                  optBg = 'rgba(16, 185, 129, 0.15)';
+                  optBorder = '1.5px solid #10b981';
+                  optColor = '#a7f3d0';
+                } else if (isSelected) {
+                  optBg = 'rgba(239, 68, 68, 0.15)';
+                  optBorder = '1.5px solid #ef4444';
+                  optColor = '#fca5a5';
+                } else {
+                  optBg = 'rgba(255,255,255,0.01)';
+                  optBorder = '1.5px solid rgba(255,255,255,0.03)';
+                  optOpacity = 0.5;
+                }
+              } else if (isSelected) {
+                optBg = 'rgba(99, 102, 241, 0.15)';
+                optBorder = '1.5px solid #6366f1';
+                optColor = '#a5b4fc';
+              }
+
+              return (
+                <button
+                  key={i}
+                  onClick={() => !cikmisQuizChecked && setCikmisQuizSelected(opt)}
+                  className="hover-card"
+                  style={{
+                    padding: '16px 20px',
+                    borderRadius: '16px',
+                    background: optBg,
+                    border: optBorder,
+                    color: optColor,
+                    fontSize: '0.9rem',
+                    fontWeight: 'bold',
+                    cursor: cikmisQuizChecked ? 'default' : 'pointer',
+                    textAlign: 'left',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    transition: 'all 0.2s',
+                    outline: 'none',
+                    opacity: optOpacity
+                  }}
+                >
+                  <span>{opt}</span>
+                  {cikmisQuizChecked && isCorrectOpt && <span style={{ color: '#10b981' }}>✔️</span>}
+                  {cikmisQuizChecked && isSelected && !isCorrectOpt && <span style={{ color: '#ef4444' }}>❌</span>}
+                </button>
+              );
+            })}
+          </div>
+
+          <div style={{ width: '100%', marginTop: '12px' }}>
+            {!cikmisQuizChecked ? (
+              <button
+                onClick={() => cikmisQuizSelected && handleCikmisQuizCheck(cikmisQuizSelected)}
+                disabled={!cikmisQuizSelected}
+                className="btn-primary"
+                style={{ width: '100%', padding: '14px', borderRadius: '12px', fontWeight: 'bold', cursor: cikmisQuizSelected ? 'pointer' : 'not-allowed', background: '#6366f1', borderColor: '#6366f1' }}
+              >
+                Cevabı Kontrol Et
+              </button>
+            ) : (
+              <button
+                onClick={handleCikmisQuizNext}
+                className="btn-primary"
+                style={{ width: '100%', padding: '14px', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer', background: '#10b981', borderColor: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+              >
+                {cikmisQuizIdx < studyWords.length - 1 ? 'Sıradaki Soru' : 'Aşamayı Bitir'} <ArrowRight className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   };
 
   const handleWordRead = () => {
@@ -1227,6 +2080,21 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   const currentGrammarDay = grammarProgress.currentDay || 1;
   const grammarDoneCount = Object.values(grammarDoneMap).filter(v => v.isPassed).length;
 
+  const cikmisDoneMap = cikmisProgress.completedDays || {};
+  const cikmisDoneCount = Object.values(cikmisDoneMap).filter(v => 
+    cikmisMode === 'swipe' ? !!v.swipeCompleted : !!v.detailedCompleted
+  ).length;
+
+  let currentCikmisDay = 1;
+  for (let d = 1; d <= 60; d++) {
+    const dayRec = cikmisDoneMap[d];
+    const isDone = dayRec ? (cikmisMode === 'swipe' ? !!dayRec.swipeCompleted : !!dayRec.detailedCompleted) : false;
+    if (!isDone) {
+      currentCikmisDay = d;
+      break;
+    }
+  }
+
   const totalSupermaster = Object.values(progress.wordMastery || {}).filter(v => v === 3).length;
 
   if (isStudying) {
@@ -1250,6 +2118,10 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
           setActiveStudyInfo={setActiveStudyInfo}
         />
       );
+    }
+
+    if (campType === 'cikmis_kelimeler') {
+      return renderCikmisStudy();
     }
 
     return (
@@ -1331,18 +2203,38 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
             </div>
 
             {(() => {
-              const completedObj = completedDaysMap[reportCardDay];
-              const score = completedObj ? completedObj.score : 100;
-              const isMonthly = (reportCardDay % 28 === 0) || (reportCardDay === totalCampDays);
-              const isSec = !isMonthly && ((reportCardDay % 7 === 0) || (reportCardDay === totalCampDays));
+              let completedObj = null;
+              let score = 100;
+              let titleText = "";
+              let isCikmis = reportCardType === 'cikmis_kelimeler';
+              let isGrammar = reportCardType === 'grammar';
+              let isVocab = reportCardType === 'vocabulary';
+
+              if (isGrammar) {
+                completedObj = grammarDoneMap[reportCardDay];
+                score = completedObj ? completedObj.score : 100;
+                titleText = `Dilbilgisi Kampı ${reportCardDay}. Gün`;
+              } else if (isCikmis) {
+                completedObj = cikmisDoneMap[reportCardDay];
+                score = completedObj ? completedObj.score : 100;
+                titleText = `Çıkmış Kelimeler ${reportCardDay}. Gün`;
+              } else {
+                completedObj = completedDaysMap[reportCardDay];
+                score = completedObj ? completedObj.score : 100;
+                const isMonthly = (reportCardDay % 28 === 0) || (reportCardDay === totalCampDays);
+                const isSec = !isMonthly && ((reportCardDay % 7 === 0) || (reportCardDay === totalCampDays));
+                titleText = isMonthly ? `Aylık Genel Test ${Math.ceil(reportCardDay / 28)}` : (isSec ? `Haftalık Kamp ${Math.ceil(reportCardDay / 7)}` : `${reportCardDay}. Gün`);
+              }
+
+              const history = completedObj?.history || (completedObj ? [completedObj] : []);
               
               return (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    <div className="glass-card" style={{ flex: 1, minWidth: '130px', padding: '14px', borderRadius: '14px', background: 'rgba(99, 102, 241, 0.08)', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
-                      <span style={{ fontSize: '0.68rem', color: '#a5b4fc', textTransform: 'uppercase', display: 'block' }}>Rapor Günü</span>
+                    <div className="glass-card" style={{ flex: 1, minWidth: '130px', padding: '14px', borderRadius: '14px', background: isGrammar ? 'rgba(16, 185, 129, 0.08)' : isCikmis ? 'rgba(239, 68, 68, 0.08)' : 'rgba(99, 102, 241, 0.08)', border: isGrammar ? '1px solid rgba(16, 185, 129, 0.2)' : isCikmis ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid rgba(99, 102, 241, 0.2)' }}>
+                      <span style={{ fontSize: '0.68rem', color: isGrammar ? '#34d399' : isCikmis ? '#fca5a5' : '#a5b4fc', textTransform: 'uppercase', display: 'block' }}>Rapor Günü</span>
                       <strong style={{ fontSize: '1.15rem', color: 'white' }}>
-                        {isMonthly ? `Aylık Genel Test ${Math.ceil(reportCardDay / 28)}` : (isSec ? `Haftalık Kamp ${Math.ceil(reportCardDay / 7)}` : `${reportCardDay}. Gün`)}
+                        {titleText}
                       </strong>
                     </div>
                     <div className="glass-card" style={{ flex: 1, minWidth: '130px', padding: '14px', borderRadius: '14px', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
@@ -1351,38 +2243,98 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
                     </div>
                   </div>
 
-                  <div>
-                    <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: '#cbd5e1', marginBottom: '8px' }}>
-                      📚 Çalışılan Kelimeler ({reportCardWords.length} Adet)
-                    </h4>
-                    {loadingReportCard ? (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', color: '#94a3b8' }}>
-                        <span style={{ fontSize: '0.82rem' }}>Veriler yükleniyor...</span>
+                  {!isGrammar && (
+                    <div>
+                      <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: '#cbd5e1', marginBottom: '8px' }}>
+                        📚 Çalışılan Kelimeler ({reportCardWords.length} Adet)
+                      </h4>
+                      {loadingReportCard ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', color: '#94a3b8' }}>
+                          <span style={{ fontSize: '0.82rem' }}>Veriler yükleniyor...</span>
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '200px', overflowY: 'auto', paddingRight: '4px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '12px' }} className="custom-scrollbar">
+                          {reportCardWords.map((w, idx) => (
+                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.8rem' }}>
+                              <span style={{ fontWeight: 'bold', color: 'white' }}>
+                                {w.word || w.english || ''} 
+                                {w.type ? <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}> ({formatWordType(w.type)})</span> : ''}
+                              </span>
+                              <span style={{ color: '#a5b4fc' }}>{w.tr || w.turkish || ''}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {isGrammar && (
+                    <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                      <strong style={{ fontSize: '0.95rem', color: 'white', display: 'block', marginBottom: '4px' }}>📚 Dilbilgisi Konusu Tamamlandı</strong>
+                      <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>Konu anlatımı ve pekiştirme soruları başarıyla incelendi.</span>
+                    </div>
+                  )}
+
+                  {history.length > 1 && (
+                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                      <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: '#cbd5e1', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        📈 Performans Gelişim Geçmişi
+                      </h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '150px', overflowY: 'auto' }} className="custom-scrollbar">
+                        {history.map((attempt, index) => {
+                          const prevAttempt = index > 0 ? history[index - 1] : null;
+                          let trendText = '';
+                          let trendColor = '#94a3b8';
+                          if (prevAttempt) {
+                            if (attempt.score > prevAttempt.score) {
+                              trendText = `(+${attempt.score - prevAttempt.score}% Gelişim)`;
+                              trendColor = '#34d399';
+                            } else if (attempt.score < prevAttempt.score) {
+                              trendText = `(-${prevAttempt.score - attempt.score}% Düşüş)`;
+                              trendColor = '#f87171';
+                            } else {
+                              trendText = '(Değişim Yok)';
+                            }
+                          }
+                          return (
+                            <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(0,0,0,0.15)', borderRadius: '8px', borderLeft: attempt.isPassed ? '3.5px solid #10b981' : '3.5px solid #ef4444', fontSize: '0.8rem' }}>
+                              <div>
+                                <span style={{ fontWeight: 'bold', color: 'white', marginRight: '6px' }}>{index + 1}. Deneme:</span>
+                                <span style={{ color: attempt.isPassed ? '#34d399' : '#f87171', fontWeight: 'bold' }}>%{attempt.score}</span>
+                                <span style={{ fontSize: '0.72rem', color: '#64748b', marginLeft: '8px' }}>({attempt.date})</span>
+                              </div>
+                              {trendText && (
+                                <span style={{ fontSize: '0.74rem', color: trendColor, fontWeight: 'bold' }}>
+                                  {attempt.score > prevAttempt.score ? '📈 ' : (attempt.score < prevAttempt.score ? '📉 ' : '➡️ ')} {trendText}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
-                    ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '200px', overflowY: 'auto', paddingRight: '4px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '12px' }} className="custom-scrollbar">
-                        {reportCardWords.map((w, idx) => (
-                          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.8rem' }}>
-                            <span style={{ fontWeight: 'bold', color: 'white' }}>{w.word} <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}>({formatWordType(w.type)})</span></span>
-                            <span style={{ color: '#a5b4fc' }}>{w.tr}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
-                    <button 
-                      onClick={() => handlePrintPDF(reportCardDay, reportCardWords, completedObj, selectedCategory, totalCampDays)}
-                      className="btn-primary"
-                      style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: '#3b82f6', borderColor: '#3b82f6', cursor: 'pointer' }}
-                    >
-                      🖨️ PDF Olarak İndir / Yazdır
-                    </button>
+                    {!isGrammar && (
+                      <button 
+                        onClick={() => handlePrintPDF(reportCardDay, reportCardWords, completedObj, selectedCategory, totalCampDays)}
+                        className="btn-primary"
+                        style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: '#3b82f6', borderColor: '#3b82f6', cursor: 'pointer' }}
+                      >
+                        🖨️ PDF Olarak İndir / Yazdır
+                      </button>
+                    )}
                     <button 
                       onClick={() => {
                         setReportCardDay(null);
-                        startDailyStudy(reportCardDay);
+                        if (isGrammar) {
+                          startGrammarStudy(reportCardDay);
+                        } else if (isCikmis) {
+                          startCikmisStudy(reportCardDay);
+                        } else {
+                          startDailyStudy(reportCardDay);
+                        }
                       }}
                       className="btn-secondary"
                       style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
@@ -1408,6 +2360,8 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
         totalCampDays={totalCampDays}
         startDailyStudy={startDailyStudy}
         setReportCardDay={setReportCardDay}
+        reportCardType={reportCardType}
+        setReportCardType={setReportCardType}
         getAIAnalysis={getAIAnalysis}
         viewMode={viewMode}
         setViewMode={setViewMode}
@@ -1420,6 +2374,15 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
         grammarDoneMap={grammarDoneMap}
         startGrammarStudy={startGrammarStudy}
         grammarCampDb={grammarCampDb}
+        cikmisDoneCount={cikmisDoneCount}
+        currentCikmisDay={currentCikmisDay}
+        cikmisDoneMap={cikmisDoneMap}
+        startCikmisStudy={startCikmisStudy}
+        cikmisMode={cikmisMode}
+        setCikmisMode={setCikmisMode}
+        onExportCikmisData={triggerCikmisExport}
+        cikmisPlanData={cikmisPlanData}
+        hideSwitcher={initialCampType === 'cikmis_kelimeler'}
       />
     </div>
   );

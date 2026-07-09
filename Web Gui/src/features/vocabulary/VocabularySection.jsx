@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BookOpen, HelpCircle, Check, Eye, Trash2, ArrowRight, Star, RefreshCw, CheckCircle, Sparkles, Mic, Volume2, X } from 'lucide-react';
 import VocabularyListView from './components/VocabularyListView';
 import VocabularyLeitner from './components/VocabularyLeitner';
@@ -224,6 +224,7 @@ const VocabularySection = ({
   const [cardOffset, setCardOffset] = useState({ x: 0, y: 0 });
   const [isDraggingCard, setIsDraggingCard] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const draggedRef = useRef(false);
   const flashcardsList = pool.filter(w => w.status !== 'learned');
 
   // Matching game state
@@ -298,6 +299,38 @@ const VocabularySection = ({
   const [sortField, setSortField] = useState('english');
   const [sortOrder, setSortOrder] = useState('asc');
 
+  // Keyboard Shortcuts for Flashcards
+  useEffect(() => {
+    if (activeTab !== 'vocabulary' || subTab !== 'flashcards' || flashcardsList.length === 0) return;
+
+    const handleKeyDown = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setRevealMeaning(r => !r);
+      } else if (e.code === 'Enter') {
+        e.preventDefault();
+        if (!revealMeaning) {
+          setRevealMeaning(true);
+        } else {
+          handleFlashcardAction(true); // Learned / Biliyorum
+        }
+      } else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        handleFlashcardAction(false); // Repeat / Tekrar
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        handleFlashcardAction(true); // Learned / Biliyorum
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeTab, subTab, flashcardIndex, revealMeaning, flashcardsList]);
+
   // Load active spelling word
   useEffect(() => {
     setSpellingInput('');
@@ -328,13 +361,20 @@ const VocabularySection = ({
     setSbSelected([]);
     setSbChecked(false);
     setSbResult(null);
-    if (sbList[sbIndex]) {
-      const sentence = ALL_SENTENCES[sbList[sbIndex].english.toLowerCase()].en;
-      const clean = sentence.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-      const words = clean.split(' ').sort(() => 0.5 - Math.random());
-      setSbScrambled(words);
+    if (sbList && sbList[sbIndex] && sbList[sbIndex].english) {
+      const sentenceObj = ALL_SENTENCES[sbList[sbIndex].english.toLowerCase()];
+      if (sentenceObj && sentenceObj.en) {
+        const sentence = sentenceObj.en;
+        const clean = sentence.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+        const words = clean.split(' ').sort(() => 0.5 - Math.random());
+        setSbScrambled(words);
+      } else {
+        setSbScrambled([]);
+      }
+    } else {
+      setSbScrambled([]);
     }
-  }, [sbIndex]);
+  }, [sbIndex, pool, subTab]);
 
   // Load active prep drill options
   useEffect(() => {
@@ -348,14 +388,14 @@ const VocabularySection = ({
 
   // Load active MCQ options
   useEffect(() => {
-    if (mcqList[mcqIndex]) {
+    if (mcqList && mcqList[mcqIndex] && mcqList[mcqIndex].english) {
       const correctWord = mcqList[mcqIndex];
       const correctVal = mcqMode === 'synonym'
         ? (SYNONYM_MAP[(correctWord.english || '').toLowerCase().trim()] || correctWord.turkish)
         : correctWord.turkish;
       
       const others = pool
-        .filter(w => w.english !== correctWord.english)
+        .filter(w => w && w.english && correctWord && w.english !== correctWord.english)
         .map(w => mcqMode === 'synonym' ? (SYNONYM_MAP[(w.english || '').toLowerCase().trim()] || w.turkish) : w.turkish)
         .filter(Boolean);
       
@@ -363,8 +403,10 @@ const VocabularySection = ({
       setMcqOptions([correctVal, ...shuffledOthers].sort(() => 0.5 - Math.random()));
       setMcqSelected(null);
       setMcqChecked(false);
+    } else {
+      setMcqOptions([]);
     }
-  }, [mcqIndex, mcqMode]);
+  }, [mcqIndex, mcqMode, pool, subTab]);
 
   // Auto pronounce first card
   useEffect(() => {
@@ -443,27 +485,78 @@ const VocabularySection = ({
   };
 
   const handleCardStartDrag = (clientX, clientY) => {
+    draggedRef.current = false;
     setIsDraggingCard(true);
     setDragStart({ x: clientX, y: clientY });
   };
 
-  const handleCardMoveDrag = (clientX, clientY) => {
+  // Window listeners for dragging to prevent card getting stuck
+  useEffect(() => {
     if (!isDraggingCard) return;
-    setCardOffset({ x: clientX - dragStart.x, y: clientY - dragStart.y });
-  };
 
-  const handleCardEndDrag = () => {
+    const handleMouseMove = (e) => {
+      const offsetX = e.clientX - dragStart.x;
+      const offsetY = e.clientY - dragStart.y;
+      if (Math.abs(offsetX) > 8 || Math.abs(offsetY) > 8) {
+        draggedRef.current = true;
+      }
+      setCardOffset({ x: offsetX, y: offsetY });
+    };
+
+    const handleMouseUp = (e) => {
+      setIsDraggingCard(false);
+      // Determine final offset based on event coordinate if offset is not updated yet
+      const finalX = e.clientX - dragStart.x;
+      if (finalX > 120) {
+        handleFlashcardAction(false); // Repeat
+      } else if (finalX < -120) {
+        handleFlashcardAction(true); // Biliyorum
+      }
+      setCardOffset({ x: 0, y: 0 });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDraggingCard, dragStart, cardOffset]);
+
+  useEffect(() => {
     if (!isDraggingCard) return;
-    setIsDraggingCard(false);
-    
-    if (cardOffset.x > 120) {
-      handleFlashcardAction(false); // Swipe Right - repeat
-    } else if (cardOffset.x < -120) {
-      handleFlashcardAction(true); // Swipe Left - learn
-    }
-    
-    setCardOffset({ x: 0, y: 0 });
-  };
+
+    const handleTouchMove = (e) => {
+      const touch = e.touches[0];
+      if (touch) {
+        const offsetX = touch.clientX - dragStart.x;
+        const offsetY = touch.clientY - dragStart.y;
+        if (Math.abs(offsetX) > 8 || Math.abs(offsetY) > 8) {
+          draggedRef.current = true;
+        }
+        setCardOffset({ x: offsetX, y: offsetY });
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      setIsDraggingCard(false);
+      const touch = e.changedTouches[0];
+      const finalX = touch ? (touch.clientX - dragStart.x) : cardOffset.x;
+      if (finalX > 120) {
+        handleFlashcardAction(false);
+      } else if (finalX < -120) {
+        handleFlashcardAction(true);
+      }
+      setCardOffset({ x: 0, y: 0 });
+    };
+
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
+    return () => {
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isDraggingCard, dragStart, cardOffset]);
 
   const handleFlashcardAction = (isLearned) => {
     const currentWord = flashcardsList[flashcardIndex];
@@ -963,27 +1056,16 @@ const VocabularySection = ({
                       if (e.target.closest('button')) return;
                       handleCardStartDrag(e.clientX, e.clientY);
                     }}
-                    onMouseMove={(e) => {
-                      handleCardMoveDrag(e.clientX, e.clientY);
-                    }}
-                    onMouseUp={handleCardEndDrag}
-                    onMouseLeave={handleCardEndDrag}
                     onTouchStart={(e) => {
                       if (e.target.closest('button')) return;
-                      e.preventDefault();
                       const touch = e.touches[0];
                       handleCardStartDrag(touch.clientX, touch.clientY);
                     }}
-                    onTouchMove={(e) => {
-                      e.preventDefault();
-                      const touch = e.touches[0];
-                      handleCardMoveDrag(touch.clientX, touch.clientY);
+                    onClick={() => {
+                      if (!draggedRef.current) {
+                        setRevealMeaning(r => !r);
+                      }
                     }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      handleCardEndDrag();
-                    }}
-                    onClick={() => setRevealMeaning(r => !r)}
                     style={{
                       touchAction: 'none',
                       userSelect: 'none',
@@ -1089,6 +1171,89 @@ const VocabularySection = ({
                       </div>
                     </div>
                   </div>
+
+                  {/* PC & Mobile Buttons Row */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <button
+                        onClick={() => handleFlashcardAction(false)}
+                        className="btn-secondary"
+                        style={{
+                          flex: 1,
+                          padding: '12px',
+                          fontSize: '0.82rem',
+                          fontWeight: 'bold',
+                          borderRadius: '12px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          borderColor: 'rgba(239, 68, 68, 0.2)',
+                          color: '#f87171',
+                          background: 'rgba(239, 68, 68, 0.02)'
+                        }}
+                      >
+                        ✕ Tekrar Çalış
+                      </button>
+                      <button
+                        onClick={() => setRevealMeaning(r => !r)}
+                        className="btn-secondary"
+                        style={{
+                          flex: 1,
+                          padding: '12px',
+                          fontSize: '0.82rem',
+                          fontWeight: 'bold',
+                          borderRadius: '12px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px'
+                        }}
+                      >
+                        🔄 Çevir / Anlamı Göster
+                      </button>
+                      <button
+                        onClick={() => handleFlashcardAction(true)}
+                        className="btn-primary"
+                        style={{
+                          flex: 1,
+                          padding: '12px',
+                          fontSize: '0.82rem',
+                          fontWeight: 'bold',
+                          borderRadius: '12px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px'
+                        }}
+                      >
+                        ✓ Biliyorum (Öğrendim)
+                      </button>
+                    </div>
+
+                    {/* PC Keyboard Shortcut Hints */}
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      gap: '12px',
+                      fontSize: '0.68rem',
+                      color: 'var(--text-secondary)',
+                      opacity: 0.7,
+                      textAlign: 'center',
+                      flexWrap: 'wrap',
+                      marginTop: '4px'
+                    }}>
+                      <span>⌨️ <strong style={{ color: '#818cf8' }}>[Sol Ok Tuşu]</strong> Tekrar</span>
+                      <span>•</span>
+                      <span><strong style={{ color: '#818cf8' }}>[Space / Boşluk]</strong> Çevir</span>
+                      <span>•</span>
+                      <span><strong style={{ color: '#818cf8' }}>[Enter / Sağ Ok]</strong> Biliyorum</span>
+                    </div>
+                  </div>
+
                 </div>
               );
             })()
@@ -1179,6 +1344,7 @@ const VocabularySection = ({
           handleCheckSentence={handleCheckSentence}
           handleNextSentence={handleNextSentence}
           setSubTab={setSubTab}
+          ALL_SENTENCES={ALL_SENTENCES}
         />
       )}
 

@@ -12,6 +12,8 @@ const CampDashboard = ({
   totalCampDays,
   startDailyStudy,
   setReportCardDay,
+  reportCardType,
+  setReportCardType,
   getAIAnalysis,
   viewMode,
   setViewMode,
@@ -23,8 +25,19 @@ const CampDashboard = ({
   currentGrammarDay,
   grammarDoneMap,
   startGrammarStudy,
-  grammarCampDb
+  grammarCampDb,
+  cikmisDoneCount,
+  currentCikmisDay,
+  cikmisDoneMap,
+  startCikmisStudy,
+  cikmisMode = 'detailed',
+  setCikmisMode,
+  onExportCikmisData,
+  cikmisPlanData,
+  hideSwitcher
 }) => {
+  const [showExportDropdown, setShowExportDropdown] = React.useState(false);
+  const [expandedCikmisDay, setExpandedCikmisDay] = React.useState(null);
 
   const getMonthStats = (monthNum) => {
     const start = (monthNum - 1) * 28 + 1;
@@ -202,50 +215,52 @@ const CampDashboard = ({
   return (
     <div className="space-y-6">
       {/* Camp Type Switcher */}
-      <div style={{ display: 'flex', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '4px', maxWidth: '400px', margin: '0 auto 10px auto' }}>
-        <button
-          onClick={() => setCampType('vocabulary')}
-          style={{
-            flex: 1,
-            padding: '10px 16px',
-            borderRadius: '10px',
-            background: campType === 'vocabulary' ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
-            border: campType === 'vocabulary' ? '1px solid rgba(99, 102, 241, 0.3)' : 'none',
-            color: campType === 'vocabulary' ? '#a5b4fc' : '#94a3b8',
-            fontWeight: 'bold',
-            fontSize: '0.85rem',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px'
-          }}
-        >
-          📖 Kelime Kampı
-        </button>
-        <button
-          onClick={() => setCampType('grammar')}
-          style={{
-            flex: 1,
-            padding: '10px 16px',
-            borderRadius: '10px',
-            background: campType === 'grammar' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
-            border: campType === 'grammar' ? '1px solid rgba(16, 185, 129, 0.3)' : 'none',
-            color: campType === 'grammar' ? '#a7f3d0' : '#94a3b8',
-            fontWeight: 'bold',
-            fontSize: '0.85rem',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px'
-          }}
-        >
-          🧠 Dilbilgisi Kampı
-        </button>
-      </div>
+      {!hideSwitcher && (
+        <div style={{ display: 'flex', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '4px', maxWidth: '600px', margin: '0 auto 10px auto' }}>
+          <button
+            onClick={() => setCampType('vocabulary')}
+            style={{
+              flex: 1,
+              padding: '10px 12px',
+              borderRadius: '10px',
+              background: campType === 'vocabulary' ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+              border: campType === 'vocabulary' ? '1px solid rgba(99, 102, 241, 0.3)' : 'none',
+              color: campType === 'vocabulary' ? '#a5b4fc' : '#94a3b8',
+              fontWeight: 'bold',
+              fontSize: '0.82rem',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px'
+            }}
+          >
+            📖 Kelime Kampı
+          </button>
+          <button
+            onClick={() => setCampType('grammar')}
+            style={{
+              flex: 1,
+              padding: '10px 12px',
+              borderRadius: '10px',
+              background: campType === 'grammar' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+              border: campType === 'grammar' ? '1px solid rgba(16, 185, 129, 0.3)' : 'none',
+              color: campType === 'grammar' ? '#a7f3d0' : '#94a3b8',
+              fontWeight: 'bold',
+              fontSize: '0.82rem',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px'
+            }}
+          >
+            🧠 Dilbilgisi Kampı
+          </button>
+        </div>
+      )}
 
       {campType === 'vocabulary' ? (
         <>
@@ -520,7 +535,7 @@ const CampDashboard = ({
             </div>
           </div>
         </>
-      ) : (
+      ) : campType === 'grammar' ? (
         <>
           {/* Grammar Camp Menu */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
@@ -674,6 +689,474 @@ const CampDashboard = ({
                       </span>
                       <ArrowRight className="h-4 w-4 text-slate-500" />
                     </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Mode Switcher for Çıkmış Kelimeler */}
+          <div style={{ display: 'flex', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '4px', maxWidth: '500px', margin: '0 auto 20px auto' }}>
+            <button
+              onClick={() => setCikmisMode('swipe')}
+              style={{
+                flex: 1,
+                padding: '10px 12px',
+                borderRadius: '10px',
+                background: cikmisMode === 'swipe' ? 'rgba(239, 68, 68, 0.15)' : 'transparent',
+                border: cikmisMode === 'swipe' ? '1px solid rgba(239, 68, 68, 0.3)' : 'none',
+                color: cikmisMode === 'swipe' ? '#fca5a5' : '#94a3b8',
+                fontWeight: 'bold',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px'
+              }}
+            >
+              🎴 Hızlı Kart Pratiği
+            </button>
+            <button
+              onClick={() => setCikmisMode('detailed')}
+              style={{
+                flex: 1,
+                padding: '10px 12px',
+                borderRadius: '10px',
+                background: cikmisMode === 'detailed' ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+                border: cikmisMode === 'detailed' ? '1px solid rgba(99, 102, 241, 0.3)' : 'none',
+                color: cikmisMode === 'detailed' ? '#a5b4fc' : '#94a3b8',
+                fontWeight: 'bold',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px'
+              }}
+            >
+              🧠 Detaylı Kelime Kampı
+            </button>
+          </div>
+
+          {/* Çıkmış Kelimeler Camp Menu Stats */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ background: 'rgba(239, 68, 68, 0.12)', padding: '12px', borderRadius: '12px', color: '#ef4444' }}>
+                <Calendar className="h-6 w-6" />
+              </div>
+              <div>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Çıkmış İlerlemesi</span>
+                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>{cikmisDoneCount} / 60 Gün</strong>
+              </div>
+            </div>
+
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ background: 'rgba(239, 68, 68, 0.12)', padding: '12px', borderRadius: '12px', color: '#ef4444' }}>
+                <Trophy className="h-6 w-6" />
+              </div>
+              <div>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Aktif Hedef Gün</span>
+                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>Gün #{currentCikmisDay}</strong>
+              </div>
+            </div>
+          </div>
+
+          {/* Start Çıkmış Kelimeler Camp Card */}
+          <div className="glass-card text-center" style={{ padding: '30px 20px', borderRadius: '24px', background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(99, 102, 241, 0.04) 100%)', border: '1.5px solid rgba(239, 68, 68, 0.25)', marginBottom: '24px' }}>
+            {cikmisMode === 'swipe' ? (
+              <>
+                <h3 style={{ fontSize: '1.45rem', fontWeight: '900', color: 'white', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  🎴 Hızlı Kart Pratiği
+                </h3>
+                <p style={{ fontSize: '0.85rem', color: '#cbd5e1', maxWidth: '520px', margin: '8px auto 20px auto', lineHeight: 1.5 }}>
+                  Biliyorum / Bilmiyorum formatında kaydırmalı kartlarla hızlı pratik yaparak kelimeleri hafızanıza atın.
+                </p>
+              </>
+            ) : (
+              <>
+                <h3 style={{ fontSize: '1.45rem', fontWeight: '900', color: 'white', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  🧠 Detaylı Kelime Kampı
+                </h3>
+                <p style={{ fontSize: '0.85rem', color: '#cbd5e1', maxWidth: '520px', margin: '8px auto 20px auto', lineHeight: 1.5 }}>
+                  Kart Kaydırma ➔ Eşleştirme ➔ İngilizce-Türkçe Test ➔ Türkçe-İngilizce Test ➔ Örnek Cümle Tamamlama adımlarıyla tam akademik öğrenim.
+                </p>
+              </>
+            )}
+
+            {(() => {
+              const completedObj = cikmisDoneMap[currentCikmisDay];
+              const isModeCompleted = completedObj ? (
+                cikmisMode === 'swipe' 
+                  ? (completedObj.swipeCompleted !== undefined ? completedObj.swipeCompleted : true)
+                  : (completedObj.detailedCompleted !== undefined ? completedObj.detailedCompleted : true)
+              ) : false;
+              const score = completedObj ? (cikmisMode === 'swipe' ? completedObj.swipeScore || completedObj.score : completedObj.detailedScore || completedObj.score) : null;
+              
+              if (isModeCompleted) {
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.94rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                      🎉 Bugünün mod çalışmasını başarıyla tamamladınız! (Skor: %{score})
+                    </div>
+                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+                      <button
+                        onClick={() => startCikmisStudy(currentCikmisDay, cikmisMode)}
+                        className="btn-secondary"
+                        style={{ padding: '8px 24px', fontSize: '0.8rem', borderRadius: '10px', cursor: 'pointer' }}
+                      >
+                        Modu Yeniden Başlat
+                      </button>
+                      <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <button
+                          onClick={() => setShowExportDropdown(!showExportDropdown)}
+                          className="btn-primary"
+                          style={{ padding: '8px 24px', fontSize: '0.8rem', borderRadius: '10px', cursor: 'pointer', background: '#3b82f6', borderColor: '#3b82f6', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                        >
+                          📤 Karne Raporunu Dışarı Aktar
+                        </button>
+                        {showExportDropdown && (
+                          <div style={{
+                            position: 'absolute',
+                            top: '100%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            marginTop: '8px',
+                            background: '#151c2c',
+                            border: '1.5px solid rgba(255, 255, 255, 0.08)',
+                            borderRadius: '12px',
+                            boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                            zIndex: 50,
+                            minWidth: '220px',
+                            overflow: 'hidden',
+                            display: 'flex',
+                            flexDirection: 'column'
+                          }}>
+                            <div 
+                              onClick={() => { onExportCikmisData('pdf'); setShowExportDropdown(false); }}
+                              className="hover-card"
+                              style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#a7f3d0', textAlign: 'left' }}
+                            >
+                              <span>📄</span> PDF Belgesi (.pdf)
+                            </div>
+                            <div 
+                              onClick={() => { onExportCikmisData('docx'); setShowExportDropdown(false); }}
+                              className="hover-card"
+                              style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#93c5fd', textAlign: 'left' }}
+                            >
+                              <span>📝</span> Microsoft Word (.docx)
+                            </div>
+                            <div 
+                              onClick={() => { onExportCikmisData('xlsx'); setShowExportDropdown(false); }}
+                              className="hover-card"
+                              style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: '#fde047', textAlign: 'left' }}
+                            >
+                              <span>📊</span> Microsoft Excel (.xlsx)
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              } else {
+                return (
+                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <button
+                      onClick={() => startCikmisStudy(currentCikmisDay, cikmisMode)}
+                      className="btn-primary"
+                      style={{ padding: '12px 30px', fontSize: '0.9rem', fontWeight: 'bold', borderRadius: '12px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', background: cikmisMode === 'swipe' ? '#ef4444' : '#6366f1', borderColor: cikmisMode === 'swipe' ? '#ef4444' : '#6366f1' }}
+                    >
+                      Gün #{currentCikmisDay} Çalışmasını Başlat <ArrowRight className="h-4 w-4" />
+                    </button>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                      <button
+                        onClick={() => setShowExportDropdown(!showExportDropdown)}
+                        className="btn-secondary"
+                        style={{ padding: '12px 24px', fontSize: '0.9rem', fontWeight: 'bold', borderRadius: '12px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                      >
+                        📤 Karne Raporunu Dışarı Aktar
+                      </button>
+                      {showExportDropdown && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '100%',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          marginTop: '8px',
+                          background: '#151c2c',
+                          border: '1.5px solid rgba(255, 255, 255, 0.08)',
+                          borderRadius: '12px',
+                          boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                          zIndex: 50,
+                          minWidth: '220px',
+                          overflow: 'hidden',
+                          display: 'flex',
+                          flexDirection: 'column'
+                        }}>
+                          <div 
+                            onClick={() => { onExportCikmisData('pdf'); setShowExportDropdown(false); }}
+                            className="hover-card"
+                            style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#a7f3d0', textAlign: 'left' }}
+                          >
+                            <span>📄</span> PDF Belgesi (.pdf)
+                          </div>
+                          <div 
+                            onClick={() => { onExportCikmisData('docx'); setShowExportDropdown(false); }}
+                            className="hover-card"
+                            style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#93c5fd', textAlign: 'left' }}
+                          >
+                            <span>📝</span> Microsoft Word (.docx)
+                          </div>
+                          <div 
+                            onClick={() => { onExportCikmisData('xlsx'); setShowExportDropdown(false); }}
+                            className="hover-card"
+                            style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: '#fde047', textAlign: 'left' }}
+                          >
+                            <span>📊</span> Microsoft Excel (.xlsx)
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              }
+            })()}
+          </div>
+
+          {/* Çıkmış Kelimeler 60 Day List Panels */}
+          <div>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>Günlük Kamp Listesi ({cikmisMode === 'swipe' ? 'Pratik' : 'Detaylı'})</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {Array.from({ length: 60 }).map((_, i) => {
+                const dayNum = i + 1;
+                const completedObj = cikmisDoneMap[dayNum];
+                
+                const isCompleted = completedObj ? (
+                  cikmisMode === 'swipe'
+                    ? (completedObj.swipeCompleted !== undefined ? !!completedObj.swipeCompleted : true)
+                    : (completedObj.detailedCompleted !== undefined ? !!completedObj.detailedCompleted : true)
+                ) : false;
+
+                const isPassed = completedObj ? (
+                  cikmisMode === 'swipe'
+                    ? (completedObj.swipePassed !== undefined ? !!completedObj.swipePassed : true)
+                    : (completedObj.detailedPassed !== undefined ? !!completedObj.detailedPassed : true)
+                ) : false;
+
+                const score = completedObj ? (
+                  cikmisMode === 'swipe' 
+                    ? (completedObj.swipeScore !== undefined ? completedObj.swipeScore : completedObj.score)
+                    : (completedObj.detailedScore !== undefined ? completedObj.detailedScore : completedObj.score)
+                ) : null;
+
+                const isActive = dayNum === currentCikmisDay;
+
+                let border = '1px solid rgba(255, 255, 255, 0.06)';
+                let bg = 'rgba(255, 255, 255, 0.02)';
+                let badgeText = 'Tamamlanmadı';
+                let badgeBg = 'rgba(255, 255, 255, 0.05)';
+                let badgeColor = '#94a3b8';
+
+                if (isCompleted) {
+                  if (isPassed) {
+                    bg = 'rgba(16, 185, 129, 0.05)';
+                    border = '1px solid rgba(16, 185, 129, 0.25)';
+                    badgeText = `Tamamlandı (%${score})`;
+                    badgeBg = 'rgba(16, 185, 129, 0.15)';
+                    badgeColor = '#34d399';
+                  } else {
+                    bg = 'rgba(239, 68, 68, 0.05)';
+                    border = '1px solid rgba(239, 68, 68, 0.25)';
+                    badgeText = `Tekrar Gerekli (%${score})`;
+                    badgeBg = 'rgba(239, 68, 68, 0.15)';
+                    badgeColor = '#f87171';
+                  }
+                } else if (isActive) {
+                  bg = 'rgba(239, 68, 68, 0.05)';
+                  border = '1.5px solid rgba(239, 68, 68, 0.4)';
+                  badgeText = 'Sıradaki Gün';
+                  badgeBg = 'rgba(239, 68, 68, 0.15)';
+                  badgeColor = '#fca5a5';
+                }
+
+                const resultsMap = completedObj ? (
+                  cikmisMode === 'swipe'
+                    ? completedObj.swipeResults || completedObj.resultsMap || {}
+                    : completedObj.detailedResults || completedObj.resultsMap || {}
+                ) : {};
+
+                const knownCount = Object.values(resultsMap).filter(v => v === true).length;
+                const unknownCount = Object.values(resultsMap).filter(v => v === false).length;
+                const isExpanded = expandedCikmisDay === dayNum;
+
+                return (
+                  <div key={dayNum} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div
+                      onClick={() => {
+                        if (isCompleted) {
+                          setReportCardType('cikmis_kelimeler');
+                          setReportCardDay(dayNum);
+                        } else {
+                          startCikmisStudy(dayNum, cikmisMode);
+                        }
+                      }}
+                      style={{
+                        background: bg,
+                        border: border,
+                        borderRadius: '16px',
+                        padding: '16px 20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        gap: '12px'
+                      }}
+                      className="hover-card"
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: isActive ? 'rgba(239,68,68,0.12)' : 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', color: isActive ? '#fca5a5' : 'white', fontSize: '1.05rem', border: '1px solid rgba(255,255,255,0.06)' }}>
+                          {dayNum}
+                        </div>
+                        <div style={{ textAlign: 'left' }}>
+                          <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
+                            Çıkmış Kelimeler {dayNum}. Gün
+                          </h4>
+                          <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginTop: '2px' }}>
+                            {cikmisMode === 'swipe' ? 'Kaydırmalı Kart Pratiği' : 'Detaylı Kelime Çalışma Aşamaları'}
+                          </span>
+                          {isCompleted && (
+                            <span style={{ fontSize: '0.75rem', color: '#10b981', display: 'block', marginTop: '4px', fontWeight: '600' }}>
+                              {cikmisMode === 'swipe' ? (
+                                <>🟢 Bilinen: {knownCount} | 🔴 Bilinmeyen: {unknownCount}</>
+                              ) : (
+                                <>🟢 Doğru: {knownCount} | 🔴 Yanlış: {unknownCount}</>
+                              )}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        {isCompleted && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setExpandedCikmisDay(isExpanded ? null : dayNum);
+                            }}
+                            style={{
+                              padding: '6px 12px',
+                              borderRadius: '8px',
+                              fontSize: '0.75rem',
+                              fontWeight: 'bold',
+                              background: 'rgba(99, 102, 241, 0.15)',
+                              border: '1px solid rgba(99, 102, 241, 0.4)',
+                              color: '#a5b4fc',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}
+                          >
+                            {isExpanded ? '👁️ Detay Kapat' : '🔍 Detay Göster'}
+                          </button>
+                        )}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setReportCardType('cikmis_kelimeler');
+                            setReportCardDay(dayNum);
+                          }}
+                          disabled={!isCompleted}
+                          style={{
+                            padding: '6px 12px',
+                            borderRadius: '8px',
+                            fontSize: '0.75rem',
+                            fontWeight: 'bold',
+                            background: isCompleted ? 'rgba(239, 68, 68, 0.15)' : 'rgba(255, 255, 255, 0.02)',
+                            border: isCompleted ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(255, 255, 255, 0.05)',
+                            color: isCompleted ? '#fca5a5' : '#475569',
+                            cursor: isCompleted ? 'pointer' : 'not-allowed',
+                            transition: 'all 0.2s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          📊 Karne
+                        </button>
+                        <span style={{
+                          padding: '6px 12px',
+                          borderRadius: '8px',
+                          fontSize: '0.72rem',
+                          fontWeight: 'bold',
+                          background: badgeBg,
+                          color: badgeColor
+                        }}>
+                          {badgeText}
+                        </span>
+                        <ArrowRight className="h-4 w-4 text-slate-500" />
+                      </div>
+                    </div>
+                    {isExpanded && isCompleted && (
+                      <div className="glass-card animate-scale-in" style={{
+                        padding: '16px 20px',
+                        borderRadius: '16px',
+                        background: 'rgba(15, 23, 42, 0.55)',
+                        border: '1.5px solid rgba(255, 255, 255, 0.08)',
+                        marginTop: '-4px',
+                        marginBottom: '10px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px'
+                      }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+                          <div>
+                            <h5 style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#34d399', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              🟢 {cikmisMode === 'swipe' ? 'Bildiğim Kelimeler' : 'Doğru Kelimeler'} ({knownCount})
+                            </h5>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '180px', overflowY: 'auto', paddingRight: '4px' }} className="custom-scrollbar">
+                              {(() => {
+                                const dayWords = (cikmisPlanData && cikmisPlanData[String(dayNum)]) || [];
+                                const knownList = dayWords.filter(w => resultsMap[w.english] !== false);
+                                if (knownList.length === 0) return <span style={{ fontSize: '0.74rem', color: '#64748b', fontStyle: 'italic' }}>Hiç yok</span>;
+                                return knownList.map((w, idx) => (
+                                  <div key={idx} style={{ fontSize: '0.78rem', padding: '8px 12px', background: 'rgba(16, 185, 129, 0.06)', border: '1px solid rgba(16, 185, 129, 0.15)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
+                                    <strong style={{ color: 'white', minWidth: '90px' }}>{w.english}</strong>
+                                    <span style={{ color: '#94a3b8', flex: 1, textAlign: 'right' }}>{w.turkish}</span>
+                                  </div>
+                                ));
+                              })()}
+                            </div>
+                          </div>
+
+                          <div>
+                            <h5 style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#f87171', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              🔴 {cikmisMode === 'swipe' ? 'Bilmediğim Kelimeler' : 'Yanlış/Eksik Kelimeler'} ({unknownCount})
+                            </h5>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '180px', overflowY: 'auto', paddingRight: '4px' }} className="custom-scrollbar">
+                              {(() => {
+                                const dayWords = (cikmisPlanData && cikmisPlanData[String(dayNum)]) || [];
+                                const unknownList = dayWords.filter(w => resultsMap[w.english] === false);
+                                if (unknownList.length === 0) return <span style={{ fontSize: '0.74rem', color: '#64748b', fontStyle: 'italic' }}>Hiç yok</span>;
+                                return unknownList.map((w, idx) => (
+                                  <div key={idx} style={{ fontSize: '0.78rem', padding: '8px 12px', background: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.15)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
+                                    <strong style={{ color: 'white', minWidth: '90px' }}>{w.english}</strong>
+                                    <span style={{ color: '#94a3b8', flex: 1, textAlign: 'right' }}>{w.turkish}</span>
+                                  </div>
+                                ));
+                              })()}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}

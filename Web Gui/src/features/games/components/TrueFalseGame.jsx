@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 const TrueFalseGame = ({ vocab, awardPetXp }) => {
   const [englishWord, setEnglishWord] = useState('');
   const [displayedTr, setDisplayedTr] = useState('');
+  const [correctTr, setCorrectTr] = useState('');
   const [isCorrectPair, setIsCorrectPair] = useState(false);
   const [score, setScore] = useState(0);
   const [selectedAns, setSelectedAns] = useState(null);
@@ -13,6 +14,7 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
     setShowFeedback(false);
     const item = vocab[Math.floor(Math.random() * vocab.length)];
     setEnglishWord(item.english);
+    setCorrectTr(item.turkish);
     const isReal = Math.random() > 0.5;
     setIsCorrectPair(isReal);
     if (isReal) {
@@ -35,10 +37,6 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
       setScore(s => s + 1);
       awardPetXp(5);
     }
-    
-    setTimeout(() => {
-      loadQuestion();
-    }, 1500);
   };
 
   const getBtnStyle = (val) => {
@@ -104,15 +102,44 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
         <button onClick={() => handleAnswer(false)} disabled={showFeedback} style={getBtnStyle(false)}>YANLIŞ (False) ❌</button>
       </div>
       {showFeedback && (
-        <div style={{
-          fontSize: '0.85rem',
-          fontWeight: 'bold',
-          color: selectedAns === isCorrectPair ? '#34d399' : '#f87171',
-          padding: '8px',
-          borderRadius: '10px',
-          background: selectedAns === isCorrectPair ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)'
-        }}>
-          {selectedAns === isCorrectPair ? '✔️ Doğru Cevap! +5 XP' : '❌ Yanlış cevap!'}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{
+            fontSize: '0.85rem',
+            fontWeight: 'bold',
+            color: selectedAns === isCorrectPair ? '#34d399' : '#f87171',
+            padding: '12px',
+            borderRadius: '10px',
+            background: selectedAns === isCorrectPair ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)',
+            lineHeight: '1.4'
+          }}>
+            {selectedAns === isCorrectPair ? (
+              '✔️ Doğru Cevap! +5 XP'
+            ) : (
+              <span>
+                ❌ Yanlış Cevap! <br />
+                <strong>"{englishWord}"</strong> kelimesinin gerçek anlamı: <strong>"{correctTr}"</strong>
+              </span>
+            )}
+          </div>
+          <button
+            onClick={loadQuestion}
+            style={{
+              padding: '12px',
+              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '12px',
+              fontSize: '0.85rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px'
+            }}
+          >
+            Sonraki Soru ➡️
+          </button>
         </div>
       )}
     </div>

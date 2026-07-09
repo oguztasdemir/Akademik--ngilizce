@@ -144,10 +144,14 @@ function App() {
     if (hash && hash.startsWith('#/') && hash !== '#/landing') {
       const parts = hash.split('/');
       if (parts.length >= 3) {
+        let tab = parts[2];
+        if (tab === 'camp' && hash.includes('cikmis_kelimeler')) {
+          tab = 'cikmis-camp';
+        }
         return {
           category: parts[1],
-          tab: parts[2],
-          quiz: parts[3] === 'quiz'
+          tab: tab,
+          quiz: parts.includes('quiz')
         };
       }
     }
@@ -250,6 +254,8 @@ function App() {
   const [examDetailTab, setExamDetailTab] = useState('list'); // 'list', 'performance'
   const [lectureProgress, setLectureProgress] = useState(() => safeJsonParse('yokdil_lecture_progress', {}));
   const [grammarNotes, setGrammarNotes] = useState(() => safeJsonParse('yokdil_grammar_notes', []));
+  const [achievementCategoryFilter, setAchievementCategoryFilter] = useState('all');
+  const [achievementStatusFilter, setAchievementStatusFilter] = useState('all');
 
   // User Practice States
   const [answers, setAnswers] = useState({});
@@ -524,10 +530,38 @@ function App() {
       gem_collector: gemCount
     };
 
-    return achievementsData.map(ach => ({
-      ...ach,
-      value: valueMap[ach.category] || 0
-    }));
+    const mapped = achievementsData.map(ach => {
+      const val = valueMap[ach.category] || 0;
+      const tier = getAchievementTier(ach.id, val, ach.target);
+      return {
+        ...ach,
+        value: val,
+        completed: tier.completed,
+        tier
+      };
+    });
+
+    return mapped.sort((a, b) => {
+      if (a.completed && !b.completed) return -1;
+      if (!a.completed && b.completed) return 1;
+      return a.target - b.target;
+    });
+  };
+
+  const getFilteredAchievements = () => {
+    let list = getAchievementsList();
+
+    if (achievementCategoryFilter !== 'all') {
+      list = list.filter(ach => ach.category === achievementCategoryFilter);
+    }
+
+    if (achievementStatusFilter === 'completed') {
+      list = list.filter(ach => ach.completed);
+    } else if (achievementStatusFilter === 'incomplete') {
+      list = list.filter(ach => !ach.completed);
+    }
+
+    return list;
   };
 
   // Explanation state
@@ -562,10 +596,13 @@ function App() {
       const parts = hash.split('/'); // ["#", "fen", "dashboard"]
       if (parts.length >= 3) {
         const cat = parts[1];
-        const tab = parts[2];
+        let tab = parts[2];
+        if (tab === 'camp' && hash.includes('cikmis_kelimeler')) {
+          tab = 'cikmis-camp';
+        }
         setSelectedCategory(cat);
         setActiveTab(tab);
-        if (parts[3] === 'quiz') {
+        if (parts.includes('quiz')) {
           setQuizActive(true);
         } else {
           setQuizActive(false);
@@ -620,15 +657,22 @@ function App() {
       }
     } else {
       const quizSuffix = quizActive ? '/quiz' : '';
-      const prefix = `#/${selectedCategory}/${activeTab}`;
-      if (activeTab === 'camp' || activeTab === 'book_exercise') {
-        if (!window.location.hash.startsWith(prefix)) {
-          window.history.pushState(null, '', prefix);
-        }
-      } else {
-        const expectedHash = `${prefix}${quizSuffix}`;
+      if (activeTab === 'cikmis-camp') {
+        const expectedHash = `#/${selectedCategory}/camp/cikmis_kelimeler`;
         if (window.location.hash !== expectedHash) {
           window.history.pushState(null, '', expectedHash);
+        }
+      } else {
+        const prefix = `#/${selectedCategory}/${activeTab}`;
+        if (activeTab === 'camp' || activeTab === 'book_exercise') {
+          if (!window.location.hash.startsWith(prefix)) {
+            window.history.pushState(null, '', prefix);
+          }
+        } else {
+          const expectedHash = `${prefix}${quizSuffix}`;
+          if (window.location.hash !== expectedHash) {
+            window.history.pushState(null, '', expectedHash);
+          }
         }
       }
     }
@@ -734,6 +778,20 @@ function App() {
     setVocabPracticeList(localVocab);
     const initialDictList = Object.entries(localDict).map(([eng, tr]) => ({ english: eng, turkish: tr }));
     setDictionaryList(initialDictList);
+    
+    // Auto-populate notebook if it's empty on category selection
+    const savedNotebook = localStorage.getItem('yokdil_notebook');
+    if (!savedNotebook || JSON.parse(savedNotebook).length === 0) {
+      const loadedWords = Object.entries(localDict).map(([eng, tr], index) => ({
+        id: Date.now() + index,
+        english: eng,
+        turkish: tr,
+        status: 'learning'
+      }));
+      setNotebook(loadedWords);
+      localStorage.setItem('yokdil_notebook', JSON.stringify(loadedWords));
+    }
+    
     setLoading(false);
 
     // Fetch fresh values from backend (if online / backend is up)
@@ -1790,33 +1848,43 @@ function App() {
   const handleLoadAcademicWords = () => {
     setLoading(true);
     const category = selectedCategory || 'fen';
+    
+    let fallbackDict = fallbackDictFen;
+    if (category === 'sosyal') fallbackDict = fallbackDictSosyal;
+    else if (category === 'saglik') fallbackDict = fallbackDictSaglik;
+
+    const processLoadedData = (dictData) => {
+      const loadedWords = Object.entries(dictData).map(([eng, tr], index) => ({
+        id: Date.now() + index,
+        english: eng,
+        turkish: tr,
+        status: 'learning'
+      }));
+      const existingEngs = new Set(notebook.map(item => (item.english || '').toLowerCase()));
+      const uniqueLoaded = loadedWords.filter(item => !existingEngs.has(item.english.toLowerCase()));
+
+      if (uniqueLoaded.length === 0) {
+        alert("Tüm kelimeler zaten defterinizde ekli!");
+        setLoading(false);
+        return;
+      }
+
+      const newNotebook = [...notebook, ...uniqueLoaded];
+      setNotebook(newNotebook);
+      localStorage.setItem('yokdil_notebook', JSON.stringify(newNotebook));
+      alert(`${uniqueLoaded.length} yeni YÖKDİL Akademik Kelimesi defterinize eklendi!`);
+      setLoading(false);
+    };
+
     fetch(`${BACKEND_URL}/api/${category}/dictionary`)
       .then(res => res.json())
       .then(data => {
-        const loadedWords = Object.entries(data).map(([eng, tr], index) => ({
-          id: Date.now() + index,
-          english: eng,
-          turkish: tr,
-          status: 'learning'
-        }));
-        const existingEngs = new Set(notebook.map(item => (item.english || '').toLowerCase()));
-        const uniqueLoaded = loadedWords.filter(item => !existingEngs.has(item.english.toLowerCase()));
-
-        if (uniqueLoaded.length === 0) {
-          alert("Tüm kelimeler zaten defterinizde ekli!");
-          setLoading(false);
-          return;
-        }
-
-        const newNotebook = [...notebook, ...uniqueLoaded];
-        setNotebook(newNotebook);
-        localStorage.setItem('yokdil_notebook', JSON.stringify(newNotebook));
-        alert(`${uniqueLoaded.length} yeni YÖKDİL Akademik Kelimesi defterinize eklendi!`);
-        setLoading(false);
+        const dictData = (data && typeof data === 'object') ? data : fallbackDict;
+        processLoadedData(dictData);
       })
       .catch(err => {
-        console.error("Dictionary load error:", err);
-        setLoading(false);
+        console.warn("Error loading dictionary from backend, using fallback:", err);
+        processLoadedData(fallbackDict);
       });
   };
 
@@ -3483,6 +3551,25 @@ function App() {
             {selectedCategory && activeTab === 'camp' && (
               <section id="screen-camp" className="app-screen active animate-fade-in">
                 <CampSection
+                  key="camp"
+                  initialCampType="vocabulary"
+                  selectedCategory={selectedCategory}
+                  awardPetXP={awardPetXP}
+                  triggerConfetti={triggerConfetti}
+                  examsDb={{ fen: fallbackExamsFen, sosyal: fallbackExamsSosyal, saglik: fallbackExamsSaglik }}
+                  dictDb={{ fen: fallbackDictFen, sosyal: fallbackDictSosyal, saglik: fallbackDictSaglik }}
+                  recordWordStat={recordWordStat}
+                  addMistake={addMistake}
+                />
+              </section>
+            )}
+
+            {/* TAB 7.57: ÇIKMIŞ KELİMELER CAMP SECTION */}
+            {selectedCategory && activeTab === 'cikmis-camp' && (
+              <section id="screen-cikmis-camp" className="app-screen active animate-fade-in">
+                <CampSection
+                  key="cikmis-camp"
+                  initialCampType="cikmis_kelimeler"
                   selectedCategory={selectedCategory}
                   awardPetXP={awardPetXP}
                   triggerConfetti={triggerConfetti}
@@ -3520,10 +3607,71 @@ function App() {
                   </p>
                 </div>
 
+                {/* Filters Row */}
+                <div style={{
+                  display: 'flex',
+                  gap: '12px',
+                  flexWrap: 'wrap',
+                  padding: '0 8px',
+                  marginBottom: '8px'
+                }}>
+                  {/* Category Filter */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: '180px' }}>
+                    <label style={{ fontSize: '0.68rem', fontWeight: 'bold', color: '#94a3b8' }}>Kategori Seçin</label>
+                    <select
+                      value={achievementCategoryFilter}
+                      onChange={(e) => setAchievementCategoryFilter(e.target.value)}
+                      style={{
+                        padding: '8px 12px',
+                        fontSize: '0.78rem',
+                        fontWeight: 'bold',
+                        borderRadius: '10px',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        background: 'rgba(15,23,42,0.6)',
+                        color: 'white',
+                        outline: 'none',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <option value="all">Tüm Kategoriler 📂</option>
+                      <option value="first_step">Soru Avcısı 🏁</option>
+                      <option value="correct_strike">İsabet Şampiyonu 🎯</option>
+                      <option value="word_master">Kelime Sihirbazı 🦁</option>
+                      <option value="grammar_master">Dilbilgisi Ustası 📚</option>
+                      <option value="on_fire">Günlük Seri 🔥</option>
+                      <option value="gem_collector">Cevher Koleksiyoneri 💎</option>
+                    </select>
+                  </div>
+
+                  {/* Status Filter */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: '180px' }}>
+                    <label style={{ fontSize: '0.68rem', fontWeight: 'bold', color: '#94a3b8' }}>Durum</label>
+                    <select
+                      value={achievementStatusFilter}
+                      onChange={(e) => setAchievementStatusFilter(e.target.value)}
+                      style={{
+                        padding: '8px 12px',
+                        fontSize: '0.78rem',
+                        fontWeight: 'bold',
+                        borderRadius: '10px',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        background: 'rgba(15,23,42,0.6)',
+                        color: 'white',
+                        outline: 'none',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <option value="all">Tümü (Hepsi) 🌟</option>
+                      <option value="completed">Başarılanlar ✔️</option>
+                      <option value="incomplete">Başarılmayanlar 🔒</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div className="glass-card animate-scale-in" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(251, 191, 36, 0.15)' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', maxHeight: '600px', overflowY: 'auto', paddingRight: '10px' }}>
-                    {getAchievementsList().map(ach => {
-                      const tier = getAchievementTier(ach.id, ach.value, ach.target);
+                    {getFilteredAchievements().map(ach => {
+                      const tier = ach.tier;
                       return (
                         <div
                           key={ach.id}
