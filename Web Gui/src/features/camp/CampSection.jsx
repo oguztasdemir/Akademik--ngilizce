@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import grammarCampDb from '@dataset/yokdil/genel/grammar_camp.json';
 import { handlePrintPDF, handlePrintCikmisExportPDF, handlePrintCikmisExportDocx, handlePrintCikmisExportXlsx } from './components/CampPrint';
 import CampDashboard from './components/CampDashboard';
@@ -2306,7 +2307,7 @@ const handleCikmisSwipeBack = () => {
 
   return (
     <div className="space-y-6">
-      {reportCardDay && (
+      {reportCardDay && createPortal(
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.65)', zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }} onClick={() => setReportCardDay(null)}>
           <div className="glass-card" style={{ width: '100%', maxWidth: '640px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '24px', padding: '28px', border: '1.5px solid rgba(255,255,255,0.08)', background: 'rgba(15, 23, 42, 0.98)', color: 'white', textAlign: 'left', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>
@@ -2465,7 +2466,8 @@ const handleCikmisSwipeBack = () => {
               );
             })()}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       <CampDashboard
