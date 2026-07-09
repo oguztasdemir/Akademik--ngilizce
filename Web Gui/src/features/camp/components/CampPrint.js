@@ -1,5 +1,3 @@
-import html2pdf from 'html2pdf.js';
-
 export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, totalCampDays) => {
   const printWindow = window.open('', '_blank', 'width=850,height=950');
   if (!printWindow) {
@@ -23,13 +21,12 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
     const knownWords = wordsList.filter(w => swipeResults[w.english] !== false);
     const unknownWords = wordsList.filter(w => swipeResults[w.english] === false);
 
-    // Sort alphabetically
     knownWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
     unknownWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
 
     const renderCikmisRows = (list) => {
       if (list.length === 0) {
-        return `<tr><td colspan="3" style="padding: 16px; text-align: center; color: #94a3b8; font-style: italic;">Bu grupta kelime bulunmamaktadır.</td></tr>`;
+        return '<tr><td colspan="3" style="padding: 16px; text-align: center; color: #94a3b8; font-style: italic;">Bu grupta kelime bulunmamaktadır.</td></tr>';
       }
       return list.map((w, idx) => `
         <tr style="border-bottom: 1px solid #f1f5f9;">
@@ -107,6 +104,8 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
     <html>
       <head>
         <title>${titleText}</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <style>
           body { 
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -165,13 +164,40 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
           }
           @media print {
             body { padding: 0; }
-            .no-print { display: none; }
+            .print-control-bar { display: none !important; }
           }
         </style>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
       </head>
       <body>
+        <!-- Progress Bar Overlay -->
+        <div id="progress-overlay" style="
+          display: none;
+          position: fixed;
+          top: 0; left: 0; width: 100%; height: 100%;
+          background: rgba(15, 23, 42, 0.9);
+          backdrop-filter: blur(8px);
+          z-index: 99999;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-family: system-ui, -apple-system, sans-serif;
+        ">
+          <div style="background: rgba(30, 41, 59, 0.95); padding: 30px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); width: 340px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+            <div style="font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; color: #10b981;">🔄 PDF Raporu Hazırlanıyor</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 20px;">Lütfen bekleyin, sayfalar hazırlanıyor.</div>
+            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; margin-bottom: 12px;">
+              <div id="progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); transition: width 0.1s;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 8px;">
+              <span>İlerleme:</span>
+              <span id="progress-text">0%</span>
+            </div>
+            <div id="progress-time" style="font-size: 0.72rem; color: #cbd5e1; font-style: italic;">Hesaplanıyor...</div>
+          </div>
+        </div>
+
         <div class="print-control-bar" style="
           display: flex;
           justify-content: space-between;
@@ -184,7 +210,7 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
           margin-bottom: 20px;
           border-radius: 8px;
         ">
-          <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
+          <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Rapor Önizleme</div>
           <div style="display: flex; gap: 8px;">
             <button onclick="downloadPDF()" style="
               background: #10b981;
@@ -231,6 +257,106 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
         </div>
         ${bodyContent}
 
+        <script>
+          async function downloadPDF() {
+            const controlBar = document.querySelector('.print-control-bar');
+            const progressOverlay = document.getElementById('progress-overlay');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const progressTime = document.getElementById('progress-time');
+
+            controlBar.style.display = 'none';
+            progressOverlay.style.display = 'flex';
+
+            const rows = Array.from(document.querySelectorAll('tbody tr'));
+            const totalRows = rows.length;
+            
+            if (totalRows === 0) {
+              alert("Yazdırılacak veri bulunamadı.");
+              progressOverlay.style.display = 'none';
+              controlBar.style.display = 'flex';
+              return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const margin = 10;
+            const contentWidth = pdfWidth - 2 * margin;
+
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'fixed';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.top = '0';
+            tempContainer.style.width = '750px';
+            tempContainer.style.background = '#ffffff';
+            tempContainer.style.padding = '20px';
+            document.body.appendChild(tempContainer);
+
+            const styleTag = document.createElement('style');
+            styleTag.innerHTML = "table { width: 100%; border-collapse: collapse; margin-top: 10px; } th { background: #f1f5f9; padding: 10px; text-align: left; font-size: 12px; font-weight: bold; color: #475569; border-bottom: 2px solid #cbd5e1; } td { padding: 9px; font-size: 11px; color: #334155; border-bottom: 1px solid #e2e8f0; }";
+            tempContainer.appendChild(styleTag);
+
+            const originalHeader = document.querySelector('thead').innerHTML;
+            const chunkSize = 25;
+            const totalChunks = Math.ceil(totalRows / chunkSize);
+            const startTime = Date.now();
+
+            for (let i = 0; i < totalChunks; i++) {
+              const existingTable = tempContainer.querySelector('table');
+              if (existingTable) tempContainer.removeChild(existingTable);
+
+              const chunkTable = document.createElement('table');
+              const thead = document.createElement('thead');
+              thead.innerHTML = originalHeader;
+              chunkTable.appendChild(thead);
+
+              const tbody = document.createElement('tbody');
+              const startIdx = i * chunkSize;
+              const endIdx = Math.min(startIdx + chunkSize, totalRows);
+              
+              for (let r = startIdx; r < endIdx; r++) {
+                tbody.appendChild(rows[r].cloneNode(true));
+              }
+              chunkTable.appendChild(tbody);
+              tempContainer.appendChild(chunkTable);
+
+              const canvas = await html2canvas(tempContainer, {
+                scale: 1.5,
+                useCORS: true,
+                logging: false
+              });
+
+              const imgData = canvas.toDataURL('image/jpeg', 0.95);
+              const imgHeight = (canvas.height * contentWidth) / canvas.width;
+
+              if (i > 0) {
+                pdf.addPage();
+              }
+              pdf.addImage(imgData, 'JPEG', margin, margin, contentWidth, imgHeight);
+
+              const progress = Math.round(((i + 1) / totalChunks) * 100);
+              progressBar.style.width = progress + '%';
+              progressText.innerText = progress + '%';
+
+              const elapsed = Date.now() - startTime;
+              const avgTimePerChunk = elapsed / (i + 1);
+              const remainingChunks = totalChunks - (i + 1);
+              const estRemainingMs = remainingChunks * avgTimePerChunk;
+              const estRemainingSec = Math.ceil(estRemainingMs / 1000);
+              progressTime.innerText = "Tahmini Kalan Süre: " + estRemainingSec + " saniye";
+
+              await new Promise(resolve => setTimeout(resolve, 30));
+            }
+
+            document.body.removeChild(tempContainer);
+            pdf.save("YOKDIL_Akademik_Rapor.pdf");
+
+            progressOverlay.style.display = 'none';
+            controlBar.style.display = 'flex';
+          }
+        </script>
       </body>
     </html>
   `);
@@ -254,7 +380,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
 
   const renderStudiedRows = () => {
     if (studiedWords.length === 0) {
-      return `<tr><td colspan="4" style="padding: 16px; text-align: center; color: #94a3b8; font-style: italic;">Henüz bu modda çalışılmış kelime bulunmamaktadır.</td></tr>`;
+      return '<tr><td colspan="4" style="padding: 16px; text-align: center; color: #94a3b8; font-style: italic;">Henüz bu modda çalışılmış kelime bulunmamaktadır.</td></tr>';
     }
     return studiedWords.map((w, idx) => {
       let statusHtml = '';
@@ -281,7 +407,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
 
   const renderUnstudiedRows = () => {
     if (unstudiedWords.length === 0) {
-      return `<tr><td colspan="3" style="padding: 16px; text-align: center; color: #94a3b8; font-style: italic;">Tüm kelimeler çalışılmıştır! 🎉</td></tr>`;
+      return '<tr><td colspan="3" style="padding: 16px; text-align: center; color: #94a3b8; font-style: italic;">Tüm kelimeler çalışılmıştır! 🎉</td></tr>';
     }
     return unstudiedWords.map((w, idx) => `
       <tr style="border-bottom: 1px solid #f1f5f9;">
@@ -304,6 +430,8 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
       <head>
         <title>YOKDIL_${categoryText.replace(/\s+/g, '_')}_Kelime_Kampi_Karne</title>
         <meta charset="utf-8">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <style>
           body { font-family: 'Inter', system-ui, -apple-system, sans-serif; padding: 30px; color: #1e293b; line-height: 1.5; }
           h1, h2, h3 { color: #0f172a; margin-top: 0; }
@@ -317,9 +445,36 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
           }
         </style>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
       </head>
       <body>
+        <!-- Progress Bar Overlay -->
+        <div id="progress-overlay" style="
+          display: none;
+          position: fixed;
+          top: 0; left: 0; width: 100%; height: 100%;
+          background: rgba(15, 23, 42, 0.9);
+          backdrop-filter: blur(8px);
+          z-index: 99999;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-family: system-ui, -apple-system, sans-serif;
+        ">
+          <div style="background: rgba(30, 41, 59, 0.95); padding: 30px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); width: 340px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+            <div style="font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; color: #10b981;">🔄 PDF Raporu Hazırlanıyor</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 20px;">Lütfen bekleyin, sayfalar hazırlanıyor.</div>
+            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; margin-bottom: 12px;">
+              <div id="progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); transition: width 0.1s;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 8px;">
+              <span>İlerleme:</span>
+              <span id="progress-text">0%</span>
+            </div>
+            <div id="progress-time" style="font-size: 0.72rem; color: #cbd5e1; font-style: italic;">Hesaplanıyor...</div>
+          </div>
+        </div>
+
         <div class="print-control-bar" style="
           display: flex;
           justify-content: space-between;
@@ -388,52 +543,135 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
           </div>
         </div>
 
-        <h3>🟢 Çalışılmış ve Değerlendirilmiş Kelimeler</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Kelime (İngilizce)</th>
-              <th>Türkçe Anlamı</th>
-              <th style="text-align: center;">Durum / Statü</th>
-              <th style="border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${renderStudiedRows()}
-          </tbody>
-        </table>
+        <div id="content-to-print">
+          <h3>🟢 Çalışılmış ve Değerlendirilmiş Kelimeler</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Kelime (İngilizce)</th>
+                <th>Türkçe Anlamı</th>
+                <th style="text-align: center;">Durum / Statü</th>
+                <th style="border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${renderStudiedRows()}
+            </tbody>
+          </table>
 
-        <h3>⚪ Henüz Çalışılmamış / Bilinmeyen Kelimeler (${unstudiedWords.length} Adet)</h3>
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 30%;">Kelime (İngilizce)</th>
-              <th style="width: 50%;">Türkçe Anlamı</th>
-              <th style="width: 20%; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${renderUnstudiedRows()}
-          </tbody>
-        </table>
+          <h3>⚪ Henüz Çalışılmamış / Bilinmeyen Kelimeler (${unstudiedWords.length} Adet)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 30%;">Kelime (İngilizce)</th>
+                <th style="width: 50%;">Türkçe Anlamı</th>
+                <th style="width: 20%; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${renderUnstudiedRows()}
+            </tbody>
+          </table>
+        </div>
+
         <script>
-          function downloadPDF() {
-            const element = document.body;
+          async function downloadPDF() {
             const controlBar = document.querySelector('.print-control-bar');
+            const progressOverlay = document.getElementById('progress-overlay');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const progressTime = document.getElementById('progress-time');
+
             controlBar.style.display = 'none';
-            const opt = {
-              margin: [10, 10, 10, 10],
-              filename: 'YOKDIL_Kelime_Kampi_Karne.pdf',
-              image: { type: 'jpeg', quality: 0.98 },
-              html2canvas: { scale: 2, logging: false, useCORS: true },
-              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save().then(() => {
+            progressOverlay.style.display = 'flex';
+
+            const rows = Array.from(document.querySelectorAll('tbody tr'));
+            const totalRows = rows.length;
+            
+            if (totalRows === 0) {
+              alert("Yazdırılacak veri bulunamadı.");
+              progressOverlay.style.display = 'none';
               controlBar.style.display = 'flex';
-            }).catch(err => {
-              console.error(err);
-              controlBar.style.display = 'flex';
-            });
+              return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const margin = 10;
+            const contentWidth = pdfWidth - 2 * margin;
+
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'fixed';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.top = '0';
+            tempContainer.style.width = '750px';
+            tempContainer.style.background = '#ffffff';
+            tempContainer.style.padding = '20px';
+            document.body.appendChild(tempContainer);
+
+            const styleTag = document.createElement('style');
+            styleTag.innerHTML = "table { width: 100%; border-collapse: collapse; margin-top: 10px; } th { background: #f1f5f9; padding: 10px; text-align: left; font-size: 12px; font-weight: bold; color: #475569; border-bottom: 2px solid #cbd5e1; } td { padding: 9px; font-size: 11px; color: #334155; border-bottom: 1px solid #e2e8f0; } .badge-bildigim { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.72rem; } .badge-bilmedigim { background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.72rem; }";
+            tempContainer.appendChild(styleTag);
+
+            const originalHeader = document.querySelector('thead').innerHTML;
+            const chunkSize = 25;
+            const totalChunks = Math.ceil(totalRows / chunkSize);
+            const startTime = Date.now();
+
+            for (let i = 0; i < totalChunks; i++) {
+              const existingTable = tempContainer.querySelector('table');
+              if (existingTable) tempContainer.removeChild(existingTable);
+
+              const chunkTable = document.createElement('table');
+              const thead = document.createElement('thead');
+              thead.innerHTML = originalHeader;
+              chunkTable.appendChild(thead);
+
+              const tbody = document.createElement('tbody');
+              const startIdx = i * chunkSize;
+              const endIdx = Math.min(startIdx + chunkSize, totalRows);
+              
+              for (let r = startIdx; r < endIdx; r++) {
+                tbody.appendChild(rows[r].cloneNode(true));
+              }
+              chunkTable.appendChild(tbody);
+              tempContainer.appendChild(chunkTable);
+
+              const canvas = await html2canvas(tempContainer, {
+                scale: 1.5,
+                useCORS: true,
+                logging: false
+              });
+
+              const imgData = canvas.toDataURL('image/jpeg', 0.95);
+              const imgHeight = (canvas.height * contentWidth) / canvas.width;
+
+              if (i > 0) {
+                pdf.addPage();
+              }
+              pdf.addImage(imgData, 'JPEG', margin, margin, contentWidth, imgHeight);
+
+              const progress = Math.round(((i + 1) / totalChunks) * 100);
+              progressBar.style.width = progress + '%';
+              progressText.innerText = progress + '%';
+
+              const elapsed = Date.now() - startTime;
+              const avgTimePerChunk = elapsed / (i + 1);
+              const remainingChunks = totalChunks - (i + 1);
+              const estRemainingMs = remainingChunks * avgTimePerChunk;
+              const estRemainingSec = Math.ceil(estRemainingMs / 1000);
+              progressTime.innerText = "Tahmini Kalan Süre: " + estRemainingSec + " saniye";
+
+              await new Promise(resolve => setTimeout(resolve, 30));
+            }
+
+            document.body.removeChild(tempContainer);
+            pdf.save("YOKDIL_Kelime_Kampi_Karne.pdf");
+
+            progressOverlay.style.display = 'none';
+            controlBar.style.display = 'flex';
           }
         </script>
       </body>
@@ -541,26 +779,6 @@ export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, 
             ${renderUnstudiedRows()}
           </tbody>
         </table>
-        <script>
-          function downloadPDF() {
-            const element = document.body;
-            const controlBar = document.querySelector('.print-control-bar');
-            controlBar.style.display = 'none';
-            const opt = {
-              margin: [10, 10, 10, 10],
-              filename: 'YOKDIL_Kelime_Kampi_Karne.pdf',
-              image: { type: 'jpeg', quality: 0.98 },
-              html2canvas: { scale: 2, logging: false, useCORS: true },
-              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save().then(() => {
-              controlBar.style.display = 'flex';
-            }).catch(err => {
-              console.error(err);
-              controlBar.style.display = 'flex';
-            });
-          }
-        </script>
       </body>
     </html>
   `;
@@ -611,18 +829,6 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
     allWords.push({ english: w.english, turkish: w.turkish, status: 'Çalışılmadı' });
   });
 
-  const buildHeaderRows = (title) => `
-   <Row><Cell ss:MergeAcross="3"><Data ss:Type="String">${escapeXml(title)}</Data></Cell></Row>
-   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Rapor Tarihi ve Saati:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="String">${escapeXml(reportDateTime)}</Data></Cell></Row>
-   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Toplam Kelime Havuzu:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${totalWordsCount}</Data></Cell></Row>
-   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Toplam Çalışılan Kelime:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${studiedWordsCount}</Data></Cell></Row>
-   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Çalışılmayan (Kalan):</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${unstudiedWordsCount}</Data></Cell></Row>
-   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Bilinen / Doğru Kelimeler:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${knownWords.length}</Data></Cell></Row>
-   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Bilinmeyen / Yanlış Kelimeler:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="Number">${unknownWords.length}</Data></Cell></Row>
-   <Row><Cell ss:MergeAcross="1"><Data ss:Type="String">Başarı / Bilme Yüzdesi:</Data></Cell><Cell ss:MergeAcross="1"><Data ss:Type="String">%${knowledgePercent}</Data></Cell></Row>
-   <Row></Row>
-  `;
-
   const buildSheetRows = (list) => {
     return list.map((w, idx) => `
     <Row>
@@ -642,17 +848,84 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
  xmlns:html="http://www.w3.org/TR/REC-html40">
  <Styles>
   <Style ss:ID="Header">
-   <Font ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Font ss:Bold="1" ss:Color="#FFFFFF" ss:Size="11"/>
    <Interior ss:Color="#4F46E5" ss:Pattern="Solid"/>
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+  </Style>
+  <Style ss:ID="Title">
+   <Font ss:Bold="1" ss:Color="#1E1B4B" ss:Size="13"/>
+   <Alignment ss:Horizontal="Center"/>
+  </Style>
+  <Style ss:ID="CardTitle">
+   <Font ss:Bold="1" ss:Color="#4F46E5" ss:Size="11"/>
+   <Interior ss:Color="#F1F5F9" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="StatVal">
+   <Font ss:Bold="1" ss:Color="#0F172A" ss:Size="11"/>
+   <Alignment ss:Horizontal="Right"/>
+  </Style>
+  <Style ss:ID="StatValHighlight">
+   <Font ss:Bold="1" ss:Color="#10B981" ss:Size="11"/>
+   <Alignment ss:Horizontal="Right"/>
   </Style>
  </Styles>
+ <Worksheet ss:Name="Genel Özet">
+  <Table>
+   <Column ss:Width="200"/>
+   <Column ss:Width="160"/>
+   <Row></Row>
+   <Row ss:Height="24">
+    <Cell ss:MergeAcross="1" ss:StyleID="Title"><Data ss:Type="String">YÖKDİL GENEL AKADEMİK GELİŞİM RAPORU</Data></Cell>
+   </Row>
+   <Row></Row>
+   <Row>
+    <Cell ss:StyleID="CardTitle"><Data ss:Type="String">Rapor Metriği</Data></Cell>
+    <Cell ss:StyleID="CardTitle"><Data ss:Type="String">Değer / Sonuç</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">🗓️ Rapor Tarihi ve Saati:</Data></Cell>
+    <Cell ss:StyleID="StatVal"><Data ss:Type="String">${escapeXml(reportDateTime)}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">🏫 Alan / Kategori:</Data></Cell>
+    <Cell ss:StyleID="StatVal"><Data ss:Type="String">YÖKDİL ${escapeXml(categoryText)}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">📖 Çalışma Modu:</Data></Cell>
+    <Cell ss:StyleID="StatVal"><Data ss:Type="String">${escapeXml(modeText)}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">📚 Toplam Kelime Havuzu:</Data></Cell>
+    <Cell ss:StyleID="StatVal"><Data ss:Type="Number">${totalWordsCount}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">🔄 Toplam Çalışılan Kelime:</Data></Cell>
+    <Cell ss:StyleID="StatVal"><Data ss:Type="Number">${studiedWordsCount}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">⚪ Çalışılmayan (Kalan):</Data></Cell>
+    <Cell ss:StyleID="StatVal"><Data ss:Type="Number">${unstudiedWordsCount}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">🟢 Bilinen / Doğru Kelimeler:</Data></Cell>
+    <Cell ss:StyleID="StatVal"><Data ss:Type="Number">${knownWords.length}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">🔴 Bilinmeyen / Yanlış Kelimeler:</Data></Cell>
+    <Cell ss:StyleID="StatVal"><Data ss:Type="Number">${unknownWords.length}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">📈 Başarı / Bilme Yüzdesi:</Data></Cell>
+    <Cell ss:StyleID="StatValHighlight"><Data ss:Type="String">%${knowledgePercent}</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
  <Worksheet ss:Name="Tümü">
   <Table>
    <Column ss:Width="60"/>
    <Column ss:Width="160"/>
    <Column ss:Width="260"/>
    <Column ss:Width="130"/>
-   ${buildHeaderRows("TÜM KELİMELER LİSTESİ")}
    <Row ss:StyleID="Header">
     <Cell><Data ss:Type="String">Sıra No</Data></Cell>
     <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
@@ -668,7 +941,6 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
    <Column ss:Width="160"/>
    <Column ss:Width="260"/>
    <Column ss:Width="130"/>
-   ${buildHeaderRows("BİLMEDİĞİM KELİMELER")}
    <Row ss:StyleID="Header">
     <Cell><Data ss:Type="String">Sıra No</Data></Cell>
     <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
@@ -684,7 +956,6 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
    <Column ss:Width="160"/>
    <Column ss:Width="260"/>
    <Column ss:Width="130"/>
-   ${buildHeaderRows("BİLDİĞİM KELİMELER")}
    <Row ss:StyleID="Header">
     <Cell><Data ss:Type="String">Sıra No</Data></Cell>
     <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
@@ -700,7 +971,6 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
    <Column ss:Width="160"/>
    <Column ss:Width="260"/>
    <Column ss:Width="130"/>
-   ${buildHeaderRows("HENÜZ ÇALIŞILMAYAN KELİMELER")}
    <Row ss:StyleID="Header">
     <Cell><Data ss:Type="String">Sıra No</Data></Cell>
     <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
