@@ -25,6 +25,13 @@ const ROOM_BACKGROUNDS = {
       border: '1px solid rgba(16,185,129,0.2)'
     }
   },
+  forest: {
+    name: '🌳 Doğal Orman',
+    style: {
+      backgroundImage: 'radial-gradient(circle at 50% -20%, rgba(250,204,21,0.18) 0%, transparent 60%), radial-gradient(circle at 10% 80%, rgba(16,185,129,0.15) 0%, transparent 50%), radial-gradient(circle at 90% 85%, rgba(4,120,87,0.2) 0%, transparent 50%), linear-gradient(135deg, #064e3b 0%, #022c22 100%)',
+      border: '1px solid rgba(16,185,129,0.25)'
+    }
+  },
   history: {
     name: '🏛️ Antik Harabeler',
     style: {
@@ -196,6 +203,76 @@ const PetSection = ({ activeTab, petXp, petLevel, petConfig, setPetConfig }) => 
               }}>
                 ⚛️
               </div>
+            )}
+
+            {/* Forest Trees and Mountain Overlays */}
+            {selectedBg === 'forest' && (
+              <>
+                {/* Sun rays */}
+                <div style={{ position: 'absolute', top: 0, left: '20%', width: '40px', height: '100%', background: 'linear-gradient(to bottom, rgba(253,224,71,0.06), transparent)', transform: 'skewX(-20deg)', pointerEvents: 'none', zIndex: 0 }} />
+                <div style={{ position: 'absolute', top: 0, left: '45%', width: '50px', height: '100%', background: 'linear-gradient(to bottom, rgba(253,224,71,0.04), transparent)', transform: 'skewX(-20deg)', pointerEvents: 'none', zIndex: 0 }} />
+                
+                {/* Distant Mountains */}
+                <div style={{ position: 'absolute', bottom: '20px', left: '-20px', width: '120px', height: '60px', background: 'rgba(6,78,59,0.4)', borderRadius: '100% 100% 0 0', transform: 'scaleY(0.7)', pointerEvents: 'none', zIndex: 0 }} />
+                <div style={{ position: 'absolute', bottom: '15px', right: '-10px', width: '140px', height: '70px', background: 'rgba(4,120,87,0.3)', borderRadius: '100% 100% 0 0', transform: 'scaleY(0.6)', pointerEvents: 'none', zIndex: 0 }} />
+
+                {/* Trees Layer */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '10px',
+                  left: '15px',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  gap: '8px',
+                  pointerEvents: 'none',
+                  zIndex: 0
+                }}>
+                  {/* Tree 1 */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ width: '0', height: '0', borderLeft: '16px solid transparent', borderRight: '16px solid transparent', borderBottom: '24px solid rgba(16,185,129,0.35)' }} />
+                    <div style={{ width: '0', height: '0', borderLeft: '12px solid transparent', borderRight: '12px solid transparent', borderBottom: '18px solid rgba(52,211,153,0.35)', marginTop: '-12px' }} />
+                    <div style={{ width: '4px', height: '10px', background: 'rgba(120,53,4,0.5)' }} />
+                  </div>
+                  {/* Tree 2 */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', transform: 'scale(1.2)' }}>
+                    <div style={{ width: '0', height: '0', borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderBottom: '20px solid rgba(4,120,87,0.4)' }} />
+                    <div style={{ width: '0', height: '0', borderLeft: '10px solid transparent', borderRight: '10px solid transparent', borderBottom: '16px solid rgba(16,185,129,0.4)', marginTop: '-10px' }} />
+                    <div style={{ width: '4px', height: '8px', background: 'rgba(120,53,4,0.5)' }} />
+                  </div>
+                </div>
+
+                {/* Trees Right Side */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '10px',
+                  right: '20px',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  gap: '10px',
+                  pointerEvents: 'none',
+                  zIndex: 0
+                }}>
+                  {/* Tree 3 */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', transform: 'scale(1.1)' }}>
+                    <div style={{ width: '0', height: '0', borderLeft: '15px solid transparent', borderRight: '15px solid transparent', borderBottom: '22px solid rgba(16,185,129,0.35)' }} />
+                    <div style={{ width: '0', height: '0', borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderBottom: '16px solid rgba(52,211,153,0.35)', marginTop: '-11px' }} />
+                    <div style={{ width: '4px', height: '10px', background: 'rgba(120,53,4,0.5)' }} />
+                  </div>
+                </div>
+
+                {/* Grass Floor */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '14px',
+                  background: 'linear-gradient(to top, rgba(6,78,59,0.7), rgba(16,185,129,0.4))',
+                  borderRadius: '0 0 16px 16px',
+                  pointerEvents: 'none',
+                  zIndex: 0
+                }} />
+              </>
             )}
 
             {/* Ancient Greek Columns overlay for History */}

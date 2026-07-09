@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import fallbackPassages from '@dataset/yokdil/genel/reading_passages.json';
+import fallbackDictFen from '@dataset/yokdil/fen/dictionary.json';
+import fallbackDictSosyal from '@dataset/yokdil/sosyal/dictionary.json';
+import fallbackDictSaglik from '@dataset/yokdil/saglik/dictionary.json';
 import { BookOpen, Check, X, HelpCircle, ArrowRight, Volume2, Award, BookOpenCheck } from 'lucide-react';
 
 const ParagraphsSection = ({
@@ -33,6 +36,7 @@ const ParagraphsSection = ({
 
   // Translation History State
   const [translationHistory, setTranslationHistory] = useState([]);
+  const [hoveredSentenceIdx, setHoveredSentenceIdx] = useState(null);
   // Drag selection states
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartIdx, setDragStartIdx] = useState(null);
@@ -107,26 +111,24 @@ const ParagraphsSection = ({
     setTranslatedWord(rawWord);
     setTranslationText('Çeviriliyor...');
 
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/translate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: cleanWord })
-      });
-      const data = await res.json();
-      if (data.translation) {
-        setTranslationText(data.translation);
+    const doLocalFallbackTranslation = () => {
+      const category = selectedCategory || 'fen';
+      let dict = fallbackDictFen;
+      if (category === 'sosyal') dict = fallbackDictSosyal;
+      else if (category === 'saglik') dict = fallbackDictSaglik;
 
-        if (dragRange) {
-          setCurrentHighlight({
-            start: dragRange.start,
-            end: dragRange.end,
-            origin: origin,
-            english: origin === 'en' ? rawWord : data.translation,
-            turkish: origin === 'en' ? data.translation : rawWord,
-            sentenceIdx: sIdx
-          });
-        }
+      const matchedTr = dict[cleanWord] || dict[rawWord.toLowerCase()] || '';
+      if (matchedTr) {
+        setTranslationText(matchedTr);
+        
+        setCurrentHighlight({
+          start: dragRange ? dragRange.start : sIdx * 10,
+          end: dragRange ? dragRange.end : sIdx * 10 + 5,
+          origin: origin,
+          english: origin === 'en' ? rawWord : matchedTr,
+          turkish: origin === 'en' ? matchedTr : rawWord,
+          sentenceIdx: sIdx
+        });
 
         if (origin === 'en' && addMistake) {
           const enSentences = selectedPassage && selectedPassage.passage ? selectedPassage.passage.split(/(?<=[.?!])\s+/) : [];
@@ -134,25 +136,82 @@ const ParagraphsSection = ({
           addMistake({
             type: 'word',
             word: cleanWord,
-            meaning: data.translation,
+            meaning: matchedTr,
             source: 'reading',
             sentence: enSentences[sIdx] || '',
             translation: trSentences[sIdx] || ''
           });
         }
 
-        // Add to history
         setTranslationHistory(prev => {
-          const keyWord = origin === 'en' ? cleanWord : data.translation.toLowerCase();
-          const trWord = origin === 'en' ? data.translation : cleanWord;
+          const keyWord = origin === 'en' ? cleanWord : matchedTr.toLowerCase();
+          const trWord = origin === 'en' ? matchedTr : cleanWord;
           const filtered = prev.filter(item => item.english.toLowerCase() !== keyWord);
           return [{ english: keyWord, turkish: trWord }, ...filtered].slice(0, 10);
         });
       } else {
-        setTranslationText('Çeviri bulunamadı.');
+        // Just highlight sentence context without word translation
+        setTranslationText('Sözlükte doğrudan karşılık bulunamadı.');
+        setCurrentHighlight({
+          start: 0,
+          end: 0,
+          origin: origin,
+          english: rawWord,
+          turkish: '(Cümle Hizalaması)',
+          sentenceIdx: sIdx
+        });
       }
-    } catch (e) {
-      setTranslationText('Çeviri hatası.');
+    };
+
+    if (BACKEND_URL) {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/translate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: cleanWord })
+        });
+        const data = await res.json();
+        if (data.translation) {
+          setTranslationText(data.translation);
+
+          if (dragRange) {
+            setCurrentHighlight({
+              start: dragRange.start,
+              end: dragRange.end,
+              origin: origin,
+              english: origin === 'en' ? rawWord : data.translation,
+              turkish: origin === 'en' ? data.translation : rawWord,
+              sentenceIdx: sIdx
+            });
+          }
+
+          if (origin === 'en' && addMistake) {
+            const enSentences = selectedPassage && selectedPassage.passage ? selectedPassage.passage.split(/(?<=[.?!])\s+/) : [];
+            const trSentences = selectedPassage && selectedPassage.translation ? selectedPassage.translation.split(/(?<=[.?!])\s+/) : [];
+            addMistake({
+              type: 'word',
+              word: cleanWord,
+              meaning: data.translation,
+              source: 'reading',
+              sentence: enSentences[sIdx] || '',
+              translation: trSentences[sIdx] || ''
+            });
+          }
+
+          setTranslationHistory(prev => {
+            const keyWord = origin === 'en' ? cleanWord : data.translation.toLowerCase();
+            const trWord = origin === 'en' ? data.translation : cleanWord;
+            const filtered = prev.filter(item => item.english.toLowerCase() !== keyWord);
+            return [{ english: keyWord, turkish: trWord }, ...filtered].slice(0, 10);
+          });
+        } else {
+          doLocalFallbackTranslation();
+        }
+      } catch (e) {
+        doLocalFallbackTranslation();
+      }
+    } else {
+      doLocalFallbackTranslation();
     }
   };
 
@@ -387,6 +446,9 @@ const ParagraphsSection = ({
           style.border = '1px solid #818cf8';
           style.color = '#e0e7ff';
           style.fontWeight = 'bold';
+        } else if (sIdx === hoveredSentenceIdx) {
+          style.background = 'rgba(99, 102, 241, 0.12)';
+          style.borderBottom = '1.5px dashed rgba(99, 102, 241, 0.5)';
         }
 
         return (
@@ -404,6 +466,13 @@ const ParagraphsSection = ({
               onMouseEnter={() => {
                 if (isDragging && dragOrigin === 'en') {
                   setDragEndIdx(globalIdx);
+                } else {
+                  setHoveredSentenceIdx(sIdx);
+                }
+              }}
+              onMouseLeave={() => {
+                if (!isDragging) {
+                  setHoveredSentenceIdx(null);
                 }
               }}
               style={style}
@@ -469,6 +538,9 @@ const ParagraphsSection = ({
           style.border = '1px solid #10b981';
           style.color = '#ecfdf5';
           style.fontWeight = 'bold';
+        } else if (sIdx === hoveredSentenceIdx) {
+          style.background = 'rgba(16, 185, 129, 0.12)';
+          style.borderBottom = '1.5px dashed rgba(16, 185, 129, 0.5)';
         }
 
         return (
@@ -486,6 +558,13 @@ const ParagraphsSection = ({
               onMouseEnter={() => {
                 if (isDragging && dragOrigin === 'tr') {
                   setDragEndIdx(globalIdx);
+                } else {
+                  setHoveredSentenceIdx(sIdx);
+                }
+              }}
+              onMouseLeave={() => {
+                if (!isDragging) {
+                  setHoveredSentenceIdx(null);
                 }
               }}
               style={style}

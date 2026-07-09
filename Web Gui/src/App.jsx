@@ -31,6 +31,19 @@ import fallbackExamsFen from '@dataset/yokdil/fen/exams.json';
 import fallbackExamsSosyal from '@dataset/yokdil/sosyal/exams.json';
 import fallbackExamsSaglik from '@dataset/yokdil/saglik/exams.json';
 
+const lectureModules = import.meta.glob('@dataset/yokdil/genel/lectures/*.md', { query: '?raw', import: 'default' });
+
+const getLectureContent = async (filename) => {
+  const key = Object.keys(lectureModules).find(k => k.endsWith(filename));
+  if (key) {
+    const loader = lectureModules[key];
+    const content = await loader();
+    return content;
+  }
+  return '';
+};
+
+
 import fallbackVocabFen from '@dataset/yokdil/fen/vocab.json';
 import fallbackVocabSosyal from '@dataset/yokdil/sosyal/vocab.json';
 import fallbackVocabSaglik from '@dataset/yokdil/saglik/vocab.json';
@@ -1047,16 +1060,36 @@ function App() {
     if (!activeExamId) return;
     setExplanationLoading(true);
     const category = selectedCategory || 'fen';
-    fetch(`${BACKEND_URL}/api/${category}/exams/${activeExamId}/explain/${qIndex}`)
-      .then(res => res.json())
-      .then(data => {
-        setActiveExplanation(data);
-        setExplanationLoading(false);
-      })
-      .catch(err => {
-        console.error("Error loading explanation:", err);
-        setExplanationLoading(false);
-      });
+
+    const loadLocalExplanationFallback = () => {
+      const questionObj = selectedExam?.questions?.find(q => q.number === qIndex);
+      if (questionObj) {
+        const correctAnsOption = questionObj.correct_option || selectedExam.answers?.[qIndex - 1] || 'A';
+        const correctAnsText = questionObj.options?.[correctAnsOption] || questionObj.correct_answer || '';
+        
+        const localExplanation = {
+          explanation: `### 📖 Soru Çözüm Analizi ve Açıklaması\n\nBu soru **YÖKDİL ${category.toUpperCase()}** düzeyindeki dilbilgisi veya kelime bilgisi yetkinliğini ölçmektedir.\n\n**Soru Cümlesi:**\n> *${questionObj.text}*\n\n**Seçenekler ve Analiz:**\n${Object.entries(questionObj.options || {}).map(([key, val]) => `*   **${key})** ${val} ${key === correctAnsOption ? '✔️ *(Doğru Cevap)*' : ''}`).join('\n')}\n\n**Çözüm ve Yapısal Açıklama:**\nCümle yapısı ve dil bilgisisel bağlam incelendiğinde, boşluğa en uygun ifadenin **${correctAnsOption}) ${correctAnsText}** olduğu görülmektedir. Seçeneklerin cümle içerisindeki işlevleri ve diğer şıkların neden elendiği:\n*   Boşluğun öncesindeki ve sonrasındaki ipuçları (zarflar, bağlaçlar veya edatlar) incelendiğinde, bu şık yapısal veya anlamsal bütünlüğü sağlamaktadır.\n*   Diğer seçenekler dil bilgisi kurallarına (zaman uyumu, etken/edilgen yapılar, tekil/çoğul uyumu) veya kelime bağlamına uymamaktadır.`,
+          takeaway: `Doğru cevap ${correctAnsOption} seçeneğidir. Cümledeki ipucu yapıları ve kelime anlamları doğru cevabı doğrudan desteklemektedir.`
+        };
+        setActiveExplanation(localExplanation);
+      }
+      setExplanationLoading(false);
+    };
+
+    if (BACKEND_URL) {
+      fetch(`${BACKEND_URL}/api/${category}/exams/${activeExamId}/explain/${qIndex}`)
+        .then(res => res.json())
+        .then(data => {
+          setActiveExplanation(data);
+          setExplanationLoading(false);
+        })
+        .catch(err => {
+          console.warn("Error loading explanation from API, falling back to local generator:", err);
+          loadLocalExplanationFallback();
+        });
+    } else {
+      loadLocalExplanationFallback();
+    }
   };
 
   const startQuizSession = (mode) => {
@@ -1904,30 +1937,37 @@ function App() {
       return;
     }
     setLectureLoading(true);
-    fetch(`${BACKEND_URL}/api/lectures/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        setActiveLecture(data);
+
+    const loadLocalFallback = async (lid) => {
+      try {
+        const text = await getLectureContent(`${lid}.md`);
+        const lecInfo = FALLBACK_LECTURES.find(l => l.id === lid) || {};
+        setActiveLecture({
+          id: lid,
+          title: lecInfo.title || lid,
+          content: text || "Konu anlatım içeriği yüklenemedi."
+        });
         setLectureLoading(false);
-      })
-      .catch(err => {
-        console.warn("API load failed, falling back to local public lectures:", err);
-        fetch(`/dataset/yokdil/genel/lectures/${id}.md`)
-          .then(res => res.text())
-          .then(text => {
-            const lecInfo = FALLBACK_LECTURES.find(l => l.id === id) || {};
-            setActiveLecture({
-              id,
-              title: lecInfo.title || id,
-              content: text
-            });
-            setLectureLoading(false);
-          })
-          .catch(e => {
-            console.error("Failed to load local lecture:", e);
-            setLectureLoading(false);
-          });
-      });
+      } catch (e) {
+        console.error("Failed to load local lecture:", e);
+        setLectureLoading(false);
+      }
+    };
+
+    if (BACKEND_URL) {
+      fetch(`${BACKEND_URL}/api/lectures/${id}`)
+        .then(res => res.json())
+        .then(data => {
+          setActiveLecture(data);
+          setLectureLoading(false);
+        })
+        .catch(err => {
+          console.warn("API load failed, falling back to local prebuilt lectures:", err);
+          loadLocalFallback(id);
+        });
+    } else {
+      loadLocalFallback(id);
+    }
   };
 
   const handleAuthSuccess = (newToken, newUser) => {

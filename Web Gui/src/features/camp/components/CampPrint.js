@@ -237,144 +237,149 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
     `).join('');
   };
 
-  const wrapper = document.createElement('div');
-  wrapper.style.position = 'fixed';
-  wrapper.style.top = '0';
-  wrapper.style.left = '0';
-  wrapper.style.width = '800px';
-  wrapper.style.height = '0';
-  wrapper.style.overflow = 'hidden';
-  wrapper.style.zIndex = '-9999';
+  const printWindow = window.open('', '_blank', 'width=850,height=950');
+  if (!printWindow) {
+    alert("Popup engelleyiciyi devre dışı bırakın!");
+    return;
+  }
 
-  const container = document.createElement('div');
-  container.style.padding = '20px';
-  container.style.color = '#1e293b';
-  container.style.backgroundColor = '#ffffff';
-  container.style.width = '800px';
-  
-  wrapper.appendChild(container);
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>YOKDIL_${categoryText.replace(' ', '_')}_Kelime_Kampi_Karne</title>
+        <meta charset="utf-8">
+        <style>
+          body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #ffffff;
+            color: #1e293b;
+            padding: 30px;
+            margin: 0;
+          }
+          th {
+            background-color: #f1f5f9;
+            color: #475569;
+            border-bottom: 2px solid #cbd5e1;
+            font-weight: 700;
+            padding: 10px;
+            text-align: left;
+            font-size: 0.8rem;
+          }
+          tr {
+            border-bottom: 1px solid #e2e8f0;
+          }
+          td {
+            padding: 10px;
+            color: #334155;
+            font-size: 0.88rem;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+          }
+          .badge-bildigim {
+            color: #166534;
+            background-color: #dcfce7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+          }
+          .badge-bilmedigim {
+            color: #991b1b;
+            background-color: #fee2e2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+          }
+          h1 {
+            color: #4f46e5;
+            border-bottom: 2.5px solid #f1f5f9;
+            padding-bottom: 12px;
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-top: 0;
+          }
+          h3 {
+            color: #1e1b4b;
+            font-size: 1.15rem;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #e2e8f0;
+          }
+          .meta-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+          }
+          @media print {
+            body { padding: 0; }
+            h1 { page-break-after: avoid; }
+            h3 { page-break-after: avoid; }
+            tr { page-break-inside: avoid; }
+          }
+        </style>
+      </head>
+      <body>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2.5px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 20px;">
+          <h1 style="margin: 0; border: none; padding: 0;">📋 Kelime Kampı Karne Raporu</h1>
+          <span style="font-size: 0.9rem; color: #64748b;">\${new Date().toLocaleDateString()}</span>
+        </div>
+        
+        <div class="meta-box">
+          <div>Alan: <strong>YÖKDİL \${categoryText}</strong></div>
+          <div>Çalışma Modu: <strong>\${modeText}</strong></div>
+          <div>Çalışılan Kelime: <strong>\${studiedWords.length} Adet</strong></div>
+        </div>
 
-  container.innerHTML = `
-    <style>
-      #pdf-export-root * {
-        color: #1e293b !important;
-        box-shadow: none !important;
-        text-shadow: none !important;
-      }
-      #pdf-export-root {
-        background-color: #ffffff !important;
-        color: #1e293b !important;
-        padding: 30px !important;
-      }
-      #pdf-export-root th {
-        background-color: #f1f5f9 !important;
-        color: #475569 !important;
-        border-bottom: 2px solid #cbd5e1 !important;
-        font-weight: 700 !important;
-      }
-      #pdf-export-root tr {
-        border-bottom: 1px solid #e2e8f0 !important;
-      }
-      #pdf-export-root td {
-        color: #334155 !important;
-      }
-      #pdf-export-root td.word-english {
-        color: #0f172a !important;
-        font-weight: 600 !important;
-      }
-      #pdf-export-root .badge-bildigim {
-        color: #166534 !important;
-        background-color: #dcfce7 !important;
-        padding: 2px 8px !important;
-        border-radius: 4px !important;
-        font-weight: bold !important;
-        display: inline-block !important;
-      }
-      #pdf-export-root .badge-bilmedigim {
-        color: #991b1b !important;
-        background-color: #fee2e2 !important;
-        padding: 2px 8px !important;
-        border-radius: 4px !important;
-        font-weight: bold !important;
-        display: inline-block !important;
-      }
-      #pdf-export-root h1 {
-        color: #4f46e5 !important;
-        border-bottom: 2.5px solid #f1f5f9 !important;
-      }
-      #pdf-export-root h3 {
-        color: #1e1b4b !important;
-        border-bottom: 2px solid #e2e8f0 !important;
-      }
-      #pdf-export-root .meta-box {
-        background-color: #f8fafc !important;
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 12px !important;
-      }
-      #pdf-export-root .meta-box strong {
-        color: #0f172a !important;
-      }
-    </style>
-    <div id="pdf-export-root" style="font-family: 'Inter', sans-serif;">
-      <h1 style="color: #4f46e5; border-bottom: 2.5px solid #f1f5f9; padding-bottom: 12px; font-size: 1.7rem; font-weight: 800; margin-top: 0; display: flex; align-items: center; justify-content: space-between;">
-        <span>📋 Kelime Kampı Karne Raporu</span> 
-        <span style="font-size: 0.9rem; font-weight: normal; color: #64748b;">${new Date().toLocaleDateString()}</span>
-      </h1>
-      
-      <div class="meta-box" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 0.88rem;">
-        <div>Alan: <strong style="color: #0f172a;">YÖKDİL ${categoryText}</strong></div>
-        <div>Çalışma Modu: <strong style="color: #0f172a;">${modeText}</strong></div>
-        <div>Çalışılan Kelime: <strong style="color: #0f172a;">${studiedWords.length} Adet</strong></div>
-      </div>
+        <h3>🟢 Çalışmış ve Değerlendirilmiş Kelimeler</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 25%;">Kelime (İngilizce)</th>
+              <th style="width: 35%;">Türkçe Anlamı</th>
+              <th style="text-align: center; width: 20%;">Durum / Statü</th>
+              <th style="width: 20%; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
+            </tr>
+          </thead>
+          <tbody>
+            \${renderStudiedRows()}
+          </tbody>
+        </table>
 
-      <h3 style="color: #1e1b4b; font-size: 1.15rem; margin-top: 24px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #e2e8f0;">🟢 Çalışmış ve Değerlendirilmiş Kelimeler</h3>
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.88rem;">
-        <thead>
-          <tr style="background-color: #f1f5f9;">
-            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Kelime (İngilizce)</th>
-            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Türkçe Anlamı</th>
-            <th style="color: #475569; text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Durum / Statü</th>
-            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${renderStudiedRows()}
-        </tbody>
-      </table>
-
-      <h3 style="color: #64748b; font-size: 1.15rem; margin-top: 24px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #cbd5e1;">⚪ Henüz Çalışılmamış / Bilinmeyen Kelimeler (${unstudiedWords.length} Adet)</h3>
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.88rem;">
-        <thead>
-          <tr style="background-color: #f1f5f9;">
-            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Kelime (İngilizce)</th>
-            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Türkçe Anlamı</th>
-            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${renderUnstudiedRows()}
-        </tbody>
-      </table>
-    </div>
-  `;
-
-  const opt = {
-    margin:       [10, 10, 15, 10],
-    filename:     `YOKDIL_${categoryText.replace(' ', '_')}_Kelime_Kampi_Karne.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-
-  document.body.appendChild(wrapper);
-  html2pdf().from(container).set(opt).save().then(() => {
-    document.body.removeChild(wrapper);
-  }).catch(err => {
-    console.error(err);
-    if (document.body.contains(wrapper)) {
-      document.body.removeChild(wrapper);
-    }
-  });
+        <h3>⚪ Henüz Çalışılmamış / Bilinmeyen Kelimeler (\${unstudiedWords.length} Adet)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 30%;">Kelime (İngilizce)</th>
+              <th style="width: 50%;">Türkçe Anlamı</th>
+              <th style="width: 20%; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
+            </tr>
+          </thead>
+          <tbody>
+            \${renderUnstudiedRows()}
+          </tbody>
+        </table>
+        
+        <script>
+          window.onload = function() {
+            window.print();
+            setTimeout(function() { window.close(); }, 500);
+          };
+        </script>
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
 };;
 
 export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, selectedCategory) => {
@@ -541,7 +546,7 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
     <Cell><Data ss:Type="String">Türkçe Anlamı</Data></Cell>
     <Cell><Data ss:Type="String">Durum / Statü</Data></Cell>
    </Row>
-   \${buildSheetRows(allWords)}
+   ${buildSheetRows(allWords)}
   </Table>
  </Worksheet>
  <Worksheet ss:Name="Bilmediklerim">
