@@ -2188,8 +2188,8 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   return (
     <div className="space-y-6">
       {reportCardDay && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15, 23, 42, 0.8)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div className="glass-card" style={{ width: '100%', maxWidth: '600px', maxHeight: '85vh', overflowY: 'auto', borderRadius: '24px', padding: '28px', border: '1.5px solid var(--primary-light)', background: 'rgba(15, 23, 42, 0.95)', color: 'white', textAlign: 'left' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 1000, display: 'flex', justifyContent: 'flex-end', alignItems: 'stretch' }} onClick={() => setReportCardDay(null)}>
+          <div className="glass-card" style={{ width: '100%', maxWidth: '500px', height: '100vh', overflowY: 'auto', borderRadius: '24px 0 0 24px', padding: '28px', borderLeft: '1.5px solid var(--primary-light)', borderTop: 'none', borderRight: 'none', borderBottom: 'none', background: 'rgba(15, 23, 42, 0.96)', color: 'white', textAlign: 'left' }} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>
               <h3 style={{ fontSize: '1.3rem', fontWeight: 'bold', margin: 0, color: 'white' }}>
                 📊 Genel Değerlendirme Karnesi

@@ -205,17 +205,17 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
       let statusHtml = '';
       if (mode === 'swipe') {
         statusHtml = w.status 
-          ? `<span style="color: #166534; font-weight: bold; background: #dcfce7; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem;">Bildiğim</span>`
-          : `<span style="color: #991b1b; font-weight: bold; background: #fee2e2; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem;">Bilmediğim</span>`;
+          ? `<span class="badge-bildigim">Bildiğim</span>`
+          : `<span class="badge-bilmedigim">Bilmediğim</span>`;
       } else {
         statusHtml = w.status
-          ? `<span style="color: #166534; font-weight: bold; background: #dcfce7; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem;">Doğru</span>`
-          : `<span style="color: #991b1b; font-weight: bold; background: #fee2e2; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem;">Yanlış</span>`;
+          ? `<span class="badge-bildigim">Doğru</span>`
+          : `<span class="badge-bilmedigim">Yanlış</span>`;
       }
 
       return `
         <tr style="border-bottom: 1px solid #f1f5f9;">
-          <td style="padding: 10px; font-weight: 600; color: #0f172a; width: 25%;">${idx + 1}. ${w.english}</td>
+          <td class="word-english" style="padding: 10px; font-weight: 600; color: #0f172a; width: 25%;">${idx + 1}. ${w.english}</td>
           <td style="padding: 10px; color: #334155; width: 35%;">${w.turkish || ''}</td>
           <td style="padding: 10px; text-align: center; width: 20%;">${statusHtml}</td>
           <td style="padding: 10px; border-left: 1px dashed #cbd5e1; width: 20%;"></td>
@@ -230,7 +230,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
     }
     return unstudiedWords.map((w, idx) => `
       <tr style="border-bottom: 1px solid #f1f5f9;">
-        <td style="padding: 10px; font-weight: 600; color: #475569; width: 30%;">${idx + 1}. ${w.english}</td>
+        <td class="word-english" style="padding: 10px; font-weight: 600; color: #475569; width: 30%;">${idx + 1}. ${w.english}</td>
         <td style="padding: 10px; color: #475569; width: 50%;">${w.turkish || ''}</td>
         <td style="padding: 10px; border-left: 1px dashed #cbd5e1; width: 20%;"></td>
       </tr>
@@ -255,45 +255,107 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
   wrapper.appendChild(container);
 
   container.innerHTML = `
-    <h1 style="color: #4f46e5; border-bottom: 2.5px solid #f1f5f9; padding-bottom: 12px; font-size: 1.7rem; font-weight: 800; margin-top: 0; display: flex; align-items: center; justify-content: space-between; font-family: 'Inter', sans-serif;">
-      <span>📋 Kelime Kampı Karne Raporu</span> 
-      <span style="font-size: 0.9rem; font-weight: normal; color: #64748b;">${new Date().toLocaleDateString()}</span>
-    </h1>
-    
-    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-family: 'Inter', sans-serif; font-size: 0.88rem;">
-      <div>Alan: <strong style="color: #0f172a;">YÖKDİL ${categoryText}</strong></div>
-      <div>Çalışma Modu: <strong style="color: #0f172a;">${modeText}</strong></div>
-      <div>Çalışılan Kelime: <strong style="color: #0f172a;">${studiedWords.length} Adet</strong></div>
+    <style>
+      #pdf-export-root, #pdf-export-root * {
+        color: #1e293b !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
+      #pdf-export-root {
+        background-color: #ffffff !important;
+        padding: 10px !important;
+      }
+      #pdf-export-root th {
+        background-color: #f1f5f9 !important;
+        color: #475569 !important;
+        border-bottom: 2px solid #cbd5e1 !important;
+        font-weight: 700 !important;
+      }
+      #pdf-export-root tr {
+        border-bottom: 1px solid #e2e8f0 !important;
+      }
+      #pdf-export-root td {
+        color: #334155 !important;
+      }
+      #pdf-export-root td.word-english {
+        color: #0f172a !important;
+        font-weight: 600 !important;
+      }
+      #pdf-export-root .badge-bildigim {
+        color: #166534 !important;
+        background-color: #dcfce7 !important;
+        padding: 2px 8px !important;
+        border-radius: 4px !important;
+        font-weight: bold !important;
+        display: inline-block !important;
+      }
+      #pdf-export-root .badge-bilmedigim {
+        color: #991b1b !important;
+        background-color: #fee2e2 !important;
+        padding: 2px 8px !important;
+        border-radius: 4px !important;
+        font-weight: bold !important;
+        display: inline-block !important;
+      }
+      #pdf-export-root h1 {
+        color: #4f46e5 !important;
+        border-bottom: 2.5px solid #f1f5f9 !important;
+      }
+      #pdf-export-root h3 {
+        color: #1e1b4b !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+      }
+      #pdf-export-root .meta-box {
+        background-color: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+      }
+      #pdf-export-root .meta-box strong {
+        color: #0f172a !important;
+      }
+    </style>
+    <div id="pdf-export-root" style="font-family: 'Inter', sans-serif;">
+      <h1 style="color: #4f46e5; border-bottom: 2.5px solid #f1f5f9; padding-bottom: 12px; font-size: 1.7rem; font-weight: 800; margin-top: 0; display: flex; align-items: center; justify-content: space-between;">
+        <span>📋 Kelime Kampı Karne Raporu</span> 
+        <span style="font-size: 0.9rem; font-weight: normal; color: #64748b;">${new Date().toLocaleDateString()}</span>
+      </h1>
+      
+      <div class="meta-box" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 0.88rem;">
+        <div>Alan: <strong style="color: #0f172a;">YÖKDİL ${categoryText}</strong></div>
+        <div>Çalışma Modu: <strong style="color: #0f172a;">${modeText}</strong></div>
+        <div>Çalışılan Kelime: <strong style="color: #0f172a;">${studiedWords.length} Adet</strong></div>
+      </div>
+
+      <h3 style="color: #1e1b4b; font-size: 1.15rem; margin-top: 24px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #e2e8f0;">🟢 Çalışılmış ve Değerlendirilmiş Kelimeler</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.88rem;">
+        <thead>
+          <tr style="background-color: #f1f5f9;">
+            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Kelime (İngilizce)</th>
+            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Türkçe Anlamı</th>
+            <th style="color: #475569; text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Durum / Statü</th>
+            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${renderStudiedRows()}
+        </tbody>
+      </table>
+
+      <h3 style="color: #64748b; font-size: 1.15rem; margin-top: 24px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #cbd5e1;">⚪ Henüz Çalışılmamış / Bilinmeyen Kelimeler (${unstudiedWords.length} Adet)</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.88rem;">
+        <thead>
+          <tr style="background-color: #f1f5f9;">
+            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Kelime (İngilizce)</th>
+            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Türkçe Anlamı</th>
+            <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${renderUnstudiedRows()}
+        </tbody>
+      </table>
     </div>
-
-    <h3 style="color: #1e1b4b; font-size: 1.15rem; margin-top: 24px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #e2e8f0; font-family: 'Inter', sans-serif;">🟢 Çalışılmış ve Değerlendirilmiş Kelimeler</h3>
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.88rem; font-family: 'Inter', sans-serif;">
-      <thead>
-        <tr style="background-color: #f1f5f9;">
-          <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Kelime (İngilizce)</th>
-          <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Türkçe Anlamı</th>
-          <th style="color: #475569; text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Durum / Statü</th>
-          <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${renderStudiedRows()}
-      </tbody>
-    </table>
-
-    <h3 style="color: #64748b; font-size: 1.15rem; margin-top: 24px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #cbd5e1; font-family: 'Inter', sans-serif;">⚪ Henüz Çalışılmamış / Bilinmeyen Kelimeler (${unstudiedWords.length} Adet)</h3>
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.88rem; font-family: 'Inter', sans-serif;">
-      <thead>
-        <tr style="background-color: #f1f5f9;">
-          <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Kelime (İngilizce)</th>
-          <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1;">Türkçe Anlamı</th>
-          <th style="color: #475569; text-align: left; padding: 10px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid #cbd5e1; border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${renderUnstudiedRows()}
-      </tbody>
-    </table>
   `;
 
   const opt = {

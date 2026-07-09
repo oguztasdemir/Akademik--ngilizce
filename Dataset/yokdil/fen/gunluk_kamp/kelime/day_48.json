@@ -2,741 +2,1555 @@
   "day": 48,
   "words": [
     {
-      "word": "discrete",
-      "en": "The data reveal a strong correlation between carbon emissions and discrete.",
-      "tr": "ayrık, farklı, bağımsız",
+      "word": "seismic",
+      "en": "We need to analyze the seismic in this scientific context.",
+      "tr": "sismik, depremle ilgili",
       "synonyms": "",
       "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile ayrık, farklı, bağımsız arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial discrete, study of discrete",
+      "en_tr": "We need to analyze the seismic in this scientific context. / Bu bilimsel bağlamda sismik, depremle ilgili analiz etmeliyiz.",
+      "collocation": "study of seismic, structure of seismic",
       "sentences": [
         {
-          "en": "The data reveal a strong correlation between carbon emissions and discrete.",
-          "tr": "Veriler, karbon emisyonları ile ayrık, farklı, bağımsız arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+          "en": "We need to analyze the seismic in this scientific context.",
+          "tr": "Bu bilimsel bağlamda sismik, depremle ilgili analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
         },
         {
-          "en": "Recent studies have demonstrated the significant impact of discrete on the ecosystem.",
-          "tr": "Son çalışmalar, ayrık, farklı, bağımsız yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+          "en": "The scientist studied the seismic during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında sismik, depremle ilgili inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
         },
         {
-          "en": "Researchers must carefully monitor the changes in discrete during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında ayrık, farklı, bağımsız durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+          "en": "Recent research provides new data about the seismic of this species.",
+          "tr": "Son araştırmalar bu türün sismik, depremle ilgili hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
         },
         {
-          "en": "A key factor in achieving sustainable development is controlling the level of discrete.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, ayrık, farklı, bağımsız seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+          "en": "They decided to focus on this seismic for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu sismik, depremle ilgili üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
         },
         {
-          "en": "The primary objective of this project is to analyze the behavior of discrete under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında ayrık, farklı, bağımsız davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
-        }
-      ],
-      "priority": "Yüksek Sıklık"
-    },
-    {
-      "word": "remove",
-      "en": "It is essential to remove the system properties to get accurate results.",
-      "tr": "kaldırmak, sökmek",
-      "synonyms": "",
-      "type": "verb",
-      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini kaldırmak, sökmek gereklidir.",
-      "collocation": "seek to remove, directly remove",
-      "sentences": [
-        {
-          "en": "It is essential to remove the system properties to get accurate results.",
-          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini kaldırmak, sökmek gereklidir.",
-          "blanked": "It is essential to ________ the system properties to get accurate results."
-        },
-        {
-          "en": "Researchers always seek to remove new methodologies in this field.",
-          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler kaldırmak, sökmek isterler.",
-          "blanked": "Researchers always seek to ________ new methodologies in this field."
-        },
-        {
-          "en": "We need to remove the main factors before drawing a final conclusion.",
-          "tr": "Nihai bir sonuca varmadan önce ana faktörleri kaldırmak, sökmek gerekir.",
-          "blanked": "We need to ________ the main factors before drawing a final conclusion."
-        },
-        {
-          "en": "Several parameters were designed to remove the chemical reaction.",
-          "tr": "Kimyasal reaksiyonu kaldırmak, sökmek için birkaç parametre tasarlandı.",
-          "blanked": "Several parameters were designed to ________ the chemical reaction."
-        },
-        {
-          "en": "The new algorithm can remove the overall processing speed.",
-          "tr": "Yeni algoritma, genel işlem hızını kaldırmak, sökmek konusunda yardımcı olabilir.",
-          "blanked": "The new algorithm can ________ the overall processing speed."
-        }
-      ],
-      "priority": "Çok Yüksek Sıklık"
-    },
-    {
-      "word": "united",
-      "en": "The data reveal a strong correlation between carbon emissions and united.",
-      "tr": "birleşik",
-      "synonyms": "",
-      "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile birleşik arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial united, study of united",
-      "sentences": [
-        {
-          "en": "The data reveal a strong correlation between carbon emissions and united.",
-          "tr": "Veriler, karbon emisyonları ile birleşik arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
-        },
-        {
-          "en": "Recent studies have demonstrated the significant impact of united on the ecosystem.",
-          "tr": "Son çalışmalar, birleşik yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
-        },
-        {
-          "en": "Researchers must carefully monitor the changes in united during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında birleşik durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
-        },
-        {
-          "en": "A key factor in achieving sustainable development is controlling the level of united.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, birleşik seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
-        },
-        {
-          "en": "The primary objective of this project is to analyze the behavior of united under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında birleşik davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
-        }
-      ],
-      "priority": "Çok Yüksek Sıklık"
-    },
-    {
-      "word": "experience",
-      "en": "It is essential to experience the system properties to get accurate results.",
-      "tr": "deneyim, tecrübe etmek",
-      "synonyms": "",
-      "type": "verb",
-      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini deneyim, tecrübe etmek gereklidir.",
-      "collocation": "seek to experience, directly experience",
-      "sentences": [
-        {
-          "en": "It is essential to experience the system properties to get accurate results.",
-          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini deneyim, tecrübe etmek gereklidir.",
-          "blanked": "It is essential to ________ the system properties to get accurate results."
-        },
-        {
-          "en": "Researchers always seek to experience new methodologies in this field.",
-          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler deneyim, tecrübe etmek isterler.",
-          "blanked": "Researchers always seek to ________ new methodologies in this field."
-        },
-        {
-          "en": "We need to experience the main factors before drawing a final conclusion.",
-          "tr": "Nihai bir sonuca varmadan önce ana faktörleri deneyim, tecrübe etmek gerekir.",
-          "blanked": "We need to ________ the main factors before drawing a final conclusion."
-        },
-        {
-          "en": "Several parameters were designed to experience the chemical reaction.",
-          "tr": "Kimyasal reaksiyonu deneyim, tecrübe etmek için birkaç parametre tasarlandı.",
-          "blanked": "Several parameters were designed to ________ the chemical reaction."
-        },
-        {
-          "en": "The new algorithm can experience the overall processing speed.",
-          "tr": "Yeni algoritma, genel işlem hızını deneyim, tecrübe etmek konusunda yardımcı olabilir.",
-          "blanked": "The new algorithm can ________ the overall processing speed."
-        }
-      ],
-      "priority": "Çok Yüksek Sıklık"
-    },
-    {
-      "word": "strain",
-      "en": "The data reveal a strong correlation between carbon emissions and strain.",
-      "tr": "zorlanma, gerilme, tür (bakteri)",
-      "synonyms": "",
-      "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile zorlanma, gerilme, tür (bakteri) arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial strain, study of strain",
-      "sentences": [
-        {
-          "en": "The data reveal a strong correlation between carbon emissions and strain.",
-          "tr": "Veriler, karbon emisyonları ile zorlanma, gerilme, tür (bakteri) arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
-        },
-        {
-          "en": "Recent studies have demonstrated the significant impact of strain on the ecosystem.",
-          "tr": "Son çalışmalar, zorlanma, gerilme, tür (bakteri) yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
-        },
-        {
-          "en": "Researchers must carefully monitor the changes in strain during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında zorlanma, gerilme, tür (bakteri) durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
-        },
-        {
-          "en": "A key factor in achieving sustainable development is controlling the level of strain.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, zorlanma, gerilme, tür (bakteri) seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
-        },
-        {
-          "en": "The primary objective of this project is to analyze the behavior of strain under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında zorlanma, gerilme, tür (bakteri) davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+          "en": "Understanding the role of seismic is very important in modern biology.",
+          "tr": "Modern biyolojide sismik, depremle ilgili rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
         }
       ],
       "priority": "Orta Sıklık"
     },
     {
-      "word": "differentiate",
-      "en": "It is essential to differentiate the system properties to get accurate results.",
-      "tr": "ayırt etmek, farklılaştırmak",
-      "synonyms": "",
-      "type": "verb",
-      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini ayırt etmek, farklılaştırmak gereklidir.",
-      "collocation": "seek to differentiate, directly differentiate",
-      "sentences": [
-        {
-          "en": "It is essential to differentiate the system properties to get accurate results.",
-          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini ayırt etmek, farklılaştırmak gereklidir.",
-          "blanked": "It is essential to ________ the system properties to get accurate results."
-        },
-        {
-          "en": "Researchers always seek to differentiate new methodologies in this field.",
-          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler ayırt etmek, farklılaştırmak isterler.",
-          "blanked": "Researchers always seek to ________ new methodologies in this field."
-        },
-        {
-          "en": "We need to differentiate the main factors before drawing a final conclusion.",
-          "tr": "Nihai bir sonuca varmadan önce ana faktörleri ayırt etmek, farklılaştırmak gerekir.",
-          "blanked": "We need to ________ the main factors before drawing a final conclusion."
-        },
-        {
-          "en": "Several parameters were designed to differentiate the chemical reaction.",
-          "tr": "Kimyasal reaksiyonu ayırt etmek, farklılaştırmak için birkaç parametre tasarlandı.",
-          "blanked": "Several parameters were designed to ________ the chemical reaction."
-        },
-        {
-          "en": "The new algorithm can differentiate the overall processing speed.",
-          "tr": "Yeni algoritma, genel işlem hızını ayırt etmek, farklılaştırmak konusunda yardımcı olabilir.",
-          "blanked": "The new algorithm can ________ the overall processing speed."
-        }
-      ],
-      "priority": "Yüksek Sıklık"
-    },
-    {
-      "word": "harmful",
-      "en": "The data reveal a strong correlation between carbon emissions and harmful.",
-      "tr": "zararlı",
+      "word": "seize",
+      "en": "We need to analyze the seize in this scientific context.",
+      "tr": "kavramak, yakalamak, ele geçirmek",
       "synonyms": "",
       "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile zararlı arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial harmful, study of harmful",
+      "en_tr": "We need to analyze the seize in this scientific context. / Bu bilimsel bağlamda kavramak, yakalamak, ele geçirmek analiz etmeliyiz.",
+      "collocation": "study of seize, structure of seize",
       "sentences": [
         {
-          "en": "The data reveal a strong correlation between carbon emissions and harmful.",
-          "tr": "Veriler, karbon emisyonları ile zararlı arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+          "en": "We need to analyze the seize in this scientific context.",
+          "tr": "Bu bilimsel bağlamda kavramak, yakalamak, ele geçirmek analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
         },
         {
-          "en": "Recent studies have demonstrated the significant impact of harmful on the ecosystem.",
-          "tr": "Son çalışmalar, zararlı yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+          "en": "The scientist studied the seize during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında kavramak, yakalamak, ele geçirmek inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
         },
         {
-          "en": "Researchers must carefully monitor the changes in harmful during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında zararlı durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+          "en": "Recent research provides new data about the seize of this species.",
+          "tr": "Son araştırmalar bu türün kavramak, yakalamak, ele geçirmek hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
         },
         {
-          "en": "A key factor in achieving sustainable development is controlling the level of harmful.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, zararlı seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+          "en": "They decided to focus on this seize for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu kavramak, yakalamak, ele geçirmek üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
         },
         {
-          "en": "The primary objective of this project is to analyze the behavior of harmful under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında zararlı davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
-        }
-      ],
-      "priority": "Çok Yüksek Sıklık"
-    },
-    {
-      "word": "subdue",
-      "en": "It is essential to subdue the system properties to get accurate results.",
-      "tr": "bastırmak, hafifletmek",
-      "synonyms": "",
-      "type": "verb",
-      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini bastırmak, hafifletmek gereklidir.",
-      "collocation": "seek to subdue, directly subdue",
-      "sentences": [
-        {
-          "en": "It is essential to subdue the system properties to get accurate results.",
-          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini bastırmak, hafifletmek gereklidir.",
-          "blanked": "It is essential to ________ the system properties to get accurate results."
-        },
-        {
-          "en": "Researchers always seek to subdue new methodologies in this field.",
-          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler bastırmak, hafifletmek isterler.",
-          "blanked": "Researchers always seek to ________ new methodologies in this field."
-        },
-        {
-          "en": "We need to subdue the main factors before drawing a final conclusion.",
-          "tr": "Nihai bir sonuca varmadan önce ana faktörleri bastırmak, hafifletmek gerekir.",
-          "blanked": "We need to ________ the main factors before drawing a final conclusion."
-        },
-        {
-          "en": "Several parameters were designed to subdue the chemical reaction.",
-          "tr": "Kimyasal reaksiyonu bastırmak, hafifletmek için birkaç parametre tasarlandı.",
-          "blanked": "Several parameters were designed to ________ the chemical reaction."
-        },
-        {
-          "en": "The new algorithm can subdue the overall processing speed.",
-          "tr": "Yeni algoritma, genel işlem hızını bastırmak, hafifletmek konusunda yardımcı olabilir.",
-          "blanked": "The new algorithm can ________ the overall processing speed."
+          "en": "Understanding the role of seize is very important in modern biology.",
+          "tr": "Modern biyolojide kavramak, yakalamak, ele geçirmek rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
         }
       ],
       "priority": "Orta Sıklık"
     },
     {
-      "word": "inadequate",
-      "en": "The data reveal a strong correlation between carbon emissions and inadequate.",
-      "tr": "yetersiz, eksik",
+      "word": "select",
+      "en": "We need to analyze the select in this scientific context.",
+      "tr": "seçmek, seçkin",
       "synonyms": "",
       "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile yetersiz, eksik arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial inadequate, study of inadequate",
+      "en_tr": "We need to analyze the select in this scientific context. / Bu bilimsel bağlamda seçmek, seçkin analiz etmeliyiz.",
+      "collocation": "study of select, structure of select",
       "sentences": [
         {
-          "en": "The data reveal a strong correlation between carbon emissions and inadequate.",
-          "tr": "Veriler, karbon emisyonları ile yetersiz, eksik arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+          "en": "We need to analyze the select in this scientific context.",
+          "tr": "Bu bilimsel bağlamda seçmek, seçkin analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
         },
         {
-          "en": "Recent studies have demonstrated the significant impact of inadequate on the ecosystem.",
-          "tr": "Son çalışmalar, yetersiz, eksik yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+          "en": "The scientist studied the select during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında seçmek, seçkin inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
         },
         {
-          "en": "Researchers must carefully monitor the changes in inadequate during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında yetersiz, eksik durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+          "en": "Recent research provides new data about the select of this species.",
+          "tr": "Son araştırmalar bu türün seçmek, seçkin hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
         },
         {
-          "en": "A key factor in achieving sustainable development is controlling the level of inadequate.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, yetersiz, eksik seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+          "en": "They decided to focus on this select for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu seçmek, seçkin üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
         },
         {
-          "en": "The primary objective of this project is to analyze the behavior of inadequate under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında yetersiz, eksik davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
-        }
-      ],
-      "priority": "Yüksek Sıklık"
-    },
-    {
-      "word": "intervene",
-      "en": "It is essential to intervene the system properties to get accurate results.",
-      "tr": "müdahale etmek, araya girmek",
-      "synonyms": "",
-      "type": "verb",
-      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini müdahale etmek, araya girmek gereklidir.",
-      "collocation": "seek to intervene, directly intervene",
-      "sentences": [
-        {
-          "en": "It is essential to intervene the system properties to get accurate results.",
-          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini müdahale etmek, araya girmek gereklidir.",
-          "blanked": "It is essential to ________ the system properties to get accurate results."
-        },
-        {
-          "en": "Researchers always seek to intervene new methodologies in this field.",
-          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler müdahale etmek, araya girmek isterler.",
-          "blanked": "Researchers always seek to ________ new methodologies in this field."
-        },
-        {
-          "en": "We need to intervene the main factors before drawing a final conclusion.",
-          "tr": "Nihai bir sonuca varmadan önce ana faktörleri müdahale etmek, araya girmek gerekir.",
-          "blanked": "We need to ________ the main factors before drawing a final conclusion."
-        },
-        {
-          "en": "Several parameters were designed to intervene the chemical reaction.",
-          "tr": "Kimyasal reaksiyonu müdahale etmek, araya girmek için birkaç parametre tasarlandı.",
-          "blanked": "Several parameters were designed to ________ the chemical reaction."
-        },
-        {
-          "en": "The new algorithm can intervene the overall processing speed.",
-          "tr": "Yeni algoritma, genel işlem hızını müdahale etmek, araya girmek konusunda yardımcı olabilir.",
-          "blanked": "The new algorithm can ________ the overall processing speed."
+          "en": "Understanding the role of select is very important in modern biology.",
+          "tr": "Modern biyolojide seçmek, seçkin rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
         }
       ],
       "priority": "Orta Sıklık"
     },
     {
-      "word": "turbulent",
-      "en": "The data reveal a strong correlation between carbon emissions and turbulent.",
-      "tr": "çalkantılı, türbülanslı",
+      "word": "selfish",
+      "en": "We need to analyze the selfish in this scientific context.",
+      "tr": "bencil",
       "synonyms": "",
       "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile çalkantılı, türbülanslı arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial turbulent, study of turbulent",
+      "en_tr": "We need to analyze the selfish in this scientific context. / Bu bilimsel bağlamda bencil analiz etmeliyiz.",
+      "collocation": "study of selfish, structure of selfish",
       "sentences": [
         {
-          "en": "The data reveal a strong correlation between carbon emissions and turbulent.",
-          "tr": "Veriler, karbon emisyonları ile çalkantılı, türbülanslı arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+          "en": "We need to analyze the selfish in this scientific context.",
+          "tr": "Bu bilimsel bağlamda bencil analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
         },
         {
-          "en": "Recent studies have demonstrated the significant impact of turbulent on the ecosystem.",
-          "tr": "Son çalışmalar, çalkantılı, türbülanslı yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+          "en": "The scientist studied the selfish during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında bencil inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
         },
         {
-          "en": "Researchers must carefully monitor the changes in turbulent during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında çalkantılı, türbülanslı durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+          "en": "Recent research provides new data about the selfish of this species.",
+          "tr": "Son araştırmalar bu türün bencil hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
         },
         {
-          "en": "A key factor in achieving sustainable development is controlling the level of turbulent.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, çalkantılı, türbülanslı seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+          "en": "They decided to focus on this selfish for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu bencil üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
         },
         {
-          "en": "The primary objective of this project is to analyze the behavior of turbulent under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında çalkantılı, türbülanslı davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+          "en": "Understanding the role of selfish is very important in modern biology.",
+          "tr": "Modern biyolojide bencil rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
         }
       ],
       "priority": "Orta Sıklık"
     },
     {
-      "word": "molecule",
-      "en": "The data reveal a strong correlation between carbon emissions and molecule.",
-      "tr": "molekül",
+      "word": "semiconductor",
+      "en": "We need to analyze the semiconductor in this scientific context.",
+      "tr": "yarı iletken",
       "synonyms": "",
       "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile molekül arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial molecule, study of molecule",
+      "en_tr": "We need to analyze the semiconductor in this scientific context. / Bu bilimsel bağlamda yarı iletken analiz etmeliyiz.",
+      "collocation": "study of semiconductor, structure of semiconductor",
       "sentences": [
         {
-          "en": "The data reveal a strong correlation between carbon emissions and molecule.",
-          "tr": "Veriler, karbon emisyonları ile molekül arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+          "en": "We need to analyze the semiconductor in this scientific context.",
+          "tr": "Bu bilimsel bağlamda yarı iletken analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
         },
         {
-          "en": "Recent studies have demonstrated the significant impact of molecule on the ecosystem.",
-          "tr": "Son çalışmalar, molekül yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+          "en": "The scientist studied the semiconductor during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında yarı iletken inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
         },
         {
-          "en": "Researchers must carefully monitor the changes in molecule during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında molekül durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+          "en": "Recent research provides new data about the semiconductor of this species.",
+          "tr": "Son araştırmalar bu türün yarı iletken hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
         },
         {
-          "en": "A key factor in achieving sustainable development is controlling the level of molecule.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, molekül seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+          "en": "They decided to focus on this semiconductor for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu yarı iletken üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
         },
         {
-          "en": "The primary objective of this project is to analyze the behavior of molecule under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında molekül davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
-        }
-      ],
-      "priority": "Çok Yüksek Sıklık"
-    },
-    {
-      "word": "endeavor",
-      "en": "The data reveal a strong correlation between carbon emissions and endeavor.",
-      "tr": "çaba göstermek, gayret",
-      "synonyms": "",
-      "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile çaba göstermek, gayret arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial endeavor, study of endeavor",
-      "sentences": [
-        {
-          "en": "The data reveal a strong correlation between carbon emissions and endeavor.",
-          "tr": "Veriler, karbon emisyonları ile çaba göstermek, gayret arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
-        },
-        {
-          "en": "Recent studies have demonstrated the significant impact of endeavor on the ecosystem.",
-          "tr": "Son çalışmalar, çaba göstermek, gayret yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
-        },
-        {
-          "en": "Researchers must carefully monitor the changes in endeavor during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında çaba göstermek, gayret durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
-        },
-        {
-          "en": "A key factor in achieving sustainable development is controlling the level of endeavor.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, çaba göstermek, gayret seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
-        },
-        {
-          "en": "The primary objective of this project is to analyze the behavior of endeavor under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında çaba göstermek, gayret davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+          "en": "Understanding the role of semiconductor is very important in modern biology.",
+          "tr": "Modern biyolojide yarı iletken rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
         }
       ],
       "priority": "Orta Sıklık"
     },
     {
-      "word": "ivory",
-      "en": "The data reveal a strong correlation between carbon emissions and ivory.",
-      "tr": "fildişi",
+      "word": "sensible",
+      "en": "We need to analyze the sensible in this scientific context.",
+      "tr": "akıllı, mantıklı, aklı başında, akla uygun",
       "synonyms": "",
       "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile fildişi arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial ivory, study of ivory",
+      "en_tr": "We need to analyze the sensible in this scientific context. / Bu bilimsel bağlamda akıllı, mantıklı, aklı başında, akla uygun analiz etmeliyiz.",
+      "collocation": "study of sensible, structure of sensible",
       "sentences": [
         {
-          "en": "The data reveal a strong correlation between carbon emissions and ivory.",
-          "tr": "Veriler, karbon emisyonları ile fildişi arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+          "en": "We need to analyze the sensible in this scientific context.",
+          "tr": "Bu bilimsel bağlamda akıllı, mantıklı, aklı başında, akla uygun analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
         },
         {
-          "en": "Recent studies have demonstrated the significant impact of ivory on the ecosystem.",
-          "tr": "Son çalışmalar, fildişi yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+          "en": "The scientist studied the sensible during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında akıllı, mantıklı, aklı başında, akla uygun inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
         },
         {
-          "en": "Researchers must carefully monitor the changes in ivory during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında fildişi durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+          "en": "Recent research provides new data about the sensible of this species.",
+          "tr": "Son araştırmalar bu türün akıllı, mantıklı, aklı başında, akla uygun hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
         },
         {
-          "en": "A key factor in achieving sustainable development is controlling the level of ivory.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, fildişi seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+          "en": "They decided to focus on this sensible for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu akıllı, mantıklı, aklı başında, akla uygun üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
         },
         {
-          "en": "The primary objective of this project is to analyze the behavior of ivory under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında fildişi davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+          "en": "Understanding the role of sensible is very important in modern biology.",
+          "tr": "Modern biyolojide akıllı, mantıklı, aklı başında, akla uygun rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
         }
       ],
       "priority": "Orta Sıklık"
     },
     {
-      "word": "extend",
-      "en": "It is essential to extend the system properties to get accurate results.",
-      "tr": "uzatmak, genişletmek",
-      "synonyms": "",
-      "type": "verb",
-      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini uzatmak, genişletmek gereklidir.",
-      "collocation": "seek to extend, directly extend",
-      "sentences": [
-        {
-          "en": "It is essential to extend the system properties to get accurate results.",
-          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini uzatmak, genişletmek gereklidir.",
-          "blanked": "It is essential to ________ the system properties to get accurate results."
-        },
-        {
-          "en": "Researchers always seek to extend new methodologies in this field.",
-          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler uzatmak, genişletmek isterler.",
-          "blanked": "Researchers always seek to ________ new methodologies in this field."
-        },
-        {
-          "en": "We need to extend the main factors before drawing a final conclusion.",
-          "tr": "Nihai bir sonuca varmadan önce ana faktörleri uzatmak, genişletmek gerekir.",
-          "blanked": "We need to ________ the main factors before drawing a final conclusion."
-        },
-        {
-          "en": "Several parameters were designed to extend the chemical reaction.",
-          "tr": "Kimyasal reaksiyonu uzatmak, genişletmek için birkaç parametre tasarlandı.",
-          "blanked": "Several parameters were designed to ________ the chemical reaction."
-        },
-        {
-          "en": "The new algorithm can extend the overall processing speed.",
-          "tr": "Yeni algoritma, genel işlem hızını uzatmak, genişletmek konusunda yardımcı olabilir.",
-          "blanked": "The new algorithm can ________ the overall processing speed."
-        }
-      ],
-      "priority": "Yüksek Sıklık"
-    },
-    {
-      "word": "fluid",
-      "en": "The data reveal a strong correlation between carbon emissions and fluid.",
-      "tr": "akışkan, sıvı",
+      "word": "sensitive",
+      "en": "We need to analyze the sensitive in this scientific context.",
+      "tr": "hassas",
       "synonyms": "",
       "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile akışkan, sıvı arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial fluid, study of fluid",
+      "en_tr": "We need to analyze the sensitive in this scientific context. / Bu bilimsel bağlamda hassas analiz etmeliyiz.",
+      "collocation": "study of sensitive, structure of sensitive",
       "sentences": [
         {
-          "en": "The data reveal a strong correlation between carbon emissions and fluid.",
-          "tr": "Veriler, karbon emisyonları ile akışkan, sıvı arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+          "en": "We need to analyze the sensitive in this scientific context.",
+          "tr": "Bu bilimsel bağlamda hassas analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
         },
         {
-          "en": "Recent studies have demonstrated the significant impact of fluid on the ecosystem.",
-          "tr": "Son çalışmalar, akışkan, sıvı yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+          "en": "The scientist studied the sensitive during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında hassas inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
         },
         {
-          "en": "Researchers must carefully monitor the changes in fluid during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında akışkan, sıvı durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+          "en": "Recent research provides new data about the sensitive of this species.",
+          "tr": "Son araştırmalar bu türün hassas hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
         },
         {
-          "en": "A key factor in achieving sustainable development is controlling the level of fluid.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, akışkan, sıvı seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+          "en": "They decided to focus on this sensitive for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu hassas üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
         },
         {
-          "en": "The primary objective of this project is to analyze the behavior of fluid under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında akışkan, sıvı davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
-        }
-      ],
-      "priority": "Yüksek Sıklık"
-    },
-    {
-      "word": "conduct",
-      "en": "It is essential to conduct the system properties to get accurate results.",
-      "tr": "yürütmek, rehberlik etmek",
-      "synonyms": "carry out, perform, execute",
-      "type": "verb",
-      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini yürütmek, rehberlik etmek gereklidir.",
-      "collocation": "seek to conduct, directly conduct",
-      "sentences": [
-        {
-          "en": "It is essential to conduct the system properties to get accurate results.",
-          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini yürütmek, rehberlik etmek gereklidir.",
-          "blanked": "It is essential to ________ the system properties to get accurate results."
-        },
-        {
-          "en": "Researchers always seek to conduct new methodologies in this field.",
-          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler yürütmek, rehberlik etmek isterler.",
-          "blanked": "Researchers always seek to ________ new methodologies in this field."
-        },
-        {
-          "en": "We need to conduct the main factors before drawing a final conclusion.",
-          "tr": "Nihai bir sonuca varmadan önce ana faktörleri yürütmek, rehberlik etmek gerekir.",
-          "blanked": "We need to ________ the main factors before drawing a final conclusion."
-        },
-        {
-          "en": "Several parameters were designed to conduct the chemical reaction.",
-          "tr": "Kimyasal reaksiyonu yürütmek, rehberlik etmek için birkaç parametre tasarlandı.",
-          "blanked": "Several parameters were designed to ________ the chemical reaction."
-        },
-        {
-          "en": "The new algorithm can conduct the overall processing speed.",
-          "tr": "Yeni algoritma, genel işlem hızını yürütmek, rehberlik etmek konusunda yardımcı olabilir.",
-          "blanked": "The new algorithm can ________ the overall processing speed."
-        }
-      ],
-      "priority": "Çok Yüksek Sıklık"
-    },
-    {
-      "word": "animals",
-      "en": "The data reveal a strong correlation between carbon emissions and animals.",
-      "tr": "hayvanlar",
-      "synonyms": "",
-      "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile hayvanlar arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial animals, study of animals",
-      "sentences": [
-        {
-          "en": "The data reveal a strong correlation between carbon emissions and animals.",
-          "tr": "Veriler, karbon emisyonları ile hayvanlar arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
-        },
-        {
-          "en": "Recent studies have demonstrated the significant impact of animals on the ecosystem.",
-          "tr": "Son çalışmalar, hayvanlar yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
-        },
-        {
-          "en": "Researchers must carefully monitor the changes in animals during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında hayvanlar durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
-        },
-        {
-          "en": "A key factor in achieving sustainable development is controlling the level of animals.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, hayvanlar seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
-        },
-        {
-          "en": "The primary objective of this project is to analyze the behavior of animals under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında hayvanlar davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
-        }
-      ],
-      "priority": "Çok Yüksek Sıklık"
-    },
-    {
-      "word": "infringe",
-      "en": "It is essential to infringe the system properties to get accurate results.",
-      "tr": "ihlal etmek, tecavüz etmek",
-      "synonyms": "",
-      "type": "verb",
-      "en_tr": "Doğru sonuçlar elde etmek için sistem özelliklerini ihlal etmek, tecavüz etmek gereklidir.",
-      "collocation": "seek to infringe, directly infringe",
-      "sentences": [
-        {
-          "en": "It is essential to infringe the system properties to get accurate results.",
-          "tr": "Doğru sonuçlar elde etmek için sistem özelliklerini ihlal etmek, tecavüz etmek gereklidir.",
-          "blanked": "It is essential to ________ the system properties to get accurate results."
-        },
-        {
-          "en": "Researchers always seek to infringe new methodologies in this field.",
-          "tr": "Araştırmacılar bu alanda her zaman yeni metodolojiler ihlal etmek, tecavüz etmek isterler.",
-          "blanked": "Researchers always seek to ________ new methodologies in this field."
-        },
-        {
-          "en": "We need to infringe the main factors before drawing a final conclusion.",
-          "tr": "Nihai bir sonuca varmadan önce ana faktörleri ihlal etmek, tecavüz etmek gerekir.",
-          "blanked": "We need to ________ the main factors before drawing a final conclusion."
-        },
-        {
-          "en": "Several parameters were designed to infringe the chemical reaction.",
-          "tr": "Kimyasal reaksiyonu ihlal etmek, tecavüz etmek için birkaç parametre tasarlandı.",
-          "blanked": "Several parameters were designed to ________ the chemical reaction."
-        },
-        {
-          "en": "The new algorithm can infringe the overall processing speed.",
-          "tr": "Yeni algoritma, genel işlem hızını ihlal etmek, tecavüz etmek konusunda yardımcı olabilir.",
-          "blanked": "The new algorithm can ________ the overall processing speed."
+          "en": "Understanding the role of sensitive is very important in modern biology.",
+          "tr": "Modern biyolojide hassas rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
         }
       ],
       "priority": "Orta Sıklık"
     },
     {
-      "word": "nutrient",
-      "en": "The data reveal a strong correlation between carbon emissions and nutrient.",
-      "tr": "besin maddesi, gıda",
+      "word": "sequence",
+      "en": "We need to analyze the sequence in this scientific context.",
+      "tr": "sıra, dizi, sekans",
       "synonyms": "",
       "type": "noun",
-      "en_tr": "Veriler, karbon emisyonları ile besin maddesi, gıda arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-      "collocation": "crucial nutrient, study of nutrient",
+      "en_tr": "We need to analyze the sequence in this scientific context. / Bu bilimsel bağlamda sıra, dizi, sekans analiz etmeliyiz.",
+      "collocation": "study of sequence, structure of sequence",
       "sentences": [
         {
-          "en": "The data reveal a strong correlation between carbon emissions and nutrient.",
-          "tr": "Veriler, karbon emisyonları ile besin maddesi, gıda arasında güçlü bir korelasyon olduğunu ortaya koyuyor.",
-          "blanked": "The data reveal a strong correlation between carbon emissions and ________."
+          "en": "We need to analyze the sequence in this scientific context.",
+          "tr": "Bu bilimsel bağlamda sıra, dizi, sekans analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
         },
         {
-          "en": "Recent studies have demonstrated the significant impact of nutrient on the ecosystem.",
-          "tr": "Son çalışmalar, besin maddesi, gıda yapısının ekosistem üzerindeki önemli etkisini göstermiştir.",
-          "blanked": "Recent studies have demonstrated the significant impact of ________ on the ecosystem."
+          "en": "The scientist studied the sequence during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında sıra, dizi, sekans inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
         },
         {
-          "en": "Researchers must carefully monitor the changes in nutrient during the experiment.",
-          "tr": "Araştırmacılar, deney sırasında besin maddesi, gıda durumundaki değişimleri dikkatle gözlemlemelidir.",
-          "blanked": "Researchers must carefully monitor the changes in ________ during the experiment."
+          "en": "Recent research provides new data about the sequence of this species.",
+          "tr": "Son araştırmalar bu türün sıra, dizi, sekans hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
         },
         {
-          "en": "A key factor in achieving sustainable development is controlling the level of nutrient.",
-          "tr": "Sürdürülebilir kalkınmayı sağlamada temel faktör, besin maddesi, gıda seviyesinin kontrol edilmesidir.",
-          "blanked": "A key factor in achieving sustainable development is controlling the level of ________."
+          "en": "They decided to focus on this sequence for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu sıra, dizi, sekans üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
         },
         {
-          "en": "The primary objective of this project is to analyze the behavior of nutrient under pressure.",
-          "tr": "Bu projenin temel amacı, basınç altında besin maddesi, gıda davranışını analiz etmektir.",
-          "blanked": "The primary objective of this project is to analyze the behavior of ________ under pressure."
+          "en": "Understanding the role of sequence is very important in modern biology.",
+          "tr": "Modern biyolojide sıra, dizi, sekans rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "series",
+      "en": "We need to analyze the series in this scientific context.",
+      "tr": "seri, diziler",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the series in this scientific context. / Bu bilimsel bağlamda seri, diziler analiz etmeliyiz.",
+      "collocation": "study of series, structure of series",
+      "sentences": [
+        {
+          "en": "We need to analyze the series in this scientific context.",
+          "tr": "Bu bilimsel bağlamda seri, diziler analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the series during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında seri, diziler inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the series of this species.",
+          "tr": "Son araştırmalar bu türün seri, diziler hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this series for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu seri, diziler üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of series is very important in modern biology.",
+          "tr": "Modern biyolojide seri, diziler rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "serious",
+      "en": "We need to analyze the serious in this scientific context.",
+      "tr": "cidden",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the serious in this scientific context. / Bu bilimsel bağlamda cidden analiz etmeliyiz.",
+      "collocation": "study of serious, structure of serious",
+      "sentences": [
+        {
+          "en": "We need to analyze the serious in this scientific context.",
+          "tr": "Bu bilimsel bağlamda cidden analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the serious during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında cidden inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the serious of this species.",
+          "tr": "Son araştırmalar bu türün cidden hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this serious for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu cidden üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of serious is very important in modern biology.",
+          "tr": "Modern biyolojide cidden rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "seriousness",
+      "en": "We need to analyze the seriousness in this scientific context.",
+      "tr": "ciddiyet",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the seriousness in this scientific context. / Bu bilimsel bağlamda ciddiyet analiz etmeliyiz.",
+      "collocation": "study of seriousness, structure of seriousness",
+      "sentences": [
+        {
+          "en": "We need to analyze the seriousness in this scientific context.",
+          "tr": "Bu bilimsel bağlamda ciddiyet analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the seriousness during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında ciddiyet inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the seriousness of this species.",
+          "tr": "Son araştırmalar bu türün ciddiyet hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this seriousness for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu ciddiyet üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of seriousness is very important in modern biology.",
+          "tr": "Modern biyolojide ciddiyet rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "set up",
+      "en": "We need to analyze the set up in this scientific context.",
+      "tr": "kurmak",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the set up in this scientific context. / Bu bilimsel bağlamda kurmak analiz etmeliyiz.",
+      "collocation": "study of set up, structure of set up",
+      "sentences": [
+        {
+          "en": "We need to analyze the set up in this scientific context.",
+          "tr": "Bu bilimsel bağlamda kurmak analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the set up during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında kurmak inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the set up of this species.",
+          "tr": "Son araştırmalar bu türün kurmak hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this set up for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu kurmak üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of set up is very important in modern biology.",
+          "tr": "Modern biyolojide kurmak rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "setting",
+      "en": "We need to analyze the setting in this scientific context.",
+      "tr": "ayar",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the setting in this scientific context. / Bu bilimsel bağlamda ayar analiz etmeliyiz.",
+      "collocation": "study of setting, structure of setting",
+      "sentences": [
+        {
+          "en": "We need to analyze the setting in this scientific context.",
+          "tr": "Bu bilimsel bağlamda ayar analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the setting during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında ayar inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the setting of this species.",
+          "tr": "Son araştırmalar bu türün ayar hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this setting for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu ayar üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of setting is very important in modern biology.",
+          "tr": "Modern biyolojide ayar rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "settlement",
+      "en": "We need to analyze the settlement in this scientific context.",
+      "tr": "yerleşim",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the settlement in this scientific context. / Bu bilimsel bağlamda yerleşim analiz etmeliyiz.",
+      "collocation": "study of settlement, structure of settlement",
+      "sentences": [
+        {
+          "en": "We need to analyze the settlement in this scientific context.",
+          "tr": "Bu bilimsel bağlamda yerleşim analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the settlement during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında yerleşim inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the settlement of this species.",
+          "tr": "Son araştırmalar bu türün yerleşim hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this settlement for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu yerleşim üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of settlement is very important in modern biology.",
+          "tr": "Modern biyolojide yerleşim rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "several",
+      "en": "We need to analyze the several in this scientific context.",
+      "tr": "birkaç",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the several in this scientific context. / Bu bilimsel bağlamda birkaç analiz etmeliyiz.",
+      "collocation": "study of several, structure of several",
+      "sentences": [
+        {
+          "en": "We need to analyze the several in this scientific context.",
+          "tr": "Bu bilimsel bağlamda birkaç analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the several during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında birkaç inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the several of this species.",
+          "tr": "Son araştırmalar bu türün birkaç hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this several for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu birkaç üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of several is very important in modern biology.",
+          "tr": "Modern biyolojide birkaç rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "severe",
+      "en": "We need to analyze the severe in this scientific context.",
+      "tr": "ağır, şiddetli, vahim",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the severe in this scientific context. / Bu bilimsel bağlamda ağır, şiddetli, vahim analiz etmeliyiz.",
+      "collocation": "study of severe, structure of severe",
+      "sentences": [
+        {
+          "en": "We need to analyze the severe in this scientific context.",
+          "tr": "Bu bilimsel bağlamda ağır, şiddetli, vahim analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the severe during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında ağır, şiddetli, vahim inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the severe of this species.",
+          "tr": "Son araştırmalar bu türün ağır, şiddetli, vahim hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this severe for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu ağır, şiddetli, vahim üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of severe is very important in modern biology.",
+          "tr": "Modern biyolojide ağır, şiddetli, vahim rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "severity",
+      "en": "We need to analyze the severity in this scientific context.",
+      "tr": "derecesi",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the severity in this scientific context. / Bu bilimsel bağlamda derecesi analiz etmeliyiz.",
+      "collocation": "study of severity, structure of severity",
+      "sentences": [
+        {
+          "en": "We need to analyze the severity in this scientific context.",
+          "tr": "Bu bilimsel bağlamda derecesi analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the severity during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında derecesi inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the severity of this species.",
+          "tr": "Son araştırmalar bu türün derecesi hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this severity for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu derecesi üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of severity is very important in modern biology.",
+          "tr": "Modern biyolojide derecesi rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "shake",
+      "en": "We need to analyze the shake in this scientific context.",
+      "tr": "sallamak",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the shake in this scientific context. / Bu bilimsel bağlamda sallamak analiz etmeliyiz.",
+      "collocation": "study of shake, structure of shake",
+      "sentences": [
+        {
+          "en": "We need to analyze the shake in this scientific context.",
+          "tr": "Bu bilimsel bağlamda sallamak analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the shake during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında sallamak inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the shake of this species.",
+          "tr": "Son araştırmalar bu türün sallamak hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this shake for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu sallamak üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of shake is very important in modern biology.",
+          "tr": "Modern biyolojide sallamak rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "shift",
+      "en": "We need to analyze the shift in this scientific context.",
+      "tr": "vites, değişim, vardiya",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the shift in this scientific context. / Bu bilimsel bağlamda vites, değişim, vardiya analiz etmeliyiz.",
+      "collocation": "study of shift, structure of shift",
+      "sentences": [
+        {
+          "en": "We need to analyze the shift in this scientific context.",
+          "tr": "Bu bilimsel bağlamda vites, değişim, vardiya analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the shift during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında vites, değişim, vardiya inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the shift of this species.",
+          "tr": "Son araştırmalar bu türün vites, değişim, vardiya hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this shift for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu vites, değişim, vardiya üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of shift is very important in modern biology.",
+          "tr": "Modern biyolojide vites, değişim, vardiya rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "shock",
+      "en": "We need to analyze the shock in this scientific context.",
+      "tr": "şok",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the shock in this scientific context. / Bu bilimsel bağlamda şok analiz etmeliyiz.",
+      "collocation": "study of shock, structure of shock",
+      "sentences": [
+        {
+          "en": "We need to analyze the shock in this scientific context.",
+          "tr": "Bu bilimsel bağlamda şok analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the shock during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında şok inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the shock of this species.",
+          "tr": "Son araştırmalar bu türün şok hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this shock for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu şok üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of shock is very important in modern biology.",
+          "tr": "Modern biyolojide şok rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "shortage of food",
+      "en": "We need to analyze the shortage of food in this scientific context.",
+      "tr": "yiyecek sıkıntısı",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the shortage of food in this scientific context. / Bu bilimsel bağlamda yiyecek sıkıntısı analiz etmeliyiz.",
+      "collocation": "study of shortage of food, structure of shortage of food",
+      "sentences": [
+        {
+          "en": "We need to analyze the shortage of food in this scientific context.",
+          "tr": "Bu bilimsel bağlamda yiyecek sıkıntısı analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the shortage of food during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında yiyecek sıkıntısı inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the shortage of food of this species.",
+          "tr": "Son araştırmalar bu türün yiyecek sıkıntısı hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this shortage of food for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu yiyecek sıkıntısı üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of shortage of food is very important in modern biology.",
+          "tr": "Modern biyolojide yiyecek sıkıntısı rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "should have moved",
+      "en": "We need to analyze the should have moved in this scientific context.",
+      "tr": "taşınmış olmalıydı, hareket etmiş olmalıydı",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the should have moved in this scientific context. / Bu bilimsel bağlamda taşınmış olmalıydı, hareket etmiş olmalıydı analiz etmeliyiz.",
+      "collocation": "study of should have moved, structure of should have moved",
+      "sentences": [
+        {
+          "en": "We need to analyze the should have moved in this scientific context.",
+          "tr": "Bu bilimsel bağlamda taşınmış olmalıydı, hareket etmiş olmalıydı analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the should have moved during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında taşınmış olmalıydı, hareket etmiş olmalıydı inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the should have moved of this species.",
+          "tr": "Son araştırmalar bu türün taşınmış olmalıydı, hareket etmiş olmalıydı hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this should have moved for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu taşınmış olmalıydı, hareket etmiş olmalıydı üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of should have moved is very important in modern biology.",
+          "tr": "Modern biyolojide taşınmış olmalıydı, hareket etmiş olmalıydı rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "show",
+      "en": "We need to analyze the show in this scientific context.",
+      "tr": "göstermek",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the show in this scientific context. / Bu bilimsel bağlamda göstermek analiz etmeliyiz.",
+      "collocation": "study of show, structure of show",
+      "sentences": [
+        {
+          "en": "We need to analyze the show in this scientific context.",
+          "tr": "Bu bilimsel bağlamda göstermek analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the show during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında göstermek inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the show of this species.",
+          "tr": "Son araştırmalar bu türün göstermek hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this show for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu göstermek üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of show is very important in modern biology.",
+          "tr": "Modern biyolojide göstermek rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "showed",
+      "en": "We need to analyze the showed in this scientific context.",
+      "tr": "show",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the showed in this scientific context. / Bu bilimsel bağlamda show analiz etmeliyiz.",
+      "collocation": "study of showed, structure of showed",
+      "sentences": [
+        {
+          "en": "We need to analyze the showed in this scientific context.",
+          "tr": "Bu bilimsel bağlamda show analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the showed during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında show inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the showed of this species.",
+          "tr": "Son araştırmalar bu türün show hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this showed for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu show üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of showed is very important in modern biology.",
+          "tr": "Modern biyolojide show rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "shrink",
+      "en": "We need to analyze the shrink in this scientific context.",
+      "tr": "küçülmek, büzülmek, psikiyatrist",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the shrink in this scientific context. / Bu bilimsel bağlamda küçülmek, büzülmek, psikiyatrist analiz etmeliyiz.",
+      "collocation": "study of shrink, structure of shrink",
+      "sentences": [
+        {
+          "en": "We need to analyze the shrink in this scientific context.",
+          "tr": "Bu bilimsel bağlamda küçülmek, büzülmek, psikiyatrist analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the shrink during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında küçülmek, büzülmek, psikiyatrist inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the shrink of this species.",
+          "tr": "Son araştırmalar bu türün küçülmek, büzülmek, psikiyatrist hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this shrink for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu küçülmek, büzülmek, psikiyatrist üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of shrink is very important in modern biology.",
+          "tr": "Modern biyolojide küçülmek, büzülmek, psikiyatrist rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "sign",
+      "en": "We need to analyze the sign in this scientific context.",
+      "tr": "imza",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the sign in this scientific context. / Bu bilimsel bağlamda imza analiz etmeliyiz.",
+      "collocation": "study of sign, structure of sign",
+      "sentences": [
+        {
+          "en": "We need to analyze the sign in this scientific context.",
+          "tr": "Bu bilimsel bağlamda imza analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the sign during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında imza inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the sign of this species.",
+          "tr": "Son araştırmalar bu türün imza hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this sign for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu imza üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of sign is very important in modern biology.",
+          "tr": "Modern biyolojide imza rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "signal",
+      "en": "We need to analyze the signal in this scientific context.",
+      "tr": "sinyal, işaret",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the signal in this scientific context. / Bu bilimsel bağlamda sinyal, işaret analiz etmeliyiz.",
+      "collocation": "study of signal, structure of signal",
+      "sentences": [
+        {
+          "en": "We need to analyze the signal in this scientific context.",
+          "tr": "Bu bilimsel bağlamda sinyal, işaret analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the signal during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında sinyal, işaret inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the signal of this species.",
+          "tr": "Son araştırmalar bu türün sinyal, işaret hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this signal for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu sinyal, işaret üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of signal is very important in modern biology.",
+          "tr": "Modern biyolojide sinyal, işaret rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "significant",
+      "en": "We need to analyze the significant in this scientific context.",
+      "tr": "önemli, anlamlı",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the significant in this scientific context. / Bu bilimsel bağlamda önemli, anlamlı analiz etmeliyiz.",
+      "collocation": "study of significant, structure of significant",
+      "sentences": [
+        {
+          "en": "We need to analyze the significant in this scientific context.",
+          "tr": "Bu bilimsel bağlamda önemli, anlamlı analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the significant during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında önemli, anlamlı inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the significant of this species.",
+          "tr": "Son araştırmalar bu türün önemli, anlamlı hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this significant for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu önemli, anlamlı üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of significant is very important in modern biology.",
+          "tr": "Modern biyolojide önemli, anlamlı rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "significantly",
+      "en": "We need to analyze the significantly in this scientific context.",
+      "tr": "önemli ölçüde",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the significantly in this scientific context. / Bu bilimsel bağlamda önemli ölçüde analiz etmeliyiz.",
+      "collocation": "study of significantly, structure of significantly",
+      "sentences": [
+        {
+          "en": "We need to analyze the significantly in this scientific context.",
+          "tr": "Bu bilimsel bağlamda önemli ölçüde analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the significantly during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında önemli ölçüde inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the significantly of this species.",
+          "tr": "Son araştırmalar bu türün önemli ölçüde hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this significantly for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu önemli ölçüde üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of significantly is very important in modern biology.",
+          "tr": "Modern biyolojide önemli ölçüde rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "similar",
+      "en": "We need to analyze the similar in this scientific context.",
+      "tr": "benzer",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the similar in this scientific context. / Bu bilimsel bağlamda benzer analiz etmeliyiz.",
+      "collocation": "study of similar, structure of similar",
+      "sentences": [
+        {
+          "en": "We need to analyze the similar in this scientific context.",
+          "tr": "Bu bilimsel bağlamda benzer analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the similar during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında benzer inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the similar of this species.",
+          "tr": "Son araştırmalar bu türün benzer hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this similar for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu benzer üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of similar is very important in modern biology.",
+          "tr": "Modern biyolojide benzer rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "similar to",
+      "en": "We need to analyze the similar to in this scientific context.",
+      "tr": "benzer, -e benzer",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the similar to in this scientific context. / Bu bilimsel bağlamda benzer, -e benzer analiz etmeliyiz.",
+      "collocation": "study of similar to, structure of similar to",
+      "sentences": [
+        {
+          "en": "We need to analyze the similar to in this scientific context.",
+          "tr": "Bu bilimsel bağlamda benzer, -e benzer analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the similar to during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında benzer, -e benzer inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the similar to of this species.",
+          "tr": "Son araştırmalar bu türün benzer, -e benzer hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this similar to for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu benzer, -e benzer üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of similar to is very important in modern biology.",
+          "tr": "Modern biyolojide benzer, -e benzer rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "similarity",
+      "en": "We need to analyze the similarity in this scientific context.",
+      "tr": "benzerlik",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the similarity in this scientific context. / Bu bilimsel bağlamda benzerlik analiz etmeliyiz.",
+      "collocation": "study of similarity, structure of similarity",
+      "sentences": [
+        {
+          "en": "We need to analyze the similarity in this scientific context.",
+          "tr": "Bu bilimsel bağlamda benzerlik analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the similarity during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında benzerlik inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the similarity of this species.",
+          "tr": "Son araştırmalar bu türün benzerlik hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this similarity for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu benzerlik üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of similarity is very important in modern biology.",
+          "tr": "Modern biyolojide benzerlik rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "similarly",
+      "en": "We need to analyze the similarly in this scientific context.",
+      "tr": "benzer şekilde, i̇spanya anayasası uyarınca, mahkemeler doğmamış hayatı bir kamusal yarara ait olduğu ve bu yüzden mutlaka korunması gerektiğini belirtir.",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the similarly in this scientific context. / Bu bilimsel bağlamda benzer şekilde, i̇spanya anayasası uyarınca, mahkemeler doğmamış hayatı bir kamusal yarara ait olduğu ve bu yüzden mutlaka korunması gerektiğini belirtir. analiz etmeliyiz.",
+      "collocation": "study of similarly, structure of similarly",
+      "sentences": [
+        {
+          "en": "We need to analyze the similarly in this scientific context.",
+          "tr": "Bu bilimsel bağlamda benzer şekilde, i̇spanya anayasası uyarınca, mahkemeler doğmamış hayatı bir kamusal yarara ait olduğu ve bu yüzden mutlaka korunması gerektiğini belirtir. analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the similarly during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında benzer şekilde, i̇spanya anayasası uyarınca, mahkemeler doğmamış hayatı bir kamusal yarara ait olduğu ve bu yüzden mutlaka korunması gerektiğini belirtir. inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the similarly of this species.",
+          "tr": "Son araştırmalar bu türün benzer şekilde, i̇spanya anayasası uyarınca, mahkemeler doğmamış hayatı bir kamusal yarara ait olduğu ve bu yüzden mutlaka korunması gerektiğini belirtir. hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this similarly for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu benzer şekilde, i̇spanya anayasası uyarınca, mahkemeler doğmamış hayatı bir kamusal yarara ait olduğu ve bu yüzden mutlaka korunması gerektiğini belirtir. üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of similarly is very important in modern biology.",
+          "tr": "Modern biyolojide benzer şekilde, i̇spanya anayasası uyarınca, mahkemeler doğmamış hayatı bir kamusal yarara ait olduğu ve bu yüzden mutlaka korunması gerektiğini belirtir. rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "simple",
+      "en": "We need to analyze the simple in this scientific context.",
+      "tr": "tekil",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the simple in this scientific context. / Bu bilimsel bağlamda tekil analiz etmeliyiz.",
+      "collocation": "study of simple, structure of simple",
+      "sentences": [
+        {
+          "en": "We need to analyze the simple in this scientific context.",
+          "tr": "Bu bilimsel bağlamda tekil analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the simple during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında tekil inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the simple of this species.",
+          "tr": "Son araştırmalar bu türün tekil hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this simple for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu tekil üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of simple is very important in modern biology.",
+          "tr": "Modern biyolojide tekil rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "simulate",
+      "en": "We need to analyze the simulate in this scientific context.",
+      "tr": "taklit etmek, simüle etmek",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the simulate in this scientific context. / Bu bilimsel bağlamda taklit etmek, simüle etmek analiz etmeliyiz.",
+      "collocation": "study of simulate, structure of simulate",
+      "sentences": [
+        {
+          "en": "We need to analyze the simulate in this scientific context.",
+          "tr": "Bu bilimsel bağlamda taklit etmek, simüle etmek analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the simulate during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında taklit etmek, simüle etmek inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the simulate of this species.",
+          "tr": "Son araştırmalar bu türün taklit etmek, simüle etmek hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this simulate for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu taklit etmek, simüle etmek üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of simulate is very important in modern biology.",
+          "tr": "Modern biyolojide taklit etmek, simüle etmek rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "simultaneous",
+      "en": "We need to analyze the simultaneous in this scientific context.",
+      "tr": "eşzamanlı, aynı andaki",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the simultaneous in this scientific context. / Bu bilimsel bağlamda eşzamanlı, aynı andaki analiz etmeliyiz.",
+      "collocation": "study of simultaneous, structure of simultaneous",
+      "sentences": [
+        {
+          "en": "We need to analyze the simultaneous in this scientific context.",
+          "tr": "Bu bilimsel bağlamda eşzamanlı, aynı andaki analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the simultaneous during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında eşzamanlı, aynı andaki inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the simultaneous of this species.",
+          "tr": "Son araştırmalar bu türün eşzamanlı, aynı andaki hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this simultaneous for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu eşzamanlı, aynı andaki üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of simultaneous is very important in modern biology.",
+          "tr": "Modern biyolojide eşzamanlı, aynı andaki rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "since",
+      "en": "We need to analyze the since in this scientific context.",
+      "tr": "beri",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the since in this scientific context. / Bu bilimsel bağlamda beri analiz etmeliyiz.",
+      "collocation": "study of since, structure of since",
+      "sentences": [
+        {
+          "en": "We need to analyze the since in this scientific context.",
+          "tr": "Bu bilimsel bağlamda beri analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the since during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında beri inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the since of this species.",
+          "tr": "Son araştırmalar bu türün beri hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this since for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu beri üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of since is very important in modern biology.",
+          "tr": "Modern biyolojide beri rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "sincerity",
+      "en": "We need to analyze the sincerity in this scientific context.",
+      "tr": "samimiyet",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the sincerity in this scientific context. / Bu bilimsel bağlamda samimiyet analiz etmeliyiz.",
+      "collocation": "study of sincerity, structure of sincerity",
+      "sentences": [
+        {
+          "en": "We need to analyze the sincerity in this scientific context.",
+          "tr": "Bu bilimsel bağlamda samimiyet analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the sincerity during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında samimiyet inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the sincerity of this species.",
+          "tr": "Son araştırmalar bu türün samimiyet hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this sincerity for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu samimiyet üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of sincerity is very important in modern biology.",
+          "tr": "Modern biyolojide samimiyet rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "sink",
+      "en": "We need to analyze the sink in this scientific context.",
+      "tr": "atmak",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the sink in this scientific context. / Bu bilimsel bağlamda atmak analiz etmeliyiz.",
+      "collocation": "study of sink, structure of sink",
+      "sentences": [
+        {
+          "en": "We need to analyze the sink in this scientific context.",
+          "tr": "Bu bilimsel bağlamda atmak analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the sink during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında atmak inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the sink of this species.",
+          "tr": "Son araştırmalar bu türün atmak hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this sink for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu atmak üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of sink is very important in modern biology.",
+          "tr": "Modern biyolojide atmak rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "site",
+      "en": "We need to analyze the site in this scientific context.",
+      "tr": "yer, sit alanı, internet sitesi",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the site in this scientific context. / Bu bilimsel bağlamda yer, sit alanı, internet sitesi analiz etmeliyiz.",
+      "collocation": "study of site, structure of site",
+      "sentences": [
+        {
+          "en": "We need to analyze the site in this scientific context.",
+          "tr": "Bu bilimsel bağlamda yer, sit alanı, internet sitesi analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the site during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında yer, sit alanı, internet sitesi inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the site of this species.",
+          "tr": "Son araştırmalar bu türün yer, sit alanı, internet sitesi hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this site for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu yer, sit alanı, internet sitesi üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of site is very important in modern biology.",
+          "tr": "Modern biyolojide yer, sit alanı, internet sitesi rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "sitting",
+      "en": "We need to analyze the sitting in this scientific context.",
+      "tr": "oturma",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the sitting in this scientific context. / Bu bilimsel bağlamda oturma analiz etmeliyiz.",
+      "collocation": "study of sitting, structure of sitting",
+      "sentences": [
+        {
+          "en": "We need to analyze the sitting in this scientific context.",
+          "tr": "Bu bilimsel bağlamda oturma analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the sitting during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında oturma inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the sitting of this species.",
+          "tr": "Son araştırmalar bu türün oturma hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this sitting for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu oturma üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of sitting is very important in modern biology.",
+          "tr": "Modern biyolojide oturma rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        }
+      ],
+      "priority": "Orta Sıklık"
+    },
+    {
+      "word": "skill",
+      "en": "We need to analyze the skill in this scientific context.",
+      "tr": "yetenek",
+      "synonyms": "",
+      "type": "noun",
+      "en_tr": "We need to analyze the skill in this scientific context. / Bu bilimsel bağlamda yetenek analiz etmeliyiz.",
+      "collocation": "study of skill, structure of skill",
+      "sentences": [
+        {
+          "en": "We need to analyze the skill in this scientific context.",
+          "tr": "Bu bilimsel bağlamda yetenek analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the skill during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında yetenek inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the skill of this species.",
+          "tr": "Son araştırmalar bu türün yetenek hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this skill for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu yetenek üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of skill is very important in modern biology.",
+          "tr": "Modern biyolojide yetenek rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
         }
       ],
       "priority": "Orta Sıklık"

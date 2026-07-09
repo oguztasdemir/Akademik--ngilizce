@@ -514,6 +514,80 @@ const SettingsSection = ({
 
       </div>
 
+      {/* CARD: YEDEKLEME VE VERİ YÖNETİMİ */}
+      <div className="glass-card" style={{ padding: '24px', borderRadius: '18px', border: '1px solid rgba(99, 102, 241, 0.15)', background: 'rgba(99, 102, 241, 0.02)', display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '10px' }}>
+        <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#818cf8', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(99, 102, 241, 0.1)', paddingBottom: '12px' }}>
+          <i className="fa-solid fa-cloud-arrow-up"></i> Yedekleme ve İlerlemeyi Kurtarma Yönetimi
+        </h3>
+
+        <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+          İlerlemenizi, kelime geçmişinizi, hedeflerinizi ve ayarlarınızı başka bir cihaza aktarmak veya güvenceye almak için JSON formatında yedek oluşturabilirsiniz.
+        </div>
+
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ flex: 1, minWidth: '250px' }}>
+            <button
+              onClick={() => {
+                const backupData = {};
+                for (let i = 0; i < localStorage.length; i++) {
+                  const key = localStorage.key(i);
+                  if (key.startsWith('yokdil_') || key.startsWith('completed_') || key.includes('session')) {
+                    backupData[key] = localStorage.getItem(key);
+                  }
+                }
+                const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `yokdil_ilerleme_yedek_${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="px-4 py-2.5 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-md cursor-pointer border-none display-inline-flex items-center gap-2"
+            >
+              📥 İlerlemeyi Yedekle (JSON İndir)
+            </button>
+          </div>
+
+          <div style={{ flex: 1, minWidth: '250px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-main)' }}>📤 Yedekten Geri Yükle (JSON Yükle)</label>
+            <input
+              type="file"
+              accept=".json"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  try {
+                    const backupData = JSON.parse(event.target.result);
+                    if (typeof backupData !== 'object' || backupData === null) {
+                      alert("Geçersiz yedekleme dosyası!");
+                      return;
+                    }
+                    if (window.confirm("Bu yedeklemeyi yüklemek mevcut tüm ilerlemenizin üzerine yazacaktır. Devam etmek istiyor musunuz?")) {
+                      Object.entries(backupData).forEach(([key, val]) => {
+                        localStorage.setItem(key, String(val));
+                      });
+                      alert("Yedekleme başarıyla yüklendi! Sayfa yenileniyor...");
+                      window.location.reload();
+                    }
+                  } catch (err) {
+                    alert("Yedek dosyası okunurken hata oluştu: " + err.message);
+                  }
+                };
+                reader.readAsText(file);
+              }}
+              style={{
+                fontSize: '0.72rem',
+                color: 'var(--text-secondary)',
+                cursor: 'pointer'
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
       {/* CARD 5: VERİ TEMİZLEME VE HESAP SIFIRLAMA */}
       <div className="glass-card" style={{ padding: '24px', borderRadius: '18px', border: '1px solid rgba(239, 68, 68, 0.15)', background: 'rgba(239, 68, 68, 0.02)', display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '10px' }}>
         <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#f87171', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(239, 68, 68, 0.1)', paddingBottom: '12px' }}>
