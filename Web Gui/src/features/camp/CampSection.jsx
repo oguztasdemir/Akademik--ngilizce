@@ -255,19 +255,9 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
 
       const tempWords = [];
       if (reportCardType === 'cikmis_kelimeler') {
-        const planKey = `@dataset/yokdil/${category}/cikmis_kelimeler/kamp_plan.json`;
-        const loadPlan = getCampModule(planKey);
-        if (loadPlan) {
-          try {
-            const planMod = await loadPlan();
-            const planData = planMod.default || planMod;
-            for (const d of days) {
-              const dayWords = planData[String(d)] || [];
-              tempWords.push(...dayWords);
-            }
-          } catch (e) {
-            console.error(e);
-          }
+        for (const d of days) {
+          const dayWords = cikmisPlanData[String(d)] || [];
+          tempWords.push(...dayWords);
         }
       } else {
         for (const d of days) {
@@ -426,20 +416,34 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   useEffect(() => {
     const loadCikmisPlan = async () => {
       const category = selectedCategory || 'fen';
-      const planKey = `@dataset/yokdil/${category}/cikmis_kelimeler/kamp_plan.json`;
+      const planKey = `@dataset/yokdil/${category}/kamp_plan.json`;
       const loadPlan = getCampModule(planKey);
       if (loadPlan) {
         try {
           const planMod = await loadPlan();
           const planData = planMod.default || planMod;
-          setCikmisPlanData(planData);
+          
+          const categoryDict = (dictDb && dictDb[category]) || {};
+          const mappedData = {};
+          
+          Object.keys(planData).forEach(dayKey => {
+            const wordList = planData[dayKey] || [];
+            mappedData[dayKey] = wordList.map((word, idx) => ({
+              id: idx + 1,
+              english: word,
+              turkish: categoryDict[word] || "anlamı bulunamadı",
+              pronunciation: ""
+            }));
+          });
+          
+          setCikmisPlanData(mappedData);
         } catch (e) {
           console.error("Cikmis plan data load error:", e);
         }
       }
     };
     loadCikmisPlan();
-  }, [selectedCategory]);
+  }, [selectedCategory, dictDb]);
 
   // Load session state from localStorage/hash on category change or mount
   useEffect(() => {
@@ -956,43 +960,28 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
     setSelectedDay(dayNum);
     setCampType('cikmis_kelimeler');
 
-    const planKey = `@dataset/yokdil/${category}/cikmis_kelimeler/kamp_plan.json`;
-    const loadPlan = getCampModule(planKey);
-    if (!loadPlan) {
-      alert("Bu günün kelime planı bulunamadı!");
+    const dayWords = cikmisPlanData[String(dayNum)];
+    if (!dayWords || dayWords.length === 0) {
+      alert("Bu güne ait kelime verisi bulunamadı!");
       return;
     }
 
-    try {
-      const planMod = await loadPlan();
-      const planData = planMod.default || planMod;
-      const dayWords = planData[String(dayNum)];
-      if (!dayWords || dayWords.length === 0) {
-        alert("Bu güne ait kelime verisi bulunamadı!");
-        return;
-      }
+    setStudyWords(dayWords);
+    setIsStudying(true);
+    setStudyMode(mode === 'detailed' ? 'swipe' : mode);
+    setPhase(1);
+    setCurrentIdx(0);
+    setCikmisCardFlipped(false);
+    setCikmisSwipeResults({});
+    setCikmisMatchingMistakes({});
 
-      setStudyWords(dayWords);
-      setIsStudying(true);
-      setStudyMode(mode === 'detailed' ? 'swipe' : mode);
-      setPhase(1);
-      setCurrentIdx(0);
-      setCikmisCardFlipped(false);
-      setCikmisSwipeResults({});
-      setCikmisMatchingMistakes({});
-
-      if (mode === 'matching') {
-        setCikmisMatchingRound(0);
-        setCikmisMatchingMoves(0);
-        setCikmisMatchingErrors(0);
-        initCikmisMatchingRound(dayWords, 0);
-      }
-    } catch (e) {
-      console.error(e);
-      alert("Çıkmış kelimeler listesi yüklenirken hata oluştu.");
-      setIsStudying(false);
+    if (mode === 'matching') {
+      setCikmisMatchingRound(0);
+      setCikmisMatchingMoves(0);
+      setCikmisMatchingErrors(0);
+      initCikmisMatchingRound(dayWords, 0);
     }
-  };
+  };;
 
   const initCikmisMatchingRound = (wordsList, roundIdx) => {
     const start = roundIdx * 6;
@@ -1166,24 +1155,14 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
 
   const triggerCikmisExport = async (format) => {
     const category = selectedCategory || 'fen';
-    const planKey = `@dataset/yokdil/${category}/cikmis_kelimeler/kamp_plan.json`;
-    const loadPlan = getCampModule(planKey);
-    if (!loadPlan) {
-      alert("Kelime planı yüklenemedi!");
-      return;
-    }
-
     try {
-      const planMod = await loadPlan();
-      const planData = planMod.default || planMod;
-      
       const cikmisDoneMap = cikmisProgress.completedDays || {};
 
       const studiedWords = [];
       const unstudiedWords = [];
 
       for (let day = 1; day <= 60; day++) {
-        const dayWords = planData[String(day)] || [];
+        const dayWords = cikmisPlanData[String(day)] || [];
         const dayRecord = cikmisDoneMap[day];
         
         const isCompleted = dayRecord ? (
@@ -1231,7 +1210,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
       console.error(e);
       alert("Veriler hazırlanırken bir hata oluştu.");
     }
-  };
+  };;
 
   const completeCikmisStudy = (score, finalResultsMap = null) => {
     const isPassed = score >= 60;
