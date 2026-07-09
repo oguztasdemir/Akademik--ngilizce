@@ -25,8 +25,7 @@ const SmartStudyDashboard = ({
           </div>
         </div>
 
-        <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>SİSTEMATİK AKILLI ÇALIŞMA</span>
-        <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: '8px 0' }}>Kelime Öğrenim Kampı</h2>
+        <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: '8px 0 0 0' }}>Kelime Öğrenim Kampı</h2>
         <p style={{ fontSize: '0.88rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '28px' }}>
           Bu modülde seçtiğiniz sayıda akademik kelimeyi; önce inceleyerek öğrenir, ardından doğru anlamını seçeneklerden bularak test edersiniz.
         </p>

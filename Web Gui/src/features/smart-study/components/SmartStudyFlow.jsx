@@ -44,42 +44,14 @@ const SmartStudyFlow = ({
   return (
     <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)', minHeight: '520px' }}>
       
-      {/* Header and Progress Bar */}
-      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '18px', marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-          <div>
-            <span style={{ fontSize: '0.62rem', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>SİSTEMATİK AKILLI ÇALIŞMA</span>
-            <h3 style={{ fontSize: '1.38rem', fontWeight: '900', color: 'white', margin: '4px 0 0 0' }}>Kelime Öğrenim Kampı ({wordLimit} Kelime)</h3>
-          </div>
-          
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <span className={`badge ${phase >= 1 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              📖 1. Öğren
-            </span>
-            <span className={`badge ${phase >= 2 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              🧠 2. Anlam
-            </span>
-            <span className={`badge ${phase >= 3 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              🔄 3. Eş Anlam
-            </span>
-            <span className={`badge ${phase >= 4 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              📝 4. Boşluk Doldurma
-            </span>
-            <span className={`badge ${phase >= 5 ? 'badge-primary' : ''}`} style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
-              💡 5. Soru Taktikleri
-            </span>
-          </div>
-        </div>
- 
-        {/* Dynamic Progress Bar */}
-        <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', marginTop: '16px', overflow: 'hidden' }}>
-          <div style={{
-            height: '100%',
-            width: `${((phase - 1) * 20) + ((currentIdx + 1) / words.length * 20)}%`,
-            background: 'linear-gradient(90deg, #6366f1 0%, #10b981 100%)',
-            transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-          }} />
-        </div>
+      {/* Sleek Dynamic Progress Bar at the very top */}
+      <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', marginBottom: '24px', overflow: 'hidden' }}>
+        <div style={{
+          height: '100%',
+          width: `${((phase - 1) * 20) + ((currentIdx + 1) / words.length * 20)}%`,
+          background: 'linear-gradient(90deg, #6366f1 0%, #10b981 100%)',
+          transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+        }} />
       </div>
 
       {/* PHASE 1: LEARN WORDS */}

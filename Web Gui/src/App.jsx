@@ -1278,7 +1278,8 @@ function App() {
     setAnswers(newAnswers);
     localStorage.setItem(`answers_${selectedExam.id}`, JSON.stringify(newAnswers));
 
-    const isCorrect = value === selectedExam.answers[qIndex - 1];
+    const correctAns = selectedExam.questions?.[qIndex - 1]?.correct_option || selectedExam.answers?.[qIndex - 1];
+    const isCorrect = value === correctAns;
 
     // Tally correct/incorrect counts per question
     const examIdKey = selectedExam.id;

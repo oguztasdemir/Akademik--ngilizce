@@ -13,6 +13,165 @@ const PerformanceSection = ({
   notebook = []
 }) => {
   const [perfTab, setPerfTab] = useState('summary'); // 'summary', 'cikmis', 'daily', 'book', 'reading', 'games'
+
+  const exportPDF = () => {
+    const printWindow = window.open('', '_blank', 'width=850,height=950');
+    if (!printWindow) {
+      alert("Popup engelleyiciyi devre dışı bırakın!");
+      return;
+    }
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>YOKDIL_Genel_Gelisim_Karnesi</title>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: 'Inter', system-ui, sans-serif; padding: 30px; color: #1e293b; }
+            h1 { color: #4f46e5; border-bottom: 2.5px solid #f1f5f9; padding-bottom: 10px; margin-top: 0; }
+            h3 { color: #1e1b4b; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 4px; margin-top: 24px; }
+            .kpi-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+            .kpi-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; font-size: 0.85rem; }
+            .kpi-value { font-size: 1.3rem; font-weight: 800; color: #4f46e5; margin-top: 4px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+            th { background: #f1f5f9; padding: 10px; text-align: left; font-size: 0.8rem; border-bottom: 2px solid #cbd5e1; }
+            td { padding: 10px; border-bottom: 1px solid #cbd5e1; font-size: 0.85rem; }
+          </style>
+        </head>
+        <body>
+          <h1>📊 YÖKDİL Akademik Gelişim Raporu</h1>
+          <p>Rapor Tarihi: ${new Date().toLocaleDateString()}</p>
+
+          <div class="kpi-container">
+            <div class="kpi-card"><div>Kelime Kampı</div><div class="kpi-value">${cikmisDoneDays} / 60 Gün</div></div>
+            <div class="kpi-card"><div>Günlük Kamp</div><div class="kpi-value">${dailyDoneDays} / 60 Gün</div></div>
+            <div class="kpi-card"><div>Okunan Makale</div><div class="kpi-value">${completedPassages.length} Adet</div></div>
+            <div class="kpi-card"><div>Çözülen Sınav</div><div class="kpi-value">${stats.solved} Sınav</div></div>
+          </div>
+
+          <h3>🟢 Kelime Kampı İlerleme Detayları</h3>
+          <table>
+            <thead><tr><th>Gün</th><th>Tarih</th><th>Deneme Sayısı</th><th>Başarı Skoru</th></tr></thead>
+            <tbody>
+              ${Object.entries(cikmisProgress.completedDays || {}).map(([dayNum, record]) => `
+                <tr><td>Gün ${dayNum}</td><td>${record.date}</td><td>${record.history?.length || 1}</td><td>%${record.score}</td></tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <h3>📚 Kelime Defterim (${notebook.length} Kelime)</h3>
+          <table>
+            <thead><tr><th>Sıra</th><th>Kelime (İngilizce)</th><th>Türkçe Anlamı</th><th>Öğrenme Aşaması</th></tr></thead>
+            <tbody>
+              ${notebook.map((w, idx) => `
+                <tr><td>${idx + 1}</td><td><strong>${w.english}</strong></td><td>${w.turkish}</td><td>Aşama ${w.leitnerStage || 1}</td></tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <script>
+            window.onload = function() { window.print(); setTimeout(function() { window.close(); }, 500); };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
+  const exportExcel = () => {
+    const allNotebookRows = notebook.map((w, idx) => `
+      <Row>
+       <Cell><Data ss:Type="Number">${idx + 1}</Data></Cell>
+       <Cell><Data ss:Type="String">${w.english}</Data></Cell>
+       <Cell><Data ss:Type="String">${w.turkish}</Data></Cell>
+       <Cell><Data ss:Type="String">Aşama ${w.leitnerStage || 1}</Data></Cell>
+      </Row>`).join('');
+
+    const xmlContent = `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Header">
+   <Font ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#4F46E5" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Genel İlerleme">
+  <Table>
+   <Row ss:StyleID="Header"><Cell><Data ss:Type="String">Metrik</Data></Cell><Cell><Data ss:Type="String">Değer</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Kelime Kampı (Çıkmış)</Data></Cell><Cell><Data ss:Type="String">${cikmisDoneDays} / 60 Gün</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Günlük SR Kampı</Data></Cell><Cell><Data ss:Type="String">${dailyDoneDays} / 60 Gün</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Dilbilgisi Kampı</Data></Cell><Cell><Data ss:Type="String">${grammarDoneDays} / 60 Gün</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Okunan Makaleler</Data></Cell><Cell><Data ss:Type="String">${completedPassages.length} Adet</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">YDS Kitap Çalışmaları</Data></Cell><Cell><Data ss:Type="String">${bookCompletedDays.length} Gün</Data></Cell></Row>
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Kelime Defterim">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Sıra No</Data></Cell>
+    <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
+    <Cell><Data ss:Type="String">Türkçe Anlamı</Data></Cell>
+    <Cell><Data ss:Type="String">Öğrenme Durumu</Data></Cell>
+   </Row>
+   ${allNotebookRows}
+  </Table>
+ </Worksheet>
+</Workbook>`;
+
+    const blob = new Blob([xmlContent], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `YOKDIL_Akademik_Gelisim_Karnesi.xls`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const exportDocx = () => {
+    const docxContent = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head><title>Kelime Defteri Raporu</title></head>
+      <body style="font-family: Arial; padding: 20px;">
+        <h2>📝 YÖKDİL Akademik Kelime Defteri Raporu</h2>
+        <p>Toplam Kayıtlı Kelime: <strong>${notebook.length}</strong></p>
+        <hr/>
+        <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 100%;">
+          <tr style="background-color: #f1f5f9; font-weight: bold;">
+            <th style="width: 10%;">No</th>
+            <th style="width: 30%;">Kelime (İngilizce)</th>
+            <th style="width: 40%;">Türkçe Anlamı</th>
+            <th style="width: 20%;">Leitner Aşaması</th>
+          </tr>
+          ${notebook.map((w, idx) => `
+            <tr>
+              <td>${idx + 1}</td>
+              <td style="font-weight: bold; color: #4f46e5;">${w.english}</td>
+              <td>${w.turkish}</td>
+              <td>Aşama ${w.leitnerStage || 1}</td>
+            </tr>
+          `).join('')}
+        </table>
+      </body>
+      </html>
+    `;
+    const blob = new Blob(['\ufeff' + docxContent], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `YOKDIL_Kelime_Defterim.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
   
   if (activeTab !== 'performance') return null;
 
@@ -42,12 +201,37 @@ const PerformanceSection = ({
   return (
     <div className="space-y-6 text-left" style={{ maxWidth: '1000px', margin: '0 auto', color: 'white' }}>
       {/* Premium Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', padding: '20px 24px', borderRadius: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', padding: '20px 24px', borderRadius: '24px', flexWrap: 'wrap', gap: '14px' }}>
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Activity style={{ color: '#6366f1' }} size={24} /> Kişisel Gelişim Karnesi
           </h2>
           <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: '4px 0 0 0' }}>Tüm çalışma istatistiklerinizi ve ilerlemenizi tek bir panelden takip edin.</p>
+        </div>
+        
+        {/* Export Buttons Block */}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button 
+            onClick={exportPDF}
+            className="btn-primary"
+            style={{ padding: '8px 12px', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', borderRadius: '8px' }}
+          >
+            📥 PDF Rapor
+          </button>
+          <button 
+            onClick={exportExcel}
+            className="btn-secondary"
+            style={{ padding: '8px 12px', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', borderRadius: '8px', border: '1px solid rgba(16,185,129,0.2)', color: '#34d399', background: 'rgba(16,185,129,0.05)' }}
+          >
+            📊 Excel Rapor
+          </button>
+          <button 
+            onClick={exportDocx}
+            className="btn-secondary"
+            style={{ padding: '8px 12px', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', borderRadius: '8px', border: '1px solid rgba(99,102,241,0.2)', color: '#a5b4fc', background: 'rgba(99,102,241,0.05)' }}
+          >
+            📝 Defteri İndir
+          </button>
         </div>
       </div>
 

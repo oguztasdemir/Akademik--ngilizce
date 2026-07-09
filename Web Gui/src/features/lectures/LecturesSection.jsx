@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, ArrowRight, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+import fallbackExercises from '@dataset/yokdil/genel/lecture_exercises.json';
 
 const LecturesSection = ({
   activeTab,
@@ -37,27 +38,21 @@ const LecturesSection = ({
     setExerciseScore(0);
     setExerciseList([]);
     
-    if (activeLecture && BACKEND_URL) {
-      // Fetch questions dynamically from general JSON served by backend
-      fetch(`${BACKEND_URL}/api/lectures/${activeLecture.id}/exercises`)
-        .then(res => res.json())
-        .then(data => {
-          const scrambled = data.map(q => {
-            if (q && Array.isArray(q.options)) {
-              return {
-                ...q,
-                options: [...q.options].sort(() => 0.5 - Math.random())
-              };
-            }
-            return q;
-          });
-          setExerciseList(scrambled);
-        })
-        .catch(err => {
-          console.error("Error loading exercises:", err);
-        });
+    if (activeLecture) {
+      const lid = activeLecture.id;
+      const data = fallbackExercises[lid] || [];
+      const scrambled = data.map(q => {
+        if (q && Array.isArray(q.options)) {
+          return {
+            ...q,
+            options: [...q.options].sort(() => 0.5 - Math.random())
+          };
+        }
+        return q;
+      });
+      setExerciseList(scrambled);
     }
-  }, [activeLecture, BACKEND_URL]);
+  }, [activeLecture]);
 
   if (activeTab !== 'lectures') return null;
 
@@ -409,10 +404,16 @@ const LecturesSection = ({
                   (() => {
                     const currentEx = exerciseList[exerciseIdx];
                     return (
-                      <div className="glass-card p-6 border border-white/5 bg-white/2 rounded-2xl space-y-5">
-                        <div className="flex justify-between items-center text-[10px] text-indigo-400 font-bold" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <span>BOŞLUK DOLDURMA PRATİĞİ</span>
-                          <span>Soru {exerciseIdx + 1} / {exerciseList.length}</span>
+                      <div className="glass-card p-6 border border-white/5 bg-gradient-to-br from-indigo-950/20 via-slate-900/40 to-slate-950/60 rounded-3xl space-y-6" style={{ background: 'rgba(15, 23, 42, 0.45)', border: '1px solid rgba(99, 102, 241, 0.12)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.62rem', fontWeight: '800', color: '#818cf8', letterSpacing: '0.05em', textTransform: 'uppercase' }}>✍️ INTERAKTIF CÜMLE PRATİĞİ</span>
+                            <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: '#94a3b8' }}>Soru {exerciseIdx + 1} / {exerciseList.length}</span>
+                          </div>
+                          {/* Sleek animated progress bar */}
+                          <div style={{ width: '100%', height: '4px', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '2px', overflow: 'hidden' }}>
+                            <div style={{ width: `${((exerciseIdx + 1) / exerciseList.length) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #6366f1, #3b82f6)', transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }} />
+                          </div>
                         </div>
 
                         <div 
@@ -426,14 +427,14 @@ const LecturesSection = ({
                               }, 100);
                             }
                           }}
-                          className="text-sm font-semibold text-slate-200 text-center leading-relaxed py-4 border-y border-white/5" 
-                          style={{ fontSize: '1rem', color: '#e2e8f0', cursor: 'pointer', userSelect: 'text', WebkitUserSelect: 'text' }}
+                          className="text-sm font-semibold text-slate-100 text-center leading-relaxed py-6 border-y border-white/5" 
+                          style={{ fontSize: '1.05rem', color: '#f1f5f9', cursor: 'pointer', userSelect: 'text', WebkitUserSelect: 'text', borderTop: '1px dashed rgba(255,255,255,0.06)', borderBottom: '1px dashed rgba(255,255,255,0.06)' }}
                         >
                           {currentEx.sentence}
                         </div>
 
                         {/* Options Grid with premium styled borders */}
-                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '16px', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', marginTop: '20px', flexWrap: 'wrap' }}>
                           {currentEx.options.map((opt) => {
                             return (
                               <button
@@ -450,22 +451,22 @@ const LecturesSection = ({
 
                         {/* Explanation Box */}
                         {exerciseChecked && (
-                          <div className="glass-card p-4 border border-indigo-500/10 bg-indigo-500/5 rounded-xl space-y-2" style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', fontWeight: 'bold', color: exerciseSelected === currentEx.answer ? '#34D399' : '#F87171' }}>
-                              {exerciseSelected === currentEx.answer ? '✔️ Tebrikler, Doğru!' : '❌ Üzgünüz, Yanlış!'}
+                          <div className="glass-card p-5 border border-indigo-500/10 bg-indigo-500/5 rounded-2xl space-y-2" style={{ background: 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.15)', animation: 'slideDown 0.3s ease-out' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', fontWeight: '900', color: exerciseSelected === currentEx.answer ? '#10b981' : '#f87171' }}>
+                              {exerciseSelected === currentEx.answer ? '✔️ Tebrikler, Doğru Cevap!' : '❌ Üzgünüz, Yanlış Cevap!'}
                             </div>
-                            <p style={{ fontSize: '0.78rem', color: '#cbd5e1', lineHeight: '1.4', margin: 0 }}>
+                            <p style={{ fontSize: '0.8rem', color: '#cbd5e1', lineHeight: '1.5', margin: 0 }}>
                               {currentEx.explanation}
                             </p>
                           </div>
                         )}
 
-                        <div className="flex justify-end" style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '14px' }}>
+                        <div className="flex justify-end" style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
                           {exerciseChecked && (
                             <button
                               onClick={handleNextExercise}
                               className="btn-primary"
-                              style={{ padding: '10px 20px', fontSize: '0.78rem', cursor: 'pointer' }}
+                              style={{ padding: '10px 24px', fontSize: '0.8rem', cursor: 'pointer', borderRadius: '10px' }}
                             >
                               {exerciseIdx < exerciseList.length - 1 ? 'Sonraki Soru ➡️' : 'Alıştırmayı Bitir 🏁'}
                             </button>

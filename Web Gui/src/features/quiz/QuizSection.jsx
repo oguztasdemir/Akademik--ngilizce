@@ -338,19 +338,28 @@ const QuizSection = ({
                 </div>
               </div>
 
+              {/* Automatic Grammatical Explanation Panel */}
+              {!isCorrect && activeExplanation && (
+                <div style={{
+                  background: 'rgba(0, 0, 0, 0.25)',
+                  border: '1px solid rgba(239, 68, 68, 0.25)',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  marginTop: '4px',
+                  fontSize: '0.8rem',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  textAlign: 'left',
+                  lineHeight: '1.5',
+                  boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.2)'
+                }} className="prose prose-invert text-slate-300 scrollable-explanation-box">
+                  {renderMarkdown(activeExplanation.explanation)}
+                </div>
+              )}
+
               {/* BOTTOM ROW: Action buttons */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: '12px' }}>
-                <div>
-                  {!isCorrect ? (
-                    <button 
-                      onClick={() => setShowExplanation(true)}
-                      className="btn-secondary"
-                      style={{ padding: '10px 16px', fontSize: '0.8rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', color: 'white', borderRadius: '8px' }}
-                    >
-                      🔍 Açıklamayı Gör
-                    </button>
-                  ) : <div />}
-                </div>
+                <div />
 
                 <div>
                   <button
