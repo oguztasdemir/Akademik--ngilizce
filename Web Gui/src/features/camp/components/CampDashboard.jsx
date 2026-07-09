@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Star, Trophy, ArrowRight, Award } from 'lucide-react';
+import { Calendar, Star, Trophy, ArrowRight, Award, Sparkles } from 'lucide-react';
 
 const CampDashboard = ({
   campType,
