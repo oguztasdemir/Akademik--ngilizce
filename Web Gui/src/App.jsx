@@ -146,7 +146,7 @@ function App() {
       if (parts.length >= 3) {
         let tab = parts[2];
         if (tab === 'camp' && hash.includes('cikmis_kelimeler')) {
-          tab = 'cikmis-camp';
+          tab = 'vocabulary';
         }
         return {
           category: parts[1],
@@ -598,7 +598,7 @@ function App() {
         const cat = parts[1];
         let tab = parts[2];
         if (tab === 'camp' && hash.includes('cikmis_kelimeler')) {
-          tab = 'cikmis-camp';
+          tab = 'vocabulary';
         }
         setSelectedCategory(cat);
         setActiveTab(tab);
@@ -657,7 +657,7 @@ function App() {
       }
     } else {
       const quizSuffix = quizActive ? '/quiz' : '';
-      if (activeTab === 'cikmis-camp') {
+      if (activeTab === 'vocabulary') {
         const expectedHash = `#/${selectedCategory}/camp/cikmis_kelimeler`;
         if (window.location.hash !== expectedHash) {
           window.history.pushState(null, '', expectedHash);
@@ -3427,26 +3427,22 @@ function App() {
               questionTimeSpent={questionTimeSpent}
             />
 
-            {/* TAB 3: VOCABULARY SECTION */}
-            <VocabularySection
-              activeTab={activeTab}
-              notebook={notebook}
-              vocabPracticeList={vocabPracticeList}
-              handleDeleteFromNotebook={handleDeleteFromNotebook}
-              handleToggleWordStatus={handleToggleWordStatus}
-              handleUpdateWordLeitner={handleUpdateWordLeitner}
-              playSpeechAudio={playSpeechAudio}
-              handleLoadAcademicWords={handleLoadAcademicWords}
-              handleAddCustomWord={handleAddCustomWord}
-              wordStats={wordStats}
-              recordWordStat={recordWordStat}
-              speechRate={speechRate}
-              setSpeechRate={setSpeechRate}
-              incrementDailyQuestions={incrementDailyQuestions}
-              incrementDailyWords={incrementDailyWords}
-              autoPronounceEnabled={autoPronounceEnabled}
-              addMistake={addMistake}
-            />
+            {/* TAB 3: VOCABULARY SECTION (SWAPPED WITH KELİME KAMPI) */}
+            {selectedCategory && activeTab === 'vocabulary' && (
+              <section id="screen-vocabulary-camp" className="app-screen active animate-fade-in">
+                <CampSection
+                  key="vocabulary-camp"
+                  initialCampType="cikmis_kelimeler"
+                  selectedCategory={selectedCategory}
+                  awardPetXP={awardPetXP}
+                  triggerConfetti={triggerConfetti}
+                  examsDb={{ fen: fallbackExamsFen, sosyal: fallbackExamsSosyal, saglik: fallbackExamsSaglik }}
+                  dictDb={{ fen: fallbackDictFen, sosial: fallbackDictSosyal, saglik: fallbackDictSaglik }}
+                  recordWordStat={recordWordStat}
+                  addMistake={addMistake}
+                />
+              </section>
+            )}
 
             {/* TAB 3.5: PARAGRAPHS SECTION */}
             <ParagraphsSection
@@ -3564,23 +3560,6 @@ function App() {
               </section>
             )}
 
-            {/* TAB 7.57: ÇIKMIŞ KELİMELER CAMP SECTION */}
-            {selectedCategory && activeTab === 'cikmis-camp' && (
-              <section id="screen-cikmis-camp" className="app-screen active animate-fade-in">
-                <CampSection
-                  key="cikmis-camp"
-                  initialCampType="cikmis_kelimeler"
-                  selectedCategory={selectedCategory}
-                  awardPetXP={awardPetXP}
-                  triggerConfetti={triggerConfetti}
-                  examsDb={{ fen: fallbackExamsFen, sosyal: fallbackExamsSosyal, saglik: fallbackExamsSaglik }}
-                  dictDb={{ fen: fallbackDictFen, sosyal: fallbackDictSosyal, saglik: fallbackDictSaglik }}
-                  recordWordStat={recordWordStat}
-                  addMistake={addMistake}
-                />
-              </section>
-            )}
- 
             {/* TAB 7.6: MINI OYUNLAR SECTION */}
             {selectedCategory && activeTab === 'games' && (
               <section id="screen-games" className="app-screen active">

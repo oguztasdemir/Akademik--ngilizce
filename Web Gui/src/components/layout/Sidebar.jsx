@@ -73,7 +73,7 @@ const Sidebar = ({
             onClick={() => { setActiveTab('vocabulary'); setQuizActive(false); }}
           >
             <i className="fa-solid fa-book"></i>
-            <span>Kelimelerim</span>
+            <span>Kelime Kampı</span>
           </button>
           <button 
             className={`sidebar-nav-item nav-paragraphs ${activeTab === 'paragraphs' ? 'active' : ''}`}
@@ -131,13 +131,7 @@ const Sidebar = ({
             <i className="fa-solid fa-calendar-days"></i>
             <span>Günlük Kamp</span>
           </button>
-          <button 
-            className={`sidebar-nav-item nav-cikmis ${activeTab === 'cikmis-camp' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('cikmis-camp'); setQuizActive(false); }}
-          >
-            <i className="fa-solid fa-fire" style={{ color: '#ef4444' }}></i>
-            <span>Kelime Kampı</span>
-          </button>
+
           <button 
             className={`sidebar-nav-item nav-games ${activeTab === 'games' ? 'active' : ''}`}
             onClick={() => { setActiveTab('games'); setQuizActive(false); }}
@@ -257,13 +251,7 @@ const Sidebar = ({
                 <i className="fa-solid fa-calendar-days" style={{ color: '#10b981' }}></i>
                 <span>Günlük Kamp</span>
               </button>
-              <button 
-                className="mobile-more-item"
-                onClick={() => { setActiveTab('cikmis-camp'); setQuizActive(false); setShowMoreMenu(false); }}
-              >
-                <i className="fa-solid fa-fire" style={{ color: '#ef4444' }}></i>
-                <span>Kelime Kampı</span>
-              </button>
+
 
               <button 
                 className="mobile-more-item"
