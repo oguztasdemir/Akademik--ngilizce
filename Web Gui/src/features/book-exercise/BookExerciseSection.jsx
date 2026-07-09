@@ -1,4 +1,12 @@
 import React, { useState, useEffect } from 'react';
+
+const bookModules = import.meta.glob('@dataset/yokdil/fen/kitap/*.json');
+
+const getBookModule = (dayNum) => {
+  const suffix = `yokdil/fen/kitap/day_${dayNum}.json`;
+  const foundKey = Object.keys(bookModules).find(k => k.endsWith(suffix));
+  return foundKey ? bookModules[foundKey] : null;
+};
 import { Award, Volume2, ArrowRight, Check, X } from 'lucide-react';
 import { handlePrintPDF } from './components/BookExercisePrint';
 import BookExerciseDashboard from './components/BookExerciseDashboard';
@@ -41,9 +49,10 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
     
     try {
       for (let d = startDay; d <= endDay; d++) {
-        const res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/kitap/day_${d}.json`);
-        if (res.ok) {
-          const data = await res.json();
+        const loadModule = getBookModule(d);
+        if (loadModule) {
+          const mod = await loadModule();
+          const data = mod.default || mod;
           if (data.words) {
             allWords.push(...data.words);
           }
@@ -192,9 +201,10 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
       const tempWords = [];
       for (const d of days) {
         try {
-          const res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/kitap/day_${d}.json`);
-          if (res.ok) {
-            const data = await res.json();
+          const loadModule = getBookModule(d);
+          if (loadModule) {
+            const mod = await loadModule();
+            const data = mod.default || mod;
             if (data.words) {
               tempWords.push(...data.words);
             }
@@ -347,20 +357,24 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
         return;
       }
 
+      const loadModule = getBookModule(selectedDay);
+      if (!loadModule) {
+        alert(`${selectedDay}. Günün verisi bulunamadı.`);
+        setSelectedDay(null);
+        setLoadingDay(false);
+        return;
+      }
       setLoadingDay(true);
       setCurrentDayData(null);
-      fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/kitap/day_${selectedDay}.json`)
-        .then(res => {
-          if (!res.ok) throw new Error("Günün verisi bulunamadı");
-          return res.json();
-        })
-        .then(data => {
+      loadModule()
+        .then(mod => {
+          const data = mod.default || mod;
           setCurrentDayData(data);
           setLoadingDay(false);
         })
         .catch(err => {
           console.error("Error loading day data:", err);
-          alert(`${selectedDay}. Günün verisi yüklenemedi. Lütfen PDF dosyanızı 'yokdil_app/pdfs/' dizinine kopyalayıp 'parse_yds_book.py' betiğini çalıştırın.`);
+          alert(`${selectedDay}. Günün verisi yüklenemedi.`);
           setSelectedDay(null);
           setLoadingDay(false);
         });

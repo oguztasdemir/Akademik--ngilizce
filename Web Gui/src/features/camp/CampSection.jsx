@@ -9,6 +9,21 @@ import CampGrammar from './components/CampGrammar';
 const campModules = import.meta.glob('@dataset/**/*.json');
 
 // Helper to resolve dynamically imported dataset modules since Vite alias keys can differ
+
+const deterministicShuffle = (array, seed) => {
+  const arr = [...array];
+  let mySeed = seed;
+  const rnd = () => {
+    mySeed = (mySeed * 9301 + 49297) % 233280;
+    return mySeed / 233280;
+  };
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
+
 const getCampModule = (key) => {
   if (!key) return null;
   const suffix = key.replace(/^@dataset\//, '').replace(/^\//, '');
@@ -283,7 +298,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         }
       } else {
         for (const d of days) {
-          const dailyKelimeKey = `@dataset/yokdil/${category}/gunluk_camp/kelime/day_${d}.json`;
+          const dailyKelimeKey = `@dataset/yokdil/${category}/gunluk_kamp/kelime/day_${d}.json`;
           const loadDailyKelime = getCampModule(dailyKelimeKey);
           if (loadDailyKelime) {
             try {
@@ -647,7 +662,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     setSelectedDay(dayNum);
     setIsStudying(true);
 
-    const dailyPlanKey = `@dataset/yokdil/${category}/gunluk_camp/kelime/day_${dayNum}.json`;
+    const dailyPlanKey = `@dataset/yokdil/${category}/gunluk_kamp/kelime/day_${dayNum}.json`;
     const loadDaily = getCampModule(dailyPlanKey);
     if (!loadDaily) {
       alert("Bu günün kelime listesi bulunamadı veya henüz hazır değil!");
@@ -659,7 +674,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const dailyMod = await loadDaily();
       const dailyData = dailyMod.default || dailyMod;
       if (dailyData && dailyData.words) {
-        let finalWords = [...dailyData.words];
+        let finalWords = deterministicShuffle(dailyData.words, dayNum);
         setStudyWords(finalWords);
 
         // Load correct answers count based on completed state
@@ -738,8 +753,9 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
           if (resume) {
             setSelectedDay(dayNum);
             setCampType('cikmis_kelimeler');
-            const dayWords = cikmisPlanData[String(dayNum)];
-            setStudyWords(dayWords);
+            const dayWords = cikmisPlanData[String(dayNum)] || [];
+            const shuffledWords = deterministicShuffle(dayWords, dayNum);
+            setStudyWords(shuffledWords);
             setIsStudying(true);
             
             // Restore all states
@@ -785,7 +801,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       return;
     }
 
-    setStudyWords(dayWords);
+    const shuffledWords = deterministicShuffle(dayWords, dayNum);
+    setStudyWords(shuffledWords);
     setIsStudying(true);
     setStudyMode(mode === 'detailed' ? 'swipe' : mode);
     setPhase(1);
@@ -990,10 +1007,14 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
             : (dayRecord.detailedCompleted !== undefined ? !!dayRecord.detailedCompleted : true)
         ) : false;
 
-        const resultsMap = dayRecord ? (
+        const historyList = dayRecord?.history || [];
+        const matchingAttempts = historyList.filter(h => h.cikmisMode === cikmisMode);
+        const latestAttempt = matchingAttempts.length > 0 ? matchingAttempts[matchingAttempts.length - 1] : dayRecord;
+
+        const resultsMap = latestAttempt ? (
           cikmisMode === 'swipe'
-            ? dayRecord.swipeResults || dayRecord.resultsMap || {}
-            : dayRecord.detailedResults || dayRecord.resultsMap || {}
+            ? latestAttempt.swipeResults || latestAttempt.resultsMap || {}
+            : latestAttempt.detailedResults || latestAttempt.resultsMap || {}
         ) : {};
 
         if (isCompleted) {
@@ -1090,7 +1111,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         isPassed: isPassed,
         date: new Date().toLocaleDateString(),
         cikmisMode: cikmisMode,
-        resultsMap: resultsMap
+        resultsMap: resultsMap,
+        swipeResults: resultsMap
       }
     ];
 
@@ -2419,7 +2441,7 @@ const handleCikmisSwipeBack = () => {
                           return (
                             <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(0,0,0,0.15)', borderRadius: '8px', borderLeft: attempt.isPassed ? '3.5px solid #10b981' : '3.5px solid #ef4444', fontSize: '0.8rem' }}>
                               <div>
-                                <span style={{ fontWeight: 'bold', color: 'white', marginRight: '6px' }}>{index + 1}. Deneme:</span>
+                                <span style={{ fontWeight: 'bold', color: 'white', marginRight: '6px' }}>{index + 1}. Deneme (v{index + 1}):</span>
                                 <span style={{ color: attempt.isPassed ? '#34d399' : '#f87171', fontWeight: 'bold' }}>%{attempt.score}</span>
                                 <span style={{ fontSize: '0.72rem', color: '#64748b', marginLeft: '8px' }}>({attempt.date})</span>
                               </div>
@@ -2438,7 +2460,16 @@ const handleCikmisSwipeBack = () => {
                   <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
                     {!isGrammar && (
                       <button 
-                        onClick={() => handlePrintPDF(reportCardDay, reportCardWords, completedObj, selectedCategory, totalCampDays)}
+                        onClick={() => {
+                          const historyList = completedObj?.history || [];
+                          const latestAttempt = historyList.length > 0 ? historyList[historyList.length - 1] : completedObj;
+                          const exportStats = { 
+                            ...completedObj, 
+                            ...latestAttempt,
+                            swipeResults: latestAttempt.swipeResults || latestAttempt.resultsMap || completedObj.swipeResults || completedObj.resultsMap
+                          };
+                          handlePrintPDF(reportCardDay, reportCardWords, exportStats, selectedCategory, totalCampDays);
+                        }}
                         className="btn-primary"
                         style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: '#3b82f6', borderColor: '#3b82f6', cursor: 'pointer' }}
                       >

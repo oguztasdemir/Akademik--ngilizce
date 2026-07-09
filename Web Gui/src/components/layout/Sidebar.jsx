@@ -54,6 +54,7 @@ const Sidebar = ({
 
         {/* Nav List */}
         <nav className="sidebar-nav">
+          {/* Main Hub */}
           <button 
             className={`sidebar-nav-item nav-dashboard ${activeTab === 'dashboard' ? 'active' : ''}`}
             onClick={() => { setActiveTab('dashboard'); setQuizActive(false); }}
@@ -61,13 +62,8 @@ const Sidebar = ({
             <i className="fa-solid fa-house"></i>
             <span>Ana Sayfa</span>
           </button>
-          <button 
-            className={`sidebar-nav-item nav-tests ${activeTab === 'tests' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('tests'); setQuizActive(false); }}
-          >
-            <i className="fa-solid fa-pen-to-square"></i>
-            <span>Testler</span>
-          </button>
+          
+          <div style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Kelime Gelişimi</div>
           <button 
             className={`sidebar-nav-item nav-vocabulary ${activeTab === 'vocabulary' ? 'active' : ''}`}
             onClick={() => { setActiveTab('vocabulary'); setQuizActive(false); }}
@@ -76,11 +72,27 @@ const Sidebar = ({
             <span>Kelime Kampı</span>
           </button>
           <button 
-            className={`sidebar-nav-item nav-paragraphs ${activeTab === 'paragraphs' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('paragraphs'); setQuizActive(false); }}
+            className={`sidebar-nav-item nav-camp ${activeTab === 'camp' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('camp'); setQuizActive(false); }}
           >
-            <i className="fa-solid fa-file-lines"></i>
-            <span>Paragraflar</span>
+            <i className="fa-solid fa-calendar-days"></i>
+            <span>Günlük Kamp</span>
+          </button>
+          <button 
+            className={`sidebar-nav-item nav-book-exercises ${activeTab === 'book-exercises' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('book-exercises'); setQuizActive(false); }}
+          >
+            <i className="fa-solid fa-book-open"></i>
+            <span>YDS Kitap</span>
+          </button>
+
+          <div style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Sınav & Okuma</div>
+          <button 
+            className={`sidebar-nav-item nav-tests ${activeTab === 'tests' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('tests'); setQuizActive(false); }}
+          >
+            <i className="fa-solid fa-pen-to-square"></i>
+            <span>Testler</span>
           </button>
           <button 
             className={`sidebar-nav-item nav-lectures ${activeTab === 'lectures' ? 'active' : ''}`}
@@ -90,12 +102,30 @@ const Sidebar = ({
             <span>Konu Anlatımı</span>
           </button>
           <button 
+            className={`sidebar-nav-item nav-paragraphs ${activeTab === 'paragraphs' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('paragraphs'); setQuizActive(false); }}
+          >
+            <i className="fa-solid fa-file-lines"></i>
+            <span>Paragraflar</span>
+          </button>
+
+          <div style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Kişisel & Destek</div>
+          <button 
+            className={`sidebar-nav-item nav-smart-study ${activeTab === 'smart-study' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('smart-study'); setQuizActive(false); }}
+          >
+            <i className="fa-solid fa-bolt"></i>
+            <span>Akıllı Çalışma</span>
+          </button>
+          <button 
             className={`sidebar-nav-item nav-mistakes ${activeTab === 'mistakes' ? 'active' : ''}`}
             onClick={() => { setActiveTab('mistakes'); setQuizActive(false); }}
           >
             <i className="fa-solid fa-circle-exclamation"></i>
             <span>Hata Kutusu</span>
           </button>
+
+          <div style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Gelişim & Eğlence</div>
           <button 
             className={`sidebar-nav-item nav-performance ${activeTab === 'performance' ? 'active' : ''}`}
             onClick={() => { setActiveTab('performance'); setQuizActive(false); }}
@@ -118,34 +148,14 @@ const Sidebar = ({
             <span>Evcil Hayvanım</span>
           </button>
           <button 
-            className={`sidebar-nav-item nav-smart-study ${activeTab === 'smart-study' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('smart-study'); setQuizActive(false); }}
-          >
-            <i className="fa-solid fa-graduation-cap"></i>
-            <span>Akıllı Çalışma</span>
-          </button>
-          <button 
-            className={`sidebar-nav-item nav-camp ${activeTab === 'camp' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('camp'); setQuizActive(false); }}
-          >
-            <i className="fa-solid fa-calendar-days"></i>
-            <span>Günlük Kamp</span>
-          </button>
-
-          <button 
             className={`sidebar-nav-item nav-games ${activeTab === 'games' ? 'active' : ''}`}
             onClick={() => { setActiveTab('games'); setQuizActive(false); }}
           >
             <i className="fa-solid fa-gamepad"></i>
             <span>Mini Oyunlar</span>
           </button>
-          <button 
-            className={`sidebar-nav-item nav-book-exercises ${activeTab === 'book-exercises' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('book-exercises'); setQuizActive(false); }}
-          >
-            <i className="fa-solid fa-book-open"></i>
-            <span>YDS Kitap</span>
-          </button>
+
+          <div style={{ margin: '10px 0' }}></div>
           <button 
             className={`sidebar-nav-item nav-settings ${activeTab === 'settings' ? 'active' : ''}`}
             onClick={() => { setActiveTab('settings'); setQuizActive(false); }}
