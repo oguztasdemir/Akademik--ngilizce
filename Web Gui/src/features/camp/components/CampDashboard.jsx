@@ -36,6 +36,39 @@ const CampDashboard = ({
   cikmisPlanData,
   hideSwitcher
 }) => {
+  // Calculate stats dynamically based on cikmisPlanData and cikmisDoneMap
+  const stats = (() => {
+    let correct = 0;
+    let wrong = 0;
+    let total = 0;
+    
+    const doneMap = cikmisDoneMap || {};
+    const plan = cikmisPlanData || {};
+    
+    Object.keys(plan).forEach(dayKey => {
+      const dayWords = plan[dayKey] || [];
+      total += dayWords.length;
+      
+      const dayRecord = doneMap[dayKey];
+      if (dayRecord) {
+        const results = dayRecord.results || dayRecord.resultsMap || dayRecord.swipeResults || dayRecord.detailedResults || {};
+        dayWords.forEach(w => {
+          const status = results[w.english];
+          if (status === true) {
+            correct += 1;
+          } else if (status === false) {
+            wrong += 1;
+          } else {
+            wrong += 1;
+          }
+        });
+      }
+    });
+    
+    const unstudied = total - (correct + wrong);
+    return { correct, wrong, unstudied, total };
+  })();
+
   const [showExportDropdown, setShowExportDropdown] = React.useState(false);
   const [expandedCikmisDay, setExpandedCikmisDay] = React.useState(null);
 
@@ -744,13 +777,13 @@ const CampDashboard = ({
           </div>
 
           {/* Çıkmış Kelimeler Camp Menu Stats */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '20px' }}>
             <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
               <div style={{ background: 'rgba(239, 68, 68, 0.12)', padding: '12px', borderRadius: '12px', color: '#ef4444' }}>
                 <Calendar className="h-6 w-6" />
               </div>
               <div>
-                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Çıkmış İlerlemesi</span>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>İlerleme</span>
                 <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>{cikmisDoneCount} / 60 Gün</strong>
               </div>
             </div>
@@ -760,8 +793,23 @@ const CampDashboard = ({
                 <Trophy className="h-6 w-6" />
               </div>
               <div>
-                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Aktif Hedef Gün</span>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Aktif Hedef</span>
                 <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>Gün #{currentCikmisDay}</strong>
+              </div>
+            </div>
+
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ background: 'rgba(59, 130, 246, 0.12)', padding: '12px', borderRadius: '12px', color: '#3b82f6' }}>
+                <Sparkles className="h-6 w-6" />
+              </div>
+              <div style={{ flex: 1 }}>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Kelime İstatistikleri</span>
+                <div style={{ display: 'flex', gap: '8px', fontSize: '0.75rem', marginTop: '4px', flexWrap: 'wrap' }}>
+                  <span style={{ color: '#10b981', fontWeight: 'bold' }}>{stats.correct} D</span>
+                  <span style={{ color: '#ef4444', fontWeight: 'bold' }}>{stats.wrong} Y</span>
+                  <span style={{ color: '#94a3b8', fontWeight: 'bold' }}>{stats.unstudied} B</span>
+                  <span style={{ color: '#cbd5e1', fontWeight: '600' }}>({stats.total} Toplam)</span>
+                </div>
               </div>
             </div>
           </div>
