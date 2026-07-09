@@ -53,6 +53,18 @@ export const handlePrintPDF = (dayNum, wordsList, totalDays) => {
         ">
           <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
           <div style="display: flex; gap: 8px;">
+            <button onclick="downloadPDF()" style="
+              background: #10b981;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+              transition: all 0.2s;
+            ">📥 PDF Olarak İndir</button>
             <button onclick="window.print()" style="
               background: #6366f1;
               color: white;
@@ -64,7 +76,7 @@ export const handlePrintPDF = (dayNum, wordsList, totalDays) => {
               cursor: pointer;
               box-shadow: 0 4px 6px rgba(0,0,0,0.15);
               transition: all 0.2s;
-            ">🖨️ Raporu Dışarı Aktar / Yazdır</button>
+            ">🖨️ Yazdır / Kağıda Bas</button>
             <button onclick="window.close()" style="
               background: rgba(255,255,255,0.1);
               color: white;

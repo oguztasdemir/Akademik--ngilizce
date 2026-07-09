@@ -169,6 +169,7 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
           }
         </style>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
       </head>
       <body>
         <div class="print-control-bar" style="
@@ -185,6 +186,18 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
         ">
           <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
           <div style="display: flex; gap: 8px;">
+            <button onclick="downloadPDF()" style="
+              background: #10b981;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+              transition: all 0.2s;
+            ">📥 PDF Olarak İndir</button>
             <button onclick="window.print()" style="
               background: #6366f1;
               color: white;
@@ -196,7 +209,7 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
               cursor: pointer;
               box-shadow: 0 4px 6px rgba(0,0,0,0.15);
               transition: all 0.2s;
-            ">🖨️ Raporu Dışarı Aktar / Yazdır</button>
+            ">🖨️ Yazdır / Kağıda Bas</button>
             <button onclick="window.close()" style="
               background: rgba(255,255,255,0.1);
               color: white;
@@ -304,6 +317,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
           }
         </style>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
       </head>
       <body>
         <div class="print-control-bar" style="
@@ -320,6 +334,18 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
         ">
           <div style="font-weight: 800; font-size: 0.95rem;">📄 YÖKDİL Akademik Rapor Önizleme</div>
           <div style="display: flex; gap: 8px;">
+            <button onclick="downloadPDF()" style="
+              background: #10b981;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              font-weight: bold;
+              border-radius: 6px;
+              cursor: pointer;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+              transition: all 0.2s;
+            ">📥 PDF Olarak İndir</button>
             <button onclick="window.print()" style="
               background: #6366f1;
               color: white;
@@ -331,7 +357,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
               cursor: pointer;
               box-shadow: 0 4px 6px rgba(0,0,0,0.15);
               transition: all 0.2s;
-            ">🖨️ Raporu Dışarı Aktar / Yazdır</button>
+            ">🖨️ Yazdır / Kağıda Bas</button>
             <button onclick="window.close()" style="
               background: rgba(255,255,255,0.1);
               color: white;
@@ -390,6 +416,26 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
             ${renderUnstudiedRows()}
           </tbody>
         </table>
+        <script>
+          function downloadPDF() {
+            const element = document.body;
+            const controlBar = document.querySelector('.print-control-bar');
+            controlBar.style.display = 'none';
+            const opt = {
+              margin: [10, 10, 10, 10],
+              filename: 'YOKDIL_Kelime_Kampi_Karne.pdf',
+              image: { type: 'jpeg', quality: 0.98 },
+              html2canvas: { scale: 2, logging: false, useCORS: true },
+              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save().then(() => {
+              controlBar.style.display = 'flex';
+            }).catch(err => {
+              console.error(err);
+              controlBar.style.display = 'flex';
+            });
+          }
+        </script>
       </body>
     </html>
   `);
@@ -495,6 +541,26 @@ export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, 
             ${renderUnstudiedRows()}
           </tbody>
         </table>
+        <script>
+          function downloadPDF() {
+            const element = document.body;
+            const controlBar = document.querySelector('.print-control-bar');
+            controlBar.style.display = 'none';
+            const opt = {
+              margin: [10, 10, 10, 10],
+              filename: 'YOKDIL_Kelime_Kampi_Karne.pdf',
+              image: { type: 'jpeg', quality: 0.98 },
+              html2canvas: { scale: 2, logging: false, useCORS: true },
+              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save().then(() => {
+              controlBar.style.display = 'flex';
+            }).catch(err => {
+              console.error(err);
+              controlBar.style.display = 'flex';
+            });
+          }
+        </script>
       </body>
     </html>
   `;
