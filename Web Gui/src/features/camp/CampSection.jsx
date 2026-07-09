@@ -159,45 +159,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   const [cikmisPlanData, setCikmisPlanData] = useState({});
   const [studyMode, setStudyMode] = useState(null);
 
-  // Auto-save active cikmis study session
-  useEffect(() => {
-    if (!isStudying || campType !== 'cikmis_kelimeler' || !selectedDay) return;
-    const category = selectedCategory || 'fen';
-    const key = `yokdil_active_cikmis_session_${category}`;
-    
-    const session = {
-      selectedDay,
-      studyMode,
-      currentIdx,
-      cikmisTransitionStep,
-      cikmisSwipeResults,
-      cikmisMatchingRound,
-      cikmisMatchingMoves,
-      cikmisMatchingErrors,
-      cikmisMatchingMistakes,
-      cikmisQuizIdx,
-      cikmisQuizMistakes,
-      timestamp: Date.now()
-    };
-    
-    localStorage.setItem(key, JSON.stringify(session));
-  }, [
-    isStudying,
-    campType,
-    selectedDay,
-    selectedCategory,
-    studyMode,
-    currentIdx,
-    cikmisTransitionStep,
-    cikmisSwipeResults,
-    cikmisMatchingRound,
-    cikmisMatchingMoves,
-    cikmisMatchingErrors,
-    cikmisMatchingMistakes,
-    cikmisQuizIdx,
-    cikmisQuizMistakes
-  ]); // 'selection', 'swipe', 'matching', 'quiz_en_tr', 'quiz_tr_en', 'quiz_sentence'
-  const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
+const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [cikmisSwipeResults, setCikmisSwipeResults] = useState({});
   const [cikmisMatchingRound, setCikmisMatchingRound] = useState(0);
   const [cikmisMatchingCards, setCikmisMatchingCards] = useState([]);
@@ -931,6 +893,47 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
     const options = [correctWord, ...filtered.slice(0, 3)];
     return options.sort(() => Math.random() - 0.5);
   };
+
+  
+
+  // Auto-save active cikmis study session
+  useEffect(() => {
+    if (!isStudying || campType !== 'cikmis_kelimeler' || !selectedDay) return;
+    const category = selectedCategory || 'fen';
+    const key = `yokdil_active_cikmis_session_${category}`;
+    
+    const session = {
+      selectedDay,
+      studyMode,
+      currentIdx,
+      cikmisTransitionStep,
+      cikmisSwipeResults,
+      cikmisMatchingRound,
+      cikmisMatchingMoves,
+      cikmisMatchingErrors,
+      cikmisMatchingMistakes,
+      cikmisQuizIdx,
+      cikmisQuizMistakes,
+      timestamp: Date.now()
+    };
+    
+    localStorage.setItem(key, JSON.stringify(session));
+  }, [
+    isStudying,
+    campType,
+    selectedDay,
+    selectedCategory,
+    studyMode,
+    currentIdx,
+    cikmisTransitionStep,
+    cikmisSwipeResults,
+    cikmisMatchingRound,
+    cikmisMatchingMoves,
+    cikmisMatchingErrors,
+    cikmisMatchingMistakes,
+    cikmisQuizIdx,
+    cikmisQuizMistakes
+  ]); // 'selection', 'swipe', 'matching', 'quiz_en_tr', 'quiz_tr_en', 'quiz_sentence'
 
   const startDailyStudy = async (dayNum, resumeIdx = null, resumePhase = null) => {
     const category = selectedCategory || 'fen';
