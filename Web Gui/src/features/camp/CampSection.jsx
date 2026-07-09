@@ -126,6 +126,26 @@ const formatWordType = (type) => {
 };
 
 const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, recordWordStat, setActiveStudyInfo, dictDb, addMistake, initialCampType = 'vocabulary' }) => {
+  // Helper to render Turkish meanings vertically if they contain multiple numbered items
+  const renderTurkishMeanings = (text, color = '#34d399', sizeStyle = {}) => {
+    if (!text) return null;
+    if (/\b\d+\)\s*/.test(text)) {
+      const parts = text.split(/(?=\b\d+\))/).map(s => s.trim()).filter(Boolean);
+      const gap = sizeStyle.gap || '6px';
+      const itemsAlign = sizeStyle.alignItems || 'center';
+      const textAlignment = sizeStyle.textAlign || 'center';
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap, alignItems: itemsAlign, textAlign: textAlignment }}>
+          {parts.map((p, idx) => (
+            <div key={idx} style={{ fontSize: sizeStyle.fontSize || '1.1rem', fontWeight: 'bold', color }}>{p}</div>
+          ))}
+        </div>
+      );
+    }
+    const { gap, alignItems, textAlign, ...restStyles } = sizeStyle;
+    return <h2 style={{ fontSize: sizeStyle.fontSize || '1.45rem', fontWeight: 'bold', margin: 0, color, ...restStyles }}>{text}</h2>;
+  };
+
   const isInitializedRef = useRef(false);
   
   // Camp State Management
@@ -137,7 +157,46 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   const [grammarProgress, setGrammarProgress] = useState(null);
   const [cikmisProgress, setCikmisProgress] = useState(null);
   const [cikmisPlanData, setCikmisPlanData] = useState({});
-  const [studyMode, setStudyMode] = useState(null); // 'selection', 'swipe', 'matching', 'quiz_en_tr', 'quiz_tr_en', 'quiz_sentence'
+  const [studyMode, setStudyMode] = useState(null);
+
+  // Auto-save active cikmis study session
+  useEffect(() => {
+    if (!isStudying || campType !== 'cikmis_kelimeler' || !selectedDay) return;
+    const category = selectedCategory || 'fen';
+    const key = `yokdil_active_cikmis_session_${category}`;
+    
+    const session = {
+      selectedDay,
+      studyMode,
+      currentIdx,
+      cikmisTransitionStep,
+      cikmisSwipeResults,
+      cikmisMatchingRound,
+      cikmisMatchingMoves,
+      cikmisMatchingErrors,
+      cikmisMatchingMistakes,
+      cikmisQuizIdx,
+      cikmisQuizMistakes,
+      timestamp: Date.now()
+    };
+    
+    localStorage.setItem(key, JSON.stringify(session));
+  }, [
+    isStudying,
+    campType,
+    selectedDay,
+    selectedCategory,
+    studyMode,
+    currentIdx,
+    cikmisTransitionStep,
+    cikmisSwipeResults,
+    cikmisMatchingRound,
+    cikmisMatchingMoves,
+    cikmisMatchingErrors,
+    cikmisMatchingMistakes,
+    cikmisQuizIdx,
+    cikmisQuizMistakes
+  ]); // 'selection', 'swipe', 'matching', 'quiz_en_tr', 'quiz_tr_en', 'quiz_sentence'
   const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [cikmisSwipeResults, setCikmisSwipeResults] = useState({});
   const [cikmisMatchingRound, setCikmisMatchingRound] = useState(0);
@@ -957,6 +1016,56 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
 
   const startCikmisStudy = async (dayNum, mode = 'selection') => {
     const category = selectedCategory || 'fen';
+    
+    // Check if there is an active session for this day to resume
+    const sessionKey = `yokdil_active_cikmis_session_${category}`;
+    const rawSession = localStorage.getItem(sessionKey);
+    if (rawSession) {
+      try {
+        const session = JSON.parse(rawSession);
+        if (session && session.selectedDay === dayNum) {
+          const resume = window.confirm("Bu güne ait yarıda kalmış bir çalışmanız var. Kaldığınız yerden devam etmek ister misiniz?");
+          if (resume) {
+            setSelectedDay(dayNum);
+            setCampType('cikmis_kelimeler');
+            const dayWords = cikmisPlanData[String(dayNum)];
+            setStudyWords(dayWords);
+            setIsStudying(true);
+            
+            // Restore all states
+            setStudyMode(session.studyMode || 'swipe');
+            setCurrentIdx(session.currentIdx || 0);
+            setCikmisTransitionStep(session.cikmisTransitionStep !== undefined ? session.cikmisTransitionStep : null);
+            setCikmisSwipeResults(session.cikmisSwipeResults || {});
+            setCikmisMatchingRound(session.cikmisMatchingRound || 0);
+            setCikmisMatchingMoves(session.cikmisMatchingMoves || 0);
+            setCikmisMatchingErrors(session.cikmisMatchingErrors || 0);
+            setCikmisMatchingMistakes(session.cikmisMatchingMistakes || {});
+            setCikmisQuizIdx(session.cikmisQuizIdx || 0);
+            setCikmisQuizMistakes(session.cikmisQuizMistakes || {});
+            
+            setCikmisCardFlipped(false);
+            setCikmisQuizSelected(null);
+            setCikmisQuizChecked(false);
+            setCikmisQuizCorrect(null);
+            
+            // Re-initialize options/cards if in matching or quiz mode
+            if (session.studyMode === 'matching') {
+              initCikmisMatchingRound(dayWords, session.cikmisMatchingRound || 0);
+            } else if (session.studyMode && session.studyMode.startsWith('quiz')) {
+              const quizType = session.studyMode === 'quiz_en_tr' ? 'en_tr' : 'tr_en';
+              generateCikmisQuizOptions(quizType, session.cikmisQuizIdx || 0, dayWords);
+            }
+            return;
+          } else {
+            localStorage.removeItem(sessionKey);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     setSelectedDay(dayNum);
     setCampType('cikmis_kelimeler');
 
@@ -981,7 +1090,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
       setCikmisMatchingErrors(0);
       initCikmisMatchingRound(dayWords, 0);
     }
-  };;
+  };;;
 
   const initCikmisMatchingRound = (wordsList, roundIdx) => {
     const start = roundIdx * 6;
@@ -1295,7 +1404,24 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
       triggerConfetti?.();
     }
     
+    // Clear active study session on completion
+    localStorage.removeItem(`yokdil_active_cikmis_session_${category}`);
+    
     exitCamp();
+  };
+
+    const handleCikmisSwipeBack = () => {
+    if (currentIdx > 0) {
+      const prevIdx = currentIdx - 1;
+      const prevWord = studyWords[prevIdx];
+      
+      const newResults = { ...cikmisSwipeResults };
+      delete newResults[prevWord.english];
+      
+      setCikmisSwipeResults(newResults);
+      setCurrentIdx(prevIdx);
+      setCikmisCardFlipped(false);
+    }
   };
 
   const handleCikmisSwipe = (known) => {
@@ -1446,7 +1572,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
                   <span style={{ fontSize: '1rem', color: '#94a3b8', fontStyle: 'italic' }}>/{currentWord.pronunciation}/</span>
                 )}
                 <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', width: '120px', margin: '4px auto' }}></div>
-                <h2 style={{ fontSize: '1.45rem', fontWeight: 'bold', margin: 0, color: '#34d399' }}>{currentWord.turkish}</h2>
+                {renderTurkishMeanings(currentWord.turkish, '#34d399', { fontSize: '1.35rem', gap: '8px' })}
               </div>
             )}
           </div>
@@ -1467,6 +1593,15 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
               ✔️ Biliyorum
             </button>
           </div>
+          {currentIdx > 0 && (
+            <button 
+              onClick={handleCikmisSwipeBack} 
+              className="btn-secondary" 
+              style={{ width: '100%', padding: '10px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#cbd5e1', fontSize: '0.82rem', fontWeight: '600', marginTop: '6px' }}
+            >
+              ↩️ Önceki Kelimeye Geri Dön
+            </button>
+          )}
 
           <button onClick={exitCamp} className="btn-secondary" style={{ padding: '8px 18px', borderRadius: '10px', fontSize: '0.74rem', cursor: 'pointer', marginTop: '10px' }}>
             ⬅️ Çalışmadan Çık
@@ -2167,8 +2302,8 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   return (
     <div className="space-y-6">
       {reportCardDay && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 1000, display: 'flex', justifyContent: 'flex-end', alignItems: 'stretch' }} onClick={() => setReportCardDay(null)}>
-          <div className="glass-card" style={{ width: '100%', maxWidth: '500px', height: '100vh', overflowY: 'auto', borderRadius: '24px 0 0 24px', padding: '28px', borderLeft: '1.5px solid var(--primary-light)', borderTop: 'none', borderRight: 'none', borderBottom: 'none', background: 'rgba(15, 23, 42, 0.96)', color: 'white', textAlign: 'left' }} onClick={(e) => e.stopPropagation()}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.65)', zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }} onClick={() => setReportCardDay(null)}>
+          <div className="glass-card" style={{ width: '100%', maxWidth: '640px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '24px', padding: '28px', border: '1.5px solid rgba(255,255,255,0.08)', background: 'rgba(15, 23, 42, 0.98)', color: 'white', textAlign: 'left', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>
               <h3 style={{ fontSize: '1.3rem', fontWeight: 'bold', margin: 0, color: 'white' }}>
                 📊 Genel Değerlendirme Karnesi
@@ -2239,7 +2374,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
                                 {w.word || w.english || ''} 
                                 {w.type ? <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}> ({formatWordType(w.type)})</span> : ''}
                               </span>
-                              <span style={{ color: '#a5b4fc' }}>{w.tr || w.turkish || ''}</span>
+                              <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>{renderTurkishMeanings(w.tr || w.turkish || '', '#a5b4fc', { fontSize: '0.8rem', gap: '2px', alignItems: 'flex-end', textAlign: 'right' })}</div>
                             </div>
                           ))}
                         </div>

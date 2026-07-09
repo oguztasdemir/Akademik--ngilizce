@@ -36,6 +36,22 @@ const CampDashboard = ({
   cikmisPlanData,
   hideSwitcher
 }) => {
+  // Helper to render Turkish meanings in dashboard lists vertically
+  const renderTurkishMeaningsList = (text) => {
+    if (!text) return '';
+    if (/\b\d+\)\s*/.test(text)) {
+      const parts = text.split(/(?=\b\d+\))/).map(s => s.trim()).filter(Boolean);
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'flex-end', textAlign: 'right' }}>
+          {parts.map((p, idx) => (
+            <span key={idx} style={{ fontSize: '0.74rem', color: '#a7f3d0', fontWeight: 'bold' }}>{p}</span>
+          ))}
+        </div>
+      );
+    }
+    return <span>{text}</span>;
+  };
+
   // Calculate stats dynamically based on cikmisPlanData and cikmisDoneMap
   const stats = (() => {
     let correct = 0;
@@ -1182,7 +1198,7 @@ const CampDashboard = ({
                                 return knownList.map((w, idx) => (
                                   <div key={idx} style={{ fontSize: '0.78rem', padding: '8px 12px', background: 'rgba(16, 185, 129, 0.06)', border: '1px solid rgba(16, 185, 129, 0.15)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
                                     <strong style={{ color: 'white', minWidth: '90px' }}>{w.english}</strong>
-                                    <span style={{ color: '#94a3b8', flex: 1, textAlign: 'right' }}>{w.turkish}</span>
+                                    <span style={{ color: '#94a3b8', flex: 1, textAlign: 'right' }}>{renderTurkishMeaningsList(w.turkish)}</span>
                                   </div>
                                 ));
                               })()}
@@ -1205,7 +1221,7 @@ const CampDashboard = ({
                                 return unknownList.map((w, idx) => (
                                   <div key={idx} style={{ fontSize: '0.78rem', padding: '8px 12px', background: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.15)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
                                     <strong style={{ color: 'white', minWidth: '90px' }}>{w.english}</strong>
-                                    <span style={{ color: '#94a3b8', flex: 1, textAlign: 'right' }}>{w.turkish}</span>
+                                    <span style={{ color: '#94a3b8', flex: 1, textAlign: 'right' }}>{renderTurkishMeaningsList(w.turkish)}</span>
                                   </div>
                                 ));
                               })()}

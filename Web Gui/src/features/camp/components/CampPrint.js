@@ -256,15 +256,15 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
 
   container.innerHTML = `
     <style>
-      #pdf-export-root, #pdf-export-root * {
+      #pdf-export-root * {
         color: #1e293b !important;
-        background-color: transparent !important;
         box-shadow: none !important;
         text-shadow: none !important;
       }
       #pdf-export-root {
         background-color: #ffffff !important;
-        padding: 10px !important;
+        color: #1e293b !important;
+        padding: 30px !important;
       }
       #pdf-export-root th {
         background-color: #f1f5f9 !important;
@@ -327,7 +327,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
         <div>Çalışılan Kelime: <strong style="color: #0f172a;">${studiedWords.length} Adet</strong></div>
       </div>
 
-      <h3 style="color: #1e1b4b; font-size: 1.15rem; margin-top: 24px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #e2e8f0;">🟢 Çalışılmış ve Değerlendirilmiş Kelimeler</h3>
+      <h3 style="color: #1e1b4b; font-size: 1.15rem; margin-top: 24px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #e2e8f0;">🟢 Çalışmış ve Değerlendirilmiş Kelimeler</h3>
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.88rem;">
         <thead>
           <tr style="background-color: #f1f5f9;">
@@ -362,7 +362,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
     margin:       [10, 10, 15, 10],
     filename:     `YOKDIL_${categoryText.replace(' ', '_')}_Kelime_Kampi_Karne.pdf`,
     image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true, logging: false },
+    html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
@@ -375,7 +375,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
       document.body.removeChild(wrapper);
     }
   });
-};
+};;
 
 export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, selectedCategory) => {
   const categoryText = selectedCategory === 'fen' ? 'Fen Bilimleri' : (selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri');
@@ -480,31 +480,109 @@ export const handlePrintCikmisExportXlsx = (studiedWords, unstudiedWords, mode, 
   studiedWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
   unstudiedWords.sort((a, b) => a.english.localeCompare(b.english, 'tr'));
 
-  let csvContent = `YÖKDİL Kelime Kampı Karne Raporu - ${categoryText} - ${modeText}\n`;
-  csvContent += `Tarih: ${new Date().toLocaleDateString()}\n\n`;
+  const escapeXml = (str) => {
+    if (!str) return '';
+    return str.toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  };
 
-  csvContent += `ÇALIŞILMIŞ VE DEĞERLENDİRİLMİŞ KELİMELER\n`;
-  csvContent += `Sıra No;Kelime (İngilizce);Türkçe Anlamı;Durum / Statü;Çalışma Notu\n`;
-
-  studiedWords.forEach((w, idx) => {
+  // Build lists for sheets
+  const allWords = [];
+  studiedWords.forEach(w => {
     const statusText = mode === 'swipe' ? (w.status ? 'Bildiğim' : 'Bilmediğim') : (w.status ? 'Doğru' : 'Yanlış');
-    csvContent += `${idx + 1};"${w.english}";"${w.turkish || ''}";"${statusText}";""\n`;
+    allWords.push({ english: w.english, turkish: w.turkish, status: statusText });
+  });
+  unstudiedWords.forEach(w => {
+    allWords.push({ english: w.english, turkish: w.turkish, status: 'Çalışılmadı' });
   });
 
-  csvContent += `\nHENÜZ ÇALIŞILMAMIŞ / BİLİNMEYEN KELİMELER\n`;
-  csvContent += `Sıra No;Kelime (İngilizce);Türkçe Anlamı;Çalışma Notu\n`;
+  const knownWords = studiedWords.filter(w => w.status === true);
+  const unknownWords = [
+    ...studiedWords.filter(w => w.status === false),
+    ...unstudiedWords
+  ];
 
-  unstudiedWords.forEach((w, idx) => {
-    csvContent += `${idx + 1};"${w.english}";"${w.turkish || ''}";""\n`;
-  });
+  const buildSheetRows = (list) => {
+    return list.map((w, idx) => `
+    <Row>
+     <Cell><Data ss:Type="Number">${idx + 1}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(w.english)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(w.turkish)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(w.status || (w.status === undefined ? 'Çalışılmadı' : (w.status ? 'Bildiğim' : 'Bilmediğim')))}</Data></Cell>
+    </Row>`).join('');
+  };
 
-  const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const xmlContent = `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Header">
+   <Font ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#4F46E5" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Tümü">
+  <Table>
+   <Column ss:Width="60"/>
+   <Column ss:Width="160"/>
+   <Column ss:Width="260"/>
+   <Column ss:Width="130"/>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Sıra No</Data></Cell>
+    <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
+    <Cell><Data ss:Type="String">Türkçe Anlamı</Data></Cell>
+    <Cell><Data ss:Type="String">Durum / Statü</Data></Cell>
+   </Row>
+   \${buildSheetRows(allWords)}
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Bilmediklerim">
+  <Table>
+   <Column ss:Width="60"/>
+   <Column ss:Width="160"/>
+   <Column ss:Width="260"/>
+   <Column ss:Width="130"/>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Sıra No</Data></Cell>
+    <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
+    <Cell><Data ss:Type="String">Türkçe Anlamı</Data></Cell>
+    <Cell><Data ss:Type="String">Durum / Statü</Data></Cell>
+   </Row>
+   \${buildSheetRows(unknownWords.map(w => ({ ...w, status: w.status === undefined ? 'Çalışılmadı' : (w.status ? 'Bildiğim/Doğru' : 'Bilmediğim/Yanlış') })))}
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Bildiklerim">
+  <Table>
+   <Column ss:Width="60"/>
+   <Column ss:Width="160"/>
+   <Column ss:Width="260"/>
+   <Column ss:Width="130"/>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Sıra No</Data></Cell>
+    <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
+    <Cell><Data ss:Type="String">Türkçe Anlamı</Data></Cell>
+    <Cell><Data ss:Type="String">Durum / Statü</Data></Cell>
+   </Row>
+   \${buildSheetRows(knownWords.map(w => ({ ...w, status: mode === 'swipe' ? 'Bildiğim' : 'Doğru' })))}
+  </Table>
+ </Worksheet>
+</Workbook>`;
+
+  const blob = new Blob([xmlContent], { type: 'application/vnd.ms-excel;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `YOKDIL_${categoryText.replace(' ', '_')}_Kelime_Kampi_Karne.csv`;
+  a.download = `YOKDIL_\${categoryText.replace(' ', '_')}_Kelime_Kampi_Karne.xls`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-};
+};;
