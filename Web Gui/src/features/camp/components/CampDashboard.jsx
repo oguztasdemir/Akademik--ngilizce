@@ -53,11 +53,12 @@ const CampDashboard = ({
       if (dayRecord) {
         const results = dayRecord.results || dayRecord.resultsMap || dayRecord.swipeResults || dayRecord.detailedResults || {};
         dayWords.forEach(w => {
-          const status = results[w.english];
+          if (!w) return;
+          const eng = typeof w === 'string' ? w : w.english;
+          if (!eng) return;
+          const status = results[eng];
           if (status === true) {
             correct += 1;
-          } else if (status === false) {
-            wrong += 1;
           } else {
             wrong += 1;
           }
@@ -65,7 +66,7 @@ const CampDashboard = ({
       }
     });
     
-    const unstudied = total - (correct + wrong);
+    const unstudied = Math.max(0, total - (correct + wrong));
     return { correct, wrong, unstudied, total };
   })();
 
@@ -1172,7 +1173,11 @@ const CampDashboard = ({
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '180px', overflowY: 'auto', paddingRight: '4px' }} className="custom-scrollbar">
                               {(() => {
                                 const dayWords = (cikmisPlanData && cikmisPlanData[String(dayNum)]) || [];
-                                const knownList = dayWords.filter(w => resultsMap[w.english] !== false);
+                                const knownList = dayWords.filter(w => {
+  if (!w) return false;
+  const eng = typeof w === 'string' ? w : w.english;
+  return resultsMap[eng] !== false;
+});
                                 if (knownList.length === 0) return <span style={{ fontSize: '0.74rem', color: '#64748b', fontStyle: 'italic' }}>Hiç yok</span>;
                                 return knownList.map((w, idx) => (
                                   <div key={idx} style={{ fontSize: '0.78rem', padding: '8px 12px', background: 'rgba(16, 185, 129, 0.06)', border: '1px solid rgba(16, 185, 129, 0.15)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
@@ -1191,7 +1196,11 @@ const CampDashboard = ({
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '180px', overflowY: 'auto', paddingRight: '4px' }} className="custom-scrollbar">
                               {(() => {
                                 const dayWords = (cikmisPlanData && cikmisPlanData[String(dayNum)]) || [];
-                                const unknownList = dayWords.filter(w => resultsMap[w.english] === false);
+                                const unknownList = dayWords.filter(w => {
+  if (!w) return false;
+  const eng = typeof w === 'string' ? w : w.english;
+  return resultsMap[eng] === false;
+});
                                 if (unknownList.length === 0) return <span style={{ fontSize: '0.74rem', color: '#64748b', fontStyle: 'italic' }}>Hiç yok</span>;
                                 return unknownList.map((w, idx) => (
                                   <div key={idx} style={{ fontSize: '0.78rem', padding: '8px 12px', background: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.15)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', gap: '8px' }}>

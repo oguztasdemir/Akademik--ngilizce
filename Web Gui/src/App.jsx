@@ -3437,7 +3437,7 @@ function App() {
                   awardPetXP={awardPetXP}
                   triggerConfetti={triggerConfetti}
                   examsDb={{ fen: fallbackExamsFen, sosyal: fallbackExamsSosyal, saglik: fallbackExamsSaglik }}
-                  dictDb={{ fen: fallbackDictFen, sosial: fallbackDictSosyal, saglik: fallbackDictSaglik }}
+                  dictDb={{ fen: fallbackDictFen, sosyal: fallbackDictSosyal, saglik: fallbackDictSaglik }}
                   recordWordStat={recordWordStat}
                   addMistake={addMistake}
                 />
