@@ -699,17 +699,25 @@ function App() {
   // Load Initial Data once on mount
   useEffect(() => {
     const category = 'fen';
-    fetch(`${BACKEND_URL}/api/${category}/exams`)
-      .then(res => res.json())
-      .then(data => {
-        setExams(Array.isArray(data) ? data : []);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error fetching exams:", err);
-        setExams([]);
-        setLoading(false);
-      });
+    // Load local fallback immediately
+    setExams(fallbackExamsFen);
+    setLoading(false);
+
+    if (BACKEND_URL) {
+      setLoading(true);
+      fetch(`${BACKEND_URL}/api/${category}/exams`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && Array.isArray(data) && data.length > 0) {
+            setExams(data);
+          }
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error("Error fetching exams from backend, keeping local fallback:", err);
+          setLoading(false);
+        });
+    }
 
     fetch(`${BACKEND_URL}/api/lectures`)
       .then(res => res.json())
@@ -795,16 +803,18 @@ function App() {
     setLoading(false);
 
     // Fetch fresh values from backend (if online / backend is up)
-    fetch(`${BACKEND_URL}/api/${selectedCategory}/exams`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && Array.isArray(data) && data.length > 0) {
-          setExams(data);
-        }
-      })
-      .catch(err => {
-        console.error("Error fetching exams:", err);
-      });
+    if (BACKEND_URL) {
+      fetch(`${BACKEND_URL}/api/${selectedCategory}/exams`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && Array.isArray(data) && data.length > 0) {
+            setExams(data);
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching exams from backend, keeping local fallback:", err);
+        });
+    }
 
     fetch(`${BACKEND_URL}/api/${selectedCategory}/dictionary`)
       .then(res => res.json())

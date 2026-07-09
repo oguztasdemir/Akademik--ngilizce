@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import fallbackPassages from '@dataset/yokdil/genel/reading_passages.json';
 import { BookOpen, Check, X, HelpCircle, ArrowRight, Volume2, Award, BookOpenCheck } from 'lucide-react';
 
 const ParagraphsSection = ({
@@ -46,23 +47,32 @@ const ParagraphsSection = ({
 
 
   useEffect(() => {
-    if (activeTab === 'paragraphs' && BACKEND_URL) {
+    if (activeTab === 'paragraphs') {
       setLoading(true);
-      fetch(`${BACKEND_URL}/api/passages`)
-        .then(res => res.json())
-        .then(data => {
-          // Sort passages by word count (short to long)
-          const sorted = data.sort((a, b) => (a.wordCount || 0) - (b.wordCount || 0));
-          
-          // Filter by category or show all
-          const filtered = sorted.filter(p => !selectedCategory || p.category === selectedCategory);
-          setPassages(filtered);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error("Error loading passages:", err);
-          setLoading(false);
-        });
+      
+      // Load local fallback first
+      const sortedFallback = [...fallbackPassages].sort((a, b) => (a.wordCount || 0) - (b.wordCount || 0));
+      const filteredFallback = sortedFallback.filter(p => !selectedCategory || p.category === selectedCategory);
+      setPassages(filteredFallback);
+      setLoading(false);
+
+      if (BACKEND_URL) {
+        setLoading(true);
+        fetch(`${BACKEND_URL}/api/passages`)
+          .then(res => res.json())
+          .then(data => {
+            if (data && Array.isArray(data) && data.length > 0) {
+              const sorted = data.sort((a, b) => (a.wordCount || 0) - (b.wordCount || 0));
+              const filtered = sorted.filter(p => !selectedCategory || p.category === selectedCategory);
+              setPassages(filtered);
+            }
+            setLoading(false);
+          })
+          .catch(err => {
+            console.error("Error loading passages from backend, keeping local fallback:", err);
+            setLoading(false);
+          });
+      }
     }
   }, [activeTab, selectedCategory, BACKEND_URL]);
 
