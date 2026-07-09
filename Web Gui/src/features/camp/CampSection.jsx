@@ -600,300 +600,6 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     loadDictionaries();
   }, [selectedCategory]);
 
-  if (!progress || !grammarProgress || !cikmisProgress) {
-    return <div style={{ color: 'white', textAlign: 'center', padding: '40px' }}>Yükleniyor...</div>;
-  }
-
-  const saveProgress = (newProg) => {
-    setProgress(newProg);
-    localStorage.setItem('yokdil_camp_progress', JSON.stringify(newProg));
-  };
-
-  const saveGrammarProgress = (newProg) => {
-    setGrammarProgress(newProg);
-    localStorage.setItem('yokdil_grammar_camp_progress', JSON.stringify(newProg));
-  };
-
-  const saveCikmisProgress = (newProg) => {
-    setCikmisProgress(newProg);
-    localStorage.setItem('yokdil_cikmis_camp_progress', JSON.stringify(newProg));
-  };
-
-  const getAIAnalysis = () => {
-    const wrongWordsRaw = localStorage.getItem('yokdil_camp_wrong_words') || '[]';
-    const wrongDetailsRaw = localStorage.getItem('yokdil_camp_wrong_details') || '{}';
-    
-    let wrongWords = [];
-    let wrongDetails = {};
-    try {
-      wrongWords = JSON.parse(wrongWordsRaw);
-      wrongDetails = JSON.parse(wrongDetailsRaw);
-    } catch (e) {
-      return null;
-    }
-
-    if (!Array.isArray(wrongWords) || wrongWords.length === 0) return null;
-    if (!wrongDetails || typeof wrongDetails !== 'object') wrongDetails = {};
-
-    // 1. Tür Analizi
-    const types = { noun: 0, verb: 0, adj: 0 };
-    wrongWords.forEach(w => {
-      const details = wrongDetails[w];
-      if (details && details.type) {
-        types[details.type] = (types[details.type] || 0) + 1;
-      }
-    });
-
-    let primaryTypeError = 'noun';
-    let maxCount = -1;
-    Object.keys(types).forEach(t => {
-      if (types[t] > maxCount) {
-        maxCount = types[t];
-        primaryTypeError = t;
-      }
-    });
-
-    const typeLabels = { noun: 'İsim (Noun)', verb: 'Fiil (Verb)', adj: 'Sıfat (Adjective)' };
-    const typeTips = {
-      noun: "Cümlelerde özne ve nesne konumlarına, özellikle de edatlardan (in, of, for vb.) sonra gelen isim yapılarına dikkat etmelisiniz.",
-      verb: "Fiil sorularında özellikle 'collocation' (birlikte kullanılan kelimeler) ve prepositions (edatlar) ipuçlarına odaklanmalısınız.",
-      adj: "Sıfat sorularında arkasından gelen ismi nasıl nitelediğine ve cümlenin olumlu/olumsuz gidişatına odaklanmalısınız."
-    };
-
-    // 2. Anlamsal Analiz
-    const categories = {
-      negative: [],
-      positive: [],
-      analysis: []
-    };
-
-    wrongWords.forEach(w => {
-      const details = wrongDetails[w] || {};
-      const tr = (details.tr || '').toLowerCase();
-
-      if (
-        tr.includes('engel') || tr.includes('önle') || tr.includes('boz') || tr.includes('zarar') || 
-        tr.includes('eksik') || tr.includes('azal') || tr.includes('hafiflet')
-      ) {
-        categories.negative.push(w);
-      } else if (
-        tr.includes('geliş') || tr.includes('art') || tr.includes('sağla') || tr.includes('sürdür') || 
-        tr.includes('üret') || tr.includes('iyileş')
-      ) {
-        categories.positive.push(w);
-      } else if (
-        tr.includes('değerlendir') || tr.includes('incele') || tr.includes('gözlem') || tr.includes('belirle') ||
-        tr.includes('analiz')
-      ) {
-        categories.analysis.push(w);
-      }
-    });
-
-    let semanticInsight = "";
-    if (categories.negative.length >= 2) {
-      semanticInsight = `Hatalarınızın önemli bir kısmı **'Engelleme / Azalba / Olumsuz Durum'** bildiren akademik kelimelerden (${categories.negative.slice(0, 3).map(w => `<code>${w}</code>`).join(', ')}) oluşuyor. Bu kelimelerin cümledeki zıtlık bağlaçlarıyla (but, although, however) kullanım sıklığı yüksektir.`;
-    } else if (categories.positive.length >= 2) {
-      semanticInsight = `Yanlışlarınız ağırlıklı olarak **'Geliştirme / Artırma / Destekleme'** bağlamlı pozitif akademik kelimelerden (${categories.positive.slice(0, 3).map(w => `<code>${w}</code>`).join(', ')}) oluşuyor. Bunlar genellikle olumlu etki-sonuç cümlelerinde karşımıza çıkar.`;
-    } else if (categories.analysis.length >= 2) {
-      semanticInsight = `Yanlış yaptığınız kelimeler arasında **'İnceleme / Belirleme / Değerlendirme'** eylemleri (${categories.analysis.slice(0, 3).map(w => `<code>${w}</code>`).join(', ')}) yoğunlukta. YÖKDİL araştırma metinlerinde deney, gözlem ve sonuç bildiren cümlelere daha çok odaklanmalısınız.`;
-    }
-
-    // 3. Eş Anlam Karışıklığı
-    const synonymPairs = [];
-    wrongWords.forEach((w1, idx) => {
-      wrongWords.slice(idx + 1).forEach(w2 => {
-        const d1 = wrongDetails[w1] || {};
-        const d2 = wrongDetails[w2] || {};
-        const s1 = (d1.synonyms || '').toLowerCase();
-        const s2 = (d2.synonyms || '').toLowerCase();
-
-        if (
-          s1.includes(w2.toLowerCase()) || 
-          s2.includes(w1.toLowerCase()) ||
-          (d1.tr && d2.tr && d1.tr.split(',')[0].trim() === d2.tr.split(',')[0].trim())
-        ) {
-          synonymPairs.push(`${w1} ↔ ${w2}`);
-        }
-      });
-    });
-
-    return {
-      primaryType: typeLabels[primaryTypeError] || 'İsim',
-      typeTip: typeTips[primaryTypeError],
-      semanticInsight,
-      synonymPairs,
-      totalWrong: wrongWords.length
-    };
-  };
-
-  const areMeaningsConflicting = (m1, m2) => {
-    const clean = (text) => text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/);
-    const w1 = clean(m1);
-    const w2 = clean(m2);
-    return w1.some(x => w2.includes(x)) || w2.some(x => w1.includes(x));
-  };
-
-  const getMeaningOptions = (correctMeaning, currentWordObj) => {
-    const allMeanings = Object.values(allWordsDb).map(v => v.tr).filter(Boolean);
-    const filtered = allMeanings.filter(m => {
-      if (m.toLowerCase().trim() === correctMeaning.toLowerCase().trim()) return false;
-      return !areMeaningsConflicting(correctMeaning, m);
-    });
-
-    const uniqueFiltered = Array.from(new Set(filtered)).sort(() => Math.random() - 0.5);
-    const options = [correctMeaning, ...uniqueFiltered.slice(0, 3)];
-    return options.sort(() => Math.random() - 0.5);
-  };
-
-  const getSynonymOptions = (correctSynonym, currentWordObj) => {
-    const allSyns = Object.values(allWordsDb).map(v => v.synonyms).filter(Boolean).map(s => s.split(',')[0].trim());
-    const filtered = allSyns.filter(s => {
-      if (s.toLowerCase().trim() === correctSynonym.toLowerCase().trim()) return false;
-      if (currentWordObj && currentWordObj.word.toLowerCase() === s.toLowerCase()) return false;
-      return true;
-    });
-
-    const uniqueFiltered = Array.from(new Set(filtered)).sort(() => Math.random() - 0.5);
-    const options = [correctSynonym, ...uniqueFiltered.slice(0, 3)];
-    return options.sort(() => Math.random() - 0.5);
-  };
-
-  const getWordFromDict = (wordStr) => {
-    if (!wordStr || !allWordsDb) return null;
-    const cleanStr = wordStr.toLowerCase().trim();
-    return allWordsDb[cleanStr] || dictDb?.[cleanStr];
-  };
-
-  const getAntonym = (wordObj) => {
-    if (!wordObj) return 'Yok';
-    const rawAntonym = ACADEMIC_ANTONYMS[wordObj.word.toLowerCase().trim()];
-    if (rawAntonym) return rawAntonym;
-    if (wordObj.antonyms && wordObj.antonyms.trim() !== "" && wordObj.antonyms.trim().toLowerCase() !== "yok") {
-      return wordObj.antonyms;
-    }
-    return 'Yok';
-  };
-
-  const getAntonymWithTranslation = (wordObj) => {
-    const antonymsStr = getAntonym(wordObj);
-    if (antonymsStr === 'Yok') return [];
-    const antonymList = antonymsStr.split(',').map(a => a.trim());
-    const translatedList = antonymList.map(ant => {
-      const match = getWordFromDict(ant);
-      return {
-        eng: ant,
-        tr: match ? match.tr : null
-      };
-    });
-    return translatedList;
-  };
-
-  const getTranslation = (wordStr) => {
-    const match = getWordFromDict(wordStr);
-    return match ? (match.tr || match.turkish || '') : '';
-  };
-
-  const translateCollocation = (coll, word, wordMeaning) => {
-    const cleanWord = word.toLowerCase().trim();
-    const cleanColl = coll.toLowerCase().trim();
-    if (cleanColl.includes('conduct a study')) return 'çalışma yürütmek';
-    if (cleanColl.includes('conduct research')) return 'araştırma yapmak';
-    if (cleanColl.includes('conduct an experiment')) return 'deney yapmak';
-    if (cleanColl.includes('adverse effect')) return 'olumsuz etki';
-    if (cleanColl.includes('adverse reaction')) return 'yan etki, olumsuz reaksiyon';
-    if (cleanColl.includes('adverse weather')) return 'olumsuz hava koşulları';
-    if (cleanColl.includes('gain knowledge')) return 'bilgi edinmek';
-    if (cleanColl.includes('acquire skills')) return 'beceri edinmek';
-    if (cleanColl.includes('profound effect')) return 'derin/büyük etki';
-    if (cleanColl.includes('profound impact')) return 'derin/büyük etki';
-    return '';
-  };
-
-  const getEnglishForMeaningOption = (turkishTr) => {
-    if (!turkishTr || !allWordsDb) return '';
-    const cleanTr = turkishTr.toLowerCase().trim();
-    const found = Object.entries(allWordsDb).find(([eng, val]) => val && val.tr && val.tr.toLowerCase().trim() === cleanTr);
-    return found ? found[0] : '';
-  };
-
-  const getSentenceEn = (wordObj) => {
-    if (!wordObj) return '';
-    if (wordObj.sentences && wordObj.sentences.length > sentenceIdx) {
-      return wordObj.sentences[sentenceIdx].en;
-    }
-    return wordObj.sentence_en || wordObj.sentence || '';
-  };
-
-  const getSentenceTr = (wordObj) => {
-    if (!wordObj) return '';
-    if (wordObj.sentences && wordObj.sentences.length > sentenceIdx) {
-      return wordObj.sentences[sentenceIdx].tr;
-    }
-    return wordObj.sentence_tr || wordObj.tr_sentence || '';
-  };
-
-  const getSynonymsList = (wordObj) => {
-    if (!wordObj || !wordObj.synonyms || wordObj.synonyms.trim() === "" || wordObj.synonyms.trim().toLowerCase() === "yok") return [];
-    return wordObj.synonyms.split(',').map(s => {
-      const syn = s.trim();
-      return {
-        eng: syn,
-        tr: getTranslation(syn)
-      };
-    });
-  };
-
-  const getAntonymsList = (wordObj) => {
-    return getAntonymWithTranslation(wordObj);
-  };
-
-  const getCollocationsList = (wordObj) => {
-    if (!wordObj || !wordObj.collocations || wordObj.collocations.trim() === "" || wordObj.collocations.trim().toLowerCase() === "yok") return [];
-    return wordObj.collocations.split(',').map(c => {
-      const coll = c.trim();
-      return {
-        eng: coll,
-        tr: translateCollocation(coll, wordObj.word, wordObj.tr)
-      };
-    });
-  };
-
-  const hasAntonym = (wordObj) => {
-    return getAntonym(wordObj) !== 'Yok';
-  };
-
-  const getAntonymOptions = (correctAntonym, currentWordObj) => {
-    const allAnts = Object.values(ACADEMIC_ANTONYMS).map(s => s.split(',')[0].trim());
-    const uniqueFiltered = Array.from(new Set(allAnts)).sort(() => Math.random() - 0.5);
-    const options = [correctAntonym, ...uniqueFiltered.slice(0, 3)];
-    return options.sort(() => Math.random() - 0.5);
-  };
-
-  const getBlankedSentence = (wordObj, idx) => {
-    if (!wordObj) return '';
-    let sentence = "";
-    let wordToBlank = wordObj.word.toLowerCase();
-    
-    const sentenceIndex = clozeSentenceIndexes[idx] !== undefined ? clozeSentenceIndexes[idx] : 0;
-    
-    if (wordObj.sentences && wordObj.sentences.length > sentenceIndex) {
-      sentence = wordObj.sentences[sentenceIndex].en;
-    } else {
-      sentence = wordObj.sentence_en || wordObj.sentence || '';
-    }
-
-    const escaped = wordToBlank.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-    const regex = new RegExp(`\\b${escaped}(s|ed|ing|d|es|ly)?\\b`, 'gi');
-    return sentence.replace(regex, '_______');
-  };
-
-  const getClozeOptions = (correctWord) => {
-    const allWords = studyWords.map(w => w.word);
-    const filtered = allWords.filter(w => w !== correctWord);
-    const options = [correctWord, ...filtered.slice(0, 3)];
-    return options.sort(() => Math.random() - 0.5);
-  };
-
   
 
   // Auto-save active cikmis study session
@@ -1413,7 +1119,303 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     exitCamp();
   };
 
-    const handleCikmisSwipeBack = () => {
+  if (!progress || !grammarProgress || !cikmisProgress) {
+    return <div style={{ color: 'white', textAlign: 'center', padding: '40px' }}>Yükleniyor...</div>;
+  }
+
+  const saveProgress = (newProg) => {
+    setProgress(newProg);
+    localStorage.setItem('yokdil_camp_progress', JSON.stringify(newProg));
+  };
+
+  const saveGrammarProgress = (newProg) => {
+    setGrammarProgress(newProg);
+    localStorage.setItem('yokdil_grammar_camp_progress', JSON.stringify(newProg));
+  };
+
+  const saveCikmisProgress = (newProg) => {
+    setCikmisProgress(newProg);
+    localStorage.setItem('yokdil_cikmis_camp_progress', JSON.stringify(newProg));
+  };
+
+  const getAIAnalysis = () => {
+    const wrongWordsRaw = localStorage.getItem('yokdil_camp_wrong_words') || '[]';
+    const wrongDetailsRaw = localStorage.getItem('yokdil_camp_wrong_details') || '{}';
+    
+    let wrongWords = [];
+    let wrongDetails = {};
+    try {
+      wrongWords = JSON.parse(wrongWordsRaw);
+      wrongDetails = JSON.parse(wrongDetailsRaw);
+    } catch (e) {
+      return null;
+    }
+
+    if (!Array.isArray(wrongWords) || wrongWords.length === 0) return null;
+    if (!wrongDetails || typeof wrongDetails !== 'object') wrongDetails = {};
+
+    // 1. Tür Analizi
+    const types = { noun: 0, verb: 0, adj: 0 };
+    wrongWords.forEach(w => {
+      const details = wrongDetails[w];
+      if (details && details.type) {
+        types[details.type] = (types[details.type] || 0) + 1;
+      }
+    });
+
+    let primaryTypeError = 'noun';
+    let maxCount = -1;
+    Object.keys(types).forEach(t => {
+      if (types[t] > maxCount) {
+        maxCount = types[t];
+        primaryTypeError = t;
+      }
+    });
+
+    const typeLabels = { noun: 'İsim (Noun)', verb: 'Fiil (Verb)', adj: 'Sıfat (Adjective)' };
+    const typeTips = {
+      noun: "Cümlelerde özne ve nesne konumlarına, özellikle de edatlardan (in, of, for vb.) sonra gelen isim yapılarına dikkat etmelisiniz.",
+      verb: "Fiil sorularında özellikle 'collocation' (birlikte kullanılan kelimeler) ve prepositions (edatlar) ipuçlarına odaklanmalısınız.",
+      adj: "Sıfat sorularında arkasından gelen ismi nasıl nitelediğine ve cümlenin olumlu/olumsuz gidişatına odaklanmalısınız."
+    };
+
+    // 2. Anlamsal Analiz
+    const categories = {
+      negative: [],
+      positive: [],
+      analysis: []
+    };
+
+    wrongWords.forEach(w => {
+      const details = wrongDetails[w] || {};
+      const tr = (details.tr || '').toLowerCase();
+
+      if (
+        tr.includes('engel') || tr.includes('önle') || tr.includes('boz') || tr.includes('zarar') || 
+        tr.includes('eksik') || tr.includes('azal') || tr.includes('hafiflet')
+      ) {
+        categories.negative.push(w);
+      } else if (
+        tr.includes('geliş') || tr.includes('art') || tr.includes('sağla') || tr.includes('sürdür') || 
+        tr.includes('üret') || tr.includes('iyileş')
+      ) {
+        categories.positive.push(w);
+      } else if (
+        tr.includes('değerlendir') || tr.includes('incele') || tr.includes('gözlem') || tr.includes('belirle') ||
+        tr.includes('analiz')
+      ) {
+        categories.analysis.push(w);
+      }
+    });
+
+    let semanticInsight = "";
+    if (categories.negative.length >= 2) {
+      semanticInsight = `Hatalarınızın önemli bir kısmı **'Engelleme / Azalba / Olumsuz Durum'** bildiren akademik kelimelerden (${categories.negative.slice(0, 3).map(w => `<code>${w}</code>`).join(', ')}) oluşuyor. Bu kelimelerin cümledeki zıtlık bağlaçlarıyla (but, although, however) kullanım sıklığı yüksektir.`;
+    } else if (categories.positive.length >= 2) {
+      semanticInsight = `Yanlışlarınız ağırlıklı olarak **'Geliştirme / Artırma / Destekleme'** bağlamlı pozitif akademik kelimelerden (${categories.positive.slice(0, 3).map(w => `<code>${w}</code>`).join(', ')}) oluşuyor. Bunlar genellikle olumlu etki-sonuç cümlelerinde karşımıza çıkar.`;
+    } else if (categories.analysis.length >= 2) {
+      semanticInsight = `Yanlış yaptığınız kelimeler arasında **'İnceleme / Belirleme / Değerlendirme'** eylemleri (${categories.analysis.slice(0, 3).map(w => `<code>${w}</code>`).join(', ')}) yoğunlukta. YÖKDİL araştırma metinlerinde deney, gözlem ve sonuç bildiren cümlelere daha çok odaklanmalısınız.`;
+    }
+
+    // 3. Eş Anlam Karışıklığı
+    const synonymPairs = [];
+    wrongWords.forEach((w1, idx) => {
+      wrongWords.slice(idx + 1).forEach(w2 => {
+        const d1 = wrongDetails[w1] || {};
+        const d2 = wrongDetails[w2] || {};
+        const s1 = (d1.synonyms || '').toLowerCase();
+        const s2 = (d2.synonyms || '').toLowerCase();
+
+        if (
+          s1.includes(w2.toLowerCase()) || 
+          s2.includes(w1.toLowerCase()) ||
+          (d1.tr && d2.tr && d1.tr.split(',')[0].trim() === d2.tr.split(',')[0].trim())
+        ) {
+          synonymPairs.push(`${w1} ↔ ${w2}`);
+        }
+      });
+    });
+
+    return {
+      primaryType: typeLabels[primaryTypeError] || 'İsim',
+      typeTip: typeTips[primaryTypeError],
+      semanticInsight,
+      synonymPairs,
+      totalWrong: wrongWords.length
+    };
+  };
+
+  const areMeaningsConflicting = (m1, m2) => {
+    const clean = (text) => text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/);
+    const w1 = clean(m1);
+    const w2 = clean(m2);
+    return w1.some(x => w2.includes(x)) || w2.some(x => w1.includes(x));
+  };
+
+  const getMeaningOptions = (correctMeaning, currentWordObj) => {
+    const allMeanings = Object.values(allWordsDb).map(v => v.tr).filter(Boolean);
+    const filtered = allMeanings.filter(m => {
+      if (m.toLowerCase().trim() === correctMeaning.toLowerCase().trim()) return false;
+      return !areMeaningsConflicting(correctMeaning, m);
+    });
+
+    const uniqueFiltered = Array.from(new Set(filtered)).sort(() => Math.random() - 0.5);
+    const options = [correctMeaning, ...uniqueFiltered.slice(0, 3)];
+    return options.sort(() => Math.random() - 0.5);
+  };
+
+  const getSynonymOptions = (correctSynonym, currentWordObj) => {
+    const allSyns = Object.values(allWordsDb).map(v => v.synonyms).filter(Boolean).map(s => s.split(',')[0].trim());
+    const filtered = allSyns.filter(s => {
+      if (s.toLowerCase().trim() === correctSynonym.toLowerCase().trim()) return false;
+      if (currentWordObj && currentWordObj.word.toLowerCase() === s.toLowerCase()) return false;
+      return true;
+    });
+
+    const uniqueFiltered = Array.from(new Set(filtered)).sort(() => Math.random() - 0.5);
+    const options = [correctSynonym, ...uniqueFiltered.slice(0, 3)];
+    return options.sort(() => Math.random() - 0.5);
+  };
+
+  const getWordFromDict = (wordStr) => {
+    if (!wordStr || !allWordsDb) return null;
+    const cleanStr = wordStr.toLowerCase().trim();
+    return allWordsDb[cleanStr] || dictDb?.[cleanStr];
+  };
+
+  const getAntonym = (wordObj) => {
+    if (!wordObj) return 'Yok';
+    const rawAntonym = ACADEMIC_ANTONYMS[wordObj.word.toLowerCase().trim()];
+    if (rawAntonym) return rawAntonym;
+    if (wordObj.antonyms && wordObj.antonyms.trim() !== "" && wordObj.antonyms.trim().toLowerCase() !== "yok") {
+      return wordObj.antonyms;
+    }
+    return 'Yok';
+  };
+
+  const getAntonymWithTranslation = (wordObj) => {
+    const antonymsStr = getAntonym(wordObj);
+    if (antonymsStr === 'Yok') return [];
+    const antonymList = antonymsStr.split(',').map(a => a.trim());
+    const translatedList = antonymList.map(ant => {
+      const match = getWordFromDict(ant);
+      return {
+        eng: ant,
+        tr: match ? match.tr : null
+      };
+    });
+    return translatedList;
+  };
+
+  const getTranslation = (wordStr) => {
+    const match = getWordFromDict(wordStr);
+    return match ? (match.tr || match.turkish || '') : '';
+  };
+
+  const translateCollocation = (coll, word, wordMeaning) => {
+    const cleanWord = word.toLowerCase().trim();
+    const cleanColl = coll.toLowerCase().trim();
+    if (cleanColl.includes('conduct a study')) return 'çalışma yürütmek';
+    if (cleanColl.includes('conduct research')) return 'araştırma yapmak';
+    if (cleanColl.includes('conduct an experiment')) return 'deney yapmak';
+    if (cleanColl.includes('adverse effect')) return 'olumsuz etki';
+    if (cleanColl.includes('adverse reaction')) return 'yan etki, olumsuz reaksiyon';
+    if (cleanColl.includes('adverse weather')) return 'olumsuz hava koşulları';
+    if (cleanColl.includes('gain knowledge')) return 'bilgi edinmek';
+    if (cleanColl.includes('acquire skills')) return 'beceri edinmek';
+    if (cleanColl.includes('profound effect')) return 'derin/büyük etki';
+    if (cleanColl.includes('profound impact')) return 'derin/büyük etki';
+    return '';
+  };
+
+  const getEnglishForMeaningOption = (turkishTr) => {
+    if (!turkishTr || !allWordsDb) return '';
+    const cleanTr = turkishTr.toLowerCase().trim();
+    const found = Object.entries(allWordsDb).find(([eng, val]) => val && val.tr && val.tr.toLowerCase().trim() === cleanTr);
+    return found ? found[0] : '';
+  };
+
+  const getSentenceEn = (wordObj) => {
+    if (!wordObj) return '';
+    if (wordObj.sentences && wordObj.sentences.length > sentenceIdx) {
+      return wordObj.sentences[sentenceIdx].en;
+    }
+    return wordObj.sentence_en || wordObj.sentence || '';
+  };
+
+  const getSentenceTr = (wordObj) => {
+    if (!wordObj) return '';
+    if (wordObj.sentences && wordObj.sentences.length > sentenceIdx) {
+      return wordObj.sentences[sentenceIdx].tr;
+    }
+    return wordObj.sentence_tr || wordObj.tr_sentence || '';
+  };
+
+  const getSynonymsList = (wordObj) => {
+    if (!wordObj || !wordObj.synonyms || wordObj.synonyms.trim() === "" || wordObj.synonyms.trim().toLowerCase() === "yok") return [];
+    return wordObj.synonyms.split(',').map(s => {
+      const syn = s.trim();
+      return {
+        eng: syn,
+        tr: getTranslation(syn)
+      };
+    });
+  };
+
+  const getAntonymsList = (wordObj) => {
+    return getAntonymWithTranslation(wordObj);
+  };
+
+  const getCollocationsList = (wordObj) => {
+    if (!wordObj || !wordObj.collocations || wordObj.collocations.trim() === "" || wordObj.collocations.trim().toLowerCase() === "yok") return [];
+    return wordObj.collocations.split(',').map(c => {
+      const coll = c.trim();
+      return {
+        eng: coll,
+        tr: translateCollocation(coll, wordObj.word, wordObj.tr)
+      };
+    });
+  };
+
+  const hasAntonym = (wordObj) => {
+    return getAntonym(wordObj) !== 'Yok';
+  };
+
+  const getAntonymOptions = (correctAntonym, currentWordObj) => {
+    const allAnts = Object.values(ACADEMIC_ANTONYMS).map(s => s.split(',')[0].trim());
+    const uniqueFiltered = Array.from(new Set(allAnts)).sort(() => Math.random() - 0.5);
+    const options = [correctAntonym, ...uniqueFiltered.slice(0, 3)];
+    return options.sort(() => Math.random() - 0.5);
+  };
+
+  const getBlankedSentence = (wordObj, idx) => {
+    if (!wordObj) return '';
+    let sentence = "";
+    let wordToBlank = wordObj.word.toLowerCase();
+    
+    const sentenceIndex = clozeSentenceIndexes[idx] !== undefined ? clozeSentenceIndexes[idx] : 0;
+    
+    if (wordObj.sentences && wordObj.sentences.length > sentenceIndex) {
+      sentence = wordObj.sentences[sentenceIndex].en;
+    } else {
+      sentence = wordObj.sentence_en || wordObj.sentence || '';
+    }
+
+    const escaped = wordToBlank.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const regex = new RegExp(`\\b${escaped}(s|ed|ing|d|es|ly)?\\b`, 'gi');
+    return sentence.replace(regex, '_______');
+  };
+
+  const getClozeOptions = (correctWord) => {
+    const allWords = studyWords.map(w => w.word);
+    const filtered = allWords.filter(w => w !== correctWord);
+    const options = [correctWord, ...filtered.slice(0, 3)];
+    return options.sort(() => Math.random() - 0.5);
+  };
+
+  
+
+const handleCikmisSwipeBack = () => {
     if (currentIdx > 0) {
       const prevIdx = currentIdx - 1;
       const prevWord = studyWords[prevIdx];
