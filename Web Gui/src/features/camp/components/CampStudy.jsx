@@ -59,7 +59,8 @@ const CampStudy = ({
   totalCampDays,
   setMeaningOptions,
   vocabTrack,
-  addMistake
+  addMistake,
+  setWordResults
 }) => {
   const getTrackTheme = () => {
     const themes = {
@@ -440,17 +441,18 @@ const CampStudy = ({
               <button
                 onClick={() => {
                   addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_card');
+                  setWordResults?.(prev => ({ ...prev, [studyWords[currentIdx].word]: false }));
                   setLearnCardFlipped(false);
                   handleWordRead();
                 }}
-                className="btn-secondary"
+                className="btn-primary"
                 style={{
                   flex: 1,
                   padding: '10px 20px',
                   fontSize: '0.85rem',
-                  borderColor: 'rgba(239, 68, 68, 0.4)',
-                  color: '#f87171',
-                  background: 'rgba(239, 68, 68, 0.05)',
+                  borderColor: '#ef4444',
+                  color: 'white',
+                  background: '#ef4444',
                   fontWeight: 'bold',
                   display: 'flex',
                   alignItems: 'center',
@@ -462,6 +464,7 @@ const CampStudy = ({
               </button>
               <button
                 onClick={() => {
+                  setWordResults?.(prev => ({ ...prev, [studyWords[currentIdx].word]: true }));
                   setLearnCardFlipped(false);
                   handleWordRead();
                 }}

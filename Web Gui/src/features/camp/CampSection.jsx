@@ -1359,6 +1359,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     // Clear active study session on completion
     localStorage.removeItem(`yokdil_active_cikmis_session_${category}`);
     
+    setReportCardType('cikmis_kelimeler');
+    setReportCardDay(dayNum);
     exitCamp();
   };
 
@@ -1903,15 +1905,15 @@ const handleCikmisSwipeBack = () => {
           <div style={{ display: 'flex', gap: '14px', width: '100%', marginTop: '10px' }}>
             <button 
               onClick={() => handleCikmisSwipe(false)} 
-              className="btn-secondary" 
-              style={{ flex: 1, padding: '14px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#fca5a5', fontWeight: 'bold' }}
+              className="btn-primary" 
+              style={{ flex: 1, padding: '14px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', background: '#ef4444', borderColor: '#ef4444', color: 'white', fontWeight: 'bold' }}
             >
               ❌ Bilmiyorum
             </button>
             <button 
               onClick={() => handleCikmisSwipe(true)} 
               className="btn-primary" 
-              style={{ flex: 1, padding: '14px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.4)', color: '#a7f3d0', fontWeight: 'bold' }}
+              style={{ flex: 1, padding: '14px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', background: '#10b981', borderColor: '#10b981', color: 'white', fontWeight: 'bold' }}
             >
               ✔️ Biliyorum
             </button>
@@ -2420,7 +2422,8 @@ const handleCikmisSwipeBack = () => {
     
     const updatedRecord = {
       ...currentDayRecord,
-      date: new Date().toLocaleDateString()
+      date: new Date().toLocaleDateString(),
+      resultsMap: wordResults
     };
 
     if (isSwipe) {
@@ -2693,6 +2696,7 @@ const handleCikmisSwipeBack = () => {
         setMeaningOptions={setMeaningOptions}
         vocabTrack={vocabTrack}
         addMistake={addMistake}
+        setWordResults={setWordResults}
       />
     );
   }
@@ -2766,15 +2770,33 @@ const handleCikmisSwipeBack = () => {
                         </div>
                       ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '200px', overflowY: 'auto', paddingRight: '4px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '12px' }} className="custom-scrollbar">
-                          {reportCardWords.map((w, idx) => (
-                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.8rem' }}>
-                              <span style={{ fontWeight: 'bold', color: 'white' }}>
-                                {w.word || w.english || ''} 
-                                {w.type ? <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}> ({formatWordType(w.type)})</span> : ''}
-                              </span>
-                              <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>{renderTurkishMeanings(w.tr || w.turkish || '', '#a5b4fc', { fontSize: '0.8rem', gap: '2px', alignItems: 'flex-end', textAlign: 'right' })}</div>
-                            </div>
-                          ))}
+                          {reportCardWords.map((w, idx) => {
+                            const eng = w.word || w.english || '';
+                            const resultsMap = completedObj?.resultsMap || completedObj?.swipeResults || completedObj?.detailedResults || {};
+                            const wasCorrect = resultsMap[eng] !== undefined ? resultsMap[eng] === true : true;
+                            return (
+                              <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 10px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.8rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <span style={{
+                                    fontSize: '0.7rem',
+                                    padding: '2px 6px',
+                                    borderRadius: '6px',
+                                    background: wasCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                                    color: wasCorrect ? '#34d399' : '#ef4444',
+                                    border: wasCorrect ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(239, 68, 68, 0.3)',
+                                    fontWeight: 'bold'
+                                  }}>
+                                    {wasCorrect ? '✓ Biliyorum' : '✗ Bilmiyorum'}
+                                  </span>
+                                  <span style={{ fontWeight: 'bold', color: 'white' }}>
+                                    {eng} 
+                                    {w.type ? <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 'normal' }}> ({formatWordType(w.type)})</span> : ''}
+                                  </span>
+                                </div>
+                                <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>{renderTurkishMeanings(w.tr || w.turkish || '', '#a5b4fc', { fontSize: '0.8rem', gap: '2px', alignItems: 'flex-end', textAlign: 'right' })}</div>
+                              </div>
+                            );
+                          })}
                         </div>
                       )}
                     </div>
@@ -2823,6 +2845,51 @@ const handleCikmisSwipeBack = () => {
                             </div>
                           );
                         })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Kamp Genel Durumu */}
+                  {!isGrammar && (
+                    <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                      <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: '#fbbf24', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        🏆 Kamp Genel İlerleme Durumu
+                      </h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.85rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span style={{ color: '#94a3b8' }}>Aktif Çalışılan Kamp Günü:</span>
+                          <strong style={{ color: 'white' }}>Gün {reportCardDay} / 60</strong>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span style={{ color: '#94a3b8' }}>Tamamlanan Gün Sayısı:</span>
+                          <strong style={{ color: '#34d399' }}>
+                            {isCikmis ? `${cikmisDoneCount} / 60` : `${totalDone} / 60`}
+                          </strong>
+                        </div>
+                        {(() => {
+                          let totalCorrect = 0;
+                          let totalWrong = 0;
+                          const targetDoneMap = isCikmis ? cikmisDoneMap : completedDaysMap;
+                          Object.values(targetDoneMap).forEach(dayRec => {
+                            const rMap = dayRec.resultsMap || dayRec.swipeResults || dayRec.detailedResults || {};
+                            Object.values(rMap).forEach(val => {
+                              if (val === true) totalCorrect++;
+                              else if (val === false) totalWrong++;
+                            });
+                          });
+                          return (
+                            <>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: '#94a3b8' }}>Kampa Ait Toplam Öğrenilen Kelime:</span>
+                                <strong style={{ color: '#34d399' }}>{totalCorrect} Kelime</strong>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: '#94a3b8' }}>Kampa Ait Toplam Tekrar Edilecek (Hata):</span>
+                                <strong style={{ color: '#f87171' }}>{totalWrong} Kelime</strong>
+                              </div>
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
                   )}
