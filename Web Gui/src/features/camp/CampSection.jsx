@@ -1175,9 +1175,10 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     };
     localStorage.setItem(`yokdil_camp_session_${category}`, JSON.stringify(sessionObj));
 
-    // Update URL hash
     if (!isInitializedRef.current) return;
-    let newHash = initialCampType === 'cikmis_kelimeler' ? `#/${category}/camp/cikmis_kelimeler` : `#/${category}/camp`;
+    let newHash = initialCampType === 'cikmis_kelimeler'
+      ? `#/${category}/camp/cikmis_kelimeler`
+      : (initialCampType === 'grammar' ? `#/${category}/camp-grammar` : `#/${category}/camp-vocab`);
     if (isStudying) {
       if (campType === 'vocabulary') {
         newHash = `#/${category}/camp/vocabulary/day_${selectedDay}/phase_${phase}/word_${currentIdx + 1}`;
@@ -3087,7 +3088,8 @@ const handleCikmisSwipeBack = () => {
     const category = selectedCategory || 'fen';
     localStorage.removeItem(`yokdil_camp_session_${category}`);
     
-    window.history.pushState(null, '', `#/${category}/camp`);
+    const baseHash = initialCampType === 'grammar' ? `#/${category}/camp-grammar` : `#/${category}/camp-vocab`;
+    window.history.pushState(null, '', baseHash);
   };
 
   const completedDaysMap = progress.completedDays || {};

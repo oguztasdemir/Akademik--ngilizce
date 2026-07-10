@@ -172,6 +172,8 @@ function App() {
             tab = 'camp-vocab';
           } else if (hash.includes('grammar')) {
             tab = 'camp-grammar';
+          } else {
+            tab = 'camp-vocab';
           }
         }
         return {
@@ -632,6 +634,8 @@ function App() {
             tab = 'camp-vocab';
           } else if (hash.includes('grammar')) {
             tab = 'camp-grammar';
+          } else {
+            tab = 'camp-vocab';
           }
         }
         setSelectedCategory(cat);
