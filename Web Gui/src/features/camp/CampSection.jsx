@@ -1277,9 +1277,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const startDailyStudy = async (dayNum, resumeIdx = null, resumePhase = null) => {
     const category = selectedCategory || 'fen';
     setSelectedDay(dayNum);
-    setIsStudying(true);
 
-    const track = vocabTrack || 'anlam';
+    const track = category === 'custom' ? 'anlam' : (vocabTrack || 'anlam');
     let rawWords = [];
 
     try {
@@ -1312,6 +1311,11 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         rawWords = rawWords.filter(w => w.antonyms && w.antonyms.trim().length > 0);
       }
         let finalWords = deterministicShuffle(rawWords, dayNum);
+        if (finalWords.length === 0) {
+          alert("Bu günün kelime listesi boş veya seçilen çalışma türü için kelime bulunamadı!");
+          setIsStudying(false);
+          return;
+        }
         setStudyWords(finalWords);
 
         // Load correct answers count based on completed state
@@ -1368,6 +1372,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
           setClozeInputText('');
           setClozeShowHint(false);
         }
+        setIsStudying(true);
     } catch (e) {
       console.error(e);
       alert("Kelime listesi yüklenirken hata oluştu.");
