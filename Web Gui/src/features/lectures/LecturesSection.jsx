@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, ArrowRight, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
-import fallbackExercises from '@dataset/yokdil/genel/lecture_exercises.json';
+import fallbackExercises from '@dataset/yokdil/genel/konu_anlatimi/lecture_exercises.json';
 
 const LecturesSection = ({
   activeTab,

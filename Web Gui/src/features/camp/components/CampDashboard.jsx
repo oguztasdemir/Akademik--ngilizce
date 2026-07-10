@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Calendar, Star, Trophy, ArrowRight, Award, Sparkles } from 'lucide-react';
 
 const CampDashboard = ({
   campType,
   setCampType,
+  vocabTrack,
+  setVocabTrack,
   totalDone,
   totalSupermaster,
   selectedCategory,
@@ -36,6 +38,28 @@ const CampDashboard = ({
   cikmisPlanData,
   hideSwitcher
 }) => {
+  const [showGeneralReport, setShowGeneralReport] = useState(false);
+  const [expandedGrammarDay, setExpandedGrammarDay] = useState(null);
+
+  const calculateGeneralStats = () => {
+    const doneMap = completedDaysMap || {};
+    const completedDays = Object.keys(doneMap).map(Number);
+    const totalCompleted = completedDays.length;
+    const scores = Object.values(doneMap).map(d => d.score || 0);
+    const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+    const passedDaysCount = Object.values(doneMap).filter(d => d.isPassed).length;
+    const failedDaysCount = totalCompleted - passedDaysCount;
+
+    return {
+      totalCompleted,
+      avgScore,
+      passedDaysCount,
+      failedDaysCount
+    };
+  };
+
+  const genStats = calculateGeneralStats();
+
   // Helper to render Turkish meanings in dashboard lists vertically
   const renderTurkishMeaningsList = (text) => {
     if (!text) return '';
@@ -125,9 +149,21 @@ const CampDashboard = ({
 
   const renderDayItem = (dayNum) => {
     const completedObj = completedDaysMap[dayNum];
-    const isCompleted = !!completedObj;
-    const isPassed = completedObj ? completedObj.isPassed : false;
-    const score = completedObj ? completedObj.score : null;
+    const isCompleted = completedObj ? (
+      cikmisMode === 'swipe'
+      ? (completedObj.swipeCompleted !== undefined ? !!completedObj.swipeCompleted : true)
+      : (completedObj.detailedCompleted !== undefined ? !!completedObj.detailedCompleted : false)
+    ) : false;
+    const isPassed = completedObj ? (
+      cikmisMode === 'swipe'
+      ? (completedObj.swipePassed !== undefined ? !!completedObj.swipePassed : true)
+      : (completedObj.detailedPassed !== undefined ? !!completedObj.detailedPassed : completedObj.isPassed)
+    ) : false;
+    const score = completedObj ? (
+      cikmisMode === 'swipe'
+      ? (completedObj.swipeScore !== undefined ? completedObj.swipeScore : completedObj.score)
+      : (completedObj.detailedScore !== undefined ? completedObj.detailedScore : completedObj.score)
+    ) : null;
 
     const isActive = dayNum === currentDay;
     const isMonthlyCamp = (dayNum % 28 === 0) || (dayNum === totalCampDays);
@@ -249,6 +285,31 @@ const CampDashboard = ({
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {isCompleted && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setReportCardType('vocabulary');
+                setReportCardDay(dayNum);
+              }}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                fontSize: '0.75rem',
+                fontWeight: 'bold',
+                background: 'rgba(59, 130, 246, 0.15)',
+                border: '1px solid rgba(59, 130, 246, 0.4)',
+                color: '#93c5fd',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+            >
+              📊 Karne
+            </button>
+          )}
           <span style={{
             padding: '6px 12px',
             borderRadius: '8px',
@@ -319,6 +380,100 @@ const CampDashboard = ({
 
       {campType === 'vocabulary' ? (
         <>
+          {/* Mode Switcher for Gelişmiş Kelime Kampı */}
+          <div style={{ display: 'flex', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '4px', maxWidth: '500px', margin: '0 auto 20px auto' }}>
+            <button
+              onClick={() => setCikmisMode('swipe')}
+              style={{
+                flex: 1,
+                padding: '10px 12px',
+                borderRadius: '10px',
+                background: cikmisMode === 'swipe' ? 'rgba(239, 68, 68, 0.15)' : 'transparent',
+                border: cikmisMode === 'swipe' ? '1px solid rgba(239, 68, 68, 0.3)' : 'none',
+                color: cikmisMode === 'swipe' ? '#fca5a5' : '#94a3b8',
+                fontWeight: 'bold',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px'
+              }}
+            >
+              🎴 Hızlı Kart Pratiği
+            </button>
+            <button
+              onClick={() => setCikmisMode('detailed')}
+              style={{
+                flex: 1,
+                padding: '10px 12px',
+                borderRadius: '10px',
+                background: cikmisMode === 'detailed' ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+                border: cikmisMode === 'detailed' ? '1px solid rgba(99, 102, 241, 0.3)' : 'none',
+                color: cikmisMode === 'detailed' ? '#a5b4fc' : '#94a3b8',
+                fontWeight: 'bold',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px'
+              }}
+            >
+              🧠 Detaylı Kelime Kampı
+            </button>
+          </div>
+
+          {vocabTrack && setVocabTrack && (
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '10px',
+              padding: '6px',
+              background: 'rgba(255,255,255,0.02)',
+              border: '1.5px solid rgba(255,255,255,0.06)',
+              borderRadius: '16px',
+              marginBottom: '20px',
+              justifyContent: 'center'
+            }}>
+              {[
+                { id: 'anlam', label: 'Anlam Kampı', color: '#6366f1', icon: 'fa-book-open' },
+                { id: 'es_anlam', label: 'Eş Anlam Kampı', color: '#a855f7', icon: 'fa-link' },
+                { id: 'zit_anlam', label: 'Zıt Anlam Kampı', color: '#f43f5e', icon: 'fa-left-right' },
+                { id: 'cumle', label: 'Cümle Kampı', color: '#f59e0b', icon: 'fa-pen-clip' },
+                { id: 'tumu', label: 'Genel Kamp (Tümü)', color: '#10b981', icon: 'fa-globe' }
+              ].map(t => {
+                const isActive = vocabTrack === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => setVocabTrack(t.id)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 16px',
+                      borderRadius: '12px',
+                      fontSize: '0.8rem',
+                      fontWeight: 'bold',
+                      cursor: 'pointer',
+                      border: '1.5px solid',
+                      borderColor: isActive ? t.color : 'rgba(255,255,255,0.08)',
+                      background: isActive ? `rgba(${isActive ? (t.id === 'anlam' ? '99,102,241' : t.id === 'es_anlam' ? '168,85,247' : t.id === 'zit_anlam' ? '244,63,94' : t.id === 'cumle' ? '245,158,11' : '16,185,129') : ''}, 0.15)` : 'transparent',
+                      color: isActive ? 'white' : '#94a3b8',
+                      transition: 'all 0.2s',
+                      boxShadow: isActive ? `0 4px 12px rgba(${t.id === 'anlam' ? '99,102,241' : t.id === 'es_anlam' ? '168,85,247' : t.id === 'zit_anlam' ? '244,63,94' : t.id === 'cumle' ? '245,158,11' : '16,185,129'}, 0.2)` : 'none'
+                    }}
+                  >
+                    <i className={`fa-solid ${t.icon}`} style={{ color: isActive ? 'white' : t.color }}></i>
+                    {t.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
           {/* Vocabulary Camp Menu */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
             <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -348,6 +503,15 @@ const CampDashboard = ({
               <div>
                 <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Aktif Hedef Gün</span>
                 <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>Gün #{currentDay}</strong>
+              </div>
+            </div>
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', transition: 'transform 0.2s', border: '1px solid rgba(251, 191, 36, 0.2)' }} onClick={() => setShowGeneralReport(true)}>
+              <div style={{ background: 'rgba(251, 191, 36, 0.12)', padding: '12px', borderRadius: '12px', color: '#fbbf24' }}>
+                <Award className="h-6 w-6" />
+              </div>
+              <div style={{ flex: 1 }}>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Kamp Karnesi</span>
+                <strong style={{ fontSize: '0.94rem', color: '#fbbf24', display: 'block', textDecoration: 'underline' }}>Karne & Durum Raporu 📊</strong>
               </div>
             </div>
           </div>
@@ -699,51 +863,95 @@ const CampDashboard = ({
                   badgeColor = '#a7f3d0';
                 }
 
+                const isExpanded = expandedGrammarDay === dayNum;
+
                 return (
-                  <div
-                    key={dayNum}
-                    onClick={() => startGrammarStudy(dayNum)}
-                    style={{
-                      background: bg,
-                      border: border,
-                      borderRadius: '16px',
-                      padding: '16px 20px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      gap: '12px'
-                    }}
-                    className="hover-card"
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: isActive ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', color: isActive ? '#a7f3d0' : 'white', fontSize: '1.05rem', border: '1px solid rgba(255,255,255,0.06)' }}>
-                        {dayNum}
+                  <div key={dayNum} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div
+                      onClick={() => startGrammarStudy(dayNum)}
+                      style={{
+                        background: bg,
+                        border: border,
+                        borderRadius: '16px',
+                        padding: '16px 20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        gap: '12px'
+                      }}
+                      className="hover-card"
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: isActive ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', color: isActive ? '#a7f3d0' : 'white', fontSize: '1.05rem', border: '1px solid rgba(255,255,255,0.06)' }}>
+                          {dayNum}
+                        </div>
+                        <div style={{ textAlign: 'left' }}>
+                          <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
+                            {dayData?.title || `${dayNum}. Gün Dilbilgisi Konusu`}
+                          </h4>
+                          <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginTop: '2px' }}>
+                            Konu Anlatımı & 5 Pekiştirme Sorusu
+                          </span>
+                        </div>
                       </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <h4 style={{ fontSize: '0.94rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
-                          {dayData?.title || `${dayNum}. Gün Dilbilgisi Konusu`}
-                        </h4>
-                        <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginTop: '2px' }}>
-                          Konu Anlatımı & 5 Pekiştirme Sorusu
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setExpandedGrammarDay(isExpanded ? null : dayNum);
+                          }}
+                          style={{
+                            padding: '6px 12px',
+                            borderRadius: '8px',
+                            fontSize: '0.72rem',
+                            fontWeight: 'bold',
+                            background: isExpanded ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                            border: isExpanded ? '1px solid rgba(99, 102, 241, 0.3)' : '1px solid rgba(255, 255, 255, 0.08)',
+                            color: isExpanded ? '#a5b4fc' : '#cbd5e1',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            transition: 'all 0.2s'
+                          }}
+                        >
+                          📖 Konu Özeti
+                        </button>
+                        <span style={{
+                          padding: '6px 12px',
+                          borderRadius: '8px',
+                          fontSize: '0.72rem',
+                          fontWeight: 'bold',
+                          background: badgeBg,
+                          color: badgeColor
+                        }}>
+                          {badgeText}
                         </span>
+                        <ArrowRight className="h-4 w-4 text-slate-500" />
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{
-                        padding: '6px 12px',
-                        borderRadius: '8px',
-                        fontSize: '0.72rem',
-                        fontWeight: 'bold',
-                        background: badgeBg,
-                        color: badgeColor
+                    {isExpanded && dayData && (
+                      <div className="glass-card animate-scale-in" style={{
+                        padding: '20px 24px',
+                        borderRadius: '16px',
+                        background: 'rgba(15, 23, 42, 0.55)',
+                        border: '1.5px solid rgba(16, 185, 129, 0.2)',
+                        marginTop: '-4px',
+                        marginBottom: '10px',
+                        textAlign: 'left'
                       }}>
-                        {badgeText}
-                      </span>
-                      <ArrowRight className="h-4 w-4 text-slate-500" />
-                    </div>
+                        <h5 style={{ fontSize: '0.88rem', fontWeight: 'bold', color: '#10b981', marginBottom: '12px' }}>
+                          📝 {dayData.title} - Konu Anlatım Özeti
+                        </h5>
+                        <p style={{ fontSize: '0.84rem', color: '#e2e8f0', lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>
+                          {dayData.lecture}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -1246,6 +1454,85 @@ const CampDashboard = ({
             </div>
           </div>
         </>
+      )}
+
+      {showGeneralReport && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(11, 15, 26, 0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          zIndex: 99999,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '20px'
+        }} onClick={() => setShowGeneralReport(false)}>
+          <div className="glass-card animate-scale-in" style={{
+            width: '100%',
+            maxWidth: '520px',
+            borderRadius: '24px',
+            background: 'rgba(15, 23, 42, 0.95)',
+            border: '1.5px solid rgba(255, 255, 255, 0.08)',
+            padding: '28px',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+            position: 'relative'
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ background: 'rgba(251, 191, 36, 0.12)', padding: '10px', borderRadius: '12px', color: '#fbbf24' }}>
+                  <Award className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: '900', color: 'white', margin: 0 }}>Genel Kamp Karnesi 📊</h3>
+                  <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                    {selectedCategory === 'fen' ? 'Fen Bilimleri' : selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri'}
+                  </span>
+                </div>
+              </div>
+              <button onClick={() => setShowGeneralReport(false)} style={{ background: 'transparent', border: 'none', color: '#64748b', fontSize: '1.5rem', cursor: 'pointer' }}>&times;</button>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
+              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Tamamlanan Günler</span>
+                <strong style={{ fontSize: '1.5rem', color: 'white' }}>{genStats.totalCompleted} / 60</strong>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Başarı Ortalaması</span>
+                <strong style={{ fontSize: '1.5rem', color: '#34d399' }}>%{genStats.avgScore}</strong>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Başarılı Günler</span>
+                <strong style={{ fontSize: '1.5rem', color: '#10b981' }}>{genStats.passedDaysCount} Gün</strong>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Tekrar Gereken</span>
+                <strong style={{ fontSize: '1.5rem', color: '#f43f5e' }}>{genStats.failedDaysCount} Gün</strong>
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(99, 102, 241, 0.05)', border: '1.5px solid rgba(99, 102, 241, 0.15)', borderRadius: '18px', padding: '16px', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', color: '#a5b4fc' }}>
+                <Sparkles className="h-5 w-5" />
+                <span style={{ fontSize: '0.82rem', fontWeight: 'bold' }}>Yapay Zeka Karne Analizi</span>
+              </div>
+              <p style={{ fontSize: '0.78rem', color: '#cbd5e1', lineHeight: 1.5, margin: 0 }}>
+                {genStats.totalCompleted === 0 
+                  ? "Henüz kampa başlamadınız. Günlük kelime çalışmalarını tamamladıkça burası sizin için detaylı başarı analizleri üretecektir!" 
+                  : `Tebrikler! Kampın %${Math.round((genStats.totalCompleted / 60) * 100)}'lik kısmını geride bıraktınız. %${genStats.avgScore} başarı ortalaması ile ilerliyorsunuz. ${genStats.failedDaysCount > 0 ? `${genStats.failedDaysCount} günü tekrar etmeniz kelime haznenizi daha da güçlendirecektir.` : 'Harika! Şu ana kadar hata yapmadan tertemiz ilerlediniz!'}`}
+              </p>
+            </div>
+
+            <button onClick={() => setShowGeneralReport(false)} className="btn-primary" style={{ width: '100%', padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', cursor: 'pointer' }}>
+              Kapat ve Devam Et
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

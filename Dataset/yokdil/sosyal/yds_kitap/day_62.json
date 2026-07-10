@@ -1,0 +1,965 @@
+{
+  "day": 62,
+  "words": [
+    {
+      "word": "ABANDON",
+      "type": "noun",
+      "turkish": "terk etmek, vazgeçmek",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "ACCOMPANIED",
+      "type": "noun",
+      "turkish": "Accompanied",
+      "sentence_en": "The study of accompanied is essential.",
+      "sentence_tr": "Accompanied çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "ACCUMULATION",
+      "type": "noun",
+      "turkish": "Accumulation",
+      "sentence_en": "The study of accumulation is essential.",
+      "sentence_tr": "Accumulation çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "AMBIGUOUS",
+      "type": "noun",
+      "turkish": "belirsiz, çok anlamlı",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "APPENDIX",
+      "type": "noun",
+      "turkish": "Appendix",
+      "sentence_en": "The study of appendix is essential.",
+      "sentence_tr": "Appendix çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "APPRECIATION",
+      "type": "noun",
+      "turkish": "Appreciation",
+      "sentence_en": "The study of appreciation is essential.",
+      "sentence_tr": "Appreciation çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "ARBITRARY",
+      "type": "noun",
+      "turkish": "Arbitrary",
+      "sentence_en": "The study of arbitrary is essential.",
+      "sentence_tr": "Arbitrary çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "AUTOMATICALLY",
+      "type": "noun",
+      "turkish": "Automatically",
+      "sentence_en": "The study of automatically is essential.",
+      "sentence_tr": "Automatically çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "BIAS",
+      "type": "noun",
+      "turkish": "Ön Yargı, Eğilim",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CHART",
+      "type": "noun",
+      "turkish": "Tablo, Çizelge",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CLARITY",
+      "type": "noun",
+      "turkish": "Clarity",
+      "sentence_en": "The study of clarity is essential.",
+      "sentence_tr": "Clarity çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "CONFORMITY",
+      "type": "noun",
+      "turkish": "Conformity",
+      "sentence_en": "The study of conformity is essential.",
+      "sentence_tr": "Conformity çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "COMMODITY",
+      "type": "noun",
+      "turkish": "ticari mal, eşya",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "COMPLEMENT",
+      "type": "noun",
+      "turkish": "tamamlamak, bütünlemek",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CONTEMPORARY",
+      "type": "noun",
+      "turkish": "çağdaş, modern",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CONTRADICTION",
+      "type": "noun",
+      "turkish": "çelişki",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CRUCIAL",
+      "type": "noun",
+      "turkish": "En Önemli An (Karar İρin Vb.)",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CURRENCY",
+      "type": "noun",
+      "turkish": "döviz, para birimi",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "DENOTE",
+      "type": "noun",
+      "turkish": "göstermek, simgelemek",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "DETECTED",
+      "type": "noun",
+      "turkish": "Detected",
+      "sentence_en": "The study of detected is essential.",
+      "sentence_tr": "Detected çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "DEVIATION",
+      "type": "noun",
+      "turkish": "Deviation",
+      "sentence_en": "The study of deviation is essential.",
+      "sentence_tr": "Deviation çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "DISPLACEMENT",
+      "type": "noun",
+      "turkish": "Displacement",
+      "sentence_en": "The study of displacement is essential.",
+      "sentence_tr": "Displacement çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "DRAMATIC",
+      "type": "noun",
+      "turkish": "ani, çarpıcı, tiyatroyla ilgili",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "EVENTUALLY",
+      "type": "noun",
+      "turkish": "Eventually",
+      "sentence_en": "The study of eventually is essential.",
+      "sentence_tr": "Eventually çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "EXHIBIT",
+      "type": "noun",
+      "turkish": "Teşhir Etmek, Göstermek",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "EXPLOITATION",
+      "type": "noun",
+      "turkish": "Exploitation",
+      "sentence_en": "The study of exploitation is essential.",
+      "sentence_tr": "Exploitation çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "FLUCTUATIONS",
+      "type": "noun",
+      "turkish": "Fluctuations",
+      "sentence_en": "The study of fluctuations is essential.",
+      "sentence_tr": "Fluctuations çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "GUIDELINES",
+      "type": "noun",
+      "turkish": "Guidelines",
+      "sentence_en": "The study of guidelines is essential.",
+      "sentence_tr": "Guidelines çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "HIGHLIGHTED",
+      "type": "noun",
+      "turkish": "Highlighted",
+      "sentence_en": "The study of highlighted is essential.",
+      "sentence_tr": "Highlighted çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "IMPLICIT",
+      "type": "noun",
+      "turkish": "örtülü, ima edilen",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "INDUCED",
+      "type": "noun",
+      "turkish": "Induced",
+      "sentence_en": "The study of induced is essential.",
+      "sentence_tr": "Induced çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "INEVITABLY",
+      "type": "noun",
+      "turkish": "kaçınılmaz olarak",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "INFRASTRUCTURE",
+      "type": "noun",
+      "turkish": "altyapı",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "INSPECTION",
+      "type": "noun",
+      "turkish": "denetim, teftiş",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "INTENSITY",
+      "type": "noun",
+      "turkish": "yoğunluk, şiddet",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "MANIPULATION",
+      "type": "noun",
+      "turkish": "Manipulation",
+      "sentence_en": "The study of manipulation is essential.",
+      "sentence_tr": "Manipulation çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "MINIMISED",
+      "type": "noun",
+      "turkish": "Minimised",
+      "sentence_en": "The study of minimised is essential.",
+      "sentence_tr": "Minimised çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "NUCLEAR",
+      "type": "noun",
+      "turkish": "nükleer, çekirdek",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "OFFSET",
+      "type": "noun",
+      "turkish": "dengelemek, telafi etmek",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "PARAGRAPH",
+      "type": "noun",
+      "turkish": "Paragraph",
+      "sentence_en": "The study of paragraph is essential.",
+      "sentence_tr": "Paragraph çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "PLUS",
+      "type": "noun",
+      "turkish": "artı",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "PRACTITIONERS",
+      "type": "noun",
+      "turkish": "Practitioners",
+      "sentence_en": "The study of practitioners is essential.",
+      "sentence_tr": "Practitioners çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "PREDOMINANTLY",
+      "type": "noun",
+      "turkish": "Predominantly",
+      "sentence_en": "The study of predominantly is essential.",
+      "sentence_tr": "Predominantly çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "PROSPECT",
+      "type": "noun",
+      "turkish": "olasılık, beklenti",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "RADICAL",
+      "type": "noun",
+      "turkish": "köklü, radikal, uç",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "RANDOM",
+      "type": "noun",
+      "turkish": "rastgele, tesadüfi",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "REINFORCED",
+      "type": "noun",
+      "turkish": "Reinforced",
+      "sentence_en": "The study of reinforced is essential.",
+      "sentence_tr": "Reinforced çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "RESTORE",
+      "type": "noun",
+      "turkish": "1)Geri Verme 2)Yeniden Kullanıma Açma",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "REVISION",
+      "type": "noun",
+      "turkish": "Revision",
+      "sentence_en": "The study of revision is essential.",
+      "sentence_tr": "Revision çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "SCHEDULE",
+      "type": "noun",
+      "turkish": "Schedule",
+      "sentence_en": "The study of schedule is essential.",
+      "sentence_tr": "Schedule çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "TENSION",
+      "type": "noun",
+      "turkish": "gerilim, gerginlik",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "TERMINATION",
+      "type": "noun",
+      "turkish": "Termination",
+      "sentence_en": "The study of termination is essential.",
+      "sentence_tr": "Termination çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "THEME",
+      "type": "noun",
+      "turkish": "Tema, Konu",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "THEREBY",
+      "type": "noun",
+      "turkish": "Thereby",
+      "sentence_en": "The study of thereby is essential.",
+      "sentence_tr": "Thereby çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "UNIFORM",
+      "type": "noun",
+      "turkish": "tekdüze, homojen, üniforma",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "VEHICLE",
+      "type": "noun",
+      "turkish": "Vehicle",
+      "sentence_en": "The study of vehicle is essential.",
+      "sentence_tr": "Vehicle çalışması önemlidir.",
+      "synonyms": [
+        "Concept"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The study of ________ is essential."
+    },
+    {
+      "word": "VIA",
+      "type": "noun",
+      "turkish": "Geçerek,Oradan (We Go From London To Van Via Paris.)",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "VIRTUALLY",
+      "type": "noun",
+      "turkish": "neredeyse, adeta",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "WIDESPREAD",
+      "type": "noun",
+      "turkish": "yaygın, geniş çaplı",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "VISUAL",
+      "type": "noun",
+      "turkish": "görsel",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    }
+  ]
+}

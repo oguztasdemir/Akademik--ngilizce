@@ -141,7 +141,7 @@ const formatWordType = (type) => {
   return type;
 };
 
-const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, recordWordStat, setActiveStudyInfo, dictDb, addMistake, initialCampType = 'vocabulary' }) => {
+const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, recordWordStat, setActiveStudyInfo, dictDb, addMistake, initialCampType = 'vocabulary', vocabTrack, setVocabTrack, hideSwitcher }) => {
   // Helper to render Turkish meanings vertically if they contain multiple numbered items
   const renderTurkishMeanings = (text, color = '#34d399', sizeStyle = {}) => {
     if (!text) return null;
@@ -270,9 +270,13 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
 
   // Dynamic camp days loader
   useEffect(() => {
+    if (initialCampType === 'vocabulary') {
+      setTotalCampDays(60);
+      return;
+    }
     const loadPlanData = async () => {
       const category = selectedCategory || 'fen';
-      const planKey = `@dataset/yokdil/${category}/kamp_plan.json`;
+      const planKey = `@dataset/yokdil/${category}/kelime_kampi/cikmis_kamp_plani.json`;
       const loadPlan = getCampModule(planKey);
       if (loadPlan) {
         try {
@@ -285,7 +289,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       }
     };
     loadPlanData();
-  }, [selectedCategory]);
+  }, [selectedCategory, initialCampType]);
 
   useEffect(() => {
     if (!reportCardDay) {
@@ -319,7 +323,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         }
       } else {
         for (const d of days) {
-          const dailyKelimeKey = `@dataset/yokdil/${category}/gunluk_kamp/kelime/day_${d}.json`;
+          const track = vocabTrack || 'anlam';
+          const dailyKelimeKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${d}.json`;
           const loadDailyKelime = getCampModule(dailyKelimeKey);
           if (loadDailyKelime) {
             try {
@@ -474,7 +479,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   useEffect(() => {
     const loadCikmisPlan = async () => {
       const category = selectedCategory || 'fen';
-      const planKey = `@dataset/yokdil/${category}/kamp_plan.json`;
+      const planKey = `@dataset/yokdil/${category}/kelime_kampi/cikmis_kamp_plani.json`;
       const loadPlan = getCampModule(planKey);
       if (loadPlan) {
         try {
@@ -617,20 +622,12 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const category = selectedCategory || 'fen';
       let combinedDb = {};
       try {
-        const dictModule = await import(`../../../../Dataset/yokdil/${category}/dictionary.json`);
+        const dictModule = await import(`../../../../Dataset/yokdil/${category}/kelime_kampi/dictionary.json`);
         if (dictModule.default) {
           combinedDb = { ...dictModule.default };
         }
       } catch (e) {
-        console.warn("Could not load dictionary.json fallback:", e);
-      }
-      try {
-        const kelimelerModule = await import(`../../../../Dataset/yokdil/${category}/kelimeler.json`);
-        if (kelimelerModule.default) {
-          combinedDb = { ...combinedDb, ...kelimelerModule.default };
-        }
-      } catch (e) {
-        console.warn("Could not load kelimeler.json:", e);
+        console.warn("Could not load dictionary.json:", e);
       }
       setAllWordsDb(combinedDb);
     };
@@ -683,7 +680,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     setSelectedDay(dayNum);
     setIsStudying(true);
 
-    const dailyPlanKey = `@dataset/yokdil/${category}/gunluk_kamp/kelime/day_${dayNum}.json`;
+    const track = vocabTrack || 'anlam';
+    const dailyPlanKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${dayNum}.json`;
     const loadDaily = getCampModule(dailyPlanKey);
     if (!loadDaily) {
       alert("Bu günün kelime listesi bulunamadı veya henüz hazır değil!");
@@ -1297,7 +1295,10 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   };
 
   const getMeaningOptions = (correctMeaning, currentWordObj) => {
-    const allMeanings = Object.values(allWordsDb).map(v => v.tr).filter(Boolean);
+    const allMeanings = Object.values(allWordsDb).map(v => {
+      if (typeof v === 'string') return v.split('|')[0].trim();
+      return v?.tr || v?.turkish;
+    }).filter(Boolean);
     const filtered = allMeanings.filter(m => {
       if (m.toLowerCase().trim() === correctMeaning.toLowerCase().trim()) return false;
       return !areMeaningsConflicting(correctMeaning, m);
@@ -1309,7 +1310,10 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   };
 
   const getSynonymOptions = (correctSynonym, currentWordObj) => {
-    const allSyns = Object.values(allWordsDb).map(v => v.synonyms).filter(Boolean).map(s => s.split(',')[0].trim());
+    const allSyns = Object.values(allWordsDb).map(v => {
+        const val = typeof v === 'string' ? v.split('|')[2] || '' : (v.synonyms || '');
+        return val.split(',')[0].trim();
+    }).filter(Boolean);
     const filtered = allSyns.filter(s => {
       if (s.toLowerCase().trim() === correctSynonym.toLowerCase().trim()) return false;
       if (currentWordObj && currentWordObj.word.toLowerCase() === s.toLowerCase()) return false;
@@ -1324,7 +1328,17 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const getWordFromDict = (wordStr) => {
     if (!wordStr || !allWordsDb) return null;
     const cleanStr = wordStr.toLowerCase().trim();
-    return allWordsDb[cleanStr] || dictDb?.[cleanStr];
+    const entry = allWordsDb[cleanStr] || dictDb?.[cleanStr];
+    if (!entry) return null;
+    if (typeof entry === 'string') {
+      return {
+        tr: entry.split('|')[0].trim(),
+        turkish: entry.split('|')[0].trim(),
+        synonyms: '',
+        type: 'noun'
+      };
+    }
+    return entry;
   };
 
   const getAntonym = (wordObj) => {
@@ -1878,11 +1892,51 @@ const handleCikmisSwipeBack = () => {
     if (currentIdx < studyWords.length - 1) {
       setCurrentIdx(prev => prev + 1);
     } else {
-      setPhase(2);
-      setCurrentIdx(0);
-      setMeaningOptions(getMeaningOptions(studyWords[0].tr, studyWords[0]));
-      setMeaningSelected(null);
-      setMeaningChecked(false);
+      if (cikmisMode === 'swipe') {
+        handleCampComplete();
+        return;
+      }
+      if (!vocabTrack || vocabTrack === 'anlam' || vocabTrack === 'tumu') {
+        setPhase(2);
+        setCurrentIdx(0);
+        setMeaningOptions(getMeaningOptions(studyWords[0].tr, studyWords[0]));
+        setMeaningSelected(null);
+        setMeaningChecked(false);
+      } else if (vocabTrack === 'es_anlam') {
+        const firstWithSyn = studyWords.findIndex(w => w.synonyms && w.synonyms.trim() !== "" && w.synonyms.trim().toLowerCase() !== "yok");
+        if (firstWithSyn !== -1) {
+          setPhase(3);
+          setCurrentIdx(firstWithSyn);
+          setSynonymOptions(getSynonymOptions(studyWords[firstWithSyn].synonyms.split(',')[0].trim(), studyWords[firstWithSyn]));
+          setSynonymSelected(null);
+          setSynonymChecked(false);
+          setSynonymCorrect(null);
+        } else {
+          handleCampComplete();
+        }
+      } else if (vocabTrack === 'zit_anlam') {
+        const firstWithAnt = studyWords.findIndex(w => hasAntonym(w));
+        if (firstWithAnt !== -1) {
+          setPhase(4);
+          setCurrentIdx(firstWithAnt);
+          const antStr = getAntonym(studyWords[firstWithAnt]);
+          setAntonymOptions(getAntonymOptions(antStr.split(',')[0].trim(), studyWords[firstWithAnt]));
+          setAntonymSelected(null);
+          setAntonymChecked(false);
+          setAntonymCorrect(null);
+        } else {
+          handleCampComplete();
+        }
+      } else if (vocabTrack === 'cumle') {
+        setPhase(5);
+        setCurrentIdx(0);
+        setClozeOptions(getClozeOptions(studyWords[0].word));
+        setClozeSelected(null);
+        setClozeChecked(false);
+        setClozeCorrect(null);
+        setClozeInputText('');
+        setClozeShowHint(false);
+      }
     }
   };
 
@@ -1933,33 +1987,37 @@ const handleCikmisSwipeBack = () => {
       setMeaningChecked(false);
       setMeaningCorrect(null);
     } else {
-      const firstWithSyn = studyWords.findIndex(w => w.synonyms && w.synonyms.trim() !== "" && w.synonyms.trim().toLowerCase() !== "yok");
-      if (firstWithSyn !== -1) {
-        setPhase(3);
-        setCurrentIdx(firstWithSyn);
-        setSynonymOptions(getSynonymOptions(studyWords[firstWithSyn].synonyms.split(',')[0].trim(), studyWords[firstWithSyn]));
-        setSynonymSelected(null);
-        setSynonymChecked(false);
-        setSynonymCorrect(null);
+      if (vocabTrack === 'anlam') {
+        handleCampComplete();
       } else {
-        const firstWithAnt = studyWords.findIndex(w => hasAntonym(w));
-        if (firstWithAnt !== -1) {
-          setPhase(4);
-          setCurrentIdx(firstWithAnt);
-          const antStr = getAntonym(studyWords[firstWithAnt]);
-          setAntonymOptions(getAntonymOptions(antStr.split(',')[0].trim(), studyWords[firstWithAnt]));
-          setAntonymSelected(null);
-          setAntonymChecked(false);
-          setAntonymCorrect(null);
+        const firstWithSyn = studyWords.findIndex(w => w.synonyms && w.synonyms.trim() !== "" && w.synonyms.trim().toLowerCase() !== "yok");
+        if (firstWithSyn !== -1) {
+          setPhase(3);
+          setCurrentIdx(firstWithSyn);
+          setSynonymOptions(getSynonymOptions(studyWords[firstWithSyn].synonyms.split(',')[0].trim(), studyWords[firstWithSyn]));
+          setSynonymSelected(null);
+          setSynonymChecked(false);
+          setSynonymCorrect(null);
         } else {
-          setPhase(5);
-          setCurrentIdx(0);
-          setClozeOptions(getClozeOptions(studyWords[0].word));
-          setClozeSelected(null);
-          setClozeChecked(false);
-          setClozeCorrect(null);
-          setClozeInputText('');
-          setClozeShowHint(false);
+          const firstWithAnt = studyWords.findIndex(w => hasAntonym(w));
+          if (firstWithAnt !== -1) {
+            setPhase(4);
+            setCurrentIdx(firstWithAnt);
+            const antStr = getAntonym(studyWords[firstWithAnt]);
+            setAntonymOptions(getAntonymOptions(antStr.split(',')[0].trim(), studyWords[firstWithAnt]));
+            setAntonymSelected(null);
+            setAntonymChecked(false);
+            setAntonymCorrect(null);
+          } else {
+            setPhase(5);
+            setCurrentIdx(0);
+            setClozeOptions(getClozeOptions(studyWords[0].word));
+            setClozeSelected(null);
+            setClozeChecked(false);
+            setClozeCorrect(null);
+            setClozeInputText('');
+            setClozeShowHint(false);
+          }
         }
       }
     }
@@ -1992,24 +2050,28 @@ const handleCikmisSwipeBack = () => {
       setSynonymChecked(false);
       setSynonymCorrect(null);
     } else {
-      const firstWithAnt = studyWords.findIndex(w => hasAntonym(w));
-      if (firstWithAnt !== -1) {
-        setPhase(4);
-        setCurrentIdx(firstWithAnt);
-        const antStr = getAntonym(studyWords[firstWithAnt]);
-        setAntonymOptions(getAntonymOptions(antStr.split(',')[0].trim(), studyWords[firstWithAnt]));
-        setAntonymSelected(null);
-        setAntonymChecked(false);
-        setAntonymCorrect(null);
+      if (vocabTrack === 'es_anlam') {
+        handleCampComplete();
       } else {
-        setPhase(5);
-        setCurrentIdx(0);
-        setClozeOptions(getClozeOptions(studyWords[0].word));
-        setClozeSelected(null);
-        setClozeChecked(false);
-        setClozeCorrect(null);
-        setClozeInputText('');
-        setClozeShowHint(false);
+        const firstWithAnt = studyWords.findIndex(w => hasAntonym(w));
+        if (firstWithAnt !== -1) {
+          setPhase(4);
+          setCurrentIdx(firstWithAnt);
+          const antStr = getAntonym(studyWords[firstWithAnt]);
+          setAntonymOptions(getAntonymOptions(antStr.split(',')[0].trim(), studyWords[firstWithAnt]));
+          setAntonymSelected(null);
+          setAntonymChecked(false);
+          setAntonymCorrect(null);
+        } else {
+          setPhase(5);
+          setCurrentIdx(0);
+          setClozeOptions(getClozeOptions(studyWords[0].word));
+          setClozeSelected(null);
+          setClozeChecked(false);
+          setClozeCorrect(null);
+          setClozeInputText('');
+          setClozeShowHint(false);
+        }
       }
     }
   };
@@ -2043,14 +2105,18 @@ const handleCikmisSwipeBack = () => {
       setAntonymChecked(false);
       setAntonymCorrect(null);
     } else {
-      setPhase(5);
-      setCurrentIdx(0);
-      setClozeOptions(getClozeOptions(studyWords[0].word));
-      setClozeSelected(null);
-      setClozeChecked(false);
-      setClozeCorrect(null);
-      setClozeInputText('');
-      setClozeShowHint(false);
+      if (vocabTrack === 'zit_anlam') {
+        handleCampComplete();
+      } else {
+        setPhase(5);
+        setCurrentIdx(0);
+        setClozeOptions(getClozeOptions(studyWords[0].word));
+        setClozeSelected(null);
+        setClozeChecked(false);
+        setClozeCorrect(null);
+        setClozeInputText('');
+        setClozeShowHint(false);
+      }
     }
   };
 
@@ -2091,15 +2157,35 @@ const handleCikmisSwipeBack = () => {
   };
 
   const handleCampComplete = () => {
-    const successRate = Math.round((correctAnswers / totalQuestions) * 100) || 100;
+    const isSwipe = cikmisMode === 'swipe';
+    const successRate = isSwipe ? 100 : (Math.round((correctAnswers / totalQuestions) * 100) || 100);
     const isPassed = successRate >= 70;
 
     const newCompleted = { ...progress.completedDays };
-    newCompleted[selectedDay] = {
-      score: successRate,
-      isPassed: isPassed,
+    const currentDayRecord = newCompleted[selectedDay] || {};
+    
+    const updatedRecord = {
+      ...currentDayRecord,
       date: new Date().toLocaleDateString()
     };
+
+    if (isSwipe) {
+      updatedRecord.swipeCompleted = true;
+      updatedRecord.swipeScore = successRate;
+      updatedRecord.swipePassed = true;
+      if (updatedRecord.detailedCompleted === undefined) {
+        updatedRecord.score = successRate;
+        updatedRecord.isPassed = true;
+      }
+    } else {
+      updatedRecord.detailedCompleted = true;
+      updatedRecord.detailedScore = successRate;
+      updatedRecord.detailedPassed = isPassed;
+      updatedRecord.score = successRate;
+      updatedRecord.isPassed = isPassed;
+    }
+
+    newCompleted[selectedDay] = updatedRecord;
 
     let nextDay = progress.currentDay;
     if (isPassed && selectedDay === progress.currentDay) {
@@ -2350,6 +2436,7 @@ const handleCikmisSwipeBack = () => {
         setActiveStudyInfo={setActiveStudyInfo}
         totalCampDays={totalCampDays}
         setMeaningOptions={setMeaningOptions}
+        vocabTrack={vocabTrack}
       />
     );
   }
@@ -2531,6 +2618,8 @@ const handleCikmisSwipeBack = () => {
       <CampDashboard
         campType={campType}
         setCampType={setCampType}
+        vocabTrack={vocabTrack}
+        setVocabTrack={setVocabTrack}
         totalDone={totalDone}
         totalSupermaster={totalSupermaster}
         selectedCategory={selectedCategory}
@@ -2561,7 +2650,7 @@ const handleCikmisSwipeBack = () => {
         setCikmisMode={setCikmisMode}
         onExportCikmisData={triggerCikmisExport}
         cikmisPlanData={cikmisPlanData}
-        hideSwitcher={initialCampType === 'cikmis_kelimeler'}
+        hideSwitcher={hideSwitcher || initialCampType === 'cikmis_kelimeler'}
       />
     </div>
   );

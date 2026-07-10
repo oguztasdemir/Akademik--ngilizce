@@ -56,8 +56,21 @@ const CampStudy = ({
   handleWordRead,
   setActiveStudyInfo,
   totalCampDays,
-  setMeaningOptions
+  setMeaningOptions,
+  vocabTrack
 }) => {
+  const getTrackTheme = () => {
+    const themes = {
+      'anlam': { color: '#6366f1', rgb: '99, 102, 241', name: 'Anlam Kampı' },
+      'es_anlam': { color: '#a855f7', rgb: '168, 85, 247', name: 'Eş Anlam Kampı' },
+      'zit_anlam': { color: '#f43f5e', rgb: '244, 63, 94', name: 'Zıt Anlam Kampı' },
+      'cumle': { color: '#f59e0b', rgb: '245, 158, 11', name: 'Cümle Kampı' },
+      'tumu': { color: '#10b981', rgb: '16, 185, 129', name: 'Genel Kamp' }
+    };
+    return themes[vocabTrack] || themes['anlam'];
+  };
+  const theme = getTrackTheme();
+
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const [swipeOffset, setSwipeOffset] = useState(0);
@@ -160,7 +173,8 @@ const CampStudy = ({
   }
 
   return (
-    <div className="glass-card" style={{ padding: '16px 20px', borderRadius: '20px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)' }}>
+    <div style={{ maxWidth: '600px', margin: '0 auto', width: '100%' }}>
+      <div className="glass-card" style={{ padding: '16px 20px', borderRadius: '20px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)' }}>
       
       {/* Flow Header and Progress */}
       {!setActiveStudyInfo && (
@@ -176,7 +190,7 @@ const CampStudy = ({
               <div style={{
                 height: '100%',
                 width: `${phase === 6 ? 100 : (((phase - 1) * 20) + ((currentIdx + 1) / studyWords.length * 20))}%`,
-                background: 'linear-gradient(90deg, #10b981 0%, #6366f1 100%)',
+                background: `linear-gradient(90deg, #10b981 0%, ${theme.color} 100%)`,
                 transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }} />
             </div>
@@ -434,9 +448,9 @@ const CampStudy = ({
                       color = '#fca5a5';
                     }
                   } else if (isSelected) {
-                    bg = 'rgba(99, 102, 241, 0.15)';
-                    border = '1.5px solid #6366f1';
-                    color = '#a5b4fc';
+                    bg = `rgba(${theme.rgb}, 0.15)`;
+                    border = `1.5px solid ${theme.color}`;
+                    color = 'white';
                   }
 
                   return (
@@ -551,9 +565,9 @@ const CampStudy = ({
                       color = '#fca5a5';
                     }
                   } else if (isSelected) {
-                    bg = 'rgba(99, 102, 241, 0.15)';
-                    border = '1.5px solid #6366f1';
-                    color = '#a5b4fc';
+                    bg = `rgba(${theme.rgb}, 0.15)`;
+                    border = `1.5px solid ${theme.color}`;
+                    color = 'white';
                   }
 
                   return (
@@ -658,9 +672,9 @@ const CampStudy = ({
                       color = '#fca5a5';
                     }
                   } else if (isSelected) {
-                    bg = 'rgba(99, 102, 241, 0.15)';
-                    border = '1.5px solid #6366f1';
-                    color = '#a5b4fc';
+                    bg = `rgba(${theme.rgb}, 0.15)`;
+                    border = `1.5px solid ${theme.color}`;
+                    color = 'white';
                   }
 
                   return (
@@ -865,9 +879,9 @@ const CampStudy = ({
                         color = '#fca5a5';
                       }
                     } else if (isSelected) {
-                      bg = 'rgba(99, 102, 241, 0.15)';
-                      border = '1.5px solid #6366f1';
-                      color = '#a5b4fc';
+                      bg = `rgba(${theme.rgb}, 0.15)`;
+                      border = `1.5px solid ${theme.color}`;
+                      color = 'white';
                     }
 
                     return (
@@ -1033,7 +1047,8 @@ const CampStudy = ({
         </div>
       )}
     </div>
-  );
+  </div>
+);
 };
 
 export default CampStudy;

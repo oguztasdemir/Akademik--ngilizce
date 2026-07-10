@@ -81,12 +81,16 @@ const BookExerciseDashboard = ({
         : (isSecCamp ? '1.5px solid rgba(251, 191, 36, 0.7)' : '1px solid rgba(16, 185, 129, 0.25)');
     }
 
-    const dayName = isMonthlyCamp 
-      ? `Aylık Genel Test ${monthlyCampNum} 🏆` 
-      : (isSecCamp ? `Haftanın Kampı ${secCampNum} 🏆` : `${dayNum}. Gün Çalışması`);
-    const dayDesc = isMonthlyCamp 
-      ? `${monthlyCampNum}. Ay Sonu Genel Değerlendirme Testi` 
-      : (isSecCamp ? `${secCampNum}. Hafta Sonu Genel Bölüm Tekrarı` : `Kelime Kartları, Eş/Zıt Anlam Alıştırmaları ve Çoktan Seçmeli Test`);
+    const dayName = dayNum >= 55
+      ? `Academic Word List - Liste ${dayNum - 54} 📘`
+      : (isMonthlyCamp 
+        ? `Aylık Genel Test ${monthlyCampNum} 🏆` 
+        : (isSecCamp ? `Haftanın Kampı ${secCampNum} 🏆` : `${dayNum}. Gün Çalışması`));
+    const dayDesc = dayNum >= 55
+      ? `Academic Word List (AWL) - Liste ${dayNum - 54} akademik kelimeleri ve alıştırmaları.`
+      : (isMonthlyCamp 
+        ? `${monthlyCampNum}. Ay Sonu Genel Değerlendirme Testi` 
+        : (isSecCamp ? `${secCampNum}. Hafta Sonu Genel Bölüm Tekrarı` : `Kelime Kartları, Eş/Zıt Anlam Alıştırmaları ve Çoktan Seçmeli Test`));
 
     return (
       <div

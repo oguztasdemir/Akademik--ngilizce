@@ -27,11 +27,12 @@ import { renderMarkdown } from './utils/markdown';
 import { playCorrectSound, playIncorrectSound, playGoalSound } from './utils/audio';
 import achievementsData from '@dataset/yokdil/achievements.json';
 
-import fallbackExamsFen from '@dataset/yokdil/fen/exams.json';
-import fallbackExamsSosyal from '@dataset/yokdil/sosyal/exams.json';
-import fallbackExamsSaglik from '@dataset/yokdil/saglik/exams.json';
+import fallbackExamsFen from '@dataset/yokdil/fen/cikmis_sinavlar/sinav_listesi.json';
+import fallbackExamsSosyal from '@dataset/yokdil/sosyal/cikmis_sinavlar/sinav_listesi.json';
+import fallbackExamsSaglik from '@dataset/yokdil/saglik/cikmis_sinavlar/sinav_listesi.json';
 
-const lectureModules = import.meta.glob('@dataset/yokdil/genel/lectures/*.md', { query: '?raw', import: 'default' });
+const lectureModules = import.meta.glob('@dataset/yokdil/genel/konu_anlatimi/*.md', { query: '?raw', import: 'default' });
+const examDetailModules = import.meta.glob('@dataset/yokdil/*/cikmis_sinavlar/*.json');
 
 const getLectureContent = async (filename) => {
   const key = Object.keys(lectureModules).find(k => k.endsWith(filename));
@@ -44,13 +45,13 @@ const getLectureContent = async (filename) => {
 };
 
 
-import fallbackVocabFen from '@dataset/yokdil/fen/vocab.json';
-import fallbackVocabSosyal from '@dataset/yokdil/sosyal/vocab.json';
-import fallbackVocabSaglik from '@dataset/yokdil/saglik/vocab.json';
+import fallbackVocabFen from '@dataset/yokdil/fen/gelismis_kelime_kampi/akademik_kelime_listesi.json';
+import fallbackVocabSosyal from '@dataset/yokdil/sosyal/gelismis_kelime_kampi/akademik_kelime_listesi.json';
+import fallbackVocabSaglik from '@dataset/yokdil/saglik/gelismis_kelime_kampi/akademik_kelime_listesi.json';
 
-import fallbackDictFen from '@dataset/yokdil/fen/dictionary.json';
-import fallbackDictSosyal from '@dataset/yokdil/sosyal/dictionary.json';
-import fallbackDictSaglik from '@dataset/yokdil/saglik/dictionary.json';
+import fallbackDictFen from '@dataset/yokdil/fen/kelime_kampi/dictionary.json';
+import fallbackDictSosyal from '@dataset/yokdil/sosyal/kelime_kampi/dictionary.json';
+import fallbackDictSaglik from '@dataset/yokdil/saglik/kelime_kampi/dictionary.json';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (
   window.location.hostname === 'localhost' || 
@@ -174,6 +175,7 @@ function App() {
   const initialHashState = getInitialHashState();
 
   const [activeTab, setActiveTab] = useState(initialHashState.tab);
+  const [vocabTrack, setVocabTrack] = useState('anlam');
   const [bookSelectedDay, setBookSelectedDay] = useState(null);
   const [bookCompletedDays, setBookCompletedDays] = useState(() => {
     try {
@@ -1228,10 +1230,29 @@ function App() {
     setExamSubmitted(false);
   };
 
-  const handleSelectExam = (exam) => {
-    setSelectedExam(exam);
-    setAnswers(JSON.parse(localStorage.getItem(`answers_${exam.id}`)) || {});
-    setFlagged(JSON.parse(localStorage.getItem(`flags_${exam.id}`)) || {});
+  const handleSelectExam = async (exam) => {
+    if (!exam) {
+      setSelectedExam(null);
+      return;
+    }
+    setLoading(true);
+    let fullExam = exam;
+    const category = selectedCategory || 'fen';
+    const suffix = `yokdil/${category}/cikmis_sinavlar/${exam.id}.json`;
+    const foundKey = Object.keys(examDetailModules).find(k => k.endsWith(suffix));
+    if (foundKey) {
+      try {
+        const loader = examDetailModules[foundKey];
+        const module = await loader();
+        fullExam = module.default || module;
+      } catch (e) {
+        console.error("Sınav yüklenirken hata oluştu:", e);
+        alert("Sınav verileri yüklenemedi!");
+      }
+    }
+    setSelectedExam(fullExam);
+    setAnswers(JSON.parse(localStorage.getItem(`answers_${fullExam.id}`)) || {});
+    setFlagged(JSON.parse(localStorage.getItem(`flags_${fullExam.id}`)) || {});
     setExamDetailTab('list');
     setCurrentQuizIndex(1);
     setShowPopover(false);
@@ -1241,6 +1262,7 @@ function App() {
     setExamSubmitted(false);
     setShowScoreModal(false);
     if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+    setLoading(false);
   };
 
   const handleToggleLectureProgress = (lectureId) => {
@@ -2443,6 +2465,7 @@ function App() {
           setSelectedExam={setSelectedExam}
           setQuizActive={setQuizActive}
           onLogout={handleLogout}
+          vocabTrack={vocabTrack}
         />
 
         <div className="app-content-wrapper">
@@ -3184,7 +3207,7 @@ function App() {
                               <div
                                 key={ex.id}
                                 className="menu-item"
-                                onClick={() => { setSelectedExam(ex); setQuizActive(false); }}
+                                onClick={() => { handleSelectExam(ex); }}
                                 style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '16px 20px' }}
                               >
                                 <div className="menu-icon subject-icon" style={{ borderColor: 'var(--primary)', color: 'var(--primary-light)' }}><i className="fa-solid fa-file-invoice"></i></div>
@@ -3594,12 +3617,13 @@ function App() {
               </section>
             )}
  
-            {/* TAB 7.56: 60-DAY CAMP SECTION */}
-            {selectedCategory && activeTab === 'camp' && (
-              <section id="screen-camp" className="app-screen active animate-fade-in">
+            {/* TAB 7.56: DEVELOPED VOCABULARY CAMP SECTION */}
+            {selectedCategory && activeTab === 'camp-vocab' && (
+              <section id="screen-camp-vocab" className="app-screen active animate-fade-in">
                 <CampSection
-                  key="camp"
+                  key="camp-vocab"
                   initialCampType="vocabulary"
+                  hideSwitcher={true}
                   selectedCategory={selectedCategory}
                   awardPetXP={awardPetXP}
                   triggerConfetti={triggerConfetti}
@@ -3607,6 +3631,28 @@ function App() {
                   dictDb={{ fen: fallbackDictFen, sosyal: fallbackDictSosyal, saglik: fallbackDictSaglik }}
                   recordWordStat={recordWordStat}
                   addMistake={addMistake}
+                  vocabTrack={vocabTrack}
+                  setVocabTrack={setVocabTrack}
+                />
+              </section>
+            )}
+
+            {/* TAB 7.57: GRAMMAR CAMP SECTION */}
+            {selectedCategory && activeTab === 'camp-grammar' && (
+              <section id="screen-camp-grammar" className="app-screen active animate-fade-in">
+                <CampSection
+                  key="camp-grammar"
+                  initialCampType="grammar"
+                  hideSwitcher={true}
+                  selectedCategory={selectedCategory}
+                  awardPetXP={awardPetXP}
+                  triggerConfetti={triggerConfetti}
+                  examsDb={{ fen: fallbackExamsFen, sosyal: fallbackExamsSosyal, saglik: fallbackExamsSaglik }}
+                  dictDb={{ fen: fallbackDictFen, sosyal: fallbackDictSosyal, saglik: fallbackDictSaglik }}
+                  recordWordStat={recordWordStat}
+                  addMistake={addMistake}
+                  vocabTrack={vocabTrack}
+                  setVocabTrack={setVocabTrack}
                 />
               </section>
             )}

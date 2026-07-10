@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import fallbackPassages from '@dataset/yokdil/genel/reading_passages.json';
-import fallbackDictFen from '@dataset/yokdil/fen/dictionary.json';
-import fallbackDictSosyal from '@dataset/yokdil/sosyal/dictionary.json';
-import fallbackDictSaglik from '@dataset/yokdil/saglik/dictionary.json';
+import fallbackPassages from '@dataset/yokdil/genel/paragraflar/reading_passages.json';
+import fallbackDictFen from '@dataset/yokdil/fen/kelime_kampi/dictionary.json';
+import fallbackDictSosyal from '@dataset/yokdil/sosyal/kelime_kampi/dictionary.json';
+import fallbackDictSaglik from '@dataset/yokdil/saglik/kelime_kampi/dictionary.json';
 import { BookOpen, Check, X, HelpCircle, ArrowRight, Volume2, Award, BookOpenCheck } from 'lucide-react';
 
 const ParagraphsSection = ({

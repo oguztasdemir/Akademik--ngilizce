@@ -7,7 +7,8 @@ const Sidebar = ({
   setSelectedCategory, 
   setSelectedExam, 
   setQuizActive,
-  onLogout
+  onLogout,
+  vocabTrack
 }) => {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
@@ -71,12 +72,50 @@ const Sidebar = ({
             <i className="fa-solid fa-book"></i>
             <span>Kelime Kampı</span>
           </button>
+          {(() => {
+            const isVocabActive = activeTab === 'camp-vocab';
+            let vocabStyle = {};
+            if (isVocabActive) {
+              const colors = {
+                'anlam': { bg: 'rgba(99, 102, 241, 0.18)', border: '1.5px solid #6366f1', glow: 'rgba(99, 102, 241, 0.35)' },
+                'es_anlam': { bg: 'rgba(168, 85, 247, 0.18)', border: '1.5px solid #a855f7', glow: 'rgba(168, 85, 247, 0.35)' },
+                'zit_anlam': { bg: 'rgba(244, 63, 94, 0.18)', border: '1.5px solid #f43f5e', glow: 'rgba(244, 63, 94, 0.35)' },
+                'cumle': { bg: 'rgba(245, 158, 11, 0.18)', border: '1.5px solid #f59e0b', glow: 'rgba(245, 158, 11, 0.35)' },
+                'tumu': { bg: 'rgba(16, 185, 129, 0.18)', border: '1.5px solid #10b981', glow: 'rgba(16, 185, 129, 0.35)' }
+              };
+              const trackTheme = colors[vocabTrack] || colors['anlam'];
+              vocabStyle = {
+                background: trackTheme.bg,
+                border: trackTheme.border,
+                color: 'white',
+                fontWeight: 'bold',
+                boxShadow: `0 4px 15px ${trackTheme.glow}`
+              };
+            }
+            return (
+              <button 
+                className={`sidebar-nav-item nav-camp-vocab ${isVocabActive ? 'active' : ''}`}
+                onClick={() => { setActiveTab('camp-vocab'); setQuizActive(false); }}
+                style={vocabStyle}
+              >
+                <i className="fa-solid fa-calendar-days"></i>
+                <span>Gelişmiş Kelime Kampı</span>
+              </button>
+            );
+          })()}
           <button 
-            className={`sidebar-nav-item nav-camp ${activeTab === 'camp' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('camp'); setQuizActive(false); }}
+            className={`sidebar-nav-item nav-camp-grammar ${activeTab === 'camp-grammar' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('camp-grammar'); setQuizActive(false); }}
+            style={activeTab === 'camp-grammar' ? {
+              background: 'rgba(16, 185, 129, 0.18)',
+              border: '1.5px solid #10b981',
+              color: 'white',
+              fontWeight: 'bold',
+              boxShadow: '0 4px 15px rgba(16, 185, 129, 0.35)'
+            } : {}}
           >
-            <i className="fa-solid fa-calendar-days"></i>
-            <span>Günlük Kamp</span>
+            <i className="fa-solid fa-book-bookmark"></i>
+            <span>Gramer Kampı</span>
           </button>
           <button 
             className={`sidebar-nav-item nav-book-exercises ${activeTab === 'book-exercises' ? 'active' : ''}`}
@@ -256,10 +295,17 @@ const Sidebar = ({
               </button>
               <button 
                 className="mobile-more-item"
-                onClick={() => { setActiveTab('camp'); setQuizActive(false); setShowMoreMenu(false); }}
+                onClick={() => { setActiveTab('camp-vocab'); setQuizActive(false); setShowMoreMenu(false); }}
               >
-                <i className="fa-solid fa-calendar-days" style={{ color: '#10b981' }}></i>
-                <span>Günlük Kamp</span>
+                <i className="fa-solid fa-calendar-days" style={{ color: '#6366f1' }}></i>
+                <span>Gelişmiş Kelime Kampı</span>
+              </button>
+              <button 
+                className="mobile-more-item"
+                onClick={() => { setActiveTab('camp-grammar'); setQuizActive(false); setShowMoreMenu(false); }}
+              >
+                <i className="fa-solid fa-book-bookmark" style={{ color: '#10b981' }}></i>
+                <span>Gramer Kampı</span>
               </button>
 
 

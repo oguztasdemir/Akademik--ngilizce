@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-const bookModules = import.meta.glob('@dataset/yokdil/fen/kitap/*.json');
+const bookModules = import.meta.glob('@dataset/**/*.json');
 
-const getBookModule = (dayNum) => {
-  const suffix = `yokdil/fen/kitap/day_${dayNum}.json`;
-  const foundKey = Object.keys(bookModules).find(k => k.endsWith(suffix));
+const getBookModule = (category, dayNum) => {
+  const cat = category || 'fen';
+  const suffix = `yokdil/${cat}/yds_kitap/day_${dayNum}.json`;
+  let foundKey = Object.keys(bookModules).find(k => k.endsWith(suffix));
+  if (!foundKey && cat !== 'fen') {
+    const fallbackSuffix = `yokdil/fen/yds_kitap/day_${dayNum}.json`;
+    foundKey = Object.keys(bookModules).find(k => k.endsWith(fallbackSuffix));
+  }
   return foundKey ? bookModules[foundKey] : null;
 };
 import { Award, Volume2, ArrowRight, Check, X } from 'lucide-react';
@@ -24,8 +29,8 @@ const formatWordType = (type) => {
   return type;
 };
 
-const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selectedDay, setSelectedDay, completedDays, setCompletedDays, addMistake }) => {
-  const totalDays = 54;
+const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selectedDay, setSelectedDay, completedDays, setCompletedDays, addMistake, selectedCategory }) => {
+  const totalDays = 62;
   const [currentDayData, setCurrentDayData] = useState(null);
   const [loadingDay, setLoadingDay] = useState(false);
   const [showEvaluationChoice, setShowEvaluationChoice] = useState(false);
@@ -49,7 +54,7 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
     
     try {
       for (let d = startDay; d <= endDay; d++) {
-        const loadModule = getBookModule(d);
+        const loadModule = getBookModule(selectedCategory, d);
         if (loadModule) {
           const mod = await loadModule();
           const data = mod.default || mod;
@@ -100,20 +105,12 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
     const loadDictionaries = async () => {
       let combinedDb = {};
       try {
-        const dictModule = await import('@dataset/yokdil/fen/dictionary.json');
+        const dictModule = await import('@dataset/yokdil/fen/kelime_kampi/dictionary.json');
         if (dictModule.default) {
           combinedDb = { ...dictModule.default };
         }
       } catch (e) {
-        console.warn("Could not load dictionary.json fallback:", e);
-      }
-      try {
-        const kelimelerModule = await import('@dataset/yokdil/fen/kelimeler.json');
-        if (kelimelerModule.default) {
-          combinedDb = { ...combinedDb, ...kelimelerModule.default };
-        }
-      } catch (e) {
-        console.warn("Could not load kelimeler.json:", e);
+        console.warn("Could not load dictionary.json:", e);
       }
       setAllWordsDb(combinedDb);
     };
@@ -125,9 +122,9 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
     const clean = wordStr.toLowerCase().trim();
     if (allWordsDb && allWordsDb[clean]) {
       const entry = allWordsDb[clean];
-      if (typeof entry === 'string') return entry;
+      if (typeof entry === 'string') return entry.split('|')[0].trim();
       if (typeof entry === 'object') {
-        return entry.tr || entry.turkish || '';
+        return (entry.tr || entry.turkish || '').split('|')[0].trim();
       }
     }
     if (currentDayData && currentDayData.words) {
@@ -201,7 +198,7 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
       const tempWords = [];
       for (const d of days) {
         try {
-          const loadModule = getBookModule(d);
+          const loadModule = getBookModule(selectedCategory, d);
           if (loadModule) {
             const mod = await loadModule();
             const data = mod.default || mod;
@@ -292,7 +289,11 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
           try {
             for (let d = startDay; d <= endDay; d++) {
               if (d <= 0) continue;
-              const res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/kitap/day_${d}.json`);
+              const cat = selectedCategory || 'fen';
+              let res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/${cat}/yds_kitap/day_${d}.json`);
+              if (!res.ok && cat !== 'fen') {
+                res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/yds_kitap/day_${d}.json`);
+              }
               if (res.ok) {
                 const data = await res.json();
                 if (data.words) allWords.push(...data.words);
@@ -357,7 +358,7 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
         return;
       }
 
-      const loadModule = getBookModule(selectedDay);
+      const loadModule = getBookModule(selectedCategory, selectedDay);
       if (!loadModule) {
         alert(`${selectedDay}. Günün verisi bulunamadı.`);
         setSelectedDay(null);

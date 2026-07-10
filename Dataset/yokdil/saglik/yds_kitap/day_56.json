@@ -1,0 +1,986 @@
+{
+  "day": 56,
+  "words": [
+    {
+      "word": "ACHIEVE",
+      "type": "noun",
+      "turkish": "Üstünden Gelme, Başarmak",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "ACQUISITION",
+      "type": "noun",
+      "turkish": "Edinme, İstimlak, El Koyma",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "ADMINISTRATION",
+      "type": "noun",
+      "turkish": "Yönetim, idare",
+      "sentence_en": "The school administration agreed.",
+      "sentence_tr": "Okul yönetimi kabul etti.",
+      "synonyms": [
+        "Management",
+        "governing"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The school ________ agreed."
+    },
+    {
+      "word": "AFFECT",
+      "type": "noun",
+      "turkish": "etkilemek, tesir etmek",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "APPROPRIATE",
+      "type": "noun",
+      "turkish": "uygun, el koymak",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "ASPECTS",
+      "type": "noun",
+      "turkish": "Yönler, açılar",
+      "sentence_en": "Consider all aspects of the plan.",
+      "sentence_tr": "Planın tüm yönlerini düşünün.",
+      "synonyms": [
+        "Sides",
+        "features"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Consider all ________ of the plan."
+    },
+    {
+      "word": "ASSISTANCE",
+      "type": "noun",
+      "turkish": "Yardım, destek",
+      "sentence_en": "We need financial assistance.",
+      "sentence_tr": "Finansal yardıma ihtiyacımız var.",
+      "synonyms": [
+        "Help",
+        "support"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "We need financial ________."
+    },
+    {
+      "word": "CATEGORIES",
+      "type": "noun",
+      "turkish": "Kategoriler",
+      "sentence_en": "Sort them into different categories.",
+      "sentence_tr": "Onları farklı kategorilere ayırın.",
+      "synonyms": [
+        "Groups",
+        "classes"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Sort them into different ________."
+    },
+    {
+      "word": "CHAPTER",
+      "type": "noun",
+      "turkish": "Bölüm, Konu",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "COMMISSION",
+      "type": "noun",
+      "turkish": "1)Atamak, Görevlendirmek 2)Komisyon (Kurul, Ücret)",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "COMMUNITY",
+      "type": "noun",
+      "turkish": "topluluk, cemiyet",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "COMPLEX",
+      "type": "noun",
+      "turkish": "karmaşık, kompleks",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "COMPUTER",
+      "type": "noun",
+      "turkish": "Bilgisayar",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CONCLUSION",
+      "type": "noun",
+      "turkish": "Karar, Sonuç",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CONDUCT",
+      "type": "noun",
+      "turkish": "Davranış, Tavır, Yol Göstermek",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CONSEQUENCES",
+      "type": "noun",
+      "turkish": "sonuçlar",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CONSTRUCTION",
+      "type": "noun",
+      "turkish": "İnşaat, yapım",
+      "sentence_en": "Road construction will end soon.",
+      "sentence_tr": "Yol inşaatı yakında bitecek.",
+      "synonyms": [
+        "Building",
+        "creation"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Road ________ will end soon."
+    },
+    {
+      "word": "CONSUMER",
+      "type": "noun",
+      "turkish": "Tüketici",
+      "sentence_en": "Consumer demand has dropped.",
+      "sentence_tr": "Tüketici talebi düştü.",
+      "synonyms": [
+        "Customer",
+        "buyer"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "________ demand has dropped."
+    },
+    {
+      "word": "CREDIT",
+      "type": "noun",
+      "turkish": "Kredi",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "CULTURAL",
+      "type": "adj",
+      "turkish": "Kültürel",
+      "sentence_en": "We attended a cultural festival.",
+      "sentence_tr": "Kültürel bir festivale katıldık.",
+      "synonyms": [
+        "Societal",
+        "traditional"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "We attended a ________ festival."
+    },
+    {
+      "word": "DESIGN",
+      "type": "noun",
+      "turkish": "tasarım, tasarlamak",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "DISTINCTION",
+      "type": "noun",
+      "turkish": "Küçük Farklılık",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "ELEMENTS",
+      "type": "noun",
+      "turkish": "tünellenmesi",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "EQUATION",
+      "type": "noun",
+      "turkish": "Denklem",
+      "sentence_en": "Solve this chemical equation.",
+      "sentence_tr": "Bu kimyasal denklemi çözün.",
+      "synonyms": [
+        "Formula",
+        "match"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Solve this chemical ________."
+    },
+    {
+      "word": "EVALUATION",
+      "type": "noun",
+      "turkish": "Değerlendirme",
+      "sentence_en": "We finished the evaluation.",
+      "sentence_tr": "Değerlendirmeyi bitirdik.",
+      "synonyms": [
+        "Assessment",
+        "appraisal"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "We finished the ________."
+    },
+    {
+      "word": "FEATURES",
+      "type": "noun",
+      "turkish": "Özellikler",
+      "sentence_en": "The phone has new features.",
+      "sentence_tr": "Telefonun yeni özellikleri var.",
+      "synonyms": [
+        "Characteristics",
+        "aspects"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The phone has new ________."
+    },
+    {
+      "word": "FINAL",
+      "type": "noun",
+      "turkish": "son",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "FOCUS",
+      "type": "noun",
+      "turkish": "odaklanmak, odak",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "IMPACT",
+      "type": "noun",
+      "turkish": "etki, darbe",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "INJURY",
+      "type": "noun",
+      "turkish": "yaralanma, hasar",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "INSTITUTE",
+      "type": "noun",
+      "turkish": "enstitü, kurmak",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "INVESTMENT",
+      "type": "noun",
+      "turkish": "Yatırım",
+      "sentence_en": "Buying gold is a safe investment.",
+      "sentence_tr": "Altın almak güvenli bir yatırımdır.",
+      "synonyms": [
+        "Funding",
+        "backing"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Buying gold is a safe ________."
+    },
+    {
+      "word": "ITEMS",
+      "type": "noun",
+      "turkish": "Öğeler, maddeler",
+      "sentence_en": "List all items on the desk.",
+      "sentence_tr": "Masadaki tüm öğeleri listeleyin.",
+      "synonyms": [
+        "Things",
+        "objects"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "List all ________ on the desk."
+    },
+    {
+      "word": "JOURNAL",
+      "type": "noun",
+      "turkish": "günlük, akademik dergi",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "MAINTENANCE",
+      "type": "noun",
+      "turkish": "bakım",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "NORMAL",
+      "type": "noun",
+      "turkish": "normal",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "OBTAINED",
+      "type": "adj",
+      "turkish": "Elde edilmiş",
+      "sentence_en": "The obtained data were analyzed.",
+      "sentence_tr": "Elde edilen veriler analiz edildi.",
+      "synonyms": [
+        "Acquired",
+        "gotten"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The ________ data were analyzed."
+    },
+    {
+      "word": "PARTICIPATION",
+      "type": "noun",
+      "turkish": "Katılım",
+      "sentence_en": "Student participation is high.",
+      "sentence_tr": "Öğrenci katılımı yüksektir.",
+      "synonyms": [
+        "Involvement",
+        "sharing"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Student ________ is high."
+    },
+    {
+      "word": "PERCEIVED",
+      "type": "adj",
+      "turkish": "Algılanan",
+      "sentence_en": "The perceived risk was small.",
+      "sentence_tr": "Algılanan risk küçüktür.",
+      "synonyms": [
+        "Detected",
+        "seen"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The ________ risk was small."
+    },
+    {
+      "word": "POSITIVE",
+      "type": "noun",
+      "turkish": "pozitif, olumlu",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "POTENTIAL",
+      "type": "noun",
+      "turkish": "potansiyel, olası",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "PREVIOUS",
+      "type": "adj",
+      "turkish": "Önceki",
+      "sentence_en": "Refer to the previous page.",
+      "sentence_tr": "Önceki sayfaya bakın.",
+      "synonyms": [
+        "Prior",
+        "former"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Refer to the ________ page."
+    },
+    {
+      "word": "PRIMARY",
+      "type": "noun",
+      "turkish": "1)Önceleri,Eskiden 2)Ana,Baş- Primary Cause 3)İlk Oku",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "PURCHASE",
+      "type": "noun",
+      "turkish": "satın almak, alım",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "RANGE",
+      "type": "noun",
+      "turkish": "aralık, çeşitlilik",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "REGION",
+      "type": "noun",
+      "turkish": "Bölge",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "REGULATIONS",
+      "type": "noun",
+      "turkish": "Yönetmelikler",
+      "sentence_en": "Follow the safety regulations.",
+      "sentence_tr": "Güvenlik yönetmeliklerine uyun.",
+      "synonyms": [
+        "Rules",
+        "laws"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Follow the safety ________."
+    },
+    {
+      "word": "RELEVANT",
+      "type": "noun",
+      "turkish": "Bağıntılı, Konuyla İlişkili",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "RESIDENT",
+      "type": "noun",
+      "turkish": "Bölgede Yaşayan, Oturan",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "RESOURCES",
+      "type": "noun",
+      "turkish": "Kaynaklar",
+      "sentence_en": "Water resources are limited.",
+      "sentence_tr": "Su kaynakları sınırlıdır.",
+      "synonyms": [
+        "Supplies",
+        "wealth"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Water ________ are limited."
+    },
+    {
+      "word": "RESTRICTED",
+      "type": "noun",
+      "turkish": "sınırlı",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "SECURITY",
+      "type": "noun",
+      "turkish": "Güvenlik",
+      "sentence_en": "Security guards are active.",
+      "sentence_tr": "Güvenlik görevlileri aktiftir.",
+      "synonyms": [
+        "Safety",
+        "protection"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "________ guards are active."
+    },
+    {
+      "word": "SOUGHT",
+      "type": "adj",
+      "turkish": "Aranan",
+      "sentence_en": "The sought solution was found.",
+      "sentence_tr": "Aranan çözüm bulundu.",
+      "synonyms": [
+        "Looked for",
+        "searched"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "The ________ solution was found."
+    },
+    {
+      "word": "SELECT",
+      "type": "noun",
+      "turkish": "seçmek, seçkin",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "SITE",
+      "type": "noun",
+      "turkish": "yer, sit alanı, internet sitesi",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "STRATEGIES",
+      "type": "noun",
+      "turkish": "Stratejiler",
+      "sentence_en": "Business strategies must adapt.",
+      "sentence_tr": "İş stratejileri uyum sağlamalıdır.",
+      "synonyms": [
+        "Plans",
+        "methods"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "Business ________ must adapt."
+    },
+    {
+      "word": "SURVEY",
+      "type": "noun",
+      "turkish": "anket, inceleme",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "TEXT",
+      "type": "noun",
+      "turkish": "metin",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "TRADITIONAL",
+      "type": "noun",
+      "turkish": "geleneksel",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    },
+    {
+      "word": "TRANSFER",
+      "type": "noun",
+      "turkish": "aktarmak, transfer",
+      "sentence_en": "This scientific concept is important.",
+      "sentence_tr": "Bu bilimsel kavram önemlidir.",
+      "synonyms": [
+        "Study"
+      ],
+      "antonyms": [
+        "Neglect"
+      ],
+      "other_forms": "",
+      "priority": "Akademik Kelime",
+      "sentence_blanked": "This scientific concept is important."
+    }
+  ]
+}
