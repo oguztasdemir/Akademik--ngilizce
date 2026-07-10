@@ -36,8 +36,11 @@ const examDetailModules = import.meta.glob('../../Dataset/yokdil/*/cikmis_sinavl
 
 const getLectureContent = async (category, filename) => {
   const targetSubstr = `${category}/konu_anlatimi/${filename}`;
-  console.log("getLectureContent glob keys:", Object.keys(lectureModules), "looking for:", targetSubstr);
-  const key = Object.keys(lectureModules).find(k => k.includes(targetSubstr));
+  let key = Object.keys(lectureModules).find(k => k.includes(targetSubstr));
+  if (!key && category !== 'fen') {
+    const fallbackSubstr = `fen/konu_anlatimi/${filename}`;
+    key = Object.keys(lectureModules).find(k => k.includes(fallbackSubstr));
+  }
   if (key) {
     const loader = lectureModules[key];
     const content = await loader();
@@ -691,6 +694,16 @@ function App() {
         const expectedHash = `#/${selectedCategory}/camp/cikmis_kelimeler`;
         if (window.location.hash !== expectedHash) {
           window.history.pushState(null, '', expectedHash);
+        }
+      } else if (activeTab === 'camp-vocab') {
+        const expectedPrefix = `#/${selectedCategory}/camp/vocabulary`;
+        if (window.location.hash !== `#/${selectedCategory}/camp-vocab` && !window.location.hash.startsWith(expectedPrefix)) {
+          window.history.pushState(null, '', `#/${selectedCategory}/camp-vocab`);
+        }
+      } else if (activeTab === 'camp-grammar') {
+        const expectedPrefix = `#/${selectedCategory}/camp/grammar`;
+        if (window.location.hash !== `#/${selectedCategory}/camp-grammar` && !window.location.hash.startsWith(expectedPrefix)) {
+          window.history.pushState(null, '', `#/${selectedCategory}/camp-grammar`);
         }
       } else {
         const prefix = `#/${selectedCategory}/${activeTab}`;
@@ -3660,6 +3673,7 @@ function App() {
                   awardPetXP={awardPetXP}
                   triggerConfetti={triggerConfetti}
                   addMistake={addMistake}
+                  activeTab={activeTab}
                 />
               </section>
             )}

@@ -515,6 +515,51 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
     }
   };
 
+  const triggerBookExport = async (format) => {
+    try {
+      const studiedDays = [];
+      const unstudiedDays = [];
+
+      for (let day = 1; day <= 62; day++) {
+        const isCompleted = completedDays.includes(day);
+        const loadModule = getBookModule(selectedCategory, day);
+        let wordsCount = 0;
+        let dayTitle = `Gün #${day}`;
+        if (loadModule) {
+          const mod = await loadModule();
+          const data = mod.default || mod;
+          wordsCount = data.words ? data.words.length : 0;
+          if (day >= 55) {
+            dayTitle = `AWL Liste ${day - 54}`;
+          }
+        }
+        const item = {
+          day: day,
+          title: dayTitle,
+          isCompleted: isCompleted,
+          wordsCount: wordsCount
+        };
+        if (isCompleted) {
+          studiedDays.push(item);
+        } else {
+          unstudiedDays.push(item);
+        }
+      }
+
+      const { handlePrintBookExportPDF, handlePrintBookExportDocx, handlePrintBookExportXlsx } = await import('./components/BookExercisePrint');
+      if (format === 'pdf') {
+        handlePrintBookExportPDF(studiedDays, unstudiedDays, selectedCategory);
+      } else if (format === 'docx') {
+        handlePrintBookExportDocx(studiedDays, unstudiedDays, selectedCategory);
+      } else if (format === 'xlsx') {
+        handlePrintBookExportXlsx(studiedDays, unstudiedDays, selectedCategory);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("YDS Kitap raporu hazırlanırken bir hata oluştu.");
+    }
+  };
+
   if (activeTab !== 'book-exercises') return null;
 
   return (
@@ -744,6 +789,7 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
           handleDaySelect={handleDaySelect}
           setReportCardDay={setReportCardDay}
           formatWordType={formatWordType}
+          onExportBookData={triggerBookExport}
         />
       )}
     </div>

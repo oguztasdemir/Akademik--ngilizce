@@ -36,6 +36,7 @@ const CampDashboard = ({
   setCikmisMode,
   onExportCikmisData,
   onExportVocabData,
+  onExportGrammarData,
   cikmisPlanData,
   vocabPlanData,
   generalInfo,
@@ -200,6 +201,7 @@ const CampDashboard = ({
 
   const [showExportDropdown, setShowExportDropdown] = React.useState(false);
   const [showVocabExportDropdown, setShowVocabExportDropdown] = React.useState(false);
+  const [showGrammarExportDropdown, setShowGrammarExportDropdown] = React.useState(false);
   const [expandedCikmisDay, setExpandedCikmisDay] = React.useState(null);
 
   const getMonthStats = (monthNum) => {
@@ -917,6 +919,73 @@ const CampDashboard = ({
               <div>
                 <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Aktif Hedef Gün</span>
                 <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>Gün #{currentGrammarDay}</strong>
+              </div>
+            </div>
+
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px', position: 'relative' }}>
+              <div style={{ background: 'rgba(251, 191, 36, 0.12)', padding: '12px', borderRadius: '12px', color: '#fbbf24' }}>
+                <i className="fa-solid fa-file-export" style={{ fontSize: '1.25rem' }}></i>
+              </div>
+              <div style={{ flex: 1 }}>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Karne Raporu</span>
+                <button
+                  onClick={() => setShowGrammarExportDropdown(!showGrammarExportDropdown)}
+                  className="glass-button"
+                  style={{
+                    marginTop: '4px',
+                    padding: '6px 12px',
+                    borderRadius: '8px',
+                    fontSize: '0.75rem',
+                    fontWeight: 'bold',
+                    color: '#fbbf24',
+                    borderColor: 'rgba(251, 191, 36, 0.4)',
+                    cursor: 'pointer',
+                    width: '100%',
+                    textAlign: 'center'
+                  }}
+                >
+                  📤 Dışarı Aktar
+                </button>
+                {showGrammarExportDropdown && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    marginTop: '8px',
+                    background: '#151c2c',
+                    border: '1.5px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '12px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                    zIndex: 50,
+                    minWidth: '180px',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}>
+                    <button 
+                      onClick={() => { onExportGrammarData('pdf'); setShowGrammarExportDropdown(false); }}
+                      className="hover-card"
+                      style={{ background: 'none', border: 'none', width: '100%', padding: '10px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#a7f3d0', textAlign: 'left' }}
+                    >
+                      <span>📄</span> PDF Belgesi (.pdf)
+                    </button>
+                    <button 
+                      onClick={() => { onExportGrammarData('docx'); setShowGrammarExportDropdown(false); }}
+                      className="hover-card"
+                      style={{ background: 'none', border: 'none', width: '100%', padding: '10px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#93c5fd', textAlign: 'left' }}
+                    >
+                      <span>📝</span> Word Belgesi (.doc)
+                    </button>
+                    <button 
+                      onClick={() => { onExportGrammarData('xlsx'); setShowGrammarExportDropdown(false); }}
+                      className="hover-card"
+                      style={{ background: 'none', border: 'none', width: '100%', padding: '10px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#fde047', textAlign: 'left' }}
+                    >
+                      <span>📊</span> Excel Raporu (.xls)
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

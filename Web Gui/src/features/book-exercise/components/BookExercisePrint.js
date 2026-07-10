@@ -245,3 +245,199 @@ export const handlePrintPDF = (dayNum, wordsList, totalDays) => {
   `);
   printWindow.document.close();
 };
+
+export const handlePrintBookExportPDF = (studiedDays, unstudiedDays, selectedCategory) => {
+  const printWindow = window.open('', '_blank', 'width=850,height=950');
+  if (!printWindow) {
+    alert("Popup engelleyiciyi devre dışı bırakın!");
+    return;
+  }
+  const categoryText = selectedCategory === 'fen' ? 'Fen Bilimleri' : (selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri');
+  const reportDateTime = new Date().toLocaleString('tr-TR');
+
+  const renderRows = (list) => {
+    if (list.length === 0) {
+      return '<tr><td colspan="4" style="padding: 12px; text-align: center; color: #94a3b8; font-style: italic;">Gün bulunmamaktadır.</td></tr>';
+    }
+    return list.map((item, idx) => `
+      <tr style="border-bottom: 1px solid #f1f5f9;">
+        <td style="padding: 10px; font-weight: bold; color: #1e293b;">Gün #${item.day}</td>
+        <td style="padding: 10px; color: #0f172a; font-weight: 500;">${item.title}</td>
+        <td style="padding: 10px; color: #64748b; font-size: 0.85rem;">${item.wordsCount} Kelime</td>
+        <td style="padding: 10px;">
+          ${item.isCompleted ? `<span style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 8px; border-radius: 6px; font-weight: bold;">Tamamlandı</span>` : `<span style="color: #94a3b8;">Başlanmadı</span>`}
+        </td>
+      </tr>
+    `).join('');
+  };
+
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>YDS Kitap Çalışma Raporu</title>
+        <style>
+          body { font-family: system-ui, -apple-system, sans-serif; padding: 30px; color: #1e293b; }
+          h1 { font-size: 1.6rem; color: #1e1b4b; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 6px; }
+          .subtitle { color: #64748b; font-size: 0.88rem; margin-bottom: 20px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px; }
+          th { background: #f8fafc; color: #475569; font-weight: 600; text-align: left; padding: 10px; border-bottom: 2px solid #cbd5e1; font-size: 0.85rem; }
+          td { font-size: 0.86rem; padding: 10px; }
+        </style>
+      </head>
+      <body onload="window.print()">
+        <h1>📊 YDS Kitap Çalışma Raporu (${categoryText})</h1>
+        <div class="subtitle">Rapor Tarihi: ${reportDateTime} | Toplam Çalışılan: ${studiedDays.length} / 62 Gün</div>
+        
+        <h3 style="color: #10b981; border-bottom: 2px solid #a7f3d0; padding-bottom: 4px;">🟢 Tamamlanan Günler</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Gün No</th>
+              <th>Çalışma Başlığı</th>
+              <th>Kelime Sayısı</th>
+              <th>Durum</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${renderRows(studiedDays)}
+          </tbody>
+        </table>
+
+        <h3 style="color: #94a3b8; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px;">⚪ Kalan Günler</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Gün No</th>
+              <th>Çalışma Başlığı</th>
+              <th>Kelime Sayısı</th>
+              <th>Durum</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${renderRows(unstudiedDays)}
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+};
+
+export const handlePrintBookExportDocx = (studiedDays, unstudiedDays, selectedCategory) => {
+  const categoryText = selectedCategory === 'fen' ? 'Fen Bilimleri' : (selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri');
+  const reportDateTime = new Date().toLocaleString('tr-TR');
+
+  const renderRows = (list) => {
+    return list.map(item => `
+      <tr style="border-bottom: 1px solid #cccccc;">
+        <td style="padding: 8px;"><b>Gün #${item.day}</b></td>
+        <td style="padding: 8px;">${item.title}</td>
+        <td style="padding: 8px;">${item.wordsCount} Kelime</td>
+        <td style="padding: 8px;">${item.isCompleted ? 'Tamamlandı' : 'Başlanmadı'}</td>
+      </tr>
+    `).join('');
+  };
+
+  const html = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+    <head><title>YDS Kitap Değerlendirme Raporu</title></head>
+    <body style="font-family: Arial, sans-serif; padding: 20px;">
+      <h2>📊 YDS Kitap Çalışma Raporu (${categoryText})</h2>
+      <p style="color: #555555; font-size: 12px;">Rapor Tarihi: ${reportDateTime} | İlerleme: ${studiedDays.length} / 62 Gün</p>
+      
+      <h3 style="color: #10b981;">🟢 Tamamlanan Günler</h3>
+      <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <tr style="background-color: #f2f2f2;">
+          <th>Gün No</th>
+          <th>Çalışma Başlığı</th>
+          <th>Kelime Sayısı</th>
+          <th>Durum</th>
+        </tr>
+        ${renderRows(studiedDays)}
+      </table>
+
+      <h3 style="color: #888888; margin-top: 20px;">⚪ Kalan Günler</h3>
+      <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <tr style="background-color: #f2f2f2;">
+          <th>Gün No</th>
+          <th>Çalışma Başlığı</th>
+          <th>Kelime Sayısı</th>
+          <th>Durum</th>
+        </tr>
+        ${renderRows(unstudiedDays)}
+      </table>
+    </body>
+    </html>
+  `;
+
+  const blob = new Blob([html], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `YOKDIL_Yds_Kitap_Karne.doc`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+export const handlePrintBookExportXlsx = (studiedDays, unstudiedDays, selectedCategory) => {
+  const categoryText = selectedCategory === 'fen' ? 'Fen Bilimleri' : (selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri');
+  
+  const buildSheetRows = (list) => {
+    return list.map(item => `
+    <Row>
+     <Cell><Data ss:Type="Number">${item.day}</Data></Cell>
+     <Cell><Data ss:Type="String">${item.title}</Data></Cell>
+     <Cell><Data ss:Type="Number">${item.wordsCount}</Data></Cell>
+     <Cell><Data ss:Type="String">${item.isCompleted ? 'Tamamlandı' : 'Başlanmadı'}</Data></Cell>
+    </Row>`).join('');
+  };
+
+  const xmlContent = `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Header">
+   <Font ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#1E1B4B" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Tamamlanan Günler">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Gün No</Data></Cell>
+    <Cell><Data ss:Type="String">Çalışma Başlığı</Data></Cell>
+    <Cell><Data ss:Type="String">Kelime Sayısı</Data></Cell>
+    <Cell><Data ss:Type="String">Durum</Data></Cell>
+   </Row>
+   ${buildSheetRows(studiedDays)}
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Kalan Günler">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Gün No</Data></Cell>
+    <Cell><Data ss:Type="String">Çalışma Başlığı</Data></Cell>
+    <Cell><Data ss:Type="String">Kelime Sayısı</Data></Cell>
+    <Cell><Data ss:Type="String">Durum</Data></Cell>
+   </Row>
+   ${buildSheetRows(unstudiedDays)}
+  </Table>
+ </Worksheet>
+</Workbook>`;
+
+  const blob = new Blob([xmlContent], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `YOKDIL_Yds_Kitap_Karne.xls`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};

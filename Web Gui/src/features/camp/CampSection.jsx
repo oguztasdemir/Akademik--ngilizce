@@ -1230,6 +1230,48 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     }
   };
 
+  const triggerGrammarExport = async (format) => {
+    const category = selectedCategory || 'fen';
+    try {
+      const studiedDays = [];
+      const unstudiedDays = [];
+
+      for (let day = 1; day <= 30; day++) {
+        const dayData = grammarCampDb[String(day)];
+        const completedObj = grammarDoneMap[day];
+        const isCompleted = completedObj ? !!completedObj.isPassed : false;
+        
+        if (dayData) {
+          const item = {
+            day: day,
+            title: dayData.title || `Gramer Konusu #${day}`,
+            description: dayData.lecture ? dayData.lecture.slice(0, 80) + '...' : '',
+            score: completedObj ? completedObj.score : null,
+            date: completedObj ? completedObj.date : '',
+            questionsCount: dayData.questions ? dayData.questions.length : 0
+          };
+          if (isCompleted) {
+            studiedDays.push(item);
+          } else {
+            unstudiedDays.push(item);
+          }
+        }
+      }
+
+      const { handlePrintGrammarExportPDF, handlePrintGrammarExportDocx, handlePrintGrammarExportXlsx } = await import('./components/CampPrint');
+      if (format === 'pdf') {
+        handlePrintGrammarExportPDF(studiedDays, unstudiedDays, category);
+      } else if (format === 'docx') {
+        handlePrintGrammarExportDocx(studiedDays, unstudiedDays, category);
+      } else if (format === 'xlsx') {
+        handlePrintGrammarExportXlsx(studiedDays, unstudiedDays, category);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Gramer raporu hazırlanırken bir hata oluştu.");
+    }
+  };
+
   const completeCikmisStudy = (score, finalResultsMap = null) => {
     const isPassed = score >= 60;
     const dayNum = selectedDay;
@@ -2863,6 +2905,7 @@ const handleCikmisSwipeBack = () => {
         setCikmisMode={setCikmisMode}
         onExportCikmisData={triggerCikmisExport}
         onExportVocabData={triggerVocabExport}
+        onExportGrammarData={triggerGrammarExport}
         cikmisPlanData={cikmisPlanData}
         vocabPlanData={vocabPlanData}
         generalInfo={generalInfoMap[campType]}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Award } from 'lucide-react';
 
 const BookExerciseDashboard = ({
@@ -14,8 +14,10 @@ const BookExerciseDashboard = ({
   setSelectedWeek,
   handleDaySelect,
   setReportCardDay,
-  formatWordType
+  formatWordType,
+  onExportBookData
 }) => {
+  const [showBookExportDropdown, setShowBookExportDropdown] = useState(false);
 
   const getMonthStats = (monthNum) => {
     const start = (monthNum - 1) * 28 + 1;
@@ -184,32 +186,95 @@ const BookExerciseDashboard = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '40px' }}>
-      {/* Filter Bar */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
-        {['daily', 'weekly', 'monthly'].map((mode) => (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+        {/* Filter Bar */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {['daily', 'weekly', 'monthly'].map((mode) => (
+            <button
+              key={mode}
+              onClick={() => {
+                setViewMode(mode);
+                setSelectedMonth(null);
+                setSelectedWeek(null);
+              }}
+              className="glass-button"
+              style={{
+                padding: '8px 18px',
+                borderRadius: '10px',
+                fontSize: '0.78rem',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                background: viewMode === mode ? 'var(--primary-gradient)' : 'rgba(255,255,255,0.02)',
+                border: viewMode === mode ? '1px solid var(--primary-light)' : '1px solid rgba(255,255,255,0.08)',
+                color: viewMode === mode ? 'white' : '#cbd5e1',
+                transition: 'all 0.2s'
+              }}
+            >
+              {mode === 'daily' ? '📅 Günlük Görünüm' : mode === 'weekly' ? '🔁 Haftalık Görünüm' : '🔥 Aylık Görünüm'}
+            </button>
+          ))}
+        </div>
+
+        {/* Karne Raporu Button */}
+        <div style={{ position: 'relative' }}>
           <button
-            key={mode}
-            onClick={() => {
-              setViewMode(mode);
-              setSelectedMonth(null);
-              setSelectedWeek(null);
-            }}
+            onClick={() => setShowBookExportDropdown(!showBookExportDropdown)}
             className="glass-button"
             style={{
-              padding: '8px 18px',
+              padding: '8px 16px',
               borderRadius: '10px',
               fontSize: '0.78rem',
               fontWeight: 'bold',
+              color: '#fbbf24',
+              borderColor: 'rgba(251, 191, 36, 0.4)',
               cursor: 'pointer',
-              background: viewMode === mode ? 'var(--primary-gradient)' : 'rgba(255,255,255,0.02)',
-              border: viewMode === mode ? '1px solid var(--primary-light)' : '1px solid rgba(255,255,255,0.08)',
-              color: viewMode === mode ? 'white' : '#cbd5e1',
-              transition: 'all 0.2s'
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}
           >
-            {mode === 'daily' ? '📅 Günlük Görünüm' : mode === 'weekly' ? '🔁 Haftalık Görünüm' : '🔥 Aylık Görünüm'}
+            <span>📤</span> Karne Raporunu Dışarı Aktar
           </button>
-        ))}
+          {showBookExportDropdown && (
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              right: 0,
+              marginTop: '8px',
+              background: '#151c2c',
+              border: '1.5px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '12px',
+              boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+              zIndex: 50,
+              minWidth: '200px',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+              <button 
+                onClick={() => { onExportBookData('pdf'); setShowBookExportDropdown(false); }}
+                className="hover-card"
+                style={{ background: 'none', border: 'none', width: '100%', padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#a7f3d0', textAlign: 'left' }}
+              >
+                <span>📄</span> PDF Belgesi (.pdf)
+              </button>
+              <button 
+                onClick={() => { onExportBookData('docx'); setShowBookExportDropdown(false); }}
+                className="hover-card"
+                style={{ background: 'none', border: 'none', width: '100%', padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#93c5fd', textAlign: 'left' }}
+              >
+                <span>📝</span> Word Belgesi (.doc)
+              </button>
+              <button 
+                onClick={() => { onExportBookData('xlsx'); setShowBookExportDropdown(false); }}
+                className="hover-card"
+                style={{ background: 'none', border: 'none', width: '100%', padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: '#fde047', textAlign: 'left' }}
+              >
+                <span>📊</span> Excel Raporu (.xls)
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Search bar */}
