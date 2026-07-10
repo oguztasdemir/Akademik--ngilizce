@@ -161,44 +161,44 @@ app.post(['/api/translate', '/api/:category/translate'], async (req, res) => {
   if (fs.existsSync(dictPath)) {
     const dictData = JSON.parse(fs.readFileSync(dictPath, 'utf8'));
     
-    // Check 1: Direct English -> Turkish Match
+    // Find local match (direct or lemma)
+    let localTr = null;
     if (dictData[cleanWord]) {
-      return res.json({ word: text, translation: dictData[cleanWord], source: 'local_dict' });
-    }
-    
-    // Check 2: English Lemma Match
-    let lemmas = [cleanWord];
-    if (cleanWord.endsWith('s')) lemmas.push(cleanWord.slice(0, -1));
-    if (cleanWord.endsWith('d')) lemmas.push(cleanWord.slice(0, -1));
-    if (cleanWord.endsWith('ed')) lemmas.push(cleanWord.slice(0, -2));
-    if (cleanWord.endsWith('ing')) lemmas.push(cleanWord.slice(0, -3));
-    if (cleanWord.endsWith('ies')) lemmas.push(cleanWord.slice(0, -3) + 'y');
-    if (cleanWord.endsWith('ied')) lemmas.push(cleanWord.slice(0, -3) + 'y');
+      localTr = dictData[cleanWord];
+    } else {
+      let lemmas = [cleanWord];
+      if (cleanWord.endsWith('s')) lemmas.push(cleanWord.slice(0, -1));
+      if (cleanWord.endsWith('d')) lemmas.push(cleanWord.slice(0, -1));
+      if (cleanWord.endsWith('ed')) lemmas.push(cleanWord.slice(0, -2));
+      if (cleanWord.endsWith('ing')) lemmas.push(cleanWord.slice(0, -3));
+      if (cleanWord.endsWith('ies')) lemmas.push(cleanWord.slice(0, -3) + 'y');
+      if (cleanWord.endsWith('ied')) lemmas.push(cleanWord.slice(0, -3) + 'y');
 
-    for (const lem of lemmas) {
-      if (dictData[lem]) {
-        return res.json({ word: text, translation: dictData[lem], source: 'local_dict_lemma' });
+      for (const lem of lemmas) {
+        if (dictData[lem]) {
+          localTr = dictData[lem];
+          break;
+        }
       }
     }
 
-    // Check 3: Reverse Turkish -> English Match (Safe stemming)
+    // Try reverse match if no direct local match
     let reverseMatch = null;
-    const stripTurkishSuffixes = (w) => {
-      return w.replace(/(dan|den|tan|ten|da|de|ta|te|ya|ye|a|e|ın|in|un|ün|ı|i|u|ü|la|le|lar|ler|nız|niz|nuz|nüz|mız|miz|muz|müz)$/g, "");
-    };
-    const strippedWord = stripTurkishSuffixes(cleanWord);
-    for (const [en, tr] of Object.entries(dictData)) {
-      const trMeanings = tr.toLowerCase().split(/[;,]/).map(s => s.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ""));
-      if (trMeanings.includes(cleanWord) || (strippedWord.length >= 3 && trMeanings.some(m => stripTurkishSuffixes(m) === strippedWord))) {
-        reverseMatch = en;
-        break;
+    if (!localTr) {
+      const stripTurkishSuffixes = (w) => {
+        return w.replace(/(dan|den|tan|ten|da|de|ta|te|ya|ye|a|e|ın|in|un|ün|ı|i|u|ü|la|le|lar|ler|nız|niz|nuz|nüz|mız|miz|muz|müz)$/g, "");
+      };
+      const strippedWord = stripTurkishSuffixes(cleanWord);
+      for (const [en, tr] of Object.entries(dictData)) {
+        const trMeanings = tr.toLowerCase().split(/[;,]/).map(s => s.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ""));
+        if (trMeanings.includes(cleanWord) || (strippedWord.length >= 3 && trMeanings.some(m => stripTurkishSuffixes(m) === strippedWord))) {
+          reverseMatch = en;
+          break;
+        }
       }
     }
-    if (reverseMatch) {
-      return res.json({ word: text, translation: reverseMatch, source: 'local_dict_reverse' });
-    }
 
-    // Check 4: External Translation API Fallback with dynamic langpair
+    // Determine langpair
     const hasTurkish = /[ğüşıöçĞÜŞİÖÇ]/i.test(cleanWord);
     let langpair = 'en|tr';
     if (hasTurkish) {
@@ -210,15 +210,46 @@ app.post(['/api/translate', '/api/:category/translate'], async (req, res) => {
       }
     }
 
+    // Fetch rich translations list
+    let translationsList = [];
+    if (localTr) {
+      // Clean local translation (remove frequency part e.g., 'geçit | 162' -> 'geçit')
+      const cleanLocal = localTr.split('|')[0].trim().toLowerCase();
+      // Split by commas/semicolons if local already has multiple
+      cleanLocal.split(/[;,]/).forEach(t => {
+        const item = t.trim();
+        if (item) translationsList.push(item);
+      });
+    } else if (reverseMatch) {
+      translationsList.push(reverseMatch.toLowerCase());
+    }
+
     try {
       const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanWord)}&langpair=${langpair}`);
       const resData = await response.json();
-      const translation = resData?.responseData?.translatedText || resData?.matches?.[0]?.translation;
-      if (translation && !translation.toLowerCase().includes("mymemory")) {
-        return res.json({ word: text, translation: translation.toLowerCase().trim(), source: 'mymemory_api' });
+      if (resData?.matches && Array.isArray(resData.matches)) {
+        resData.matches.forEach(m => {
+          const t = m.translation.toLowerCase().trim();
+          // Filter out identical words, empty words, and api notes
+          if (t && t !== cleanWord && !t.includes("mymemory")) {
+            // Split any compound translations returned by the API
+            t.split(/[;,]/).forEach(item => {
+              const cleanItem = item.trim();
+              if (cleanItem && !translationsList.includes(cleanItem)) {
+                translationsList.push(cleanItem);
+              }
+            });
+          }
+        });
       }
     } catch (e) {
-      console.error("External translation failed:", e);
+      console.error("External translation query failed:", e);
+    }
+
+    // If we have translations, return them as a comma-separated list
+    if (translationsList.length > 0) {
+      const merged = [...new Set(translationsList)].slice(0, 4).join(', ');
+      return res.json({ word: text, translation: merged, source: 'merged_dictionary' });
     }
 
     // Check 5: Return fallback note
