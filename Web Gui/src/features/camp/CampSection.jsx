@@ -1092,6 +1092,60 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       console.error(e);
       alert("Veriler hazırlanırken bir hata oluştu.");
     }
+  };
+
+  const triggerVocabExport = async (format) => {
+    const category = selectedCategory || 'fen';
+    try {
+      const vocabDoneMap = progress?.completedDays || {};
+      const studiedWords = [];
+      const unstudiedWords = [];
+
+      for (let day = 1; day <= 60; day++) {
+        const suffix = `yokdil/${category}/kelime_kampi/day_${day}.json`;
+        const foundKey = Object.keys(campModules).find(k => k.endsWith(suffix));
+        let dayWords = [];
+        if (foundKey) {
+          const loader = campModules[foundKey];
+          const module = await loader();
+          dayWords = module.default || module;
+        }
+
+        const dayRecord = vocabDoneMap[day];
+        const isCompleted = dayRecord ? !!dayRecord.isPassed : false;
+
+        if (isCompleted) {
+          dayWords.forEach(w => {
+            const stateVal = progress?.wordMastery?.[w.english] || 0;
+            studiedWords.push({
+              english: w.english,
+              turkish: w.turkish,
+              pronunciation: w.pronunciation || '',
+              status: stateVal >= 2
+            });
+          });
+        } else {
+          dayWords.forEach(w => {
+            unstudiedWords.push({
+              english: w.english,
+              turkish: w.turkish,
+              pronunciation: w.pronunciation || ''
+            });
+          });
+        }
+      }
+
+      if (format === 'pdf') {
+        handlePrintCikmisExportPDF(studiedWords, unstudiedWords, 'Gelişmiş Kelime Kampı', category);
+      } else if (format === 'docx') {
+        handlePrintCikmisExportDocx(studiedWords, unstudiedWords, 'Gelişmiş Kelime Kampı', category);
+      } else if (format === 'xlsx') {
+        handlePrintCikmisExportXlsx(studiedWords, unstudiedWords, 'Gelişmiş Kelime Kampı', category);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Veriler hazırlanırken bir hata oluştu.");
+    }
   };;
 
   const completeCikmisStudy = (score, finalResultsMap = null) => {
@@ -2682,6 +2736,7 @@ const handleCikmisSwipeBack = () => {
         cikmisMode={cikmisMode}
         setCikmisMode={setCikmisMode}
         onExportCikmisData={triggerCikmisExport}
+        onExportVocabData={triggerVocabExport}
         cikmisPlanData={cikmisPlanData}
         hideSwitcher={hideSwitcher || initialCampType === 'cikmis_kelimeler'}
         showConfirm={showConfirm}

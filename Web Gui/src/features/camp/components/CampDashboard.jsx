@@ -35,6 +35,7 @@ const CampDashboard = ({
   cikmisMode = 'detailed',
   setCikmisMode,
   onExportCikmisData,
+  onExportVocabData,
   cikmisPlanData,
   hideSwitcher,
   showConfirm
@@ -60,6 +61,15 @@ const CampDashboard = ({
   };
 
   const genStats = calculateGeneralStats();
+
+  const getTrackColor = () => {
+    if (vocabTrack === 'es_anlam') return { hex: '#a855f7', rgb: '168,85,247' };
+    if (vocabTrack === 'zit_anlam') return { hex: '#f43f5e', rgb: '244,63,94' };
+    if (vocabTrack === 'cumle') return { hex: '#f59e0b', rgb: '245,158,11' };
+    if (vocabTrack === 'tumu') return { hex: '#10b981', rgb: '16,185,129' };
+    return { hex: '#6366f1', rgb: '99,102,241' }; // default/anlam: indigo
+  };
+  const themeColor = getTrackColor();
 
   // Helper to render Turkish meanings in dashboard lists vertically
   const renderTurkishMeaningsList = (text) => {
@@ -112,6 +122,7 @@ const CampDashboard = ({
   })();
 
   const [showExportDropdown, setShowExportDropdown] = React.useState(false);
+  const [showVocabExportDropdown, setShowVocabExportDropdown] = React.useState(false);
   const [expandedCikmisDay, setExpandedCikmisDay] = React.useState(null);
 
   const getMonthStats = (monthNum) => {
@@ -203,17 +214,17 @@ const CampDashboard = ({
     } else if (isActive) {
       bg = isMonthlyCamp 
         ? 'rgba(239, 68, 68, 0.08)' 
-        : (isSecCamp ? 'rgba(251, 191, 36, 0.08)' : 'rgba(99, 102, 241, 0.05)');
+        : (isSecCamp ? 'rgba(251, 191, 36, 0.08)' : `rgba(${themeColor.rgb}, 0.05)`);
       border = isMonthlyCamp 
         ? '1.5px solid rgba(239, 68, 68, 0.9)' 
-        : (isSecCamp ? '1.5px solid rgba(251, 191, 36, 0.9)' : '1.5px solid rgba(99, 102, 241, 0.4)');
+        : (isSecCamp ? '1.5px solid rgba(251, 191, 36, 0.9)' : `1.5px solid rgba(${themeColor.rgb}, 0.4)`);
       badgeText = 'Sıradaki Hedef';
       badgeBg = isMonthlyCamp 
         ? 'rgba(239, 68, 68, 0.15)' 
-        : (isSecCamp ? 'rgba(251, 191, 36, 0.15)' : 'rgba(99, 102, 241, 0.15)');
+        : (isSecCamp ? 'rgba(251, 191, 36, 0.15)' : `rgba(${themeColor.rgb}, 0.15)`);
       badgeColor = isMonthlyCamp 
         ? '#f87171' 
-        : (isSecCamp ? '#fbbf24' : '#a5b4fc');
+        : (isSecCamp ? '#fbbf24' : themeColor.hex);
     }
 
     const dayName = isMonthlyCamp 
@@ -523,7 +534,7 @@ const CampDashboard = ({
           </div>
 
           {/* Start Daily Button Card */}
-          <div className="glass-card text-center" style={{ padding: '36px 20px', borderRadius: '24px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(16, 185, 129, 0.04) 100%)', border: '1.5px solid rgba(99, 102, 241, 0.25)' }}>
+          <div className="glass-card text-center" style={{ padding: '36px 20px', borderRadius: '24px', background: `linear-gradient(135deg, rgba(${themeColor.rgb}, 0.1) 0%, rgba(16, 185, 129, 0.04) 100%)`, border: `1.5px solid rgba(${themeColor.rgb}, 0.25)` }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'white', margin: 0 }}>
               Akademik Kelime Master Kampı 🚀
             </h2>
@@ -535,32 +546,82 @@ const CampDashboard = ({
               const completedObj = completedDaysMap[currentDay];
               const isPassed = completedObj ? completedObj.isPassed : false;
               
-              if (completedObj && isPassed) {
-                return (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                      🎉 Bugünün kelime kampını %{completedObj.score} başarıyla tamamladınız!
+              return (
+                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+                  {completedObj && isPassed ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                        🎉 Bugünün kelime kampını %{completedObj.score} başarıyla tamamladınız!
+                      </div>
+                      <button
+                        onClick={() => startDailyStudy(currentDay)}
+                        className="btn-secondary"
+                        style={{ padding: '8px 24px', fontSize: '0.8rem', borderRadius: '10px', cursor: 'pointer' }}
+                      >
+                        Tekrar Çalış (Puan Yükselt)
+                      </button>
                     </div>
+                  ) : (
                     <button
                       onClick={() => startDailyStudy(currentDay)}
-                      className="btn-secondary"
-                      style={{ padding: '8px 24px', fontSize: '0.8rem', borderRadius: '10px', cursor: 'pointer' }}
+                      className="btn-primary"
+                      style={{ padding: '14px 36px', fontSize: '0.94rem', fontWeight: 'bold', borderRadius: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', background: themeColor.hex, borderColor: themeColor.hex, boxShadow: `0 4px 14px rgba(${themeColor.rgb}, 0.35)` }}
                     >
-                      Tekrar Çalış (Puan Yükselt)
+                      Gün #{currentDay} Çalışmasını Başlat <ArrowRight className="h-4 w-4" />
                     </button>
+                  )}
+
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <button
+                      onClick={() => setShowVocabExportDropdown(!showVocabExportDropdown)}
+                      className="btn-secondary"
+                      style={{ padding: '14px 28px', fontSize: '0.94rem', fontWeight: 'bold', borderRadius: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                    >
+                      📤 Karne Raporunu Dışarı Aktar
+                    </button>
+                    {showVocabExportDropdown && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        marginTop: '8px',
+                        background: '#151c2c',
+                        border: '1.5px solid rgba(255, 255, 255, 0.08)',
+                        borderRadius: '12px',
+                        boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                        zIndex: 50,
+                        minWidth: '220px',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}>
+                        <div 
+                          onClick={() => { onExportVocabData('pdf'); setShowVocabExportDropdown(false); }}
+                          className="hover-card"
+                          style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#a7f3d0', textAlign: 'left' }}
+                        >
+                          <span>📄</span> PDF Belgesi (.pdf)
+                        </div>
+                        <div 
+                          onClick={() => { onExportVocabData('docx'); setShowVocabExportDropdown(false); }}
+                          className="hover-card"
+                          style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#93c5fd', textAlign: 'left' }}
+                        >
+                          <span>📝</span> Microsoft Word (.docx)
+                        </div>
+                        <div 
+                          onClick={() => { onExportVocabData('xlsx'); setShowVocabExportDropdown(false); }}
+                          className="hover-card"
+                          style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: '#fde047', textAlign: 'left' }}
+                        >
+                          <span>📊</span> Microsoft Excel (.xlsx)
+                        </div>
+                      </div>
+                    )}
                   </div>
-                );
-              } else {
-                return (
-                  <button
-                    onClick={() => startDailyStudy(currentDay)}
-                    className="btn-primary"
-                    style={{ padding: '14px 36px', fontSize: '0.94rem', fontWeight: 'bold', borderRadius: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
-                  >
-                    Gün #{currentDay} Çalışmasını Başlat <ArrowRight className="h-4 w-4" />
-                  </button>
-                );
-              }
+                </div>
+              );
             })()}
           </div>
 
