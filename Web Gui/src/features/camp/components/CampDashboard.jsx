@@ -37,6 +37,7 @@ const CampDashboard = ({
   onExportCikmisData,
   onExportVocabData,
   cikmisPlanData,
+  vocabPlanData,
   hideSwitcher,
   showConfirm
 }) => {
@@ -121,14 +122,14 @@ const CampDashboard = ({
     return { correct, wrong, unstudied, total };
   })();
 
-  // Calculate vocabStats dynamically based on completedDaysMap and cikmisPlanData for Gelişmiş Kelime Kampı
+  // Calculate vocabStats dynamically based on completedDaysMap and vocabPlanData for Gelişmiş Kelime Kampı
   const vocabStats = (() => {
     let correct = 0;
     let wrong = 0;
     let total = 0;
 
     const doneMap = completedDaysMap || {};
-    const plan = cikmisPlanData || {};
+    const plan = vocabPlanData || {};
 
     Object.keys(plan).forEach(dayKey => {
       const dayWords = plan[dayKey] || [];

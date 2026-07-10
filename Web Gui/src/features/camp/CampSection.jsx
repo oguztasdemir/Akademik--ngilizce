@@ -172,6 +172,7 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   const [grammarProgress, setGrammarProgress] = useState(null);
   const [cikmisProgress, setCikmisProgress] = useState(null);
   const [cikmisPlanData, setCikmisPlanData] = useState({});
+  const [vocabPlanData, setVocabPlanData] = useState({});
   const [studyMode, setStudyMode] = useState(null);
 
 const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
@@ -348,7 +349,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         for (const d of days) {
           const track = vocabTrack || 'anlam';
           const dailyKelimeKey = track === 'tumu'
-            ? `@dataset/yokdil/${category}/gelismis_kelime_kampi/day_${d}.json`
+            ? `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${d}.json`
             : `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${d}.json`;
           const loadDailyKelime = getCampModule(dailyKelimeKey);
           if (loadDailyKelime) {
@@ -500,14 +501,15 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     }
   }, []);
 
-  // Load cikmis kelimeler plan data dynamically
+  // Load camp plan datasets dynamically
   useEffect(() => {
-    const loadCikmisPlan = async () => {
+    const loadPlans = async () => {
       const category = selectedCategory || 'fen';
       const categoryDict = (dictDb && dictDb[category]) || {};
-      const mappedData = {};
+      const mappedCikmis = {};
+      const mappedVocab = {};
       
-      // Load from kelime_kampi/day_*.json dynamically
+      // Load Cikmis Kelimeler plan
       for (let day = 1; day <= 60; day++) {
         const planKey = `@dataset/yokdil/${category}/kelime_kampi/day_${day}.json`;
         const loadPlan = getCampModule(planKey);
@@ -516,7 +518,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
             const planMod = await loadPlan();
             const planData = planMod.default || planMod;
             const wordList = planData.words || [];
-            mappedData[String(day)] = wordList.map((wObj, idx) => {
+            mappedCikmis[String(day)] = wordList.map((wObj, idx) => {
               const eng = typeof wObj === 'string' ? wObj : wObj.word;
               return {
                 id: idx + 1,
@@ -530,9 +532,37 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
           }
         }
       }
-      setCikmisPlanData(mappedData);
+      setCikmisPlanData(mappedCikmis);
+
+      // Load Gelişmiş Kelime Kampı (1500+ academic words) plan
+      for (let day = 1; day <= 60; day++) {
+        const planKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${day}.json`;
+        const loadPlan = getCampModule(planKey);
+        if (loadPlan) {
+          try {
+            const planMod = await loadPlan();
+            const planData = planMod.default || planMod;
+            const wordList = planData.words || [];
+            mappedVocab[String(day)] = wordList.map((wObj, idx) => {
+              const eng = typeof wObj === 'string' ? wObj : wObj.word;
+              return {
+                id: idx + 1,
+                english: eng,
+                turkish: wObj.tr || categoryDict[eng] || "anlamı bulunamadı",
+                pronunciation: wObj.pronunciation || "",
+                synonyms: wObj.synonyms || "",
+                antonyms: wObj.antonyms || "",
+                sentences: wObj.sentences || []
+              };
+            });
+          } catch (e) {
+            console.error(`Failed to load vocab day ${day} for category ${category}:`, e);
+          }
+        }
+      }
+      setVocabPlanData(mappedVocab);
     };
-    loadCikmisPlan();
+    loadPlans();
   }, [selectedCategory, dictDb]);
 
   // Load session state from localStorage/hash on category change or mount
@@ -709,7 +739,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
 
     const track = vocabTrack || 'anlam';
     const dailyPlanKey = track === 'tumu'
-      ? `@dataset/yokdil/${category}/gelismis_kelime_kampi/day_${dayNum}.json`
+      ? `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${dayNum}.json`
       : `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${dayNum}.json`;
     const loadDaily = getCampModule(dailyPlanKey);
     if (!loadDaily) {
@@ -1112,33 +1142,40 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const unstudiedWords = [];
 
       for (let day = 1; day <= 60; day++) {
-        const suffix = `yokdil/${category}/kelime_kampi/day_${day}.json`;
+        const suffix = `yokdil/${category}/gelismis_kelime_kampi/kelime/day_${day}.json`;
         const foundKey = Object.keys(campModules).find(k => k.endsWith(suffix));
         let dayWords = [];
         if (foundKey) {
           const loader = campModules[foundKey];
           const module = await loader();
-          dayWords = module.default || module;
+          const data = module.default || module;
+          dayWords = data.words || [];
         }
 
         const dayRecord = vocabDoneMap[day];
         const isCompleted = dayRecord ? !!dayRecord.isPassed : false;
+        const resultsMap = dayRecord?.resultsMap || {};
 
         if (isCompleted) {
           dayWords.forEach(w => {
-            const stateVal = progress?.wordMastery?.[w.english] || 0;
+            const eng = w.word;
+            const trVal = w.tr;
+            const isKnown = resultsMap[eng] !== undefined 
+              ? resultsMap[eng] === true 
+              : ((progress?.wordMastery?.[eng] || 0) >= 2 || true);
+
             studiedWords.push({
-              english: w.english,
-              turkish: w.turkish,
+              english: eng,
+              turkish: trVal,
               pronunciation: w.pronunciation || '',
-              status: stateVal >= 2
+              status: isKnown
             });
           });
         } else {
           dayWords.forEach(w => {
             unstudiedWords.push({
-              english: w.english,
-              turkish: w.turkish,
+              english: w.word,
+              turkish: w.tr,
               pronunciation: w.pronunciation || ''
             });
           });
@@ -1156,7 +1193,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       console.error(e);
       alert("Veriler hazırlanırken bir hata oluştu.");
     }
-  };;
+  };
 
   const completeCikmisStudy = (score, finalResultsMap = null) => {
     const isPassed = score >= 60;
@@ -2748,6 +2785,7 @@ const handleCikmisSwipeBack = () => {
         onExportCikmisData={triggerCikmisExport}
         onExportVocabData={triggerVocabExport}
         cikmisPlanData={cikmisPlanData}
+        vocabPlanData={vocabPlanData}
         hideSwitcher={hideSwitcher || initialCampType === 'cikmis_kelimeler'}
         showConfirm={showConfirm}
       />
