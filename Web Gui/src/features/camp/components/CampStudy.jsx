@@ -434,83 +434,81 @@ const CampStudy = ({
             )}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px' }}>
-            <button
-              onClick={() => { setCurrentIdx(prev => Math.max(0, prev - 1)); setLearnCardFlipped(false); }}
-              disabled={currentIdx === 0}
-              className="btn-secondary"
-              style={{ padding: '10px 20px', fontSize: '0.8rem' }}
-            >
-              Önceki Kelime
-            </button>
-
-            {((selectedDay % 7 === 0) || (selectedDay % 28 === 0) || (selectedDay === totalCampDays)) && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '14px', width: '100%' }}>
+            {/* Row 1: Bilmiyorum & Biliyorum */}
+            <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
               <button
                 onClick={() => {
-                  setPhase(2);
-                  setCurrentIdx(0);
-                  setMeaningOptions(meaningOptions); // updated state will bubble up or initialize correctly
+                  addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_card');
+                  setLearnCardFlipped(false);
+                  handleWordRead();
                 }}
                 className="btn-secondary"
-                style={{ padding: '10px 16px', fontSize: '0.8rem', borderColor: 'rgba(239, 68, 68, 0.4)', color: '#f87171', background: 'rgba(239, 68, 68, 0.05)', fontWeight: 'bold' }}
+                style={{
+                  flex: 1,
+                  padding: '10px 20px',
+                  fontSize: '0.85rem',
+                  borderColor: 'rgba(239, 68, 68, 0.4)',
+                  color: '#f87171',
+                  background: 'rgba(239, 68, 68, 0.05)',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px'
+                }}
               >
-                ⏩ Kartları Geç ve Teste Başla
+                ❌ Bilmiyorum
               </button>
-            )}
-
-            {!learnCardFlipped ? (
               <button
-                onClick={() => setLearnCardFlipped(true)}
+                onClick={() => {
+                  setLearnCardFlipped(false);
+                  handleWordRead();
+                }}
                 className="btn-primary"
-                style={{ padding: '10px 24px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{
+                  flex: 1,
+                  padding: '10px 24px',
+                  fontSize: '0.85rem',
+                  background: 'rgba(16, 185, 129, 0.9)',
+                  borderColor: '#10b981',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px'
+                }}
               >
-                Kartı Döndür 🔄
+                ✅ Biliyorum
               </button>
-            ) : (
-              <div style={{ display: 'flex', gap: '10px' }}>
+            </div>
+
+            {/* Row 2: Önceki Kelime & optional Skip button */}
+            <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+              <button
+                onClick={() => { setCurrentIdx(prev => Math.max(0, prev - 1)); setLearnCardFlipped(false); }}
+                disabled={currentIdx === 0}
+                className="btn-secondary"
+                style={{ flex: 1, padding: '10px 20px', fontSize: '0.8rem', opacity: currentIdx === 0 ? 0.5 : 1 }}
+              >
+                Önceki Kelime
+              </button>
+
+              {((selectedDay % 7 === 0) || (selectedDay % 28 === 0) || (selectedDay === totalCampDays)) && (
                 <button
                   onClick={() => {
-                    addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_card');
-                    setLearnCardFlipped(false);
-                    handleWordRead();
+                    setPhase(2);
+                    setCurrentIdx(0);
+                    setMeaningOptions(meaningOptions);
                   }}
                   className="btn-secondary"
-                  style={{
-                    padding: '10px 20px',
-                    fontSize: '0.8rem',
-                    borderColor: 'rgba(239, 68, 68, 0.4)',
-                    color: '#f87171',
-                    background: 'rgba(239, 68, 68, 0.05)',
-                    fontWeight: 'bold',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
+                  style={{ padding: '10px 16px', fontSize: '0.8rem', borderColor: 'rgba(239, 68, 68, 0.4)', color: '#f87171', background: 'rgba(239, 68, 68, 0.05)', fontWeight: 'bold' }}
                 >
-                  ❌ Bilmiyorum
+                  ⏩ Kartları Geç ve Teste Başla
                 </button>
-                <button
-                  onClick={() => {
-                    setLearnCardFlipped(false);
-                    handleWordRead();
-                  }}
-                  className="btn-primary"
-                  style={{
-                    padding: '10px 24px',
-                    fontSize: '0.8rem',
-                    background: 'rgba(16, 185, 129, 0.9)',
-                    borderColor: '#10b981',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
-                >
-                  ✅ Biliyorum
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}
