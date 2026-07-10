@@ -913,14 +913,25 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
           customWords = activeProj.words || {};
           
           if (activeProj.progress) {
-            setProgress(activeProj.progress);
+            setProgress(prev => {
+              if (JSON.stringify(prev) !== JSON.stringify(activeProj.progress)) {
+                return activeProj.progress;
+              }
+              return prev;
+            });
           }
           if (activeProj.vocabMeaningSelections) {
-            setVocabMeaningSelections(activeProj.vocabMeaningSelections);
+            setVocabMeaningSelections(prev => {
+              if (JSON.stringify(prev) !== JSON.stringify(activeProj.vocabMeaningSelections)) {
+                return activeProj.vocabMeaningSelections;
+              }
+              return prev;
+            });
           }
-          setTotalCampDays(activeProj.total_days || 0);
+          const nextTotal = activeProj.total_days || 0;
+          setTotalCampDays(prev => prev !== nextTotal ? nextTotal : prev);
         } else {
-          setTotalCampDays(0);
+          setTotalCampDays(prev => prev !== 0 ? 0 : prev);
         }
 
         if (!customGenel) {
@@ -934,7 +945,12 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         }
 
         const loadedInfo = { vocabulary: customGenel };
-        setGeneralInfoMap(loadedInfo);
+        setGeneralInfoMap(prev => {
+          if (JSON.stringify(prev) !== JSON.stringify(loadedInfo)) {
+            return loadedInfo;
+          }
+          return prev;
+        });
 
         Object.keys(customWords).forEach(day => {
           mappedVocab[day] = customWords[day].map((wObj, idx) => {
@@ -955,7 +971,12 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
           });
         });
 
-        setVocabPlanData(mappedVocab);
+        setVocabPlanData(prev => {
+          if (JSON.stringify(prev) !== JSON.stringify(mappedVocab)) {
+            return mappedVocab;
+          }
+          return prev;
+        });
         return;
       }
 

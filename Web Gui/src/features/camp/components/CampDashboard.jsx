@@ -580,7 +580,9 @@ const CampDashboard = ({
               </div>
               <div>
                 <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Kelime İlerlemesi</span>
-                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>{totalDone} / 60 Gün</strong>
+                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>
+                  {selectedCategory === 'custom' ? `${totalDone} / ${totalCampDays} Gün` : `${totalDone} / 60 Gün`}
+                </strong>
               </div>
             </div>
 
@@ -1777,7 +1779,7 @@ const CampDashboard = ({
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
                 <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Tamamlanan Günler</span>
-                <strong style={{ fontSize: '1.5rem', color: 'white' }}>{genStats.totalCompleted} / 60</strong>
+                <strong style={{ fontSize: '1.5rem', color: 'white' }}>{genStats.totalCompleted} / {selectedCategory === 'custom' ? totalCampDays : 60}</strong>
               </div>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
                 <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Başarı Ortalaması</span>
@@ -1801,7 +1803,7 @@ const CampDashboard = ({
               <p style={{ fontSize: '0.78rem', color: '#cbd5e1', lineHeight: 1.5, margin: 0 }}>
                 {genStats.totalCompleted === 0 
                   ? "Henüz kampa başlamadınız. Günlük kelime çalışmalarını tamamladıkça burası sizin için detaylı başarı analizleri üretecektir!" 
-                  : `Tebrikler! Kampın %${Math.round((genStats.totalCompleted / 60) * 100)}'lik kısmını geride bıraktınız. %${genStats.avgScore} başarı ortalaması ile ilerliyorsunuz. ${genStats.failedDaysCount > 0 ? `${genStats.failedDaysCount} günü tekrar etmeniz kelime haznenizi daha da güçlendirecektir.` : 'Harika! Şu ana kadar hata yapmadan tertemiz ilerlediniz!'}`}
+                  : `Tebrikler! Kampın %${Math.round((genStats.totalCompleted / (selectedCategory === 'custom' ? totalCampDays : 60)) * 100)}'lik kısmını geride bıraktınız. %${genStats.avgScore} başarı ortalaması ile ilerliyorsunuz. ${genStats.failedDaysCount > 0 ? `${genStats.failedDaysCount} günü tekrar etmeniz kelime haznenizi daha da güçlendirecektir.` : 'Harika! Şu ana kadar hata yapmadan tertemiz ilerlediniz!'}`}
               </p>
             </div>
 
