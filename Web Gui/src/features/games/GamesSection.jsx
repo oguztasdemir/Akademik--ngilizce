@@ -26,17 +26,21 @@ const GamesSection = ({ selectedCategory, awardPetXp }) => {
   const [vocabList, setVocabList] = useState([]);
 
   useEffect(() => {
+    if (!activeGame) {
+      setVocabList([]);
+      return;
+    }
     const cat = selectedCategory || 'fen';
     const loadVocab = async () => {
       try {
-        const mod = await import(`../../../../Dataset/yokdil/${cat}/minioyunlar/games_vocab.json`);
+        const mod = await import(`../../../../Dataset/yokdil/${cat}/minioyunlar/${activeGame}.json`);
         setVocabList(mod.default || mod);
       } catch (e) {
-        console.error("Error loading games vocab:", e);
+        console.error(`Error loading games vocab for ${activeGame}:`, e);
       }
     };
     loadVocab();
-  }, [selectedCategory]);
+  }, [activeGame, selectedCategory]);
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', paddingBottom: '40px', textAlign: 'left' }}>
