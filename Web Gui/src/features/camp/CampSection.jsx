@@ -5,7 +5,7 @@ import CampDashboard from './components/CampDashboard';
 import CampStudy from './components/CampStudy';
 import CampGrammar from './components/CampGrammar';
 
-const campModules = import.meta.glob('@dataset/**/*.json');
+const campModules = import.meta.glob('../../../../Dataset/**/*.json');
 
 // Helper to resolve dynamically imported dataset modules since Vite alias keys can differ
 
@@ -261,6 +261,16 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       setIsStudyingActive(isStudying);
     }
   }, [isStudying, setIsStudyingActive]);
+
+  useEffect(() => {
+    if (isStudying) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const mainEl = document.querySelector('.app-main');
+      if (mainEl) {
+        mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }, [isStudying]);
 
   // Question/Test States
   const [meaningOptions, setMeaningOptions] = useState([]);

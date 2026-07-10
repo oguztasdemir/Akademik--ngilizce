@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const bookModules = import.meta.glob('@dataset/**/*.json');
+const bookModules = import.meta.glob('../../../Dataset/**/*.json');
 
 const getBookModule = (category, dayNum) => {
   const cat = category || 'fen';

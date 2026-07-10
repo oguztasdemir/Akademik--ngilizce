@@ -121,6 +121,59 @@ const CampDashboard = ({
     return { correct, wrong, unstudied, total };
   })();
 
+  // Calculate vocabStats dynamically based on completedDaysMap and cikmisPlanData for Gelişmiş Kelime Kampı
+  const vocabStats = (() => {
+    let correct = 0;
+    let wrong = 0;
+    let total = 0;
+
+    const doneMap = completedDaysMap || {};
+    const plan = cikmisPlanData || {};
+
+    Object.keys(plan).forEach(dayKey => {
+      const dayWords = plan[dayKey] || [];
+      
+      const filteredWords = dayWords.filter(w => {
+        if (!w) return false;
+        if (vocabTrack === 'es_anlam') {
+          return Array.isArray(w.synonyms) ? w.synonyms.length > 0 : (typeof w.synonyms === 'string' && w.synonyms.trim().length > 0);
+        }
+        if (vocabTrack === 'zit_anlam') {
+          return Array.isArray(w.antonyms) ? w.antonyms.length > 0 : (typeof w.antonyms === 'string' && w.antonyms.trim().length > 0);
+        }
+        return true;
+      });
+
+      total += filteredWords.length;
+
+      const dayRecord = doneMap[dayKey];
+      if (dayRecord) {
+        const results = dayRecord.resultsMap || {};
+        filteredWords.forEach(w => {
+          const eng = w.english;
+          if (!eng) return;
+          if (results[eng] !== undefined) {
+            if (results[eng] === true) {
+              correct += 1;
+            } else {
+              wrong += 1;
+            }
+          } else {
+            const isPassed = !!dayRecord.isPassed;
+            if (isPassed) {
+              correct += 1;
+            } else {
+              wrong += 1;
+            }
+          }
+        });
+      }
+    });
+
+    const unstudied = Math.max(0, total - (correct + wrong));
+    return { correct, wrong, unstudied, total };
+  })();
+
   const [showExportDropdown, setShowExportDropdown] = React.useState(false);
   const [showVocabExportDropdown, setShowVocabExportDropdown] = React.useState(false);
   const [expandedCikmisDay, setExpandedCikmisDay] = React.useState(null);
@@ -492,9 +545,9 @@ const CampDashboard = ({
             </div>
           )}
           {/* Vocabulary Camp Menu */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '20px' }}>
             <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ background: 'rgba(99, 102, 241, 0.12)', padding: '12px', borderRadius: '12px', color: '#6366f1' }}>
+              <div style={{ background: `rgba(${themeColor.rgb}, 0.12)`, padding: '12px', borderRadius: '12px', color: themeColor.hex }}>
                 <Calendar className="h-6 w-6" />
               </div>
               <div>
@@ -504,17 +557,7 @@ const CampDashboard = ({
             </div>
 
             <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ background: 'rgba(16, 185, 129, 0.12)', padding: '12px', borderRadius: '12px', color: '#10b981' }}>
-                <Star className="h-6 w-6" />
-              </div>
-              <div>
-                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Supermaster Kelimeler</span>
-                <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>{totalSupermaster} / {selectedCategory === 'fen' ? 1730 : 1744}</strong>
-              </div>
-            </div>
-
-            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ background: 'rgba(245, 158, 11, 0.12)', padding: '12px', borderRadius: '12px', color: '#f59e0b' }}>
+              <div style={{ background: `rgba(${themeColor.rgb}, 0.12)`, padding: '12px', borderRadius: '12px', color: themeColor.hex }}>
                 <Trophy className="h-6 w-6" />
               </div>
               <div>
@@ -522,13 +565,19 @@ const CampDashboard = ({
                 <strong style={{ fontSize: '1.25rem', color: 'white', display: 'block' }}>Gün #{currentDay}</strong>
               </div>
             </div>
-            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', transition: 'transform 0.2s', border: '1px solid rgba(251, 191, 36, 0.2)' }} onClick={() => setShowGeneralReport(true)}>
-              <div style={{ background: 'rgba(251, 191, 36, 0.12)', padding: '12px', borderRadius: '12px', color: '#fbbf24' }}>
-                <Award className="h-6 w-6" />
+
+            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ background: 'rgba(59, 130, 246, 0.12)', padding: '12px', borderRadius: '12px', color: '#3b82f6' }}>
+                <Sparkles className="h-6 w-6" />
               </div>
               <div style={{ flex: 1 }}>
-                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Kamp Karnesi</span>
-                <strong style={{ fontSize: '0.94rem', color: '#fbbf24', display: 'block', textDecoration: 'underline' }}>Karne & Durum Raporu 📊</strong>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Kelime İstatistikleri</span>
+                <div style={{ display: 'flex', gap: '8px', fontSize: '0.75rem', marginTop: '4px', flexWrap: 'wrap' }}>
+                  <span style={{ color: '#10b981', fontWeight: 'bold' }}>{vocabStats.correct} D</span>
+                  <span style={{ color: '#ef4444', fontWeight: 'bold' }}>{vocabStats.wrong} Y</span>
+                  <span style={{ color: '#94a3b8', fontWeight: 'bold' }}>{vocabStats.unstudied} B</span>
+                  <span style={{ color: '#cbd5e1', fontWeight: '600' }}>({vocabStats.total} Toplam)</span>
+                </div>
               </div>
             </div>
           </div>
