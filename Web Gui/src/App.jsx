@@ -222,6 +222,20 @@ function App() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
 
+  useEffect(() => {
+    if (selectedCategory && selectedCategory !== 'custom') {
+      localStorage.setItem('yokdil_last_standard_category', selectedCategory);
+    }
+  }, [selectedCategory]);
+
+  const handleSetActiveTab = (tabName) => {
+    if (selectedCategory === 'custom' && tabName !== 'camp-vocab') {
+      const lastCat = localStorage.getItem('yokdil_last_standard_category') || 'fen';
+      setSelectedCategory(lastCat);
+    }
+    setActiveTab(tabName);
+  };
+
   // Gamification & Shop States
   const [confetti, setConfetti] = useState([]);
   const [mascotState, setMascotState] = useState('neutral');
@@ -2473,7 +2487,7 @@ function App() {
         <Sidebar
           selectedCategory={selectedCategory}
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          setActiveTab={handleSetActiveTab}
           setSelectedCategory={setSelectedCategory}
           setSelectedExam={setSelectedExam}
           setQuizActive={setQuizActive}
@@ -3606,7 +3620,7 @@ function App() {
               exams={exams}
               answers={answers}
               getStats={getStats}
-              setActiveTab={setActiveTab}
+              setActiveTab={handleSetActiveTab}
               wordStats={wordStats}
               vocabPracticeList={vocabPracticeList}
               notebook={notebook}
