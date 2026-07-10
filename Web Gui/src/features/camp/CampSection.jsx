@@ -4437,7 +4437,7 @@ const handleCikmisSwipeBack = () => {
 
       {renderImportModal()}
 
-      {confirmModal && (
+      {confirmModal && createPortal(
         <div style={{
           position: 'fixed',
           top: 0,
@@ -4527,7 +4527,8 @@ const handleCikmisSwipeBack = () => {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
