@@ -176,7 +176,7 @@ const LecturesSection = ({
             <div className="text-xs text-slate-400 font-bold mb-2">Çalışmak istediğiniz konuyu seçin:</div>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {lecturesList.map(lec => {
+              {Array.isArray(lecturesList) && lecturesList.map(lec => {
                 return (
                   <div 
                     key={lec.id}

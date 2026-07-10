@@ -739,7 +739,9 @@ function App() {
     fetch(`${BACKEND_URL}/api/lectures`)
       .then(res => res.json())
       .then(data => {
-        setLecturesList(data);
+        if (Array.isArray(data)) {
+          setLecturesList(data);
+        }
       })
       .catch(err => console.error("Error fetching lectures:", err));
 
