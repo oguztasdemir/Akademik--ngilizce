@@ -647,14 +647,32 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
             if (typeof parsed.selectedDay === 'number') setSelectedDay(parsed.selectedDay);
             if (typeof parsed.currentIdx === 'number') setCurrentIdx(parsed.currentIdx);
             if (typeof parsed.phase === 'number') setPhase(parsed.phase);
-            setIsStudying(false);
             if (parsed.campType) setCampType(parsed.campType);
             if (typeof parsed.grammarIdx === 'number') setGrammarIdx(parsed.grammarIdx);
+
+            if (parsed.isStudying) {
+              if (parsed.campType === 'vocabulary') {
+                startDailyStudy(parsed.selectedDay, parsed.currentIdx, parsed.phase).then(() => {
+                  isInitializedRef.current = true;
+                });
+              } else if (parsed.campType === 'grammar') {
+                startGrammarStudy(parsed.selectedDay, parsed.grammarIdx, parsed.phase).then(() => {
+                  isInitializedRef.current = true;
+                });
+              } else if (parsed.campType === 'cikmis_kelimeler') {
+                startCikmisStudy(parsed.selectedDay, 'selection', true).then(() => {
+                  isInitializedRef.current = true;
+                });
+              }
+            } else {
+              setIsStudying(false);
+              isInitializedRef.current = true;
+            }
           } else {
             setCampType(initialCampType);
             setIsStudying(false);
+            isInitializedRef.current = true;
           }
-          isInitializedRef.current = true;
         } catch (e) {
           console.error("Error loading camp session:", e);
           setCampType(initialCampType);
