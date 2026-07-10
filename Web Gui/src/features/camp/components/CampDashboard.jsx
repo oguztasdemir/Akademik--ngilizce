@@ -36,7 +36,8 @@ const CampDashboard = ({
   setCikmisMode,
   onExportCikmisData,
   cikmisPlanData,
-  hideSwitcher
+  hideSwitcher,
+  showConfirm
 }) => {
   const [showGeneralReport, setShowGeneralReport] = useState(false);
   const [expandedGrammarDay, setExpandedGrammarDay] = useState(null);
@@ -227,11 +228,16 @@ const CampDashboard = ({
         key={dayNum}
         onClick={() => {
           if (isCompleted) {
-            const restart = window.confirm("Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)");
-            if (restart) {
-              startDailyStudy(dayNum);
+            if (showConfirm) {
+              showConfirm(
+                "Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)",
+                () => startDailyStudy(dayNum),
+                () => setReportCardDay(dayNum)
+              );
             } else {
-              setReportCardDay(dayNum);
+              const restart = window.confirm("Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)");
+              if (restart) startDailyStudy(dayNum);
+              else setReportCardDay(dayNum);
             }
           } else {
             startDailyStudy(dayNum);
@@ -1277,12 +1283,22 @@ const CampDashboard = ({
                     <div
                       onClick={() => {
                         if (isCompleted) {
-                          const restart = window.confirm("Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)");
-                          if (restart) {
-                            startCikmisStudy(dayNum, cikmisMode);
+                          if (showConfirm) {
+                            showConfirm(
+                              "Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)",
+                              () => startCikmisStudy(dayNum, cikmisMode),
+                              () => {
+                                setReportCardType('cikmis_kelimeler');
+                                setReportCardDay(dayNum);
+                              }
+                            );
                           } else {
-                            setReportCardType('cikmis_kelimeler');
-                            setReportCardDay(dayNum);
+                            const restart = window.confirm("Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)");
+                            if (restart) startCikmisStudy(dayNum, cikmisMode);
+                            else {
+                              setReportCardType('cikmis_kelimeler');
+                              setReportCardDay(dayNum);
+                            }
                           }
                         } else {
                           startCikmisStudy(dayNum, cikmisMode);

@@ -237,6 +237,11 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [reportCardDay, setReportCardDay] = useState(null);
   const [reportCardWords, setReportCardWords] = useState([]);
   const [loadingReportCard, setLoadingReportCard] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(null);
+
+  const showConfirm = (message, onConfirm, onCancel, showCancel = true) => {
+    setConfirmModal({ message, onConfirm, onCancel, showCancel });
+  };
 
   // Question/Test States
   const [meaningOptions, setMeaningOptions] = useState([]);
@@ -758,53 +763,57 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     }
   };
 
-  const startCikmisStudy = async (dayNum, mode = 'selection') => {
+  const startCikmisStudy = async (dayNum, mode = 'selection', skipConfirmCheck = false) => {
     const category = selectedCategory || 'fen';
     
     // Check if there is an active session for this day to resume
     const sessionKey = `yokdil_active_cikmis_session_${category}`;
     const rawSession = localStorage.getItem(sessionKey);
-    if (rawSession) {
+    if (rawSession && !skipConfirmCheck) {
       try {
         const session = JSON.parse(rawSession);
         if (session && session.selectedDay === dayNum) {
-          const resume = window.confirm("Bu güne ait yarıda kalmış bir çalışmanız var. Kaldığınız yerden devam etmek ister misiniz?");
-          if (resume) {
-            setSelectedDay(dayNum);
-            setCampType('cikmis_kelimeler');
-            const dayWords = cikmisPlanData[String(dayNum)] || [];
-            const shuffledWords = deterministicShuffle(dayWords, dayNum);
-            setStudyWords(shuffledWords);
-            setIsStudying(true);
-            
-            // Restore all states
-            setStudyMode(session.studyMode || 'swipe');
-            setCurrentIdx(session.currentIdx || 0);
-            setCikmisTransitionStep(session.cikmisTransitionStep !== undefined ? session.cikmisTransitionStep : null);
-            setCikmisSwipeResults(session.cikmisSwipeResults || {});
-            setCikmisMatchingRound(session.cikmisMatchingRound || 0);
-            setCikmisMatchingMoves(session.cikmisMatchingMoves || 0);
-            setCikmisMatchingErrors(session.cikmisMatchingErrors || 0);
-            setCikmisMatchingMistakes(session.cikmisMatchingMistakes || {});
-            setCikmisQuizIdx(session.cikmisQuizIdx || 0);
-            setCikmisQuizMistakes(session.cikmisQuizMistakes || {});
-            
-            setCikmisCardFlipped(false);
-            setCikmisQuizSelected(null);
-            setCikmisQuizChecked(false);
-            setCikmisQuizCorrect(null);
-            
-            // Re-initialize options/cards if in matching or quiz mode
-            if (session.studyMode === 'matching') {
-              initCikmisMatchingRound(dayWords, session.cikmisMatchingRound || 0);
-            } else if (session.studyMode && session.studyMode.startsWith('quiz')) {
-              const quizType = session.studyMode === 'quiz_en_tr' ? 'en_tr' : 'tr_en';
-              generateCikmisQuizOptions(quizType, session.cikmisQuizIdx || 0, dayWords);
+          showConfirm(
+            "Bu güne ait yarıda kalmış bir çalışmanız var. Kaldığınız yerden devam etmek ister misiniz?",
+            () => {
+              // Confirm resume: load states
+              setSelectedDay(dayNum);
+              setCampType('cikmis_kelimeler');
+              const dayWords = cikmisPlanData[String(dayNum)] || [];
+              const shuffledWords = deterministicShuffle(dayWords, dayNum);
+              setStudyWords(shuffledWords);
+              setIsStudying(true);
+              
+              setStudyMode(session.studyMode || 'swipe');
+              setCurrentIdx(session.currentIdx || 0);
+              setCikmisTransitionStep(session.cikmisTransitionStep !== undefined ? session.cikmisTransitionStep : null);
+              setCikmisSwipeResults(session.cikmisSwipeResults || {});
+              setCikmisMatchingRound(session.cikmisMatchingRound || 0);
+              setCikmisMatchingMoves(session.cikmisMatchingMoves || 0);
+              setCikmisMatchingErrors(session.cikmisMatchingErrors || 0);
+              setCikmisMatchingMistakes(session.cikmisMatchingMistakes || {});
+              setCikmisQuizIdx(session.cikmisQuizIdx || 0);
+              setCikmisQuizMistakes(session.cikmisQuizMistakes || {});
+              
+              setCikmisCardFlipped(false);
+              setCikmisQuizSelected(null);
+              setCikmisQuizChecked(false);
+              setCikmisQuizCorrect(null);
+              
+              if (session.studyMode === 'matching') {
+                initCikmisMatchingRound(dayWords, session.cikmisMatchingRound || 0);
+              } else if (session.studyMode && session.studyMode.startsWith('quiz')) {
+                const quizType = session.studyMode === 'quiz_en_tr' ? 'en_tr' : 'tr_en';
+                generateCikmisQuizOptions(quizType, session.cikmisQuizIdx || 0, dayWords);
+              }
+            },
+            () => {
+              // Cancel/Reset: remove session and load fresh
+              localStorage.removeItem(sessionKey);
+              startCikmisStudy(dayNum, mode, true);
             }
-            return;
-          } else {
-            localStorage.removeItem(sessionKey);
-          }
+          );
+          return;
         }
       } catch (e) {
         console.error(e);
@@ -2651,7 +2660,101 @@ const handleCikmisSwipeBack = () => {
         onExportCikmisData={triggerCikmisExport}
         cikmisPlanData={cikmisPlanData}
         hideSwitcher={hideSwitcher || initialCampType === 'cikmis_kelimeler'}
+        showConfirm={showConfirm}
       />
+
+      {confirmModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(15, 23, 42, 0.75)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          animation: 'fadeIn 0.2s ease-out'
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%)',
+            border: '1.5px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4)',
+            borderRadius: '24px',
+            padding: '28px',
+            maxWidth: '440px',
+            width: '90%',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '16px',
+              background: 'rgba(59, 130, 246, 0.12)',
+              color: '#3b82f6',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.5rem',
+              margin: '0 auto 16px auto'
+            }}>
+              ❓
+            </div>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'white', marginBottom: '12px' }}>
+              Onay Gerekiyor
+            </h3>
+            <p style={{ fontSize: '0.88rem', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '24px', whiteSpace: 'pre-line' }}>
+              {confirmModal.message}
+            </p>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button
+                onClick={() => {
+                  confirmModal.onConfirm();
+                  setConfirmModal(null);
+                }}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  borderRadius: '12px',
+                  background: '#3b82f6',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '0.85rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Tamam
+              </button>
+              {confirmModal.showCancel && (
+                <button
+                  onClick={() => {
+                    if (confirmModal.onCancel) confirmModal.onCancel();
+                    setConfirmModal(null);
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '12px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: '#94a3b8',
+                    fontWeight: 'bold',
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  İptal
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
