@@ -194,30 +194,89 @@ const SettingsSection = ({
           </h3>
 
           {/* Theme Settings */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div>
-              <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Arayüz Teması</div>
-              <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Açık veya koyu görünümü seçin.</div>
+              <div style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--text-main)' }}>Arayüz Teması (20 Özel Renk Seçeneği)</div>
+              <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Uygulamayı renklendirmek için bir tema seçin.</div>
             </div>
-            <div>
-              <select
-                value={theme}
-                onChange={(e) => setTheme(e.target.value)}
-                style={{
-                  padding: '6px 12px',
-                  fontSize: '0.75rem',
-                  fontWeight: 'bold',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  color: 'white',
-                  cursor: 'pointer',
-                  outline: 'none'
-                }}
-              >
-                <option value="theme-light" style={{ background: '#0d111c' }}>Açık</option>
-                <option value="theme-dark" style={{ background: '#0d111c' }}>Koyu</option>
-              </select>
+            
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', 
+              gap: '8px', 
+              maxHeight: '260px', 
+              overflowY: 'auto', 
+              paddingRight: '4px',
+              paddingBottom: '4px'
+            }}>
+              {[
+                { key: 'theme-dark', name: 'Koyu Gece', bg: '#090B10', primary: '#4F46E5' },
+                { key: 'theme-cosmic', name: 'Kozmik Mor', bg: '#0B071E', primary: '#8B5CF6' },
+                { key: 'theme-emerald', name: 'Zümrüt Yeşil', bg: '#040D0B', primary: '#10B981' },
+                { key: 'theme-ocean', name: 'Okyanus Mavisi', bg: '#050E1A', primary: '#0EA5E9' },
+                { key: 'theme-sunset', name: 'Kızıl Gök', bg: '#14080B', primary: '#F43F5E' },
+                { key: 'theme-amber', name: 'Altın Kum', bg: '#0F0B05', primary: '#F59E0B' },
+                { key: 'theme-cyberpunk', name: 'Siberpunk', bg: '#030008', primary: '#FF007F' },
+                { key: 'theme-nordic', name: 'Nordik Buz', bg: '#0F171F', primary: '#38BDF8' },
+                { key: 'theme-volcano', name: 'Volkanik Lav', bg: '#0D0C0C', primary: '#EF4444' },
+                { key: 'theme-light', name: 'Açık Klasik', bg: '#f8fafc', primary: '#4f46e5' },
+                { key: 'theme-rosegold', name: 'Gül Kurusu', bg: '#141012', primary: '#FDA4AF' },
+                { key: 'theme-sakura', name: 'Sakura Pembe', bg: '#1D1518', primary: '#F472B6' },
+                { key: 'theme-carbon', name: 'Mat Kömür', bg: '#121212', primary: '#78716C' },
+                { key: 'theme-mocha', name: 'Çikolata Kahve', bg: '#14100D', primary: '#D97706' },
+                { key: 'theme-sapphire', name: 'Kraliyet Laciverti', bg: '#060B18', primary: '#2563EB' },
+                { key: 'theme-mint', name: 'Nane Ferahlığı', bg: '#081410', primary: '#34D399' },
+                { key: 'theme-lime', name: 'Neon Limon', bg: '#0C0F0A', primary: '#84CC16' },
+                { key: 'theme-burgundy', name: 'Bordo Asalet', bg: '#12050A', primary: '#9D174D' },
+                { key: 'theme-synthwave', name: 'Retro Dalga', bg: '#0B091A', primary: '#EC4899' },
+                { key: 'theme-sage', name: 'Eko Doğa', bg: '#0F120E', primary: '#84A98C' }
+              ].map((t) => {
+                const isSelected = theme === t.key;
+                return (
+                  <button
+                    type="button"
+                    key={t.key}
+                    onClick={() => setTheme(t.key)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '6px',
+                      borderRadius: '10px',
+                      background: isSelected ? 'rgba(99,102,241,0.18)' : 'rgba(255,255,255,0.02)',
+                      border: `1.5px solid ${isSelected ? '#6366f1' : 'rgba(255,255,255,0.05)'}`,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'all 0.2s',
+                      width: '100%'
+                    }}
+                  >
+                    {/* Visual Color Preview Box */}
+                    <div style={{
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '6px',
+                      background: t.bg,
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      position: 'relative',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      <div style={{
+                        width: '10px',
+                        height: '10px',
+                        borderRadius: '50%',
+                        background: t.primary
+                      }} />
+                    </div>
+                    <span style={{ fontSize: '0.68rem', color: isSelected ? 'white' : '#cbd5e1', fontWeight: isSelected ? 'bold' : '500' }}>
+                      {t.name}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
