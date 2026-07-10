@@ -124,41 +124,42 @@ const CampDashboard = ({
     return <span>{text}</span>;
   };
 
-  // Calculate stats dynamically based on cikmisPlanData and cikmisDoneMap
+  // Calculate stats dynamically based on cikmisPlanData, generalInfo and cikmisDoneMap
   const stats = (() => {
     let correct = 0;
     let wrong = 0;
-    let total = 0;
     
     const doneMap = cikmisDoneMap || {};
-    const plan = cikmisPlanData || {};
-    
-    Object.keys(plan).forEach(dayKey => {
-      const dayWords = plan[dayKey] || [];
-      total += dayWords.length;
-      
+    Object.keys(doneMap).forEach(dayKey => {
       const dayRecord = doneMap[dayKey];
       if (dayRecord) {
         const results = dayRecord.results || dayRecord.resultsMap || dayRecord.swipeResults || dayRecord.detailedResults || {};
-        dayWords.forEach(w => {
-          if (!w) return;
-          const eng = typeof w === 'string' ? w : w.english;
-          if (!eng) return;
-          const status = results[eng];
-          if (status === true) {
+        Object.keys(results).forEach(wordKey => {
+          if (results[wordKey] === true) {
             correct += 1;
-          } else {
+          } else if (results[wordKey] === false) {
             wrong += 1;
           }
         });
       }
     });
     
+    let total = 0;
+    const plan = cikmisPlanData || {};
+    const planKeys = Object.keys(plan);
+    if (planKeys.length > 0) {
+      planKeys.forEach(dayKey => {
+        total += (plan[dayKey] || []).length;
+      });
+    } else if (generalInfo && generalInfo.total_words) {
+      total = generalInfo.total_words;
+    }
+    
     const unstudied = Math.max(0, total - (correct + wrong));
     return { correct, wrong, unstudied, total };
   })();
 
-  // Calculate vocabStats dynamically based on completedDaysMap and vocabPlanData for Gelişmiş Kelime Kampı
+  // Calculate vocabStats dynamically based on completedDaysMap, generalInfo and vocabPlanData for Gelişmiş Kelime Kampı
   const vocabStats = (() => {
     let correct = 0;
     let wrong = 0;
@@ -166,46 +167,65 @@ const CampDashboard = ({
 
     const doneMap = completedDaysMap || {};
     const plan = vocabPlanData || {};
+    const planKeys = Object.keys(plan);
 
-    Object.keys(plan).forEach(dayKey => {
-      const dayWords = plan[dayKey] || [];
-      
-      const filteredWords = dayWords.filter(w => {
-        if (!w) return false;
-        if (vocabTrack === 'es_anlam') {
-          return Array.isArray(w.synonyms) ? w.synonyms.length > 0 : (typeof w.synonyms === 'string' && w.synonyms.trim().length > 0);
+    if (planKeys.length > 0) {
+      planKeys.forEach(dayKey => {
+        const dayWords = plan[dayKey] || [];
+        const filteredWords = dayWords.filter(w => {
+          if (!w) return false;
+          if (vocabTrack === 'es_anlam') {
+            return Array.isArray(w.synonyms) ? w.synonyms.length > 0 : (typeof w.synonyms === 'string' && w.synonyms.trim().length > 0);
+          }
+          if (vocabTrack === 'zit_anlam') {
+            return Array.isArray(w.antonyms) ? w.antonyms.length > 0 : (typeof w.antonyms === 'string' && w.antonyms.trim().length > 0);
+          }
+          return true;
+        });
+
+        total += filteredWords.length;
+
+        const dayRecord = doneMap[dayKey];
+        if (dayRecord) {
+          const results = dayRecord.resultsMap || {};
+          filteredWords.forEach(w => {
+            const eng = w.english;
+            if (!eng) return;
+            if (results[eng] !== undefined) {
+              if (results[eng] === true) {
+                correct += 1;
+              } else {
+                wrong += 1;
+              }
+            } else {
+              const isPassed = !!dayRecord.isPassed;
+              if (isPassed) {
+                correct += 1;
+              } else {
+                wrong += 1;
+              }
+            }
+          });
         }
-        if (vocabTrack === 'zit_anlam') {
-          return Array.isArray(w.antonyms) ? w.antonyms.length > 0 : (typeof w.antonyms === 'string' && w.antonyms.trim().length > 0);
-        }
-        return true;
       });
-
-      total += filteredWords.length;
-
-      const dayRecord = doneMap[dayKey];
-      if (dayRecord) {
-        const results = dayRecord.resultsMap || {};
-        filteredWords.forEach(w => {
-          const eng = w.english;
-          if (!eng) return;
-          if (results[eng] !== undefined) {
+    } else {
+      if (generalInfo && generalInfo.total_words) {
+        total = generalInfo.total_words;
+      }
+      Object.keys(doneMap).forEach(dayKey => {
+        const dayRecord = doneMap[dayKey];
+        if (dayRecord) {
+          const results = dayRecord.resultsMap || {};
+          Object.keys(results).forEach(eng => {
             if (results[eng] === true) {
               correct += 1;
-            } else {
+            } else if (results[eng] === false) {
               wrong += 1;
             }
-          } else {
-            const isPassed = !!dayRecord.isPassed;
-            if (isPassed) {
-              correct += 1;
-            } else {
-              wrong += 1;
-            }
-          }
-        });
-      }
-    });
+          });
+        }
+      });
+    }
 
     const unstudied = Math.max(0, total - (correct + wrong));
     return { correct, wrong, unstudied, total };

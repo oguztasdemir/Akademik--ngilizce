@@ -513,6 +513,26 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const categoryDict = (dictDb && dictDb[category]) || {};
       const mappedCikmis = {};
       const mappedVocab = {};
+
+      // Load general info for all three camps immediately first
+      const loadedInfo = {};
+      const camps = [
+        { type: 'cikmis_kelimeler', key: `@dataset/yokdil/${category}/kelime_kampi/00_genel.json` },
+        { type: 'vocabulary', key: `@dataset/yokdil/${category}/gelismis_kelime_kampi/00_genel.json` },
+        { type: 'grammar', key: `@dataset/yokdil/${category}/gramer_kampi/00_genel.json` }
+      ];
+      for (const camp of camps) {
+        const loadInfo = getCampModule(camp.key);
+        if (loadInfo) {
+          try {
+            const infoMod = await loadInfo();
+            loadedInfo[camp.type] = infoMod.default || infoMod;
+          } catch (e) {
+            console.error(`Failed to load general info for ${camp.type}:`, e);
+          }
+        }
+      }
+      setGeneralInfoMap(loadedInfo);
       
       // Load Cikmis Kelimeler plan
       for (let day = 1; day <= 60; day++) {
@@ -566,26 +586,6 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         }
       }
       setVocabPlanData(mappedVocab);
-
-      // Load general info for all three camps
-      const loadedInfo = {};
-      const camps = [
-        { type: 'cikmis_kelimeler', key: `@dataset/yokdil/${category}/kelime_kampi/00_genel.json` },
-        { type: 'vocabulary', key: `@dataset/yokdil/${category}/gelismis_kelime_kampi/00_genel.json` },
-        { type: 'grammar', key: `@dataset/yokdil/${category}/gramer_kampi/00_genel.json` }
-      ];
-      for (const camp of camps) {
-        const loadInfo = getCampModule(camp.key);
-        if (loadInfo) {
-          try {
-            const infoMod = await loadInfo();
-            loadedInfo[camp.type] = infoMod.default || infoMod;
-          } catch (e) {
-            console.error(`Failed to load general info for ${camp.type}:`, e);
-          }
-        }
-      }
-      setGeneralInfoMap(loadedInfo);
     };
     loadPlans();
   }, [selectedCategory, dictDb]);
