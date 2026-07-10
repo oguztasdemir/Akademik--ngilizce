@@ -334,30 +334,17 @@ const CampStudy = ({
                   </div>
                 ) : (
                   // Back Side for anlam, es_anlam, zit_anlam, tumu
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: 'center', width: '100%', justifyContent: vocabTrack === 'anlam' ? 'center' : 'flex-start', flex: vocabTrack === 'anlam' ? 1 : 'none' }}>
-                    {vocabTrack !== 'anlam' ? (
-                      <>
-                        <span style={{ fontSize: '0.65rem', color: theme.color, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em' }}>İNGİLİZCE VE TÜRKÇE ANLAMI</span>
-                        <h1 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'white', margin: 0 }}>
-                          {studyWords[currentIdx].word}
-                        </h1>
-                        {studyWords[currentIdx].pronunciation && (
-                          <span style={{ fontSize: '0.94rem', color: '#94a3b8', fontStyle: 'italic', marginTop: '-6px' }}>
-                            /{studyWords[currentIdx].pronunciation}/
-                          </span>
-                        )}
-                        <h2 style={{ fontSize: '1.45rem', fontWeight: '800', color: '#34d399', margin: '4px 0 0 0' }}>
-                          {studyWords[currentIdx].tr}
-                        </h2>
-                      </>
-                    ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, height: '100%' }}>
-                        <span style={{ fontSize: '0.65rem', color: theme.color, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px' }}>TÜRKÇE ANLAMI</span>
-                        <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#34d399', margin: 0, textAlign: 'center' }}>
-                          {studyWords[currentIdx].tr}
-                        </h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: 'center', width: '100%', justifyContent: vocabTrack === 'anlam' ? 'center' : 'flex-start', flex: 1 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: vocabTrack === 'anlam' ? 1 : 'none', width: '100%', margin: vocabTrack === 'anlam' ? 'auto' : '10px 0' }}>
+                      <span style={{ fontSize: '0.65rem', color: theme.color, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px' }}>TÜRKÇE ANLAMI</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                        {studyWords[currentIdx].tr.split(',').map((meaning, mIdx) => (
+                          <h2 key={mIdx} style={{ fontSize: '1.8rem', fontWeight: '800', color: '#34d399', margin: 0, textAlign: 'center' }}>
+                            {meaning.trim()}
+                          </h2>
+                        ))}
                       </div>
-                    )}
+                    </div>
 
                     {/* Sub-camp conditional details */}
                     {(vocabTrack === 'es_anlam' || vocabTrack === 'tumu') && (
