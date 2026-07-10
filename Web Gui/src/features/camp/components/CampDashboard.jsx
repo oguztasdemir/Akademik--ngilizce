@@ -130,6 +130,7 @@ const CampDashboard = ({
 
     const doneMap = completedDaysMap || {};
     const plan = vocabPlanData || {};
+    console.log("vocabStats calculation - plan keys length:", Object.keys(plan).length, "sample day 1 words count:", plan['1'] ? plan['1'].length : 'none');
 
     Object.keys(plan).forEach(dayKey => {
       const dayWords = plan[dayKey] || [];
