@@ -279,19 +279,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       setTotalCampDays(60);
       return;
     }
-    const loadPlanData = async () => {
-      const category = selectedCategory || 'fen';
-      const planKey = `@dataset/yokdil/${category}/kelime_kampi/cikmis_kamp_plani.json`;
-      const loadPlan = getCampModule(planKey);
-      if (loadPlan) {
-        try {
-          const planMod = await loadPlan();
-          const planData = planMod.default || planMod;
-          setTotalCampDays(Object.keys(planData).length);
-        } catch (e) {
-          console.error("Plan yüklenirken hata oluştu:", e);
-        }
-      }
+    const loadPlanData = () => {
+      setTotalCampDays(60);
     };
     loadPlanData();
   }, [selectedCategory, initialCampType]);
@@ -484,31 +473,33 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   useEffect(() => {
     const loadCikmisPlan = async () => {
       const category = selectedCategory || 'fen';
-      const planKey = `@dataset/yokdil/${category}/kelime_kampi/cikmis_kamp_plani.json`;
-      const loadPlan = getCampModule(planKey);
-      if (loadPlan) {
-        try {
-          const planMod = await loadPlan();
-          const planData = planMod.default || planMod;
-          
-          const categoryDict = (dictDb && dictDb[category]) || {};
-          const mappedData = {};
-          
-          Object.keys(planData).forEach(dayKey => {
-            const wordList = planData[dayKey] || [];
-            mappedData[dayKey] = wordList.map((word, idx) => ({
-              id: idx + 1,
-              english: word,
-              turkish: categoryDict[word] || "anlamı bulunamadı",
-              pronunciation: ""
-            }));
-          });
-          
-          setCikmisPlanData(mappedData);
-        } catch (e) {
-          console.error("Cikmis plan data load error:", e);
+      const categoryDict = (dictDb && dictDb[category]) || {};
+      const mappedData = {};
+      
+      // Load from gelismis_kelime_kampi/tumu/day_*.json dynamically
+      for (let day = 1; day <= 60; day++) {
+        const planKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/tumu/day_${day}.json`;
+        const loadPlan = getCampModule(planKey);
+        if (loadPlan) {
+          try {
+            const planMod = await loadPlan();
+            const planData = planMod.default || planMod;
+            const wordList = planData.words || [];
+            mappedData[String(day)] = wordList.map((wObj, idx) => {
+              const eng = typeof wObj === 'string' ? wObj : wObj.word;
+              return {
+                id: idx + 1,
+                english: eng,
+                turkish: wObj.tr || categoryDict[eng] || "anlamı bulunamadı",
+                pronunciation: wObj.pronunciation || ""
+              };
+            });
+          } catch (e) {
+            console.error(`Failed to load day ${day} for category ${category}:`, e);
+          }
         }
       }
+      setCikmisPlanData(mappedData);
     };
     loadCikmisPlan();
   }, [selectedCategory, dictDb]);
