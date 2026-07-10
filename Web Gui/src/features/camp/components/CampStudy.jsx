@@ -71,6 +71,12 @@ const CampStudy = ({
   };
   const theme = getTrackTheme();
 
+  const [learnCardFlipped, setLearnCardFlipped] = useState(false);
+
+  useEffect(() => {
+    setLearnCardFlipped(false);
+  }, [currentIdx, phase]);
+
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const [swipeOffset, setSwipeOffset] = useState(0);
@@ -208,174 +214,225 @@ const CampStudy = ({
           </div>
 
           <div 
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUpOrLeave}
-            onMouseLeave={handleMouseUpOrLeave}
+            onClick={() => setLearnCardFlipped(!learnCardFlipped)}
             style={{ 
               padding: '24px 28px', 
               borderRadius: '24px', 
               background: 'rgba(15, 23, 42, 0.65)', 
-              border: '1px solid rgba(16, 185, 129, 0.25)',
-              boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 0 1px rgba(255, 255, 255, 0.03)',
+              border: `1px solid rgba(${theme.rgb}, 0.35)`,
+              boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 0 1px rgba(255, 255, 255, 0.03)`,
               backdropFilter: 'blur(12px)',
-              minHeight: '400px',
+              minHeight: '380px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               gap: '20px',
               transform: transformStyle,
               transition: transitionStyle,
-              cursor: 'grab'
+              cursor: 'pointer'
             }}
             className="glass-card animate-scale-in"
           >
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '0.65rem', color: '#10b981', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em' }}>İNGİLİZCE KELİME</span>
-              <h1 style={{ 
-                fontSize: studyWords[currentIdx].word.length > 15 ? '1.8rem' : (studyWords[currentIdx].word.length > 10 ? '2.2rem' : '2.6rem'), 
-                fontWeight: '900', 
-                color: '#ffffff', 
-                margin: 0, 
-                letterSpacing: '-0.02em',
-                textShadow: '0 0 20px rgba(16, 185, 129, 0.2)',
-                maxWidth: '100%'
-              }}>
-                {studyWords[currentIdx].word}
-              </h1>
-              
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '4px' }}>
-                <span className="word-badge" style={{ background: 'rgba(255, 255, 255, 0.06)', color: '#cbd5e1', fontSize: '0.68rem', fontWeight: '600', border: '1px solid rgba(255,255,255,0.08)', padding: '3px 10px', borderRadius: '8px' }}>
-                  {formatWordType(studyWords[currentIdx].type)}
+            {!learnCardFlipped ? (
+              // FRONT SIDE OF THE FLIP CARD
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', flex: 1, gap: '20px' }}>
+                <span style={{ fontSize: '0.65rem', color: theme.color, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                  {vocabTrack === 'cumle' ? 'ÖRNEK AKADEMİK CÜMLE (BOŞLUKLU)' : 'İNGİLİZCE KELİME'}
                 </span>
-                {studyWords[currentIdx].priority && (
-                  <span className="word-badge" style={{ 
-                    background: studyWords[currentIdx].priority === 'Çok Yüksek Sıklık' ? 'rgba(239, 68, 68, 0.15)' : (studyWords[currentIdx].priority === 'Yüksek Sıklık' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(99, 102, 241, 0.15)'), 
-                    color: studyWords[currentIdx].priority === 'Çok Yüksek Sıklık' ? '#fca5a5' : (studyWords[currentIdx].priority === 'Yüksek Sıklık' ? '#fcd34d' : '#c7d2fe'), 
-                    fontSize: '0.68rem',
-                    fontWeight: '600',
-                    border: '1px solid rgba(255,255,255,0.05)',
-                    padding: '3px 10px',
-                    borderRadius: '8px'
-                  }}>
-                    🎯 {studyWords[currentIdx].priority}
-                  </span>
-                )}
-              </div>
-              
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '4px' }}>
-                {studyWords[currentIdx].word_count !== undefined && (
-                  <span className="word-badge" style={{ background: 'rgba(99, 102, 241, 0.12)', color: '#a5b4fc', fontSize: '0.68rem', fontWeight: '600', border: '1px solid rgba(255,255,255,0.05)', padding: '3px 10px', borderRadius: '8px' }}>
-                    Sayı: {studyWords[currentIdx].word_count}
-                  </span>
-                )}
-              </div>
-              
-              <div style={{ margin: '10px 0', height: '1px', width: '60px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }} />
-
-              <span style={{ fontSize: '0.65rem', color: '#a5b4fc', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em' }}>TÜRKÇE ANLAMI</span>
-              <h2 style={{ 
-                fontSize: studyWords[currentIdx].tr.length > 25 ? '1.15rem' : (studyWords[currentIdx].tr.length > 15 ? '1.3rem' : '1.5rem'), 
-                fontWeight: '800', 
-                color: '#c7d2fe', 
-                margin: 0,
-                maxWidth: '100%'
-              }}>
-                {studyWords[currentIdx].tr}
-              </h2>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '12px 0' }}>
-              <div style={{ background: 'rgba(99, 102, 241, 0.03)', border: '1px solid rgba(99, 102, 241, 0.1)', padding: '10px 12px', borderRadius: '12px' }}>
-                <span style={{ fontSize: '0.6rem', color: '#a5b4fc', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
-                  🔄 EŞ ANLAMLILAR
-                </span>
-                {getSynonymsList(studyWords[currentIdx]).length > 0 ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {getSynonymsList(studyWords[currentIdx]).map((item, idx) => (
-                      <div key={idx} style={{ fontSize: '0.78rem', color: 'white', fontWeight: '700', lineHeight: '1.2' }}>
-                        {item.eng} {item.tr && <span style={{ color: '#a5b4fc', fontWeight: '500', fontSize: '0.72rem' }}>({item.tr})</span>}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
-                )}
-              </div>
-
-              <div style={{ background: 'rgba(239, 68, 68, 0.03)', border: '1px solid rgba(239, 68, 68, 0.15)', padding: '10px 12px', borderRadius: '12px' }}>
-                <span style={{ fontSize: '0.6rem', color: '#f87171', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
-                  🔀 ZIT ANLAMLILAR
-                </span>
-                {getAntonymsList(studyWords[currentIdx]).length > 0 ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {getAntonymsList(studyWords[currentIdx]).map((item, idx) => (
-                      <div key={idx} style={{ fontSize: '0.78rem', color: 'white', fontWeight: '700', lineHeight: '1.2' }}>
-                        {item.eng} {item.tr && <span style={{ color: '#fca5a5', fontWeight: '500', fontSize: '0.72rem' }}>({item.tr})</span>}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
-                )}
-              </div>
-
-              <div style={{ background: 'rgba(16, 185, 129, 0.03)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '10px 12px', borderRadius: '12px' }}>
-                <span style={{ fontSize: '0.6rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
-                  🔗 BİRLİKTE KULLANIMLAR (COLLOCATIONS)
-                </span>
-                {getCollocationsList(studyWords[currentIdx]).length > 0 ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {getCollocationsList(studyWords[currentIdx]).map((item, idx) => (
-                      <div key={idx} style={{ fontSize: '0.78rem', color: 'white', fontWeight: '700', fontStyle: 'italic', lineHeight: '1.2' }}>
-                        {item.eng} {item.tr && <span style={{ color: '#a7f3d0', fontWeight: '500', fontSize: '0.72rem', fontStyle: 'normal' }}>({item.tr})</span>}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
-                )}
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px 16px', borderRadius: '16px', background: 'rgba(251, 191, 36, 0.03)', border: '1px dashed rgba(251, 191, 36, 0.2)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                <span style={{ fontSize: '0.65rem', color: '#fbbf24', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  📝 ÖRNEK AKADEMİK CÜMLE (YÖKDİL)
-                </span>
-                {studyWords[currentIdx].sentences && (
-                  <button 
-                    onClick={() => setSentenceIdx(prev => (prev + 1) % studyWords[currentIdx].sentences.length)}
-                    style={{
-                      background: 'rgba(251, 191, 36, 0.1)',
-                      border: '1px solid rgba(251, 191, 36, 0.3)',
-                      borderRadius: '6px',
-                      color: '#fbbf24',
-                      padding: '2px 8px',
-                      fontSize: '0.6rem',
-                      cursor: 'pointer',
-                      fontWeight: 'bold',
-                      transition: 'all 0.2s'
-                    }}
-                  >
-                    🔄 Cümleyi Değiştir ({sentenceIdx + 1}/5)
-                  </button>
-                )}
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <p style={{ fontSize: '0.85rem', color: '#ffffff', lineHeight: 1.5, margin: '0 0 6px 0', fontWeight: '500' }}>
-                  "{getSentenceEn(studyWords[currentIdx])}"
-                </p>
-                {getSentenceTr(studyWords[currentIdx]) && (
-                  <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontStyle: 'italic', margin: 0 }}>
-                    {getSentenceTr(studyWords[currentIdx])}
+                
+                {vocabTrack === 'cumle' ? (
+                  <p style={{ fontSize: '1.15rem', color: '#ffffff', lineHeight: 1.6, fontWeight: '500', margin: 0 }}>
+                    "{studyWords[currentIdx].sentences && studyWords[currentIdx].sentences.length > 0
+                      ? (studyWords[currentIdx].sentences[sentenceIdx]?.blanked || studyWords[currentIdx].sentence_blanked || '___')
+                      : '___'}"
                   </p>
+                ) : (
+                  <>
+                    <h1 style={{ 
+                      fontSize: studyWords[currentIdx].word.length > 15 ? '1.8rem' : (studyWords[currentIdx].word.length > 10 ? '2.2rem' : '2.6rem'), 
+                      fontWeight: '900', 
+                      color: '#ffffff', 
+                      margin: 0, 
+                      letterSpacing: '-0.02em',
+                      textShadow: `0 0 20px rgba(${theme.rgb}, 0.25)`,
+                      maxWidth: '100%'
+                    }}>
+                      {studyWords[currentIdx].word}
+                    </h1>
+                    
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '4px' }}>
+                      <span className="word-badge" style={{ background: 'rgba(255, 255, 255, 0.06)', color: '#cbd5e1', fontSize: '0.68rem', fontWeight: '600', border: '1px solid rgba(255,255,255,0.08)', padding: '3px 10px', borderRadius: '8px' }}>
+                        {formatWordType(studyWords[currentIdx].type)}
+                      </span>
+                      {studyWords[currentIdx].priority && (
+                        <span className="word-badge" style={{ 
+                          background: studyWords[currentIdx].priority === 'Çok Yüksek Sıklık' ? 'rgba(239, 68, 68, 0.15)' : (studyWords[currentIdx].priority === 'Yüksek Sıklık' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(99, 102, 241, 0.15)'), 
+                          color: studyWords[currentIdx].priority === 'Çok Yüksek Sıklık' ? '#fca5a5' : (studyWords[currentIdx].priority === 'Yüksek Sıklık' ? '#fcd34d' : '#c7d2fe'), 
+                          fontSize: '0.68rem',
+                          fontWeight: '600',
+                          border: '1px solid rgba(255,255,255,0.05)',
+                          padding: '3px 10px',
+                          borderRadius: '8px'
+                        }}>
+                          🎯 {studyWords[currentIdx].priority}
+                        </span>
+                      )}
+                    </div>
+                  </>
                 )}
+                
+                <span style={{ fontSize: '0.74rem', color: '#64748b', display: 'block', marginTop: '12px' }}>
+                  Detayları ve Türkçe anlamını görmek için tıkla (Kartı Döndür)
+                </span>
               </div>
-            </div>
+            ) : (
+              // BACK SIDE OF THE FLIP CARD
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1, gap: '20px', textAlign: 'center' }}>
+                {vocabTrack === 'cumle' ? (
+                  // Back Side for Cümle Kampı
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                    <span style={{ fontSize: '0.65rem', color: theme.color, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em' }}>CÜMLE ÇÖZÜMÜ VE ANLAMI</span>
+                    
+                    <div style={{ textAlign: 'left', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)', width: '100%' }}>
+                      <p style={{ fontSize: '1rem', color: '#ffffff', lineHeight: 1.6, fontWeight: '600', margin: '0 0 10px 0' }}>
+                        "{getSentenceEn(studyWords[currentIdx])}"
+                      </p>
+                      {getSentenceTr(studyWords[currentIdx]) && (
+                        <p style={{ fontSize: '0.88rem', color: '#a7f3d0', fontStyle: 'italic', margin: 0, fontWeight: '600' }}>
+                          {getSentenceTr(studyWords[currentIdx])}
+                        </p>
+                      )}
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.04)', padding: '8px 16px', borderRadius: '10px' }}>
+                      <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>Ana Kelime: <strong>{studyWords[currentIdx].word}</strong> ({studyWords[currentIdx].tr})</span>
+                    </div>
+
+                    {studyWords[currentIdx].sentences && studyWords[currentIdx].sentences.length > 1 && (
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent re-flipping when clicking button
+                          setSentenceIdx(prev => (prev + 1) % studyWords[currentIdx].sentences.length);
+                        }}
+                        style={{
+                          background: 'rgba(245, 158, 11, 0.1)',
+                          border: '1px solid rgba(245, 158, 11, 0.3)',
+                          borderRadius: '8px',
+                          color: '#fbbf24',
+                          padding: '6px 14px',
+                          fontSize: '0.74rem',
+                          cursor: 'pointer',
+                          fontWeight: 'bold',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        🔄 Sonraki Örnek Cümleye Geç ({sentenceIdx + 1}/{studyWords[currentIdx].sentences.length})
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  // Back Side for anlam, es_anlam, zit_anlam, tumu
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: 'center', width: '100%' }}>
+                    <span style={{ fontSize: '0.65rem', color: theme.color, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em' }}>İNGİLİZCE VE TÜRKÇE ANLAMI</span>
+                    
+                    <h1 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'white', margin: 0 }}>
+                      {studyWords[currentIdx].word}
+                    </h1>
+                    {studyWords[currentIdx].pronunciation && (
+                      <span style={{ fontSize: '0.94rem', color: '#94a3b8', fontStyle: 'italic', marginTop: '-6px' }}>
+                        /{studyWords[currentIdx].pronunciation}/
+                      </span>
+                    )}
+
+                    <h2 style={{ fontSize: '1.45rem', fontWeight: '800', color: '#34d399', margin: '4px 0 0 0' }}>
+                      {studyWords[currentIdx].tr}
+                    </h2>
+
+                    {/* Sub-camp conditional details */}
+                    {(vocabTrack === 'es_anlam' || vocabTrack === 'tumu') && (
+                      <div style={{ width: '100%', marginTop: '10px' }}>
+                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '14px 0' }} />
+                        <span style={{ fontSize: '0.65rem', color: '#a855f7', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '8px', letterSpacing: '0.08em' }}>
+                          🔄 EŞ ANLAMLILAR VE TÜRKÇELERİ
+                        </span>
+                        {getSynonymsList(studyWords[currentIdx]).length > 0 ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+                            {getSynonymsList(studyWords[currentIdx]).map((item, idx) => (
+                              <div key={idx} style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700' }}>
+                                {item.eng} {item.tr && <span style={{ color: '#a5b4fc', fontWeight: '500', fontSize: '0.8rem' }}>({item.tr})</span>}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
+                        )}
+                      </div>
+                    )}
+
+                    {(vocabTrack === 'zit_anlam' || vocabTrack === 'tumu') && (
+                      <div style={{ width: '100%', marginTop: '10px' }}>
+                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '14px 0' }} />
+                        <span style={{ fontSize: '0.65rem', color: '#f43f5e', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '8px', letterSpacing: '0.08em' }}>
+                          🔀 ZIT ANLAMLILAR VE TÜRKÇELERİ
+                        </span>
+                        {getAntonymsList(studyWords[currentIdx]).length > 0 ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+                            {getAntonymsList(studyWords[currentIdx]).map((item, idx) => (
+                              <div key={idx} style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700' }}>
+                                {item.eng} {item.tr && <span style={{ color: '#fca5a5', fontWeight: '500', fontSize: '0.8rem' }}>({item.tr})</span>}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
+                        )}
+                      </div>
+                    )}
+
+                    {vocabTrack === 'tumu' && (
+                      <>
+                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '14px 0' }} />
+                        
+                        <span style={{ fontSize: '0.65rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '8px', letterSpacing: '0.08em' }}>
+                          🔗 BİRLİKTE KULLANIMLAR (COLLOCATIONS)
+                        </span>
+                        {getCollocationsList(studyWords[currentIdx]).length > 0 ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+                            {getCollocationsList(studyWords[currentIdx]).map((item, idx) => (
+                              <div key={idx} style={{ fontSize: '0.82rem', color: 'white', fontWeight: '700', fontStyle: 'italic' }}>
+                                {item.eng} {item.tr && <span style={{ color: '#a7f3d0', fontWeight: '500', fontSize: '0.76rem', fontStyle: 'normal' }}>({item.tr})</span>}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p style={{ fontSize: '0.82rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
+                        )}
+
+                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '14px 0' }} />
+
+                        <span style={{ fontSize: '0.65rem', color: '#fbbf24', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '8px', letterSpacing: '0.08em' }}>
+                          ÖRNEK AKADEMİK CÜMLE (YÖKDİL)
+                        </span>
+                        <div style={{ textAlign: 'left', background: 'rgba(251, 191, 36, 0.03)', padding: '12px 14px', borderRadius: '12px', border: '1px dashed rgba(251, 191, 36, 0.2)' }}>
+                          <p style={{ fontSize: '0.84rem', color: 'white', margin: '0 0 6px 0', lineHeight: 1.5, fontWeight: '500' }}>
+                            "{getSentenceEn(studyWords[currentIdx])}"
+                          </p>
+                          {getSentenceTr(studyWords[currentIdx]) && (
+                            <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontStyle: 'italic', margin: 0 }}>
+                              {getSentenceTr(studyWords[currentIdx])}
+                            </p>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                <span style={{ fontSize: '0.7rem', color: '#64748b', display: 'block', marginTop: '12px' }}>
+                  Ön yüzü görmek için tıklayın (Kartı Döndür)
+                </span>
+              </div>
+            )}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px' }}>
