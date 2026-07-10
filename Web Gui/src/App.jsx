@@ -765,15 +765,20 @@ function App() {
     if (savedNotebook) {
       try {
         const parsed = JSON.parse(savedNotebook);
-        const normalized = parsed.map(item => ({
-          id: item.id || Date.now() + Math.random(),
-          english: item.english || item.word || '',
-          turkish: item.turkish || item.translation || '',
-          status: item.status || 'learning'
-        }));
-        setNotebook(normalized);
+        if (Array.isArray(parsed)) {
+          const normalized = parsed.map(item => ({
+            id: item.id || Date.now() + Math.random(),
+            english: item.english || item.word || '',
+            turkish: item.turkish || item.translation || '',
+            status: item.status || 'learning'
+          }));
+          setNotebook(normalized);
+        } else {
+          setNotebook([]);
+        }
       } catch (e) {
         console.error("Error loading notebook:", e);
+        setNotebook([]);
       }
     }
   }, []);
