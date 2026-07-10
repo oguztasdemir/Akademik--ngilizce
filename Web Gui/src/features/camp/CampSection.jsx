@@ -260,6 +260,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [importStatus, setImportStatus] = useState('');
   const [importTimeLeft, setImportTimeLeft] = useState(0);
   const [importErrors, setImportErrors] = useState([]);
+  const [importSuccessCount, setImportSuccessCount] = useState(0);
   const [projects, setProjects] = useState(() => {
     const saved = localStorage.getItem('yokdil_custom_projects');
     if (saved) {
