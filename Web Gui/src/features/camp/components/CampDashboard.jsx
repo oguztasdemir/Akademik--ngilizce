@@ -976,72 +976,21 @@ const CampDashboard = ({
               </div>
             </div>
 
-            <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px', position: 'relative' }}>
-              <div style={{ background: 'rgba(251, 191, 36, 0.12)', padding: '12px', borderRadius: '12px', color: '#fbbf24' }}>
-                <i className="fa-solid fa-file-export" style={{ fontSize: '1.25rem' }}></i>
-              </div>
-              <div style={{ flex: 1 }}>
-                <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Karne Raporu</span>
-                <button
-                  onClick={() => setShowGrammarExportDropdown(!showGrammarExportDropdown)}
-                  className="glass-button"
-                  style={{
-                    marginTop: '4px',
-                    padding: '6px 12px',
-                    borderRadius: '8px',
-                    fontSize: '0.75rem',
-                    fontWeight: 'bold',
-                    color: '#fbbf24',
-                    borderColor: 'rgba(251, 191, 36, 0.4)',
-                    cursor: 'pointer',
-                    width: '100%',
-                    textAlign: 'center'
-                  }}
-                >
-                  📤 Dışarı Aktar
-                </button>
-                {showGrammarExportDropdown && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    marginTop: '8px',
-                    background: '#151c2c',
-                    border: '1.5px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
-                    zIndex: 50,
-                    minWidth: '180px',
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}>
-                    <button 
-                      onClick={() => { onExportGrammarData('pdf'); setShowGrammarExportDropdown(false); }}
-                      className="hover-card"
-                      style={{ background: 'none', border: 'none', width: '100%', padding: '10px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#a7f3d0', textAlign: 'left' }}
-                    >
-                      <span>📄</span> PDF Belgesi (.pdf)
-                    </button>
-                    <button 
-                      onClick={() => { onExportGrammarData('docx'); setShowGrammarExportDropdown(false); }}
-                      className="hover-card"
-                      style={{ background: 'none', border: 'none', width: '100%', padding: '10px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#93c5fd', textAlign: 'left' }}
-                    >
-                      <span>📝</span> Word Belgesi (.doc)
-                    </button>
-                    <button 
-                      onClick={() => { onExportGrammarData('xlsx'); setShowGrammarExportDropdown(false); }}
-                      className="hover-card"
-                      style={{ background: 'none', border: 'none', width: '100%', padding: '10px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#fde047', textAlign: 'left' }}
-                    >
-                      <span>📊</span> Excel Raporu (.xls)
-                    </button>
+            {(() => {
+              const scores = Object.values(grammarDoneMap || {}).map(d => d.score || 0);
+              const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+              return (
+                <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ background: 'rgba(139, 92, 246, 0.12)', padding: '12px', borderRadius: '12px', color: '#8b5cf6' }}>
+                    <Sparkles className="h-6 w-6" />
                   </div>
-                )}
-              </div>
-            </div>
+                  <div>
+                    <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>Ortalama Başarı</span>
+                    <strong style={{ fontSize: '1.25rem', color: '#34d399', display: 'block' }}>%{avgScore}</strong>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
 
@@ -1059,32 +1008,84 @@ const CampDashboard = ({
               const completedObj = grammarDoneMap[currentGrammarDay];
               const isPassed = completedObj ? completedObj.isPassed : false;
               
-              if (completedObj && isPassed) {
-                return (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+                  {completedObj && isPassed && (
                     <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                       🎉 Bugünün dilbilgisi çalışmasını %{completedObj.score} başarıyla tamamladınız!
                     </div>
-                    <button
-                      onClick={() => startGrammarStudy(currentGrammarDay)}
-                      className="btn-secondary"
-                      style={{ padding: '8px 24px', fontSize: '0.8rem', borderRadius: '10px', cursor: 'pointer' }}
-                    >
-                      Tekrar Çalış (Puan Yükselt)
-                    </button>
+                  )}
+                  <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    {completedObj && isPassed ? (
+                      <button
+                        onClick={() => startGrammarStudy(currentGrammarDay)}
+                        className="btn-secondary"
+                        style={{ padding: '14px 28px', fontSize: '0.94rem', borderRadius: '14px', cursor: 'pointer' }}
+                      >
+                        Tekrar Çalış (Puan Yükselt)
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => startGrammarStudy(currentGrammarDay)}
+                        className="btn-primary"
+                        style={{ padding: '14px 36px', fontSize: '0.94rem', fontWeight: 'bold', borderRadius: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#10b981', borderColor: '#10b981' }}
+                      >
+                        Gün #{currentGrammarDay} Gramer Çalışmasını Başlat <ArrowRight className="h-4 w-4" />
+                      </button>
+                    )}
+
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                      <button
+                        onClick={() => setShowGrammarExportDropdown(!showGrammarExportDropdown)}
+                        className="btn-secondary"
+                        style={{ padding: '14px 28px', fontSize: '0.94rem', fontWeight: 'bold', borderRadius: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                      >
+                        📤 Karne Raporunu Dışarı Aktar
+                      </button>
+                      {showGrammarExportDropdown && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '100%',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          marginTop: '8px',
+                          background: '#151c2c',
+                          border: '1.5px solid rgba(255, 255, 255, 0.08)',
+                          borderRadius: '12px',
+                          boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                          zIndex: 50,
+                          minWidth: '220px',
+                          overflow: 'hidden',
+                          display: 'flex',
+                          flexDirection: 'column'
+                        }}>
+                          <div 
+                            onClick={() => { onExportGrammarData('pdf'); setShowGrammarExportDropdown(false); }}
+                            className="hover-card"
+                            style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#a7f3d0', textAlign: 'left' }}
+                          >
+                            <span>📄</span> PDF Belgesi (.pdf)
+                          </div>
+                          <div 
+                            onClick={() => { onExportGrammarData('docx'); setShowGrammarExportDropdown(false); }}
+                            className="hover-card"
+                            style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#93c5fd', textAlign: 'left' }}
+                          >
+                            <span>📝</span> Microsoft Word (.docx)
+                          </div>
+                          <div 
+                            onClick={() => { onExportGrammarData('xlsx'); setShowGrammarExportDropdown(false); }}
+                            className="hover-card"
+                            style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: '#fde047', textAlign: 'left' }}
+                          >
+                            <span>📊</span> Microsoft Excel (.xlsx)
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                );
-              } else {
-                return (
-                  <button
-                    onClick={() => startGrammarStudy(currentGrammarDay)}
-                    className="btn-primary"
-                    style={{ padding: '14px 36px', fontSize: '0.94rem', fontWeight: 'bold', borderRadius: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#10b981', borderColor: '#10b981' }}
-                  >
-                    Gün #{currentGrammarDay} Gramer Çalışmasını Başlat <ArrowRight className="h-4 w-4" />
-                  </button>
-                );
-              }
+                </div>
+              );
             })()}
           </div>
 
