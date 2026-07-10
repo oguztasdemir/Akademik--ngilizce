@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Star, Trophy, ArrowRight, Award, Sparkles } from 'lucide-react';
+import { Calendar, Star, Trophy, ArrowRight, Award, Sparkles, Info } from 'lucide-react';
 
 const CampDashboard = ({
   campType,
@@ -38,11 +38,47 @@ const CampDashboard = ({
   onExportVocabData,
   cikmisPlanData,
   vocabPlanData,
+  generalInfo,
   hideSwitcher,
   showConfirm
 }) => {
   const [showGeneralReport, setShowGeneralReport] = useState(false);
   const [expandedGrammarDay, setExpandedGrammarDay] = useState(null);
+
+  const renderGeneralInfoBanner = () => {
+    if (!generalInfo) return null;
+    return (
+      <div className="glass-card" style={{ 
+        padding: '16px 20px', 
+        borderRadius: '16px', 
+        background: 'rgba(255, 255, 255, 0.02)', 
+        border: '1.5px solid rgba(255, 255, 255, 0.08)',
+        textAlign: 'left',
+        marginBottom: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#3b82f6', fontWeight: 'bold', fontSize: '0.9rem' }}>
+          <Info className="h-5 w-5" />
+          <span>Kamp Değerlendirme Bilgisi</span>
+        </div>
+        <p style={{ margin: 0, fontSize: '0.86rem', color: '#e2e8f0', lineHeight: 1.5 }}>
+          {generalInfo.description}
+        </p>
+        <div style={{ display: 'flex', gap: '16px', fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px', flexWrap: 'wrap' }}>
+          <span>📅 Süre: <strong>{generalInfo.total_days} Gün</strong></span>
+          {generalInfo.total_words !== undefined && (
+            <span>🔤 Toplam Kelime: <strong>{generalInfo.total_words}</strong></span>
+          )}
+          {generalInfo.total_lectures !== undefined && (
+            <span>📖 Toplam Ders: <strong>{generalInfo.total_lectures}</strong></span>
+          )}
+          <span>📂 Toplam Dosya: <strong>{generalInfo.files_count} Adet</strong></span>
+        </div>
+      </div>
+    );
+  };
 
   const calculateGeneralStats = () => {
     const doneMap = completedDaysMap || {};
@@ -583,6 +619,8 @@ const CampDashboard = ({
             </div>
           </div>
 
+          {renderGeneralInfoBanner()}
+
           {/* Start Daily Button Card */}
           <div className="glass-card text-center" style={{ padding: '36px 20px', borderRadius: '24px', background: `linear-gradient(135deg, rgba(${themeColor.rgb}, 0.1) 0%, rgba(16, 185, 129, 0.04) 100%)`, border: `1.5px solid rgba(${themeColor.rgb}, 0.25)` }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'white', margin: 0 }}>
@@ -896,6 +934,8 @@ const CampDashboard = ({
             </div>
           </div>
 
+          {renderGeneralInfoBanner()}
+
           {/* Start Grammar Camp Card */}
           <div className="glass-card text-center" style={{ padding: '36px 20px', borderRadius: '24px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(99, 102, 241, 0.04) 100%)', border: '1.5px solid rgba(16, 185, 129, 0.25)' }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'white', margin: 0 }}>
@@ -1160,6 +1200,8 @@ const CampDashboard = ({
               </div>
             </div>
           </div>
+
+          {renderGeneralInfoBanner()}
 
           {/* Start Çıkmış Kelimeler Camp Card */}
           <div className="glass-card text-center" style={{ padding: '30px 20px', borderRadius: '24px', background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(99, 102, 241, 0.04) 100%)', border: '1.5px solid rgba(239, 68, 68, 0.25)', marginBottom: '24px' }}>
