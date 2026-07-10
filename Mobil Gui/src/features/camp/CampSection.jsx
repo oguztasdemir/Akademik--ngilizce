@@ -1000,57 +1000,63 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       }
       setGeneralInfoMap(loadedInfo);
       
-      // Load Cikmis Kelimeler plan
+      // Load Cikmis Kelimeler plan in parallel
+      const cikmisPromises = [];
       for (let day = 1; day <= 60; day++) {
         const planKey = `@dataset/yokdil/${category}/kelime_kampi/day_${day}.json`;
         const loadPlan = getCampModule(planKey);
         if (loadPlan) {
-          try {
-            const planMod = await loadPlan();
-            const planData = planMod.default || planMod;
-            const wordList = planData.words || [];
-            mappedCikmis[String(day)] = wordList.map((wObj, idx) => {
-              const eng = typeof wObj === 'string' ? wObj : wObj.word;
-              return {
-                id: idx + 1,
-                english: eng,
-                turkish: wObj.tr || categoryDict[eng] || "anlamı bulunamadı",
-                pronunciation: wObj.pronunciation || ""
-              };
-            });
-          } catch (e) {
-            console.error(`Failed to load day ${day} for category ${category}:`, e);
-          }
+          cikmisPromises.push(
+            loadPlan().then(planMod => {
+              const planData = planMod.default || planMod;
+              const wordList = planData.words || [];
+              mappedCikmis[String(day)] = wordList.map((wObj, idx) => {
+                const eng = typeof wObj === 'string' ? wObj : wObj.word;
+                return {
+                  id: idx + 1,
+                  english: eng,
+                  turkish: wObj.tr || categoryDict[eng] || "anlamı bulunamadı",
+                  pronunciation: wObj.pronunciation || ""
+                };
+              });
+            }).catch(e => {
+              console.error(`Failed to load day ${day} for category ${category}:`, e);
+            })
+          );
         }
       }
-      setCikmisPlanData(mappedCikmis);
 
-      // Load Gelişmiş Kelime Kampı (1500+ academic words) plan
+      // Load Gelişmiş Kelime Kampı (1500+ academic words) plan in parallel
+      const vocabPromises = [];
       for (let day = 1; day <= 60; day++) {
         const planKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${day}.json`;
         const loadPlan = getCampModule(planKey);
         if (loadPlan) {
-          try {
-            const planMod = await loadPlan();
-            const planData = planMod.default || planMod;
-            const wordList = planData.words || [];
-            mappedVocab[String(day)] = wordList.map((wObj, idx) => {
-              const eng = typeof wObj === 'string' ? wObj : wObj.word;
-              return {
-                id: idx + 1,
-                english: eng,
-                turkish: wObj.tr || categoryDict[eng] || "anlamı bulunamadı",
-                pronunciation: wObj.pronunciation || "",
-                synonyms: wObj.synonyms || "",
-                antonyms: wObj.antonyms || "",
-                sentences: wObj.sentences || []
-              };
-            });
-          } catch (e) {
-            console.error(`Failed to load vocab day ${day} for category ${category}:`, e);
-          }
+          vocabPromises.push(
+            loadPlan().then(planMod => {
+              const planData = planMod.default || planMod;
+              const wordList = planData.words || [];
+              mappedVocab[String(day)] = wordList.map((wObj, idx) => {
+                const eng = typeof wObj === 'string' ? wObj : wObj.word;
+                return {
+                  id: idx + 1,
+                  english: eng,
+                  turkish: wObj.tr || categoryDict[eng] || "anlamı bulunamadı",
+                  pronunciation: wObj.pronunciation || "",
+                  synonyms: wObj.synonyms || "",
+                  antonyms: wObj.antonyms || "",
+                  sentences: wObj.sentences || []
+                };
+              });
+            }).catch(e => {
+              console.error(`Failed to load vocab day ${day} for category ${category}:`, e);
+            })
+          );
         }
       }
+
+      await Promise.all([...cikmisPromises, ...vocabPromises]);
+      setCikmisPlanData(mappedCikmis);
       setVocabPlanData(mappedVocab);
     };
     loadPlans();
