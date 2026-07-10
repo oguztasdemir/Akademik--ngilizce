@@ -21,9 +21,15 @@ const GAMES_CATALOG = [
   { id: 'definition', name: '9. Tanım Bulmaca', desc: 'İngilizce tanımı verilen akademik kelimeyi tahmin edin.', color: '#14b8a6', icon: 'fa-book-bookmark' }
 ];
 
-const GamesSection = ({ selectedCategory, awardPetXp }) => {
+const GamesSection = ({ selectedCategory, awardPetXp, setIsStudyingActive }) => {
   const [activeGame, setActiveGame] = useState(null);
   const [vocabList, setVocabList] = useState([]);
+
+  useEffect(() => {
+    if (setIsStudyingActive) {
+      setIsStudyingActive(activeGame !== null);
+    }
+  }, [activeGame, setIsStudyingActive]);
 
   useEffect(() => {
     if (!activeGame) {

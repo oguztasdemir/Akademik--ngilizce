@@ -29,12 +29,18 @@ const formatWordType = (type) => {
   return type;
 };
 
-const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selectedDay, setSelectedDay, completedDays, setCompletedDays, addMistake, selectedCategory }) => {
+const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selectedDay, setSelectedDay, completedDays, setCompletedDays, addMistake, selectedCategory, setIsStudyingActive }) => {
   const totalDays = 62;
   const [currentDayData, setCurrentDayData] = useState(null);
   const [loadingDay, setLoadingDay] = useState(false);
   const [showEvaluationChoice, setShowEvaluationChoice] = useState(false);
   const [isEvaluationMode, setIsEvaluationMode] = useState(false);
+
+  useEffect(() => {
+    if (setIsStudyingActive) {
+      setIsStudyingActive(currentDayData !== null);
+    }
+  }, [currentDayData, setIsStudyingActive]);
 
   const startNormalStudy = () => {
     setShowEvaluationChoice(false);

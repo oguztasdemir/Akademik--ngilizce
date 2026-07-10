@@ -13,8 +13,14 @@ const LecturesSection = ({
   incrementDailyQuestions,
   incrementDailyLectures,
   handleTextSelection,
-  selectedCategory
+  selectedCategory,
+  setIsStudyingActive
 }) => {
+  useEffect(() => {
+    if (setIsStudyingActive) {
+      setIsStudyingActive(activeLecture !== null);
+    }
+  }, [activeLecture, setIsStudyingActive]);
   const renderInteractiveSentence = (text) => {
     return text || '';
   };

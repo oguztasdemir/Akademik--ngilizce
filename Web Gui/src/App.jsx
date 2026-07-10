@@ -349,6 +349,7 @@ function App() {
   const [lecturesList, setLecturesList] = useState(FALLBACK_LECTURES);
   const [activeLecture, setActiveLecture] = useState(null);
   const [lectureLoading, setLectureLoading] = useState(false);
+  const [isStudyingActive, setIsStudyingActive] = useState(false);
 
   // Dictionary / Translator States
   const [selectedText, setSelectedText] = useState('');
@@ -1131,7 +1132,7 @@ function App() {
     setQuizActive(true);
   };
 
-  const startTopicQuizSession = (topicKey) => {
+  const startTopicQuizSession = async (topicKey) => {
     let startIdx = 1;
     let endIdx = 80;
 
@@ -1146,21 +1147,41 @@ function App() {
     else if (topicKey === 'irrelevant_sentence') { startIdx = 60; endIdx = 65; }
     else if (topicKey === 'reading') { startIdx = 66; endIdx = 80; }
 
+    setLoading(true);
+    const category = selectedCategory || 'fen';
+    
+    // Load all exam details dynamically
+    const loadedExams = [];
+    const categoryKeys = Object.keys(examDetailModules).filter(k => k.includes(`yokdil/${category}/cikmis_sinavlar/`) && !k.endsWith('sinav_listesi.json'));
+    
+    for (const key of categoryKeys) {
+      try {
+        const loader = examDetailModules[key];
+        const module = await loader();
+        const fullExam = module.default || module;
+        loadedExams.push(fullExam);
+      } catch (e) {
+        console.error("Failed to load exam for topic quiz:", key, e);
+      }
+    }
+    
+    setLoading(false);
+
     let collectedQuestions = [];
-    if (Array.isArray(exams)) {
-      exams.forEach(ex => {
+    loadedExams.forEach(ex => {
+      if (ex.questions) {
         ex.questions.forEach(q => {
           if (q.number >= startIdx && q.number <= endIdx) {
             collectedQuestions.push({
               ...q,
               examId: ex.id,
               examName: ex.name,
-              correctAnswer: ex.answers[q.number - 1]
+              correctAnswer: q.correct_answer || q.correct_option
             });
           }
         });
-      });
-    }
+      }
+    });
 
     if (collectedQuestions.length === 0) {
       alert("Bu konu için soru bulunamadı.");
@@ -3515,6 +3536,7 @@ function App() {
                   dictDb={{ fen: fallbackDictFen, sosyal: fallbackDictSosyal, saglik: fallbackDictSaglik }}
                   recordWordStat={recordWordStat}
                   addMistake={addMistake}
+                  setIsStudyingActive={setIsStudyingActive}
                 />
               </section>
             )}
@@ -3531,6 +3553,7 @@ function App() {
               handleAddCustomWord={handleAddCustomWord}
               logStudyActivity={logStudyActivity}
               addMistake={addMistake}
+              setIsStudyingActive={setIsStudyingActive}
             />
 
             {/* TAB 3.6: YDS BOOK EXERCISES SECTION */}
@@ -3543,6 +3566,7 @@ function App() {
               completedDays={bookCompletedDays}
               setCompletedDays={setBookCompletedDays}
               addMistake={addMistake}
+              setIsStudyingActive={setIsStudyingActive}
             />
 
             {/* TAB 4: LECTURES SECTION */}
@@ -3564,6 +3588,7 @@ function App() {
               incrementDailyLectures={incrementDailyLectures}
               handleTextSelection={handleTextSelection}
               selectedCategory={selectedCategory}
+              setIsStudyingActive={setIsStudyingActive}
             />
 
              <MistakeInbox
@@ -3633,6 +3658,7 @@ function App() {
                   dictDb={{ fen: fallbackDictFen, sosyal: fallbackDictSosyal, saglik: fallbackDictSaglik }}
                   recordWordStat={recordWordStat}
                   addMistake={addMistake}
+                  setIsStudyingActive={setIsStudyingActive}
                   vocabTrack={vocabTrack}
                   setVocabTrack={setVocabTrack}
                 />
@@ -3653,6 +3679,7 @@ function App() {
                   dictDb={{ fen: fallbackDictFen, sosyal: fallbackDictSosyal, saglik: fallbackDictSaglik }}
                   recordWordStat={recordWordStat}
                   addMistake={addMistake}
+                  setIsStudyingActive={setIsStudyingActive}
                   vocabTrack={vocabTrack}
                   setVocabTrack={setVocabTrack}
                 />
@@ -3666,6 +3693,7 @@ function App() {
                   selectedCategory={selectedCategory}
                   awardPetXp={awardPetXp}
                   activeTab={activeTab}
+                  setIsStudyingActive={setIsStudyingActive}
                 />
               </section>
             )}
@@ -3919,7 +3947,7 @@ function App() {
           </div>
         </div>
       )}
-      {pendingLevelUp && !quizActive && (
+      {pendingLevelUp && !quizActive && !isStudyingActive && (
         <div className="auth-modal-overlay" style={{ zIndex: 100002 }} onClick={() => setPendingLevelUp(null)}>
           <div 
             className="auth-modal-card text-center" 

@@ -140,7 +140,7 @@ const formatWordType = (type) => {
   return type;
 };
 
-const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, recordWordStat, setActiveStudyInfo, dictDb, addMistake, initialCampType = 'vocabulary', vocabTrack, setVocabTrack, hideSwitcher }) => {
+const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, recordWordStat, setActiveStudyInfo, dictDb, addMistake, initialCampType = 'vocabulary', vocabTrack, setVocabTrack, hideSwitcher, setIsStudyingActive }) => {
   // Helper to render Turkish meanings vertically if they contain multiple numbered items
   const renderTurkishMeanings = (text, color = '#34d399', sizeStyle = {}) => {
     if (!text) return null;
@@ -255,6 +255,12 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     };
     loadGrammarCampDb();
   }, [selectedCategory]);
+
+  useEffect(() => {
+    if (setIsStudyingActive) {
+      setIsStudyingActive(isStudying);
+    }
+  }, [isStudying, setIsStudyingActive]);
 
   // Question/Test States
   const [meaningOptions, setMeaningOptions] = useState([]);
@@ -1362,8 +1368,12 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     if (!wordObj) return 'Yok';
     const rawAntonym = ACADEMIC_ANTONYMS[wordObj.word.toLowerCase().trim()];
     if (rawAntonym) return rawAntonym;
-    if (wordObj.antonyms && wordObj.antonyms.trim() !== "" && wordObj.antonyms.trim().toLowerCase() !== "yok") {
-      return wordObj.antonyms;
+    if (wordObj.antonyms) {
+      if (Array.isArray(wordObj.antonyms)) {
+        if (wordObj.antonyms.length > 0) return wordObj.antonyms.join(', ');
+      } else if (typeof wordObj.antonyms === 'string' && wordObj.antonyms.trim() !== "" && wordObj.antonyms.trim().toLowerCase() !== "yok") {
+        return wordObj.antonyms;
+      }
     }
     return 'Yok';
   };
@@ -1376,7 +1386,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const match = getWordFromDict(ant);
       return {
         eng: ant,
-        tr: match ? match.tr : null
+        tr: match ? (match.tr || match.turkish || null) : null
       };
     });
     return translatedList;
@@ -1427,14 +1437,17 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   };
 
   const getSynonymsList = (wordObj) => {
-    if (!wordObj || !wordObj.synonyms || wordObj.synonyms.trim() === "" || wordObj.synonyms.trim().toLowerCase() === "yok") return [];
-    return wordObj.synonyms.split(',').map(s => {
-      const syn = s.trim();
-      return {
-        eng: syn,
-        tr: getTranslation(syn)
-      };
-    });
+    if (!wordObj || !wordObj.synonyms) return [];
+    let synArray = [];
+    if (Array.isArray(wordObj.synonyms)) {
+      synArray = wordObj.synonyms;
+    } else if (typeof wordObj.synonyms === 'string' && wordObj.synonyms.trim() !== "" && wordObj.synonyms.trim().toLowerCase() !== "yok") {
+      synArray = wordObj.synonyms.split(',').map(s => s.trim());
+    }
+    return synArray.map(syn => ({
+      eng: syn,
+      tr: getTranslation(syn)
+    }));
   };
 
   const getAntonymsList = (wordObj) => {
@@ -1442,14 +1455,17 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   };
 
   const getCollocationsList = (wordObj) => {
-    if (!wordObj || !wordObj.collocations || wordObj.collocations.trim() === "" || wordObj.collocations.trim().toLowerCase() === "yok") return [];
-    return wordObj.collocations.split(',').map(c => {
-      const coll = c.trim();
-      return {
-        eng: coll,
-        tr: translateCollocation(coll, wordObj.word, wordObj.tr)
-      };
-    });
+    if (!wordObj || !wordObj.collocations) return [];
+    let collArray = [];
+    if (Array.isArray(wordObj.collocations)) {
+      collArray = wordObj.collocations;
+    } else if (typeof wordObj.collocations === 'string' && wordObj.collocations.trim() !== "" && wordObj.collocations.trim().toLowerCase() !== "yok") {
+      collArray = wordObj.collocations.split(',').map(c => c.trim());
+    }
+    return collArray.map(coll => ({
+      eng: coll,
+      tr: translateCollocation(coll, wordObj.word, wordObj.tr)
+    }));
   };
 
   const hasAntonym = (wordObj) => {

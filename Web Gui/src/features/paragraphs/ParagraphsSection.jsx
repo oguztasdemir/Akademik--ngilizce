@@ -14,7 +14,8 @@ const ParagraphsSection = ({
   notebook,
   handleAddCustomWord,
   logStudyActivity,
-  addMistake
+  addMistake,
+  setIsStudyingActive
 }) => {
   const [passages, setPassages] = useState([]);
   const [selectedPassage, setSelectedPassage] = useState(null);
@@ -22,6 +23,12 @@ const ParagraphsSection = ({
   const [translationText, setTranslationText] = useState('');
   const [translationPos, setTranslationPos] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (setIsStudyingActive) {
+      setIsStudyingActive(selectedPassage !== null);
+    }
+  }, [selectedPassage, setIsStudyingActive]);
   
   // Track completed passages
   const [completedPassages, setCompletedPassages] = useState(() => {
