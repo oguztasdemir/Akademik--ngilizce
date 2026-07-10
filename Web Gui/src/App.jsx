@@ -161,8 +161,14 @@ function App() {
       const parts = hash.split('/');
       if (parts.length >= 3) {
         let tab = parts[2];
-        if (tab === 'camp' && hash.includes('cikmis_kelimeler')) {
-          tab = 'vocabulary';
+        if (tab === 'camp') {
+          if (hash.includes('cikmis_kelimeler') || hash.includes('cikmis')) {
+            tab = 'vocabulary';
+          } else if (hash.includes('vocabulary')) {
+            tab = 'camp-vocab';
+          } else if (hash.includes('grammar')) {
+            tab = 'camp-grammar';
+          }
         }
         return {
           category: parts[1],
@@ -615,8 +621,14 @@ function App() {
       if (parts.length >= 3) {
         const cat = parts[1];
         let tab = parts[2];
-        if (tab === 'camp' && hash.includes('cikmis_kelimeler')) {
-          tab = 'vocabulary';
+        if (tab === 'camp') {
+          if (hash.includes('cikmis_kelimeler') || hash.includes('cikmis')) {
+            tab = 'vocabulary';
+          } else if (hash.includes('vocabulary')) {
+            tab = 'camp-vocab';
+          } else if (hash.includes('grammar')) {
+            tab = 'camp-grammar';
+          }
         }
         setSelectedCategory(cat);
         setActiveTab(tab);
@@ -682,7 +694,7 @@ function App() {
         }
       } else {
         const prefix = `#/${selectedCategory}/${activeTab}`;
-        if (activeTab === 'camp' || activeTab === 'book_exercise') {
+        if (activeTab === 'camp' || activeTab === 'book-exercises') {
           if (!window.location.hash.startsWith(prefix)) {
             window.history.pushState(null, '', prefix);
           }
