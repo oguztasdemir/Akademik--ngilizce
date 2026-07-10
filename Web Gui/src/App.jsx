@@ -2656,13 +2656,6 @@ function App() {
                     </div>
                     <i className="fa-solid fa-chevron-right arrow-icon"></i>
                   </button>
-                  <button className="menu-item subject-card custom-vocab-card" onClick={() => { setSelectedCategory('custom'); setActiveTab('camp-vocab'); setSelectedExam(null); setQuizActive(false); }} style={{ borderLeft: '4px solid #fb923c' }}>
-                    <div className="menu-icon subject-icon" style={{ borderColor: '#d97706', color: '#fb923c' }}><i className="fa-solid fa-file-excel"></i></div>
-                    <div className="menu-text" style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-                      <h4 style={{ margin: 0 }}>Özelleştirilmiş Kelime Kampı</h4>
-                    </div>
-                    <i className="fa-solid fa-chevron-right arrow-icon"></i>
-                  </button>
                 </div>
               </section>
             )}
