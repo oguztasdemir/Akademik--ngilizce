@@ -105,7 +105,7 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
     const loadDictionaries = async () => {
       let combinedDb = {};
       try {
-        const dictModule = await import('@dataset/yokdil/fen/kelime_kampi/dictionary.json');
+        const dictModule = await import('@dataset/yokdil/fen/dictionary.json');
         if (dictModule.default) {
           combinedDb = { ...dictModule.default };
         }

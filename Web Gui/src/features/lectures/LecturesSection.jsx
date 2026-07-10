@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, ArrowRight, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
-import fallbackExercises from '@dataset/yokdil/genel/konu_anlatimi/lecture_exercises.json';
 
 const LecturesSection = ({
   activeTab,
@@ -13,7 +12,8 @@ const LecturesSection = ({
   BACKEND_URL,
   incrementDailyQuestions,
   incrementDailyLectures,
-  handleTextSelection
+  handleTextSelection,
+  selectedCategory
 }) => {
   const renderInteractiveSentence = (text) => {
     return text || '';
@@ -40,19 +40,29 @@ const LecturesSection = ({
     
     if (activeLecture) {
       const lid = activeLecture.id;
-      const data = fallbackExercises[lid] || [];
-      const scrambled = data.map(q => {
-        if (q && Array.isArray(q.options)) {
-          return {
-            ...q,
-            options: [...q.options].sort(() => 0.5 - Math.random())
-          };
+      const category = selectedCategory || 'fen';
+      const loadExercises = async () => {
+        try {
+          const mod = await import(`../../../../Dataset/yokdil/${category}/konu_anlatimi/lecture_exercises.json`);
+          const exercisesDb = mod.default || mod;
+          const data = exercisesDb[lid] || [];
+          const scrambled = data.map(q => {
+            if (q && Array.isArray(q.options)) {
+              return {
+                ...q,
+                options: [...q.options].sort(() => 0.5 - Math.random())
+              };
+            }
+            return q;
+          });
+          setExerciseList(scrambled);
+        } catch (e) {
+          console.error("Error loading lecture exercises:", e);
         }
-        return q;
-      });
-      setExerciseList(scrambled);
+      };
+      loadExercises();
     }
-  }, [activeLecture]);
+  }, [activeLecture, selectedCategory]);
 
   if (activeTab !== 'lectures') return null;
 

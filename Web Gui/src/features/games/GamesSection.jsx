@@ -9,46 +9,6 @@ import TrueFalseGame from './components/TrueFalseGame';
 import ClozeGame from './components/ClozeGame';
 import DefinitionGame from './components/DefinitionGame';
 
-// Vocabulary database fallback for instant client-side games
-const MINI_GAME_VOCAB = {
-  fen: [
-    { english: 'orbit', turkish: 'yörünge', synonym: 'path', antonym: 'center', definition: 'The curved path of a celestial object or spacecraft round a star, planet, or moon.', sentence: 'The Earth is in a constant ____ around the Sun.', type: 'Noun' },
-    { english: 'discovery', turkish: 'keşif', synonym: 'finding', antonym: 'loss', definition: 'The act of finding or learning something for the first time.', sentence: 'The ____ of penicillin changed modern medicine.', type: 'Noun' },
-    { english: 'gravity', turkish: 'yerçekimi', synonym: 'attraction', antonym: 'repulsion', definition: 'The force that attracts a body towards the centre of the earth.', sentence: 'Objects fall to the ground due to the force of ____.', type: 'Noun' },
-    { english: 'compound', turkish: 'bileşik', synonym: 'mixture', antonym: 'element', definition: 'A thing that is composed of two or more separate elements.', sentence: 'Water is a chemical ____ consisting of hydrogen and oxygen.', type: 'Noun' },
-    { english: 'radiation', turkish: 'radyasyon', synonym: 'emission', antonym: 'absorption', definition: 'The emission of energy as electromagnetic waves or subatomic particles.', sentence: 'The ozone layer protects us from harmful solar ____.', type: 'Noun' },
-    { english: 'absorb', turkish: 'absorbe etmek', synonym: 'soak up', antonym: 'release', definition: 'Take in or soak up energy, liquid, or other substances.', sentence: 'Plants ____ carbon dioxide from the atmosphere.', type: 'Verb' },
-    { english: 'conduct', turkish: 'iletmek', synonym: 'transmit', antonym: 'insulate', definition: 'Transmit a form of energy such as heat or electricity.', sentence: 'Metals like copper ____ electricity very efficiently.', type: 'Verb' },
-    { english: 'constant', turkish: 'sabit', synonym: 'stable', antonym: 'variable', definition: 'Occurring continuously or remaining the same over a period of time.', sentence: 'The speed of light is a ____ value in physics.', type: 'Adjective' },
-    { english: 'abundant', turkish: 'bol', synonym: 'plentiful', antonym: 'scarce', definition: 'Existing or available in large quantities; overflowing.', sentence: 'Hydrogen is the most ____ element in the universe.', type: 'Adjective' },
-    { english: 'precisely', turkish: 'kesinlikle', synonym: 'exactly', antonym: 'vaguely', definition: 'In a exact and accurate manner.', sentence: 'The scientific instruments measured the distance ____.', type: 'Adverb' }
-  ],
-  saglik: [
-    { english: 'treatment', turkish: 'tedavi', synonym: 'therapy', antonym: 'harm', definition: 'Medical care given to a patient for an illness or injury.', sentence: 'Chemotherapy is a common ____ for cancer patients.', type: 'Noun' },
-    { english: 'disease', turkish: 'hastalık', synonym: 'illness', antonym: 'health', definition: 'A disorder of structure or function in a human, animal, or plant.', sentence: 'Lyme ____ is transmitted to humans through tick bites.', type: 'Noun' },
-    { english: 'symptom', turkish: 'belirti', synonym: 'indication', antonym: 'cause', definition: 'A physical or mental sign which indicates a condition of disease.', sentence: 'A dry cough is a common ____ of respiratory infections.', type: 'Noun' },
-    { english: 'vaccine', turkish: 'aşı', synonym: 'immunization', antonym: 'pathogen', definition: 'A substance used to stimulate the production of antibodies.', sentence: 'The polio ____ has nearly eradicated the disease worldwide.', type: 'Noun' },
-    { english: 'infection', turkish: 'enfeksiyon', synonym: 'contamination', antonym: 'purity', definition: 'The invasion and growth of germs in the body.', sentence: 'Wash the wound to prevent a bacterial ____.', type: 'Noun' },
-    { english: 'diagnose', turkish: 'teşhis etmek', synonym: 'identify', antonym: 'misinterpret', definition: 'Identify the nature of an illness by examination of symptoms.', sentence: 'Doctors use blood tests to ____ diabetes.', type: 'Verb' },
-    { english: 'prescribe', turkish: 'reçete etmek', synonym: 'order', antonym: 'ban', definition: 'Advise and authorize the use of a medicine or treatment.', sentence: 'The doctor will ____ antibiotics for your throat infection.', type: 'Verb' },
-    { english: 'immune', turkish: 'bağışıklık', synonym: 'resistant', antonym: 'susceptible', definition: 'Protected or exempt from a disease or pathogen.', sentence: 'Vaccinated individuals become ____ to the specific virus.', type: 'Adjective' },
-    { english: 'severe', turkish: 'şiddetli', synonym: 'acute', antonym: 'mild', definition: 'Very great, intense, or harsh in medical illness symptoms.', sentence: 'The patient experienced ____ chest pain during the attack.', type: 'Adjective' },
-    { english: 'gradually', turkish: 'yavaş yavaş', synonym: 'slowly', antonym: 'suddenly', definition: 'By degrees or in a gradual, slow-moving manner.', sentence: 'The patient recovered ____ after the complex surgery.', type: 'Adverb' }
-  ],
-  sosyal: [
-    { english: 'society', turkish: 'toplum', synonym: 'community', antonym: 'individual', definition: 'People living together in a more or less ordered community.', sentence: 'Education plays a critical role in shaping modern ____.', type: 'Noun' },
-    { english: 'culture', turkish: 'kültür', synonym: 'tradition', antonym: 'nature', definition: 'The customs, arts, and social institutions of a nation.', sentence: 'We spent the summer studying the local ____ of the Andes.', type: 'Noun' },
-    { english: 'heritage', turkish: 'miras', synonym: 'legacy', antonym: 'loss', definition: 'Property or cultural traditions that can be inherited.', sentence: 'Historic buildings are an essential part of our national ____.', type: 'Noun' },
-    { english: 'inflation', turkish: 'enflasyon', synonym: 'price rise', antonym: 'deflation', definition: 'A general increase in prices and fall in the purchasing value of money.', sentence: 'Central banks raise interest rates to control rising ____.', type: 'Noun' },
-    { english: 'government', turkish: 'hükümet', synonym: 'administration', antonym: 'anarchy', definition: 'The group of people with the authority to govern a country.', sentence: 'The ____ announced a new policy to support low-income families.', type: 'Noun' },
-    { english: 'govern', turkish: 'yönetmek', synonym: 'rule', antonym: 'obey', definition: 'Conduct the policy, actions, and affairs of a state.', sentence: 'It is difficult to ____ a nation with diverse populations.', type: 'Verb' },
-    { english: 'abolish', turkish: 'yürürlükten kaldırmak', synonym: 'cancel', antonym: 'enact', definition: 'Formally put an end to a system, practice, or institution.', sentence: 'Many nations decided to ____ slavery in the 19th century.', type: 'Verb' },
-    { english: 'democratic', turkish: 'demokratik', synonym: 'representative', antonym: 'authoritarian', definition: 'Supporting social equality and electing leaders by voting.', sentence: 'The constitution guarantees a ____ election process.', type: 'Adjective' },
-    { english: 'stable', turkish: 'istikrarlı', synonym: 'steady', antonym: 'volatile', definition: 'Not likely to change, fail, or fluctuate.', sentence: 'A ____ economy attracts foreign investment.', type: 'Adjective' },
-    { english: 'mutually', turkish: 'karşılıklı olarak', synonym: 'reciprocally', antonym: 'unilaterally', definition: 'With mutual action or relation between two parties.', sentence: 'Both countries signed a ____ beneficial trade agreement.', type: 'Adverb' }
-  ]
-};
-
 const GAMES_CATALOG = [
   { id: 'match', name: '1. Kart Eşleştirme (Memory)', desc: 'İngilizce kelimeleri Türkçe anlamlarıyla kart çevirerek eşleştirin.', color: '#ec4899', icon: 'fa-clone' },
   { id: 'shooter', name: '2. Kelime Avcısı (Shooter)', desc: 'Yukarıdan düşen kelime yere çarpmadan doğru çevirisini vurun!', color: '#3b82f6', icon: 'fa-bullseye' },
@@ -67,7 +27,15 @@ const GamesSection = ({ selectedCategory, awardPetXp }) => {
 
   useEffect(() => {
     const cat = selectedCategory || 'fen';
-    setVocabList(MINI_GAME_VOCAB[cat] || MINI_GAME_VOCAB.fen);
+    const loadVocab = async () => {
+      try {
+        const mod = await import(`../../../../Dataset/yokdil/${cat}/minioyunlar/games_vocab.json`);
+        setVocabList(mod.default || mod);
+      } catch (e) {
+        console.error("Error loading games vocab:", e);
+      }
+    };
+    loadVocab();
   }, [selectedCategory]);
 
   return (

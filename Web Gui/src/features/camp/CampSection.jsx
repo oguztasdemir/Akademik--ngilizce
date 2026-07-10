@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import grammarCampDb from '@dataset/yokdil/genel/grammar_camp.json';
 import { handlePrintPDF, handlePrintCikmisExportPDF, handlePrintCikmisExportDocx, handlePrintCikmisExportXlsx } from './components/CampPrint';
 import CampDashboard from './components/CampDashboard';
 import CampStudy from './components/CampStudy';
@@ -238,10 +237,24 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [reportCardWords, setReportCardWords] = useState([]);
   const [loadingReportCard, setLoadingReportCard] = useState(false);
   const [confirmModal, setConfirmModal] = useState(null);
+  const [grammarCampDb, setGrammarCampDb] = useState({});
 
   const showConfirm = (message, onConfirm, onCancel, showCancel = true) => {
     setConfirmModal({ message, onConfirm, onCancel, showCancel });
   };
+
+  useEffect(() => {
+    const loadGrammarCampDb = async () => {
+      const category = selectedCategory || 'fen';
+      try {
+        const mod = await import(`../../../../Dataset/yokdil/${category}/gramer_kampi/grammar_camp.json`);
+        setGrammarCampDb(mod.default || mod);
+      } catch (e) {
+        console.error("Error loading grammar camp db:", e);
+      }
+    };
+    loadGrammarCampDb();
+  }, [selectedCategory]);
 
   // Question/Test States
   const [meaningOptions, setMeaningOptions] = useState([]);
@@ -318,7 +331,9 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       } else {
         for (const d of days) {
           const track = vocabTrack || 'anlam';
-          const dailyKelimeKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${d}.json`;
+          const dailyKelimeKey = track === 'tumu'
+            ? `@dataset/yokdil/${category}/gelismis_kelime_kampi/day_${d}.json`
+            : `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${d}.json`;
           const loadDailyKelime = getCampModule(dailyKelimeKey);
           if (loadDailyKelime) {
             try {
@@ -476,9 +491,9 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const categoryDict = (dictDb && dictDb[category]) || {};
       const mappedData = {};
       
-      // Load from gelismis_kelime_kampi/tumu/day_*.json dynamically
+      // Load from kelime_kampi/day_*.json dynamically
       for (let day = 1; day <= 60; day++) {
-        const planKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/tumu/day_${day}.json`;
+        const planKey = `@dataset/yokdil/${category}/kelime_kampi/day_${day}.json`;
         const loadPlan = getCampModule(planKey);
         if (loadPlan) {
           try {
@@ -618,7 +633,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const category = selectedCategory || 'fen';
       let combinedDb = {};
       try {
-        const dictModule = await import(`../../../../Dataset/yokdil/${category}/kelime_kampi/dictionary.json`);
+        const dictModule = await import(`../../../../Dataset/yokdil/${category}/dictionary.json`);
         if (dictModule.default) {
           combinedDb = { ...dictModule.default };
         }
@@ -677,7 +692,9 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     setIsStudying(true);
 
     const track = vocabTrack || 'anlam';
-    const dailyPlanKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${dayNum}.json`;
+    const dailyPlanKey = track === 'tumu'
+      ? `@dataset/yokdil/${category}/gelismis_kelime_kampi/day_${dayNum}.json`
+      : `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${dayNum}.json`;
     const loadDaily = getCampModule(dailyPlanKey);
     if (!loadDaily) {
       alert("Bu günün kelime listesi bulunamadı veya henüz hazır değil!");

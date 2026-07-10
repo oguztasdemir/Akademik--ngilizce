@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import fallbackPassages from '@dataset/yokdil/genel/paragraflar/reading_passages.json';
-import fallbackDictFen from '@dataset/yokdil/fen/kelime_kampi/dictionary.json';
-import fallbackDictSosyal from '@dataset/yokdil/sosyal/kelime_kampi/dictionary.json';
-import fallbackDictSaglik from '@dataset/yokdil/saglik/kelime_kampi/dictionary.json';
+import fallbackDictFen from '@dataset/yokdil/fen/dictionary.json';
+import fallbackDictSosyal from '@dataset/yokdil/sosyal/dictionary.json';
+import fallbackDictSaglik from '@dataset/yokdil/saglik/dictionary.json';
 import { BookOpen, Check, X, HelpCircle, ArrowRight, Volume2, Award, BookOpenCheck } from 'lucide-react';
 
 const ParagraphsSection = ({
@@ -53,32 +52,21 @@ const ParagraphsSection = ({
   useEffect(() => {
     if (activeTab === 'paragraphs') {
       setLoading(true);
-      
-      // Load local fallback first
-      const sortedFallback = [...fallbackPassages].sort((a, b) => (a.wordCount || 0) - (b.wordCount || 0));
-      const filteredFallback = sortedFallback.filter(p => !selectedCategory || p.category === selectedCategory);
-      setPassages(filteredFallback);
-      setLoading(false);
-
-      if (BACKEND_URL) {
-        setLoading(true);
-        fetch(`${BACKEND_URL}/api/passages`)
-          .then(res => res.json())
-          .then(data => {
-            if (data && Array.isArray(data) && data.length > 0) {
-              const sorted = data.sort((a, b) => (a.wordCount || 0) - (b.wordCount || 0));
-              const filtered = sorted.filter(p => !selectedCategory || p.category === selectedCategory);
-              setPassages(filtered);
-            }
-            setLoading(false);
-          })
-          .catch(err => {
-            console.error("Error loading passages from backend, keeping local fallback:", err);
-            setLoading(false);
-          });
-      }
+      const loadPassages = async () => {
+        const category = selectedCategory || 'fen';
+        try {
+          const mod = await import(`../../../../Dataset/yokdil/${category}/paragraflar/reading_passages.json`);
+          const data = mod.default || mod;
+          const sorted = [...data].sort((a, b) => (a.wordCount || 0) - (b.wordCount || 0));
+          setPassages(sorted);
+        } catch (e) {
+          console.error("Error loading category passages:", e);
+        }
+        setLoading(false);
+      };
+      loadPassages();
     }
-  }, [activeTab, selectedCategory, BACKEND_URL]);
+  }, [activeTab, selectedCategory]);
 
   useEffect(() => {
     localStorage.setItem('completed_passages', JSON.stringify(completedPassages));

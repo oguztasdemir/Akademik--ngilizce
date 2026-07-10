@@ -31,11 +31,12 @@ import fallbackExamsFen from '@dataset/yokdil/fen/cikmis_sinavlar/sinav_listesi.
 import fallbackExamsSosyal from '@dataset/yokdil/sosyal/cikmis_sinavlar/sinav_listesi.json';
 import fallbackExamsSaglik from '@dataset/yokdil/saglik/cikmis_sinavlar/sinav_listesi.json';
 
-const lectureModules = import.meta.glob('@dataset/yokdil/genel/konu_anlatimi/*.md', { query: '?raw', import: 'default' });
+const lectureModules = import.meta.glob('@dataset/yokdil/*/konu_anlatimi/*.md', { query: '?raw', import: 'default' });
 const examDetailModules = import.meta.glob('@dataset/yokdil/*/cikmis_sinavlar/*.json');
 
-const getLectureContent = async (filename) => {
-  const key = Object.keys(lectureModules).find(k => k.endsWith(filename));
+const getLectureContent = async (category, filename) => {
+  const targetSubstr = `${category}/konu_anlatimi/${filename}`;
+  const key = Object.keys(lectureModules).find(k => k.includes(targetSubstr));
   if (key) {
     const loader = lectureModules[key];
     const content = await loader();
@@ -49,9 +50,9 @@ import fallbackVocabFen from '@dataset/yokdil/fen/gelismis_kelime_kampi/akademik
 import fallbackVocabSosyal from '@dataset/yokdil/sosyal/gelismis_kelime_kampi/akademik_kelime_listesi.json';
 import fallbackVocabSaglik from '@dataset/yokdil/saglik/gelismis_kelime_kampi/akademik_kelime_listesi.json';
 
-import fallbackDictFen from '@dataset/yokdil/fen/kelime_kampi/dictionary.json';
-import fallbackDictSosyal from '@dataset/yokdil/sosyal/kelime_kampi/dictionary.json';
-import fallbackDictSaglik from '@dataset/yokdil/saglik/kelime_kampi/dictionary.json';
+import fallbackDictFen from '@dataset/yokdil/fen/dictionary.json';
+import fallbackDictSosyal from '@dataset/yokdil/sosyal/dictionary.json';
+import fallbackDictSaglik from '@dataset/yokdil/saglik/dictionary.json';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (
   window.location.hostname === 'localhost' || 
@@ -1963,7 +1964,7 @@ function App() {
 
     const loadLocalFallback = async (lid) => {
       try {
-        const text = await getLectureContent(`${lid}.md`);
+        const text = await getLectureContent(selectedCategory || 'fen', `${lid}.md`);
         const lecInfo = FALLBACK_LECTURES.find(l => l.id === lid) || {};
         setActiveLecture({
           id: lid,
@@ -3562,6 +3563,7 @@ function App() {
               incrementDailyQuestions={incrementDailyQuestions}
               incrementDailyLectures={incrementDailyLectures}
               handleTextSelection={handleTextSelection}
+              selectedCategory={selectedCategory}
             />
 
              <MistakeInbox
