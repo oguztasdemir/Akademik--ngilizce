@@ -211,17 +211,6 @@ const Sidebar = ({
           </button>
         </nav>
 
-        {/* Footer Area */}
-        <div className="sidebar-footer">
-
-          <button 
-            className="change-course-btn-sidebar"
-            style={{ border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.05)', color: '#FEB2B2' }}
-            onClick={onLogout}
-          >
-            <i className="fa-solid fa-right-from-bracket"></i> Çıkış Yap
-          </button>
-        </div>
       </aside>
 
       {/* Mobile More Bottom Sheet */}
@@ -337,14 +326,9 @@ const Sidebar = ({
               <button 
                 className="change-course-btn"
                 onClick={() => { setSelectedCategory(null); setSelectedExam(null); setQuizActive(false); setShowMoreMenu(false); }}
+                style={{ width: '100%', flex: 'none' }}
               >
                 <i className="fa-solid fa-arrow-right-to-bracket"></i> Alan Değiştir
-              </button>
-              <button 
-                className="logout-btn"
-                onClick={() => { onLogout(); setShowMoreMenu(false); }}
-              >
-                <i className="fa-solid fa-right-from-bracket"></i> Çıkış Yap
               </button>
             </div>
           </div>

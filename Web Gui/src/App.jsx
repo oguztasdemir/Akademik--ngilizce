@@ -2252,181 +2252,28 @@ function App() {
 
   const stats = getStats();
 
-  // Landing view when user has not logged in
+  // Automatically sign in guest user if no user session exists
   if (!currentUser) {
+    const defaultUser = { name: 'Kullanıcı', username: 'kullanici', id: '1' };
+    localStorage.setItem('yokdil_user', JSON.stringify(defaultUser));
+    setTimeout(() => {
+      setCurrentUser(defaultUser);
+    }, 10);
     return (
-      <div className="landing-gate-container">
-        <div className="landing-gate-card">
-          <div className="landing-gate-logo">
-            <i className="fa-solid fa-graduation-cap"></i>
-          </div>
-
-          <div>
-            <h1 className="landing-gate-title">YÖKDİL Akademik Hazırlık</h1>
-            <p className="landing-gate-text" style={{ marginTop: '8px' }}>
-              Akademik İngilizce hazırlık platformuna hoş geldiniz.
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '16px', gap: '8px', justifyContent: 'center' }}>
-            <button
-              type="button"
-              onClick={() => setAuthMode('login')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: authMode === 'login' ? 'var(--primary-light)' : 'rgba(255,255,255,0.5)',
-                borderBottom: authMode === 'login' ? '2px solid var(--primary-light)' : 'none',
-                padding: '8px 12px',
-                fontSize: '0.85rem',
-                fontWeight: 'bold',
-                cursor: 'pointer'
-              }}
-            >
-              Giriş Yap
-            </button>
-            <button
-              type="button"
-              onClick={() => setAuthMode('register')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: authMode === 'register' ? 'var(--primary-light)' : 'rgba(255,255,255,0.5)',
-                borderBottom: authMode === 'register' ? '2px solid var(--primary-light)' : 'none',
-                padding: '8px 12px',
-                fontSize: '0.85rem',
-                fontWeight: 'bold',
-                cursor: 'pointer'
-              }}
-            >
-              Kayıt Ol
-            </button>
-            <button
-              type="button"
-              onClick={() => setAuthMode('guest')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: authMode === 'guest' ? 'var(--primary-light)' : 'rgba(255,255,255,0.5)',
-                borderBottom: authMode === 'guest' ? '2px solid var(--primary-light)' : 'none',
-                padding: '8px 12px',
-                fontSize: '0.85rem',
-                fontWeight: 'bold',
-                cursor: 'pointer'
-              }}
-            >
-              Misafir Girişi
-            </button>
-          </div>
-
-          <form onSubmit={async (e) => {
-            e.preventDefault();
-            if (authMode === 'guest') {
-              const uName = authUsername.trim();
-              if (!uName) return;
-              try {
-                const res = await fetch(`${BACKEND_URL}/api/auth/guest`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ username: uName })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
-                handleAuthSuccess(data.token, data.user);
-              } catch (err) {
-                alert("Misafir girişi başarısız: " + err.message);
-              }
-            } else if (authMode === 'login') {
-              const uName = authUsername.trim();
-              const pass = authPassword;
-              if (!uName || !pass) return;
-              try {
-                const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ username: uName, password: pass })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
-                handleAuthSuccess(data.token, data.user);
-              } catch (err) {
-                alert("Giriş başarısız: " + err.message);
-              }
-            } else {
-              const uName = authUsername.trim();
-              const fullName = authFullName.trim();
-              const pass = authPassword;
-              if (pass !== authConfirmPassword) {
-                alert("Şifreler uyuşmuyor! Lütfen kontrol edin.");
-                return;
-              }
-              if (!uName || !fullName || !pass) return;
-              try {
-                const res = await fetch(`${BACKEND_URL}/api/auth/register`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ username: uName, name: fullName, password: pass })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
-                handleAuthSuccess(data.token, data.user);
-              } catch (err) {
-                alert("Kayıt başarısız: " + err.message);
-              }
-            }
-          }} className="landing-gate-form" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {authMode === 'register' && (
-              <input
-                type="text"
-                required
-                placeholder="Adınız Soyadınız"
-                value={authFullName}
-                onChange={(e) => setAuthFullName(e.target.value)}
-                className="landing-gate-input"
-              />
-            )}
-            <input
-              type="text"
-              required
-              placeholder={authMode === 'guest' ? "Misafir Kullanıcı Adı" : "Kullanıcı Adı"}
-              value={authUsername}
-              onChange={(e) => setAuthUsername(e.target.value)}
-              className="landing-gate-input"
-            />
-            {authMode !== 'guest' && (
-              <input
-                type="password"
-                required
-                placeholder="Şifre"
-                value={authPassword}
-                onChange={(e) => setAuthPassword(e.target.value)}
-                className="landing-gate-input"
-              />
-            )}
-            {authMode === 'register' && (
-              <input
-                type="password"
-                required
-                placeholder="Şifre Tekrar"
-                value={authConfirmPassword}
-                onChange={(e) => setAuthConfirmPassword(e.target.value)}
-                className="landing-gate-input"
-              />
-            )}
-            {authMode === 'register' && (
-              <p style={{ fontSize: '0.72rem', color: '#F6AD55', margin: '-4px 0 4px 0', lineHeight: 1.3, textAlign: 'left', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
-                <i className="fa-solid fa-triangle-exclamation" style={{ marginTop: '2px' }}></i>
-                <span>Lütfen başka platformlarda kullandığınız şifreleri girmeyiniz. Yeni ve farklı bir şifre belirleyiniz.</span>
-              </p>
-            )}
-            <button
-              type="submit"
-              className="landing-gate-button"
-              style={{ marginTop: '8px' }}
-            >
-              {authMode === 'login' ? 'Giriş Yap' : authMode === 'register' ? 'Kayıt Ol' : 'Misafir Olarak Giriş Yap'}
-            </button>
-          </form>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#090d16',
+        color: '#818cf8',
+        fontSize: '1rem',
+        fontWeight: 'bold',
+        fontFamily: 'system-ui'
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+          <i className="fa-solid fa-graduation-cap fa-spin" style={{ fontSize: '2.5rem' }}></i>
+          <span>Oturum Hazırlanıyor...</span>
         </div>
       </div>
     );

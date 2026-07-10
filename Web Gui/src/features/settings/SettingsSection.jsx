@@ -673,25 +673,18 @@ const SettingsSection = ({
       {/* CARD 6: ACCOUNT ACTIONS FOR MOBILE/ALL */}
       <div className="glass-card" style={{ padding: '20px', borderRadius: '18px', display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
         <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
-          <i className="fa-solid fa-user-gear"></i> Hesap ve Oturum Yönetimi
+          <i className="fa-solid fa-user-gear"></i> Hesap Yönetimi
         </h3>
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex' }}>
           <button 
             onClick={() => {
               if (setSelectedCategory) setSelectedCategory(null);
               if (setSelectedExam) setSelectedExam(null);
             }}
             className="btn-secondary"
-            style={{ flex: 1, padding: '12px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            style={{ width: '100%', flex: 'none', padding: '12px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
           >
             <i className="fa-solid fa-arrow-right-to-bracket"></i> Alan Değiştir
-          </button>
-          <button 
-            onClick={onLogout}
-            className="btn-secondary"
-            style={{ flex: 1, padding: '12px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', borderColor: '#f87171', color: '#f87171', background: 'rgba(239, 68, 68, 0.03)' }}
-          >
-            <i className="fa-solid fa-right-from-bracket"></i> Çıkış Yap
           </button>
         </div>
       </div>
