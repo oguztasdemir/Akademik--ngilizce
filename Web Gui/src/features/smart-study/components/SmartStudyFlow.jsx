@@ -59,7 +59,7 @@ const SmartStudyFlow = ({
         <div className="space-y-6">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 1: Modadil Akademik Kelime Kartı <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
+              Adım 1: Akademik Kelime Kartı <span style={{ color: '#818cf8' }}>({currentIdx + 1}/{words.length})</span>
             </h4>
             <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Kelimelerin anlam, eş anlam ve collocation yapılarını inceleyin.</span>
           </div>
@@ -602,7 +602,7 @@ const SmartStudyFlow = ({
                     gap: '6px'
                   }}
                 >
-                  💡 Modadil Soru Çözüm Stratejisini Gör {showStrategyTip ? '▲' : '▼'}
+                   💡 Soru Çözüm Stratejisini Gör {showStrategyTip ? '▲' : '▼'}
                 </button>
 
                 {showStrategyTip && (
@@ -685,7 +685,7 @@ const SmartStudyFlow = ({
           </div>
 
           <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0 }}>
-            Tebrikler! Modadil Kelime Kampını Tamamladınız! 🎉
+            Tebrikler! Kelime Kampını Tamamladınız! 🎉
           </h2>
           <p style={{ fontSize: '0.94rem', color: '#94a3b8', maxWidth: '480px', margin: '12px auto 0 auto', lineHeight: 1.6 }}>
             Seçtiğiniz akademik kelimeleri; anlam okuma, Türkçe anlam eşleştirme, eş anlam bulma, cümle boşluk doldurma ve sınav soru taktikleri aşamalarını başarıyla tamamlayarak hafızanıza kazıdınız.

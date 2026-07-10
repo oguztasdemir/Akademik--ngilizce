@@ -2556,6 +2556,7 @@ const handleCikmisSwipeBack = () => {
         setCurrentIdx={setCurrentIdx}
         phase={phase}
         setPhase={setPhase}
+        allWordsDb={allWordsDb}
         sentenceIdx={sentenceIdx}
         setSentenceIdx={setSentenceIdx}
         meaningOptions={meaningOptions}

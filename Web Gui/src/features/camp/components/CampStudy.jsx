@@ -8,6 +8,7 @@ const CampStudy = ({
   setCurrentIdx,
   phase,
   setPhase,
+  allWordsDb,
   sentenceIdx,
   setSentenceIdx,
   meaningOptions,
@@ -209,20 +210,21 @@ const CampStudy = ({
         <div className="space-y-4">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <h4 style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
-              Adım 1: Modadil Akademik Kelime Kartı <span style={{ color: '#10b981' }}>({currentIdx + 1}/{studyWords.length})</span>
+              Adım 1: Akademik Kelime Kartı <span style={{ color: '#10b981' }}>({currentIdx + 1}/{studyWords.length})</span>
             </h4>
           </div>
 
           <div 
             onClick={() => setLearnCardFlipped(!learnCardFlipped)}
             style={{ 
-              padding: '24px 28px', 
+              padding: '20px 24px', 
               borderRadius: '24px', 
               background: 'rgba(15, 23, 42, 0.65)', 
               border: `1px solid rgba(${theme.rgb}, 0.35)`,
               boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 0 1px rgba(255, 255, 255, 0.03)`,
               backdropFilter: 'blur(12px)',
-              minHeight: '380px',
+              height: '430px',
+              overflowY: 'auto',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
