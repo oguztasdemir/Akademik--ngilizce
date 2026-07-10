@@ -43,6 +43,7 @@ const SettingsSection = ({
   const [changePasswordEnabled, setChangePasswordEnabled] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState('');
   const [updateError, setUpdateError] = useState('');
+  const [localConfirm, setLocalConfirm] = useState(null); // { title: string, message: string, onConfirm: () => void }
 
   React.useEffect(() => {
     if (currentUser) {
@@ -515,43 +516,87 @@ const SettingsSection = ({
       </div>
 
       {/* CARD: YEDEKLEME VE VERİ YÖNETİMİ */}
-      <div className="glass-card" style={{ padding: '24px', borderRadius: '18px', border: '1px solid rgba(99, 102, 241, 0.15)', background: 'rgba(99, 102, 241, 0.02)', display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '10px' }}>
-        <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#818cf8', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(99, 102, 241, 0.1)', paddingBottom: '12px' }}>
-          <i className="fa-solid fa-cloud-arrow-up"></i> Yedekleme ve İlerlemeyi Kurtarma Yönetimi
+      <div className="glass-card" style={{ 
+        padding: '24px', 
+        borderRadius: '20px', 
+        border: '1px solid rgba(99, 102, 241, 0.2)', 
+        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.04) 0%, rgba(16, 185, 129, 0.01) 100%)', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        gap: '20px', 
+        marginTop: '10px',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.15)'
+      }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#a5b4fc', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(99, 102, 241, 0.1)', paddingBottom: '12px' }}>
+          <i className="fa-solid fa-cloud-arrow-up" style={{ color: '#818cf8' }}></i> Yedekleme ve İlerlemeyi Kurtarma Yönetimi
         </h3>
 
-        <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+        <div style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.5 }}>
           İlerlemenizi, kelime geçmişinizi, hedeflerinizi ve ayarlarınızı başka bir cihaza aktarmak veya güvenceye almak için JSON formatında yedek oluşturabilirsiniz.
         </div>
 
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ flex: 1, minWidth: '250px' }}>
-            <button
-              onClick={() => {
-                const backupData = {};
-                for (let i = 0; i < localStorage.length; i++) {
-                  const key = localStorage.key(i);
-                  if (key.startsWith('yokdil_') || key.startsWith('completed_') || key.includes('session')) {
-                    backupData[key] = localStorage.getItem(key);
-                  }
-                }
-                const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `yokdil_ilerleme_yedek_${new Date().toISOString().slice(0,10)}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-              }}
-              className="px-4 py-2.5 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-md cursor-pointer border-none display-inline-flex items-center gap-2"
-            >
-              📥 İlerlemeyi Yedekle (JSON İndir)
-            </button>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginTop: '4px' }}>
+          {/* Backup Button Card */}
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.02)',
+            border: '1px solid rgba(255, 255, 255, 0.04)',
+            padding: '20px',
+            borderRadius: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            alignItems: 'center',
+            textAlign: 'center',
+            transition: 'transform 0.2s',
+            cursor: 'pointer'
+          }}
+          onClick={() => {
+            const backupData = {};
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key.startsWith('yokdil_') || key.startsWith('completed_') || key.includes('session')) {
+                backupData[key] = localStorage.getItem(key);
+              }
+            }
+            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `yokdil_ilerleme_yedek_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+          }}
+          className="hover:scale-[1.02] hover:bg-[rgba(255,255,255,0.04)]"
+          >
+            <div style={{ fontSize: '2rem', marginBottom: '4px' }}>📥</div>
+            <strong style={{ fontSize: '0.88rem', color: 'white' }}>İlerlemeyi Yedekle</strong>
+            <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>Mevcut ilerlemenizi içeren .json uzantılı bir yedek dosyası indirin.</span>
           </div>
 
-          <div style={{ flex: 1, minWidth: '250px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-main)' }}>📤 Yedekten Geri Yükle (JSON Yükle)</label>
+          {/* Restore Button Card */}
+          <label
+            htmlFor="backup-file-upload"
+            style={{
+              background: 'rgba(255, 255, 255, 0.02)',
+              border: '1px solid rgba(255, 255, 255, 0.04)',
+              padding: '20px',
+              borderRadius: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              alignItems: 'center',
+              textAlign: 'center',
+              transition: 'transform 0.2s',
+              cursor: 'pointer'
+            }}
+            className="hover:scale-[1.02] hover:bg-[rgba(255,255,255,0.04)]"
+          >
+            <div style={{ fontSize: '2rem', marginBottom: '4px' }}>📤</div>
+            <strong style={{ fontSize: '0.88rem', color: 'white' }}>Yedekten Geri Yükle</strong>
+            <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>Daha önce indirdiğiniz yedek dosyasını seçerek ilerlemenizi geri yükleyin.</span>
+            
             <input
+              id="backup-file-upload"
               type="file"
               accept=".json"
               onChange={(e) => {
@@ -565,26 +610,26 @@ const SettingsSection = ({
                       alert("Geçersiz yedekleme dosyası!");
                       return;
                     }
-                    if (window.confirm("Bu yedeklemeyi yüklemek mevcut tüm ilerlemenizin üzerine yazacaktır. Devam etmek istiyor musunuz?")) {
-                      Object.entries(backupData).forEach(([key, val]) => {
-                        localStorage.setItem(key, String(val));
-                      });
-                      alert("Yedekleme başarıyla yüklendi! Sayfa yenileniyor...");
-                      window.location.reload();
-                    }
+                    setLocalConfirm({
+                      title: "Yedekten Geri Yükle",
+                      message: "Bu yedeklemeyi yüklemek mevcut tüm ilerlemenizin üzerine yazacaktır. Devam etmek istiyor musunuz?",
+                      onConfirm: () => {
+                        Object.entries(backupData).forEach(([key, val]) => {
+                          localStorage.setItem(key, String(val));
+                        });
+                        alert("Yedekleme başarıyla yüklendi! Sayfa yenileniyor...");
+                        window.location.reload();
+                      }
+                    });
                   } catch (err) {
                     alert("Yedek dosyası okunurken hata oluştu: " + err.message);
                   }
                 };
                 reader.readAsText(file);
               }}
-              style={{
-                fontSize: '0.72rem',
-                color: 'var(--text-secondary)',
-                cursor: 'pointer'
-              }}
+              style={{ display: 'none' }}
             />
-          </div>
+          </label>
         </div>
       </div>
 
@@ -650,6 +695,93 @@ const SettingsSection = ({
           </button>
         </div>
       </div>
+
+      {localConfirm && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(15, 23, 42, 0.85)',
+          backdropFilter: 'blur(10px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 99999,
+          animation: 'fadeIn 0.25s ease-out'
+        }}>
+          <div 
+            style={{
+              background: 'rgba(30, 41, 59, 0.98)',
+              border: '1.5px solid rgba(99, 102, 241, 0.4)',
+              padding: '28px 32px',
+              borderRadius: '24px',
+              maxWidth: '440px',
+              width: '90%',
+              textAlign: 'center',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(99, 102, 241, 0.15)',
+              color: '#e2e8f0',
+              animation: 'scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}
+          >
+            <div style={{
+              width: '54px',
+              height: '54px',
+              borderRadius: '50px',
+              background: 'rgba(99, 102, 241, 0.12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px auto',
+              color: '#818cf8',
+              fontSize: '1.6rem',
+              border: '1.5px solid rgba(99, 102, 241, 0.3)'
+            }}>
+              ℹ️
+            </div>
+            
+            <h3 style={{ 
+              fontSize: '1.2rem', 
+              fontWeight: '800', 
+              color: '#a5b4fc',
+              marginBottom: '12px',
+              marginTop: 0
+            }}>
+              {localConfirm.title}
+            </h3>
+            
+            <p style={{ 
+              fontSize: '0.88rem', 
+              color: '#cbd5e1', 
+              lineHeight: 1.6,
+              marginBottom: '24px'
+            }}>
+              {localConfirm.message}
+            </p>
+            
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button
+                onClick={() => setLocalConfirm(null)}
+                className="btn-secondary"
+                style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold' }}
+              >
+                İptal
+              </button>
+              <button
+                onClick={() => {
+                  localConfirm.onConfirm();
+                  setLocalConfirm(null);
+                }}
+                className="btn-primary"
+                style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', background: '#4f46e5', borderColor: '#4f46e5', color: 'white' }}
+              >
+                Tamam
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -156,6 +156,7 @@ function App() {
   const [deviceLinkInfo, setDeviceLinkInfo] = useState(null);
   const [showDeviceLinkModal, setShowDeviceLinkModal] = useState(false);
   const [customAlert, setCustomAlert] = useState(null); // { title: string, message: string, type: 'success' | 'info' | 'error' }
+  const [customConfirm, setCustomConfirm] = useState(null); // { title: string, message: string, onConfirm: () => void, onCancel?: () => void }
 
   // Navigation & Config States
   const getInitialHashState = () => {
@@ -1458,37 +1459,51 @@ function App() {
   };
 
   const handleResetProgress = () => {
-    if (!selectedExam || !window.confirm("Bu sınavın tüm ilerlemesini sıfırlamak istediğinize emin misiniz?")) return;
-    setAnswers({});
-    setFlagged({});
-    localStorage.removeItem(`answers_${selectedExam.id}`);
-    localStorage.removeItem(`flags_${selectedExam.id}`);
-    setCurrentQuizIndex(1);
-    setExamRunning(false);
-    setExamSubmitted(false);
-    setShowScoreModal(false);
-    setExamSecondsLeft(180 * 60);
+    if (!selectedExam) return;
+    setCustomConfirm({
+      title: "Sınav İlerlemesini Sıfırla",
+      message: "Bu sınavın tüm ilerlemesini sıfırlamak istediğinize emin misiniz?",
+      onConfirm: () => {
+        setAnswers({});
+        setFlagged({});
+        localStorage.removeItem(`answers_${selectedExam.id}`);
+        localStorage.removeItem(`flags_${selectedExam.id}`);
+        setCurrentQuizIndex(1);
+        setExamRunning(false);
+        setExamSubmitted(false);
+        setShowScoreModal(false);
+        setExamSecondsLeft(180 * 60);
+      }
+    });
   };
 
   const handleResetAllProgress = () => {
-    if (!window.confirm("DİKKAT: Hesabınızdaki TÜM ilerlemeyi (çözülen sorular, istatistikler, kelimeler, seriler ve hedefler) sıfırlamak istediğinize emin misiniz? Bu işlem geri alınamaz!")) return;
+    setCustomConfirm({
+      title: "Tüm İlerlemeyi Sıfırla",
+      message: "DİKKAT: Hesabınızdaki TÜM ilerlemeyi (çözülen sorular, istatistikler, kelimeler, seriler ve hedefler) sıfırlamak istediğinize emin misiniz? Bu işlem geri alınamaz!",
+      onConfirm: () => {
+        Object.keys(localStorage).forEach(key => {
+          if (key.startsWith('answers_') || key.startsWith('flags_') || key.startsWith('yokdil_')) {
+            localStorage.removeItem(key);
+          }
+        });
 
-    Object.keys(localStorage).forEach(key => {
-      if (key.startsWith('answers_') || key.startsWith('flags_') || key.startsWith('yokdil_')) {
-        localStorage.removeItem(key);
+        setAnswers({});
+        setFlagged({});
+        setNotebook([]);
+        setQuestionStats({});
+        setStudyStreak(1);
+        setDailyQuestionsSolved(0);
+        setDailyWordsStudied(0);
+        setDailyLecturesStudied(0);
+
+        setCustomAlert({
+          title: "Sıfırlama Başarılı",
+          message: "Tüm verileriniz başarıyla sıfırlanmıştır.",
+          type: "success"
+        });
       }
     });
-
-    setAnswers({});
-    setFlagged({});
-    setNotebook([]);
-    setQuestionStats({});
-    setStudyStreak(1);
-    setDailyQuestionsSolved(0);
-    setDailyWordsStudied(0);
-    setDailyLecturesStudied(0);
-
-    alert("Tüm verileriniz başarıyla sıfırlanmıştır.");
   };
 
   // AI Chatbot States
@@ -2495,6 +2510,96 @@ function App() {
             >
               Tamam
             </button>
+          </div>
+        </div>
+      )}
+
+      {customConfirm && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(15, 23, 42, 0.85)',
+          backdropFilter: 'blur(10px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 99999,
+          animation: 'fadeIn 0.25s ease-out'
+        }}>
+          <div 
+            style={{
+              background: 'rgba(30, 41, 59, 0.98)',
+              border: '1.5px solid rgba(239, 68, 68, 0.4)',
+              padding: '28px 32px',
+              borderRadius: '24px',
+              maxWidth: '440px',
+              width: '90%',
+              textAlign: 'center',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(239, 68, 68, 0.15)',
+              color: '#e2e8f0',
+              animation: 'scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}
+          >
+            <div style={{
+              width: '54px',
+              height: '54px',
+              borderRadius: '50px',
+              background: 'rgba(239, 68, 68, 0.12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px auto',
+              color: '#ef4444',
+              fontSize: '1.6rem',
+              border: '1.5px solid rgba(239, 68, 68, 0.3)'
+            }}>
+              ⚠️
+            </div>
+            
+            <h3 style={{ 
+              fontSize: '1.2rem', 
+              fontWeight: '800', 
+              color: '#fca5a5',
+              marginBottom: '12px',
+              marginTop: 0
+            }}>
+              {customConfirm.title}
+            </h3>
+            
+            <p style={{ 
+              fontSize: '0.88rem', 
+              color: '#e2e8f0', 
+              lineHeight: 1.6,
+              marginBottom: '24px'
+            }}>
+              {customConfirm.message}
+            </p>
+            
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button
+                onClick={() => {
+                  customConfirm.onCancel?.();
+                  setCustomConfirm(null);
+                }}
+                className="btn-secondary"
+                style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold' }}
+              >
+                İptal
+              </button>
+              <button
+                onClick={() => {
+                  customConfirm.onConfirm();
+                  setCustomConfirm(null);
+                }}
+                className="btn-primary"
+                style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', background: '#ef4444', borderColor: '#ef4444', color: 'white' }}
+              >
+                Tamam
+              </button>
+            </div>
           </div>
         </div>
       )}

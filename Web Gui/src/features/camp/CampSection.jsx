@@ -803,7 +803,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         setStudyWords(finalWords);
 
         // Load correct answers count based on completed state
-        const comp = progress.completedDays[dayNum];
+        const comp = progress && progress.completedDays ? progress.completedDays[dayNum] : null;
         if (comp) {
           const expectedCorr = Math.round((comp.score / 100) * (finalWords.length * 4));
           setCorrectAnswers(expectedCorr);
