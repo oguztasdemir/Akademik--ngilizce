@@ -480,57 +480,23 @@ const CampStudy = ({
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: 'center', width: '100%', justifyContent: vocabTrack === 'anlam' ? 'center' : 'flex-start', flex: 1 }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: (vocabTrack === 'anlam' || vocabTrack === 'tumu') ? 1 : 'none', width: '100%', margin: (vocabTrack === 'anlam' || vocabTrack === 'tumu') ? 'auto' : '10px 0' }}>
                       <span style={{ fontSize: '0.65rem', color: theme.color, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px' }}>
-                        TÜRKÇE ANLAMLARI (BİLDİKLERİNİZİ SEÇİN)
+                        TÜRKÇE ANLAMLARI
                       </span>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', justifyContent: 'center', width: '100%', maxWidth: '380px' }} onClick={(e) => e.stopPropagation()}>
-                        {studyWords[currentIdx].tr.split(',').map((meaning, mIdx) => {
-                          const cleanMeaning = meaning.trim();
-                          const isSelected = selectedMeaningsForWord.includes(cleanMeaning);
-                          return (
-                            <div 
-                              key={mIdx}
-                              onClick={() => toggleMeaningSelection(cleanMeaning)}
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '12px',
-                                background: isSelected ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.02)',
-                                border: isSelected ? '1.5px solid #10b981' : '1px solid rgba(255,255,255,0.08)',
-                                padding: '10px 14px',
-                                borderRadius: '12px',
-                                width: '100%',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                boxSizing: 'border-box',
-                                textAlign: 'left'
-                              }}
-                            >
-                              <div style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '6px',
-                                border: isSelected ? '1.5px solid #10b981' : '1.5px solid rgba(255,255,255,0.3)',
-                                background: isSelected ? '#10b981' : 'transparent',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: 'white',
-                                fontSize: '0.75rem',
-                                transition: 'all 0.2s'
-                              }}>
-                                {isSelected && '✓'}
+                      <div style={{ fontSize: '1.45rem', fontWeight: 'bold', color: '#34d399', textAlign: 'center', lineHeight: 1.6, padding: '0 20px' }}>
+                        {(() => {
+                          const text = studyWords[currentIdx].tr || '';
+                          if (/\b\d+\)\s*/.test(text)) {
+                            const parts = text.split(/(?=\b\d+\))/).map(s => s.trim()).filter(Boolean);
+                            return (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+                                {parts.map((p, idx) => (
+                                  <div key={idx} style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#34d399' }}>{p}</div>
+                                ))}
                               </div>
-                              <span style={{ 
-                                fontSize: '1.05rem', 
-                                fontWeight: '700', 
-                                color: isSelected ? '#34d399' : 'white',
-                                transition: 'color 0.2s'
-                              }}>
-                                {cleanMeaning}
-                              </span>
-                            </div>
-                          );
-                        })}
+                            );
+                          }
+                          return text;
+                        })()}
                       </div>
                     </div>
 
@@ -775,7 +741,7 @@ const CampStudy = ({
                           gap: '6px'
                         }}
                       >
-                        Kaydet ve Devam Et ⏩
+                        Biliyorum ⏩
                       </button>
                     </>
                   )}
