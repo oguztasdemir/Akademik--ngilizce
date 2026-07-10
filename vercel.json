@@ -53,8 +53,16 @@
       "dest": "api/server.js"
     },
     {
+      "src": "/assets/(.*)",
+      "dest": "Web Gui/assets/$1"
+    },
+    {
+      "src": "/(.*)\\.(js|css|png|jpg|jpeg|gif|ico|svg|json|pdf|txt)",
+      "dest": "Web Gui/$1.$2"
+    },
+    {
       "src": "/(.*)",
-      "dest": "Web Gui/$1"
+      "dest": "Web Gui/index.html"
     }
   ]
 }

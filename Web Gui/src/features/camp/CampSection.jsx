@@ -1305,16 +1305,30 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         }
       }
 
+      let isFallbackApplied = false;
       if (track === 'es_anlam') {
-        rawWords = rawWords.filter(w => w.synonyms && w.synonyms.trim().length > 0);
+        const filtered = rawWords.filter(w => w.synonyms && w.synonyms.trim().length > 0);
+        if (filtered.length > 0) {
+          rawWords = filtered;
+        } else {
+          isFallbackApplied = true;
+        }
       } else if (track === 'zit_anlam') {
-        rawWords = rawWords.filter(w => w.antonyms && w.antonyms.trim().length > 0);
+        const filtered = rawWords.filter(w => w.antonyms && w.antonyms.trim().length > 0);
+        if (filtered.length > 0) {
+          rawWords = filtered;
+        } else {
+          isFallbackApplied = true;
+        }
       }
         let finalWords = deterministicShuffle(rawWords, dayNum);
         if (finalWords.length === 0) {
-          alert("Bu günün kelime listesi boş veya seçilen çalışma türü için kelime bulunamadı!");
+          alert("Bu günün kelime listesi boş!");
           setIsStudying(false);
           return;
+        }
+        if (isFallbackApplied) {
+          alert("Bu günün kelimelerinde seçilen çalışma türü (eş/zıt anlam) bulunmadığı için genel kelime çalışması başlatılıyor.");
         }
         setStudyWords(finalWords);
 
