@@ -41,7 +41,8 @@ const CampDashboard = ({
   vocabPlanData,
   generalInfo,
   hideSwitcher,
-  showConfirm
+  showConfirm,
+  handleExcelImport
 }) => {
   const [showGeneralReport, setShowGeneralReport] = useState(false);
   const [expandedGrammarDay, setExpandedGrammarDay] = useState(null);
@@ -613,11 +614,42 @@ const CampDashboard = ({
           {/* Start Daily Button Card */}
           <div className="glass-card text-center" style={{ padding: '36px 20px', borderRadius: '24px', background: `linear-gradient(135deg, rgba(${themeColor.rgb}, 0.1) 0%, rgba(16, 185, 129, 0.04) 100%)`, border: `1.5px solid rgba(${themeColor.rgb}, 0.25)` }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'white', margin: 0 }}>
-              Akademik Kelime Master Kampı 🚀
+              {selectedCategory === 'custom' ? 'Özelleştirilmiş Kelime Kampı 🚀' : 'Akademik Kelime Master Kampı 🚀'}
             </h2>
             <p style={{ fontSize: '0.94rem', color: '#cbd5e1', maxWidth: '520px', margin: '8px auto 24px auto', lineHeight: 1.6 }}>
-              60 Günlük Gelişmiş Kelime Kampı ile akademik kelimeleri; anlam, eş anlam, zıt anlam ve örnek cümle alıştırmalarıyla çalışarak hafızanıza sabitleyin.
+              {selectedCategory === 'custom' 
+                ? `${totalCampDays} Günlük Özelleştirilmiş Kelime Kampı ile kendi kelime listenizi çalışarak hafızanıza sabitleyin.` 
+                : '60 Günlük Gelişmiş Kelime Kampı ile akademik kelimeleri; anlam, eş anlam, zıt anlam ve örnek cümle alıştırmalarıyla çalışarak hafızanıza sabitleyin.'}
             </p>
+
+            {selectedCategory === 'custom' && (
+              <div style={{ marginBottom: '24px' }}>
+                <label
+                  className="btn-secondary"
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '10px',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <i className="fa-solid fa-file-excel"></i> Excel Listesini Güncelle
+                  <input
+                    type="file"
+                    accept=".xlsx, .xls, .csv"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        handleExcelImport(e.target.files[0]);
+                      }
+                    }}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+              </div>
+            )}
 
             {(() => {
               const completedObj = completedDaysMap[currentDay];

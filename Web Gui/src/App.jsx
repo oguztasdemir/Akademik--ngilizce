@@ -1479,8 +1479,8 @@ function App() {
 
   const handleResetAllProgress = () => {
     setCustomConfirm({
-      title: "Tüm İlerlemeyi Sıfırla",
-      message: "DİKKAT: Hesabınızdaki TÜM ilerlemeyi (çözülen sorular, istatistikler, kelimeler, seriler ve hedefler) sıfırlamak istediğinize emin misiniz? Bu işlem geri alınamaz!",
+      title: "Tüm Verileri Sıfırla",
+      message: "DİKKAT: Hesabınızdaki TÜM ilerlemeyi (çözülen sorular, istatistikler, kelimeler, seriler, hedefler ve yüklediğiniz özel kelime kampları) sıfırlamak istediğinize emin misiniz? Bu işlem geri alınamaz!",
       onConfirm: () => {
         Object.keys(localStorage).forEach(key => {
           if (key.startsWith('answers_') || key.startsWith('flags_') || key.startsWith('yokdil_')) {
@@ -1496,6 +1496,8 @@ function App() {
         setDailyQuestionsSolved(0);
         setDailyWordsStudied(0);
         setDailyLecturesStudied(0);
+        setSelectedCategory(null);
+        setSelectedExam(null);
 
         setCustomAlert({
           title: "Sıfırlama Başarılı",
@@ -2654,6 +2656,13 @@ function App() {
                     </div>
                     <i className="fa-solid fa-chevron-right arrow-icon"></i>
                   </button>
+                  <button className="menu-item subject-card custom-vocab-card" onClick={() => { setSelectedCategory('custom'); setActiveTab('camp-vocab'); setSelectedExam(null); setQuizActive(false); }} style={{ borderLeft: '4px solid #fb923c' }}>
+                    <div className="menu-icon subject-icon" style={{ borderColor: '#d97706', color: '#fb923c' }}><i className="fa-solid fa-file-excel"></i></div>
+                    <div className="menu-text" style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                      <h4 style={{ margin: 0 }}>Özelleştirilmiş Kelime Kampı</h4>
+                    </div>
+                    <i className="fa-solid fa-chevron-right arrow-icon"></i>
+                  </button>
                 </div>
               </section>
             )}
@@ -2674,7 +2683,7 @@ function App() {
                   <div className="welcome-card text-left" style={{ flex: 1, minWidth: '280px', margin: 0, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                     <div>
                       <h2>Selam, {currentUser.name}! 👋</h2>
-                      <p>YÖKDİL {selectedCategory === 'fen' ? 'Fen Bilimleri' : selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : 'Sağlık Bilimleri'} hazırlık performansın aşağıda listelenmiştir.</p>
+                      <p>YÖKDİL {selectedCategory === 'fen' ? 'Fen Bilimleri' : selectedCategory === 'sosyal' ? 'Sosyal Bilimler' : selectedCategory === 'saglik' ? 'Sağlık Bilimleri' : 'Özelleştirilmiş Kelime Kampı'} hazırlık performansın aşağıda listelenmiştir.</p>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(251, 146, 60, 0.1)', border: '1px solid rgba(251, 146, 60, 0.25)', padding: '10px 16px', borderRadius: '16px' }}>
                       <span style={{ fontSize: '1.8rem' }}>🔥</span>

@@ -4,6 +4,8 @@ import { handlePrintPDF, handlePrintCikmisExportPDF, handlePrintCikmisExportDocx
 import CampDashboard from './components/CampDashboard';
 import CampStudy from './components/CampStudy';
 import CampGrammar from './components/CampGrammar';
+import * as XLSX from 'xlsx';
+import { downloadExcelTemplate } from '../../utils/excelHelper';
 
 const campModules = import.meta.glob('../../../../Dataset/**/*.json');
 
@@ -253,6 +255,179 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [loadingReportCard, setLoadingReportCard] = useState(false);
   const [confirmModal, setConfirmModal] = useState(null);
   const [grammarCampDb, setGrammarCampDb] = useState({});
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importProgress, setImportProgress] = useState(0);
+  const [importStatus, setImportStatus] = useState('');
+  const [importTimeLeft, setImportTimeLeft] = useState(0);
+  const [importErrors, setImportErrors] = useState([]);
+  const [importSuccessCount, setImportSuccessCount] = useState(0);
+
+  const handleExcelImport = (file) => {
+    if (!file) return;
+    
+    setShowImportModal(true);
+    setImportProgress(0);
+    setImportStatus('Dosya okunuyor...');
+    setImportTimeLeft(0);
+    setImportErrors([]);
+    setImportSuccessCount(0);
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet);
+
+        if (!rows || rows.length === 0) {
+          setImportStatus('Hata: Excel dosyası boş veya okunamadı.');
+          setImportErrors(['Dosya içinde geçerli satır bulunamadı.']);
+          return;
+        }
+
+        const totalRows = rows.length;
+        setImportStatus(`Toplam ${totalRows} satır tespit edildi. Aktarım başlatılıyor...`);
+
+        const grouped = {};
+        const errors = [];
+        let successCount = 0;
+        let maxDay = 0;
+
+        const chunkSize = Math.max(1, Math.ceil(totalRows / 20)); // Chunk size to update progress ~20 times
+        const totalChunks = Math.ceil(totalRows / chunkSize);
+        
+        let chunkIndex = 0;
+
+        const processNextChunk = () => {
+          if (chunkIndex >= totalChunks) {
+            // Done!
+            setImportProgress(100);
+            setImportTimeLeft(0);
+            
+            if (successCount === 0) {
+              setImportStatus('Hata: Hiçbir satır başarıyla aktarılamadı.');
+              if (errors.length > 0) {
+                setImportErrors(errors);
+              }
+              return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('yokdil_custom_camp_words', JSON.stringify(grouped));
+            
+            const customGenel = {
+              camp_name: "Özelleştirilmiş Kelime Kampı",
+              total_days: maxDay,
+              total_words: successCount,
+              files_count: maxDay,
+              description: "Kendi yüklediğiniz excel listesiyle oluşturulan özelleştirilmiş kelime çalışma kampı."
+            };
+            localStorage.setItem('yokdil_custom_camp_genel', JSON.stringify(customGenel));
+
+            // Reset progress for this camp
+            const initialProgress = { currentDay: 1, completedDays: {} };
+            localStorage.setItem('yokdil_camp_progress_custom', JSON.stringify(initialProgress));
+            setProgress(initialProgress);
+
+            setImportStatus('Aktarım başarıyla tamamlandı!');
+            setImportSuccessCount(successCount);
+            if (errors.length > 0) {
+              setImportErrors(errors);
+            }
+
+            // Reload plans to refresh state
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+
+            return;
+          }
+
+          const startIdx = chunkIndex * chunkSize;
+          const endIdx = Math.min(startIdx + chunkSize, totalRows);
+
+          for (let i = startIdx; i < endIdx; i++) {
+            const row = rows[i];
+            const rowNum = i + 2; // Excel sheet rows are 1-based, plus header
+
+            // Standardize column lookups
+            const rawDay = row['Gün'] || row['Day'] || row['gün'] || row['day'];
+            const rawWord = row['Kelime'] || row['Word'] || row['kelime'] || row['word'];
+            const rawType = row['Kelime Türü'] || row['Tür'] || row['Type'] || row['tür'] || row['type'] || '';
+            const rawTr = row['Türkçe Anlamı'] || row['Anlam'] || row['Turkish'] || row['türkçe'] || row['tr'] || row['turkish'] || '';
+            const rawSynonyms = row['Eş Anlamlılar'] || row['Eş Anlam'] || row['Synonyms'] || row['synonyms'] || '';
+            const rawAntonyms = row['Zıt Anlamlılar'] || row['Zıt Anlam'] || row['Antonyms'] || row['antonyms'] || '';
+            const rawSentence = row['Örnek Cümle'] || row['Cümle'] || row['Sentence'] || row['sentence'] || '';
+            const rawSentenceTr = row['Örnek Cümle Çevirisi'] || row['Cümle Çevirisi'] || row['Sentence TR'] || row['sentence_tr'] || '';
+
+            const dayNum = parseInt(rawDay, 10);
+            const wordStr = String(rawWord || '').trim();
+            const trStr = String(rawTr || '').trim();
+
+            if (isNaN(dayNum) || dayNum <= 0) {
+              errors.push(`Satır ${rowNum}: Geçersiz gün numarası (${rawDay || 'Boş'}). Satır atlandı.`);
+              continue;
+            }
+
+            if (!wordStr) {
+              errors.push(`Satır ${rowNum}: İngilizce kelime boş bırakılmış. Satır atlandı.`);
+              continue;
+            }
+
+            if (!trStr) {
+              errors.push(`Satır ${rowNum}: "${wordStr}" kelimesinin Türkçe anlamı boş bırakılmış. Satır atlandı.`);
+              continue;
+            }
+
+            // Make custom word object matching the app structure
+            const sentences = rawSentence ? [{
+              en: String(rawSentence).trim(),
+              tr: String(rawSentenceTr).trim(),
+              blanked: String(rawSentence).replace(new RegExp(wordStr.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi'), '________')
+            }] : [];
+
+            if (!grouped[String(dayNum)]) grouped[String(dayNum)] = [];
+
+            grouped[String(dayNum)].push({
+              word: wordStr,
+              tr: trStr,
+              type: String(rawType).trim(),
+              synonyms: String(rawSynonyms).trim(),
+              antonyms: String(rawAntonyms).trim(),
+              sentences: sentences
+            });
+
+            successCount++;
+            if (dayNum > maxDay) maxDay = dayNum;
+          }
+
+          chunkIndex++;
+          const progressVal = Math.round((chunkIndex / totalChunks) * 100);
+          setImportProgress(progressVal);
+          setImportStatus(`${endIdx} / ${totalRows} satır doğrulandı...`);
+          setImportTimeLeft(Math.max(1, Math.ceil((totalChunks - chunkIndex) * 0.1)));
+
+          setTimeout(processNextChunk, 100);
+        };
+
+        setTimeout(processNextChunk, 100);
+
+      } catch (err) {
+        console.error("Excel import failed:", err);
+        setImportStatus('Hata: Excel dosyası okunamadı veya ayrıştırılamadı.');
+        setImportErrors([err.message]);
+      }
+    };
+
+    reader.onerror = () => {
+      setImportStatus('Hata: Dosya okunamadı.');
+      setImportErrors(['Dosya yükleme hatası.']);
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
 
   const showConfirm = (message, onConfirm, onCancel, showCancel = true) => {
     setConfirmModal({ message, onConfirm, onCancel, showCancel });
@@ -526,6 +701,59 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const categoryDict = (dictDb && dictDb[category]) || {};
       const mappedCikmis = {};
       const mappedVocab = {};
+
+      if (category === 'custom') {
+        let customGenel = null;
+        try {
+          const savedGenel = localStorage.getItem('yokdil_custom_camp_genel');
+          if (savedGenel) customGenel = JSON.parse(savedGenel);
+        } catch (e) {
+          console.error("Failed to parse custom camp genel:", e);
+        }
+
+        if (!customGenel) {
+          customGenel = {
+            camp_name: "Özelleştirilmiş Kelime Kampı",
+            total_days: 0,
+            total_words: 0,
+            files_count: 0,
+            description: "Kendi yüklediğiniz excel listesiyle oluşturulan özelleştirilmiş kelime çalışma kampı."
+          };
+        }
+
+        const loadedInfo = { vocabulary: customGenel };
+        setGeneralInfoMap(loadedInfo);
+
+        let customWords = {};
+        try {
+          const savedWords = localStorage.getItem('yokdil_custom_camp_words');
+          if (savedWords) customWords = JSON.parse(savedWords);
+        } catch (e) {
+          console.error("Failed to parse custom camp words:", e);
+        }
+
+        Object.keys(customWords).forEach(day => {
+          mappedVocab[day] = customWords[day].map((wObj, idx) => {
+            const eng = wObj.word || wObj.english || "";
+            const tr = wObj.tr || wObj.turkish || "anlamı bulunamadı";
+            return {
+              id: idx + 1,
+              english: eng,
+              turkish: tr,
+              pronunciation: wObj.pronunciation || "",
+              synonyms: wObj.synonyms || "",
+              antonyms: wObj.antonyms || "",
+              sentences: wObj.sentences || [],
+              word: eng,
+              tr: tr,
+              type: wObj.type || ""
+            };
+          });
+        });
+
+        setVocabPlanData(mappedVocab);
+        return;
+      }
 
       // Load general info for all three camps immediately first
       const loadedInfo = {};
@@ -2733,6 +2961,251 @@ const handleCikmisSwipeBack = () => {
     );
   }
 
+  const isCustomEmpty = selectedCategory === 'custom' && (!vocabPlanData || Object.keys(vocabPlanData).length === 0);
+
+  const renderExcelUploadDashboard = () => {
+    return (
+      <div className="space-y-6" style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+        <div className="welcome-card text-left" style={{
+          background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%)',
+          border: '1.5px solid rgba(251, 146, 60, 0.25)',
+          borderRadius: '24px',
+          padding: '28px'
+        }}>
+          <h2 style={{ color: '#fb923c', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.8rem', fontWeight: '800', margin: '0 0 10px 0' }}>
+            <i className="fa-solid fa-file-excel"></i> Özelleştirilmiş Kelime Kampı
+          </h2>
+          <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+            Kendi kelimelerinizi Excel formatında yükleyerek eş anlam, zıt anlam ve cümle pratiklerini içeren tamamen size özel bir çalışma kampı oluşturabilirsiniz.
+          </p>
+        </div>
+
+        <div className="glass-card" style={{
+          padding: '30px',
+          borderRadius: '24px',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          background: 'rgba(15, 23, 42, 0.65)',
+          backdropFilter: 'blur(12px)',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '24px'
+        }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '72px',
+              height: '72px',
+              borderRadius: '20px',
+              background: 'rgba(251, 146, 60, 0.1)',
+              border: '1.5px solid rgba(251, 146, 60, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fb923c',
+              fontSize: '2rem'
+            }}>
+              <i className="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'white', margin: '10px 0 0 0' }}>
+              Excel Listenizi Yükleyin
+            </h3>
+            <p style={{ fontSize: '0.85rem', color: '#94a3b8', maxWidth: '420px', margin: 0, lineHeight: 1.5 }}>
+              Hazırladığınız Excel dosyasını (.xlsx, .xls, .csv) buraya sürükleyin veya dosya seçin.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', width: '100%', justifyContent: 'center' }}>
+            <button
+              onClick={downloadExcelTemplate}
+              className="btn-secondary"
+              style={{
+                padding: '12px 24px',
+                borderRadius: '14px',
+                fontSize: '0.88rem',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer'
+              }}
+            >
+              <i className="fa-solid fa-download"></i> Örnek Excel Şablonu İndir
+            </button>
+
+            <label
+              className="btn-primary"
+              style={{
+                padding: '12px 24px',
+                borderRadius: '14px',
+                fontSize: '0.88rem',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: '#fb923c',
+                borderColor: '#fb923c',
+                cursor: 'pointer'
+              }}
+            >
+              <i className="fa-solid fa-file-import"></i> Dosya Seç ve Yükle
+              <input
+                type="file"
+                accept=".xlsx, .xls, .csv"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    handleExcelImport(e.target.files[0]);
+                  }
+                }}
+                style={{ display: 'none' }}
+              />
+            </label>
+          </div>
+        </div>
+
+        <div className="glass-card" style={{ padding: '24px', borderRadius: '18px', border: '1px solid rgba(255, 255, 255, 0.04)', background: 'rgba(15, 23, 42, 0.3)' }}>
+          <h4 style={{ fontSize: '0.9rem', color: 'white', fontWeight: 'bold', margin: '0 0 12px 0', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <i className="fa-solid fa-circle-info" style={{ color: '#fb923c' }}></i> Şablon Kuralları & İpuçları
+          </h4>
+          <ul style={{ textAlign: 'left', fontSize: '0.8rem', color: '#94a3b8', paddingLeft: '20px', margin: 0, lineHeight: 1.7 }}>
+            <li><strong>Gün Sütunu:</strong> Kelimelerin hangi gün çalışmasında karşınıza çıkacağını belirler (Örn: 1, 2, 3).</li>
+            <li><strong>Kelime Sütunu:</strong> İngilizce kelimeyi giriniz. Bu alan zorunludur.</li>
+            <li><strong>Kelime Türü:</strong> Kelimenin türünü belirtir (örn: verb, noun, adjective).</li>
+            <li><strong>Türkçe Anlamı:</strong> Kelimenin Türkçe karşılıklarını yazınız. Birden fazla anlamı virgülle ayırabilirsiniz.</li>
+            <li><strong>Eş/Zıt Anlamlılar:</strong> Kelimenin eş ve zıt anlamlılarını virgülle ayırarak yazabilirsiniz.</li>
+            <li><strong>Örnek Cümle:</strong> İngilizce örnek cümle girildiğinde, sistem otomatik olarak kelime boşluğu bırakarak cümleyi pratik sorularına dönüştürür.</li>
+          </ul>
+        </div>
+      </div>
+    );
+  };
+
+  const renderImportModal = () => {
+    if (!showImportModal) return null;
+    return createPortal(
+      <div style={{
+        position: 'fixed',
+        top: 0, left: 0, right: 0, bottom: 0,
+        background: 'rgba(15, 23, 42, 0.85)',
+        backdropFilter: 'blur(10px)',
+        zIndex: 10000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}>
+        <div className="glass-card" style={{
+          width: '100%',
+          maxWidth: '520px',
+          borderRadius: '24px',
+          padding: '30px',
+          border: '1.5px solid rgba(255, 255, 255, 0.08)',
+          background: 'rgba(15, 23, 42, 0.98)',
+          color: 'white',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.6)'
+        }}>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 10px 0', color: '#fb923c', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <i className="fa-solid fa-arrows-spin fa-spin"></i> Excel Verileri İçe Aktarılıyor
+          </h3>
+          <p style={{ fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '24px' }}>
+            {importStatus}
+          </p>
+
+          <div style={{
+            width: '100%',
+            height: '10px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '5px',
+            overflow: 'hidden',
+            marginBottom: '12px'
+          }}>
+            <div style={{
+              width: `${importProgress}%`,
+              height: '100%',
+              background: 'linear-gradient(90deg, #fb923c, #f97316)',
+              transition: 'width 0.15s ease-out',
+              borderRadius: '5px'
+            }}></div>
+          </div>
+
+          <div style={{ display: 'flex', justifycontent: 'space-between', fontSize: '0.82rem', fontWeight: 'bold', color: '#94a3b8', marginBottom: '20px' }}>
+            <span>İlerleme: <strong style={{ color: 'white' }}>{importProgress}%</strong></span>
+            {importTimeLeft > 0 && (
+              <span>Tahmini Kalan: <strong style={{ color: 'white' }}>{importTimeLeft} saniye</strong></span>
+            )}
+          </div>
+
+          {importSuccessCount > 0 && (
+            <div style={{
+              background: 'rgba(16, 185, 129, 0.08)',
+              border: '1px solid rgba(16, 185, 129, 0.2)',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              fontSize: '0.82rem',
+              color: '#34d399',
+              fontWeight: '600',
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <i className="fa-solid fa-circle-check"></i>
+              <span>{importSuccessCount} kelime başarıyla doğrulandı.</span>
+            </div>
+          )}
+
+          {importErrors.length > 0 && (
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <span style={{ fontSize: '0.78rem', color: '#f87171', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <i className="fa-solid fa-triangle-exclamation"></i> Aktarım Günlüğü ({importErrors.length} Hata/Atlama)
+                </span>
+              </div>
+              <div style={{
+                maxHeight: '120px',
+                overflowY: 'auto',
+                background: 'rgba(0, 0, 0, 0.3)',
+                borderRadius: '10px',
+                padding: '10px',
+                fontSize: '0.72rem',
+                fontFamily: 'monospace',
+                color: '#fca5a5',
+                lineHeight: 1.5,
+                border: '1px solid rgba(239, 68, 68, 0.1)'
+              }}>
+                {importErrors.map((err, idx) => (
+                  <div key={idx} style={{ marginBottom: '4px' }}>{err}</div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {importProgress === 100 && (
+            <div style={{ display: 'flex', justifycontent: 'flex-end', gap: '10px', marginTop: '20px' }}>
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="btn-secondary"
+                style={{ padding: '8px 20px', borderRadius: '10px', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer' }}
+              >
+                Kapat
+              </button>
+            </div>
+          )}
+        </div>
+      </div>,
+      document.body
+    );
+  };
+
+  if (isCustomEmpty) {
+    return (
+      <>
+        {renderExcelUploadDashboard()}
+        {renderImportModal()}
+      </>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {reportCardDay && createPortal(
@@ -3011,7 +3484,10 @@ const handleCikmisSwipeBack = () => {
         generalInfo={generalInfoMap[campType]}
         hideSwitcher={hideSwitcher || initialCampType === 'cikmis_kelimeler'}
         showConfirm={showConfirm}
+        handleExcelImport={handleExcelImport}
       />
+
+      {renderImportModal()}
 
       {confirmModal && (
         <div style={{
