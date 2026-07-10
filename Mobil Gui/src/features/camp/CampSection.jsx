@@ -4156,8 +4156,8 @@ const handleCikmisSwipeBack = () => {
   return (
     <div className="space-y-6">
       {reportCardDay && createPortal(
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.65)', zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }} onClick={() => setReportCardDay(null)}>
-          <div className="glass-card" style={{ width: '100%', maxWidth: '640px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '24px', padding: '28px', border: '1.5px solid rgba(255,255,255,0.08)', background: 'rgba(15, 23, 42, 0.98)', color: 'white', textAlign: 'left', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }} onClick={(e) => e.stopPropagation()}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(5, 5, 5, 0.95)', backdropFilter: 'blur(10px)', zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }} onClick={() => setReportCardDay(null)}>
+          <div style={{ width: '100%', maxWidth: '640px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '24px', padding: '28px', border: '1.5px solid rgba(255,255,255,0.08)', background: '#090d16', color: 'white', textAlign: 'left', boxShadow: '0 20px 50px rgba(0,0,0,0.8)' }} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>
               <h3 style={{ fontSize: '1.3rem', fontWeight: 'bold', margin: 0, color: 'white' }}>
                 📊 Genel Değerlendirme Karnesi
@@ -4379,7 +4379,17 @@ const handleCikmisSwipeBack = () => {
                       className="btn-secondary"
                       style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
                     >
-                      🔄 Çalışmayı Yeniden Başlat
+                      🔄 Yeniden Başlat
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setReportCardDay(null);
+                        exitCamp();
+                      }}
+                      className="btn-secondary"
+                      style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer', background: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)', color: '#f87171' }}
+                    >
+                      🚪 Çalışmadan Çık
                     </button>
                   </div>
                 </div>
