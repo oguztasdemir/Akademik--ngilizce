@@ -1468,19 +1468,50 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     return options.sort(() => Math.random() - 0.5);
   };
 
+  const getGlobalEnglishWordsPool = () => {
+    const pool = new Set();
+    if (vocabPlanData) {
+      Object.values(vocabPlanData).forEach(dayWords => {
+        if (Array.isArray(dayWords)) {
+          dayWords.forEach(w => {
+            if (w && w.english) pool.add(w.english);
+          });
+        }
+      });
+    }
+    if (cikmisPlanData) {
+      Object.values(cikmisPlanData).forEach(dayWords => {
+        if (Array.isArray(dayWords)) {
+          dayWords.forEach(w => {
+            if (w && w.english) pool.add(w.english);
+          });
+        }
+      });
+    }
+    if (allWordsDb) {
+      Object.keys(allWordsDb).forEach(k => {
+        if (k) pool.add(k);
+      });
+    }
+    return Array.from(pool);
+  };
+
   const getSynonymOptions = (correctSynonym, currentWordObj) => {
-    const allSyns = Object.values(allWordsDb).map(v => {
-        const val = typeof v === 'string' ? v.split('|')[2] || '' : (v.synonyms || '');
-        return val.split(',')[0].trim();
-    }).filter(Boolean);
-    const filtered = allSyns.filter(s => {
-      if (s.toLowerCase().trim() === correctSynonym.toLowerCase().trim()) return false;
-      if (currentWordObj && currentWordObj.word.toLowerCase() === s.toLowerCase()) return false;
+    const pool = getGlobalEnglishWordsPool();
+    const filtered = pool.filter(s => {
+      if (!s) return false;
+      const cleanS = s.toLowerCase().trim();
+      if (cleanS === correctSynonym.toLowerCase().trim()) return false;
+      if (currentWordObj && currentWordObj.english && currentWordObj.english.toLowerCase().trim() === cleanS) return false;
+      if (currentWordObj && currentWordObj.word && currentWordObj.word.toLowerCase().trim() === cleanS) return false;
       return true;
     });
 
     const uniqueFiltered = Array.from(new Set(filtered)).sort(() => Math.random() - 0.5);
     const options = [correctSynonym, ...uniqueFiltered.slice(0, 3)];
+    while (options.length < 4) {
+      options.push("alternative");
+    }
     return options.sort(() => Math.random() - 0.5);
   };
 
@@ -1609,9 +1640,21 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   };
 
   const getAntonymOptions = (correctAntonym, currentWordObj) => {
-    const allAnts = Object.values(ACADEMIC_ANTONYMS).map(s => s.split(',')[0].trim());
-    const uniqueFiltered = Array.from(new Set(allAnts)).sort(() => Math.random() - 0.5);
+    const pool = getGlobalEnglishWordsPool();
+    const filtered = pool.filter(s => {
+      if (!s) return false;
+      const cleanS = s.toLowerCase().trim();
+      if (cleanS === correctAntonym.toLowerCase().trim()) return false;
+      if (currentWordObj && currentWordObj.english && currentWordObj.english.toLowerCase().trim() === cleanS) return false;
+      if (currentWordObj && currentWordObj.word && currentWordObj.word.toLowerCase().trim() === cleanS) return false;
+      return true;
+    });
+
+    const uniqueFiltered = Array.from(new Set(filtered)).sort(() => Math.random() - 0.5);
     const options = [correctAntonym, ...uniqueFiltered.slice(0, 3)];
+    while (options.length < 4) {
+      options.push("alternative");
+    }
     return options.sort(() => Math.random() - 0.5);
   };
 
