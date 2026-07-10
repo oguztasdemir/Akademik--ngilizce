@@ -17,15 +17,20 @@
     },
     {
       "word": "advocate",
-      "tr": "avukat",
+      "tr": "savunmak, desteklemek, savunucu, taraftar",
       "pronunciation": "",
-      "synonyms": "Support, counsel, back up.",
-      "antonyms": "Accuse, blame, charge.",
+      "synonyms": "defend, support, champion, back, uphold",
+      "antonyms": "oppose, criticize, object to",
       "sentences": [
         {
-          "en": "Mr.Williams is a conservative who advocates fewer government control on business.",
-          "tr": "Mr.Williams hükümetin iş üzerinde daha az kontrolü olması gerektiğini savunan bir muhafazakardır.",
-          "blanked": "Mr.Williams is a conservative who ________s fewer government control on business."
+          "en": "Mr. Williams is a conservative who advocates fewer government controls on business.",
+          "tr": "Mr. Williams, hükümetin iş dünyası üzerinde daha az denetime sahip olmasını savunan bir muhafazakardır.",
+          "blanked": "Mr. Williams is a conservative who ________s fewer government controls on business."
+        },
+        {
+          "en": "She is a passionate advocate for children's rights.",
+          "tr": "Kendisi çocuk haklarının tutkulu bir savunucusudur.",
+          "blanked": "She is a passionate ________ for children's rights."
         }
       ]
     },
