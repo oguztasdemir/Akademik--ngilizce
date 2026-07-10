@@ -1257,24 +1257,37 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     setIsStudying(true);
 
     const track = vocabTrack || 'anlam';
-    const dailyPlanKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${dayNum}.json`;
-    const loadDaily = getCampModule(dailyPlanKey);
-    if (!loadDaily) {
-      alert("Bu günün kelime listesi bulunamadı veya henüz hazır değil!");
-      setIsStudying(false);
-      return;
-    }
+    let rawWords = [];
 
     try {
-      const dailyMod = await loadDaily();
-      const dailyData = dailyMod.default || dailyMod;
-      if (dailyData && dailyData.words) {
-        let rawWords = dailyData.words || [];
-        if (track === 'es_anlam') {
-          rawWords = rawWords.filter(w => w.synonyms && w.synonyms.trim().length > 0);
-        } else if (track === 'zit_anlam') {
-          rawWords = rawWords.filter(w => w.antonyms && w.antonyms.trim().length > 0);
+      if (category === 'custom') {
+        const customDayWords = vocabPlanData[String(dayNum)] || [];
+        if (customDayWords.length === 0) {
+          alert("Bu günün kelime listesi bulunamadı veya henüz hazır değil!");
+          setIsStudying(false);
+          return;
         }
+        rawWords = customDayWords;
+      } else {
+        const dailyPlanKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${dayNum}.json`;
+        const loadDaily = getCampModule(dailyPlanKey);
+        if (!loadDaily) {
+          alert("Bu günün kelime listesi bulunamadı veya henüz hazır değil!");
+          setIsStudying(false);
+          return;
+        }
+        const dailyMod = await loadDaily();
+        const dailyData = dailyMod.default || dailyMod;
+        if (dailyData && dailyData.words) {
+          rawWords = dailyData.words || [];
+        }
+      }
+
+      if (track === 'es_anlam') {
+        rawWords = rawWords.filter(w => w.synonyms && w.synonyms.trim().length > 0);
+      } else if (track === 'zit_anlam') {
+        rawWords = rawWords.filter(w => w.antonyms && w.antonyms.trim().length > 0);
+      }
         let finalWords = deterministicShuffle(rawWords, dayNum);
         setStudyWords(finalWords);
 
@@ -1332,7 +1345,6 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
           setClozeInputText('');
           setClozeShowHint(false);
         }
-      }
     } catch (e) {
       console.error(e);
       alert("Kelime listesi yüklenirken hata oluştu.");
@@ -3788,7 +3800,7 @@ const handleCikmisSwipeBack = () => {
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                 <i className="fa-solid fa-file-excel" style={{ fontSize: '2.4rem', color: '#fb923c' }}></i>
                 <span style={{ fontSize: '0.85rem', color: 'white', fontWeight: 'bold' }}>Excel Dosyası Seçin</span>
-                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{newProjFile ? `Seçilen: ${newProjFile.name}` : 'Maksimum 5MB, .xlsx, .xls veya .csv'}</span>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{newProjFile ? `Seçilen: ${newProjFile.name}` : '.xlsx, .xls veya .csv formatında dosya yükleyin'}</span>
               </div>
               
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
