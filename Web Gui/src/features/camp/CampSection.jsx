@@ -260,17 +260,304 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [importStatus, setImportStatus] = useState('');
   const [importTimeLeft, setImportTimeLeft] = useState(0);
   const [importErrors, setImportErrors] = useState([]);
-  const [importSuccessCount, setImportSuccessCount] = useState(0);
+  const [projects, setProjects] = useState(() => {
+    const saved = localStorage.getItem('yokdil_custom_projects');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) { console.error(e); }
+    }
+    return [];
+  });
+  const [activeProjectId, setActiveProjectId] = useState(() => {
+    return localStorage.getItem('yokdil_current_project_id') || '';
+  });
+  const [isProjectManagerView, setIsProjectManagerView] = useState(false);
+  const [showMergeModal, setShowMergeModal] = useState(false);
 
-  const handleExcelImport = (file) => {
-    if (!file) return;
+  // States for Excel import conflict resolution
+  const [pendingImportData, setPendingImportData] = useState(null); // { incomingWords, isNewProject, projectName, projectDesc }
+  const [duplicateWordsList, setDuplicateWordsList] = useState([]);
+  const [showConflictModal, setShowConflictModal] = useState(false);
+
+  // States for project merging
+  const [mergeProjA, setMergeProjA] = useState('');
+  const [mergeProjB, setMergeProjB] = useState('');
+  const [mergeName, setMergeName] = useState('');
+  const [mergeDesc, setMergeDesc] = useState('');
+  const [mergeResolution, setMergeResolution] = useState('merge');
+
+  // States for new project creation form
+  const [newProjName, setNewProjName] = useState('');
+  const [newProjDesc, setNewProjDesc] = useState('');
+  const [newProjFile, setNewProjFile] = useState(null);
+
+  useEffect(() => {
+    // Migration: if old single-project keys exist, move them to the new yokdil_custom_projects array
+    const oldWords = localStorage.getItem('yokdil_custom_camp_words');
+    const oldGenel = localStorage.getItem('yokdil_custom_camp_genel');
     
+    if (oldWords) {
+      try {
+        const parsedWords = JSON.parse(oldWords);
+        let parsedGenel = { total_days: 0, total_words: 0 };
+        if (oldGenel) {
+          try { parsedGenel = JSON.parse(oldGenel); } catch (e) {}
+        }
+        
+        // Check if we already migrated it
+        const savedProjects = localStorage.getItem('yokdil_custom_projects');
+        let currentProjectsList = [];
+        if (savedProjects) {
+          currentProjectsList = JSON.parse(savedProjects);
+        }
+        
+        if (currentProjectsList.length === 0) {
+          // Create default project from existing data
+          const defaultProj = {
+            id: 'default_custom_proj_' + Date.now(),
+            name: "Varsayılan Özel Proje",
+            description: "Daha önce yüklenmiş olan kelime listesi.",
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            total_days: parsedGenel.total_days || 0,
+            total_words: parsedGenel.total_words || 0,
+            words: parsedWords,
+            progress: {
+              currentDay: 1,
+              completedDays: {}
+            },
+            vocabMeaningSelections: {}
+          };
+          
+          // Try to migrate progress and meanings
+          const oldProg = localStorage.getItem('yokdil_camp_progress_custom');
+          if (oldProg) {
+            try { defaultProj.progress = JSON.parse(oldProg); } catch (e) {}
+          }
+          const oldMeanings = localStorage.getItem('yokdil_camp_meaning_selections_custom');
+          if (oldMeanings) {
+            try { defaultProj.vocabMeaningSelections = JSON.parse(oldMeanings); } catch (e) {}
+          }
+          
+          const newList = [defaultProj];
+          localStorage.setItem('yokdil_custom_projects', JSON.stringify(newList));
+          localStorage.setItem('yokdil_current_project_id', defaultProj.id);
+          setProjects(newList);
+          setActiveProjectId(defaultProj.id);
+        }
+        
+        // Clean up old single-project keys so migration only runs once
+        localStorage.removeItem('yokdil_custom_camp_words');
+        localStorage.removeItem('yokdil_custom_camp_genel');
+        localStorage.removeItem('yokdil_camp_progress_custom');
+        localStorage.removeItem('yokdil_camp_meaning_selections_custom');
+        
+      } catch (err) {
+        console.error("Migration to multi-project failed:", err);
+      }
+    }
+  }, []);
+
+  const executeExcelImport = (resolution, rows, isNew = false, name = '', desc = '') => {
     setShowImportModal(true);
     setImportProgress(0);
-    setImportStatus('Dosya okunuyor...');
-    setImportTimeLeft(0);
+    setImportStatus('Veriler işleniyor...');
     setImportErrors([]);
     setImportSuccessCount(0);
+
+    const activeProj = projects.find(p => p.id === activeProjectId);
+    const existingWordsMap = {};
+    if (!isNew && activeProj && activeProj.words) {
+      Object.keys(activeProj.words).forEach(day => {
+        activeProj.words[day].forEach(w => {
+          existingWordsMap[w.word.toLowerCase().trim()] = { ...w, dayNum: day };
+        });
+      });
+    }
+
+    const totalRows = rows.length;
+    const grouped = isNew ? {} : JSON.parse(JSON.stringify(activeProj?.words || {}));
+    const errors = [];
+    let successCount = 0;
+    let maxDay = isNew ? 0 : (activeProj?.total_days || 0);
+
+    const chunkSize = Math.max(1, Math.ceil(totalRows / 10));
+    const totalChunks = Math.ceil(totalRows / chunkSize);
+    let chunkIndex = 0;
+
+    const processNextChunk = () => {
+      if (chunkIndex >= totalChunks) {
+        setImportProgress(100);
+        setImportTimeLeft(0);
+
+        if (successCount === 0 && Object.keys(grouped).length === 0) {
+          setImportStatus('Hata: Hiçbir kelime aktarılamadı.');
+          return;
+        }
+
+        let totalWordsCount = 0;
+        Object.keys(grouped).forEach(day => {
+          totalWordsCount += grouped[day].length;
+          const dayNum = parseInt(day, 10);
+          if (dayNum > maxDay) maxDay = dayNum;
+        });
+
+        let updatedProjectsList = [...projects];
+        if (isNew) {
+          const newProj = {
+            id: 'custom_proj_' + Date.now(),
+            name: name || "Yeni Excel Projesi",
+            description: desc || "Excel dosyasından içe aktarılan kelimeler.",
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            total_days: maxDay,
+            total_words: totalWordsCount,
+            words: grouped,
+            progress: { currentDay: 1, completedDays: {} },
+            vocabMeaningSelections: {}
+          };
+          updatedProjectsList.push(newProj);
+          localStorage.setItem('yokdil_custom_projects', JSON.stringify(updatedProjectsList));
+          localStorage.setItem('yokdil_current_project_id', newProj.id);
+          setProjects(updatedProjectsList);
+          setActiveProjectId(newProj.id);
+        } else if (activeProj) {
+          activeProj.words = grouped;
+          activeProj.total_days = maxDay;
+          activeProj.total_words = totalWordsCount;
+          activeProj.updatedAt = Date.now();
+          
+          localStorage.setItem('yokdil_custom_projects', JSON.stringify(updatedProjectsList));
+          setProjects(updatedProjectsList);
+        }
+
+        setImportStatus('Aktarım başarıyla tamamlandı!');
+        setImportSuccessCount(successCount);
+        if (errors.length > 0) {
+          setImportErrors(errors);
+        }
+
+        // Reload plans after successful import
+        setTimeout(() => {
+          setShowImportModal(false);
+          setIsProjectManagerView(false);
+        }, 1500);
+        return;
+      }
+
+      const startIdx = chunkIndex * chunkSize;
+      const endIdx = Math.min(startIdx + chunkSize, totalRows);
+
+      for (let i = startIdx; i < endIdx; i++) {
+        const row = rows[i];
+        const rowNum = i + 2;
+
+        const rawDay = row['Gün'] || row['Day'] || row['gün'] || row['day'];
+        const rawWord = row['Kelime'] || row['Word'] || row['kelime'] || row['word'];
+        const rawType = row['Kelime Türü'] || row['Tür'] || row['Type'] || row['tür'] || row['type'] || '';
+        const rawTr = row['Türkçe Anlamı'] || row['Anlam'] || row['Turkish'] || row['türkçe'] || row['tr'] || row['turkish'] || '';
+        const rawSynonyms = row['Eş Anlamlılar'] || row['Eş Anlam'] || row['Synonyms'] || row['synonyms'] || '';
+        const rawAntonyms = row['Zıt Anlamlılar'] || row['Zıt Anlam'] || row['Antonyms'] || row['antonyms'] || '';
+        const rawSentence = row['Örnek Cümle'] || row['Cümle'] || row['Sentence'] || row['sentence'] || '';
+        const rawSentenceTr = row['Örnek Cümle Çevirisi'] || row['Cümle Çevirisi'] || row['Sentence TR'] || row['sentence_tr'] || '';
+
+        const dayNum = parseInt(rawDay, 10);
+        const wordStr = String(rawWord || '').trim();
+        const trStr = String(rawTr || '').trim();
+
+        if (isNaN(dayNum) || dayNum <= 0) {
+          errors.push(`Satır ${rowNum}: Geçersiz gün numarası (${rawDay || 'Boş'}). Satır atlandı.`);
+          continue;
+        }
+        if (!wordStr) {
+          errors.push(`Satır ${rowNum}: Kelime boş. Satır atlandı.`);
+          continue;
+        }
+        if (!trStr) {
+          errors.push(`Satır ${rowNum}: "${wordStr}" Türkçe anlamı boş. Satır atlandı.`);
+          continue;
+        }
+
+        const wordKey = wordStr.toLowerCase().trim();
+        const isDuplicate = existingWordsMap[wordKey] !== undefined;
+
+        let finalWord = wordStr;
+        let finalTr = trStr;
+        let finalType = String(rawType).trim();
+        let finalSynonyms = String(rawSynonyms).trim();
+        let finalAntonyms = String(rawAntonyms).trim();
+        
+        let sentences = rawSentence ? [{
+          en: String(rawSentence).trim(),
+          tr: String(rawSentenceTr).trim(),
+          blanked: String(rawSentence).replace(new RegExp(wordStr.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi'), '________')
+        }] : [];
+
+        let targetDay = String(dayNum);
+
+        if (isDuplicate && !isNew) {
+          const oldWordObj = existingWordsMap[wordKey];
+          targetDay = String(oldWordObj.dayNum); 
+
+          if (resolution === 'skip') {
+            continue; 
+          } else if (resolution === 'merge') {
+            const oldMeanings = String(oldWordObj.tr || oldWordObj.turkish || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            const newMeanings = trStr.split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            const combinedMeanings = Array.from(new Set([...oldMeanings, ...newMeanings])).join(', ');
+            finalTr = combinedMeanings;
+
+            const oldSyns = String(oldWordObj.synonyms || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            const newSyns = String(rawSynonyms).split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            finalSynonyms = Array.from(new Set([...oldSyns, ...newSyns])).join(', ');
+
+            const oldAnts = String(oldWordObj.antonyms || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            const newAnts = String(rawAntonyms).split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            finalAntonyms = Array.from(new Set([...oldAnts, ...newAnts])).join(', ');
+
+            const oldSentences = oldWordObj.sentences || [];
+            sentences = [...oldSentences, ...sentences];
+            const seenSentences = new Set();
+            sentences = sentences.filter(s => {
+              const k = s.en.toLowerCase().trim();
+              if (seenSentences.has(k)) return false;
+              seenSentences.add(k);
+              return true;
+            });
+
+            finalType = finalType || oldWordObj.type || '';
+          }
+          
+          if (grouped[targetDay]) {
+            grouped[targetDay] = grouped[targetDay].filter(w => w.word.toLowerCase().trim() !== wordKey);
+          }
+        }
+
+        if (!grouped[targetDay]) grouped[targetDay] = [];
+
+        grouped[targetDay].push({
+          word: finalWord,
+          tr: finalTr,
+          type: finalType,
+          synonyms: finalSynonyms,
+          antonyms: finalAntonyms,
+          sentences: sentences
+        });
+
+        successCount++;
+      }
+
+      chunkIndex++;
+      setImportProgress(Math.round((chunkIndex / totalChunks) * 100));
+      setImportStatus(`${endIdx} / ${totalRows} satır işlendi...`);
+      setImportTimeLeft(Math.max(1, Math.ceil((totalChunks - chunkIndex) * 0.1)));
+      setTimeout(processNextChunk, 50);
+    };
+
+    setTimeout(processNextChunk, 50);
+  };
+
+  const handleExcelImport = (file, isNew = false, name = '', desc = '') => {
+    if (!file) return;
 
     const reader = new FileReader();
     reader.onload = async (e) => {
@@ -282,150 +569,45 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         const rows = XLSX.utils.sheet_to_json(sheet);
 
         if (!rows || rows.length === 0) {
-          setImportStatus('Hata: Excel dosyası boş veya okunamadı.');
-          setImportErrors(['Dosya içinde geçerli satır bulunamadı.']);
+          alert('Excel dosyasında veri bulunamadı.');
           return;
         }
 
-        const totalRows = rows.length;
-        setImportStatus(`Toplam ${totalRows} satır tespit edildi. Aktarım başlatılıyor...`);
+        const activeProj = projects.find(p => p.id === activeProjectId);
+        if (!isNew && activeProj && activeProj.words && Object.keys(activeProj.words).length > 0) {
+          const existingSet = new Set();
+          Object.keys(activeProj.words).forEach(day => {
+            activeProj.words[day].forEach(w => {
+              existingSet.add(w.word.toLowerCase().trim());
+            });
+          });
 
-        const grouped = {};
-        const errors = [];
-        let successCount = 0;
-        let maxDay = 0;
-
-        const chunkSize = Math.max(1, Math.ceil(totalRows / 20)); // Chunk size to update progress ~20 times
-        const totalChunks = Math.ceil(totalRows / chunkSize);
-        
-        let chunkIndex = 0;
-
-        const processNextChunk = () => {
-          if (chunkIndex >= totalChunks) {
-            // Done!
-            setImportProgress(100);
-            setImportTimeLeft(0);
-            
-            if (successCount === 0) {
-              setImportStatus('Hata: Hiçbir satır başarıyla aktarılamadı.');
-              if (errors.length > 0) {
-                setImportErrors(errors);
+          const duplicates = [];
+          rows.forEach((row) => {
+            const rawWord = row['Kelime'] || row['Word'] || row['kelime'] || row['word'];
+            if (rawWord) {
+              const wordStr = String(rawWord).toLowerCase().trim();
+              if (existingSet.has(wordStr) && !duplicates.includes(wordStr)) {
+                duplicates.push(wordStr);
               }
-              return;
             }
+          });
 
-            // Save to localStorage
-            localStorage.setItem('yokdil_custom_camp_words', JSON.stringify(grouped));
-            
-            const customGenel = {
-              camp_name: "Özelleştirilmiş Kelime Kampı",
-              total_days: maxDay,
-              total_words: successCount,
-              files_count: maxDay,
-              description: "Kendi yüklediğiniz excel listesiyle oluşturulan özelleştirilmiş kelime çalışma kampı."
-            };
-            localStorage.setItem('yokdil_custom_camp_genel', JSON.stringify(customGenel));
-
-            // Reset progress for this camp
-            const initialProgress = { currentDay: 1, completedDays: {} };
-            localStorage.setItem('yokdil_camp_progress_custom', JSON.stringify(initialProgress));
-            setProgress(initialProgress);
-
-            setImportStatus('Aktarım başarıyla tamamlandı!');
-            setImportSuccessCount(successCount);
-            if (errors.length > 0) {
-              setImportErrors(errors);
-            }
-
-            // Reload plans to refresh state
-            setTimeout(() => {
-              window.location.reload();
-            }, 1500);
-
+          if (duplicates.length > 0) {
+            setPendingImportData({ rows, isNew, name, desc });
+            setDuplicateWordsList(duplicates);
+            setShowConflictModal(true);
             return;
           }
+        }
 
-          const startIdx = chunkIndex * chunkSize;
-          const endIdx = Math.min(startIdx + chunkSize, totalRows);
-
-          for (let i = startIdx; i < endIdx; i++) {
-            const row = rows[i];
-            const rowNum = i + 2; // Excel sheet rows are 1-based, plus header
-
-            // Standardize column lookups
-            const rawDay = row['Gün'] || row['Day'] || row['gün'] || row['day'];
-            const rawWord = row['Kelime'] || row['Word'] || row['kelime'] || row['word'];
-            const rawType = row['Kelime Türü'] || row['Tür'] || row['Type'] || row['tür'] || row['type'] || '';
-            const rawTr = row['Türkçe Anlamı'] || row['Anlam'] || row['Turkish'] || row['türkçe'] || row['tr'] || row['turkish'] || '';
-            const rawSynonyms = row['Eş Anlamlılar'] || row['Eş Anlam'] || row['Synonyms'] || row['synonyms'] || '';
-            const rawAntonyms = row['Zıt Anlamlılar'] || row['Zıt Anlam'] || row['Antonyms'] || row['antonyms'] || '';
-            const rawSentence = row['Örnek Cümle'] || row['Cümle'] || row['Sentence'] || row['sentence'] || '';
-            const rawSentenceTr = row['Örnek Cümle Çevirisi'] || row['Cümle Çevirisi'] || row['Sentence TR'] || row['sentence_tr'] || '';
-
-            const dayNum = parseInt(rawDay, 10);
-            const wordStr = String(rawWord || '').trim();
-            const trStr = String(rawTr || '').trim();
-
-            if (isNaN(dayNum) || dayNum <= 0) {
-              errors.push(`Satır ${rowNum}: Geçersiz gün numarası (${rawDay || 'Boş'}). Satır atlandı.`);
-              continue;
-            }
-
-            if (!wordStr) {
-              errors.push(`Satır ${rowNum}: İngilizce kelime boş bırakılmış. Satır atlandı.`);
-              continue;
-            }
-
-            if (!trStr) {
-              errors.push(`Satır ${rowNum}: "${wordStr}" kelimesinin Türkçe anlamı boş bırakılmış. Satır atlandı.`);
-              continue;
-            }
-
-            // Make custom word object matching the app structure
-            const sentences = rawSentence ? [{
-              en: String(rawSentence).trim(),
-              tr: String(rawSentenceTr).trim(),
-              blanked: String(rawSentence).replace(new RegExp(wordStr.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi'), '________')
-            }] : [];
-
-            if (!grouped[String(dayNum)]) grouped[String(dayNum)] = [];
-
-            grouped[String(dayNum)].push({
-              word: wordStr,
-              tr: trStr,
-              type: String(rawType).trim(),
-              synonyms: String(rawSynonyms).trim(),
-              antonyms: String(rawAntonyms).trim(),
-              sentences: sentences
-            });
-
-            successCount++;
-            if (dayNum > maxDay) maxDay = dayNum;
-          }
-
-          chunkIndex++;
-          const progressVal = Math.round((chunkIndex / totalChunks) * 100);
-          setImportProgress(progressVal);
-          setImportStatus(`${endIdx} / ${totalRows} satır doğrulandı...`);
-          setImportTimeLeft(Math.max(1, Math.ceil((totalChunks - chunkIndex) * 0.1)));
-
-          setTimeout(processNextChunk, 100);
-        };
-
-        setTimeout(processNextChunk, 100);
+        executeExcelImport('overwrite', rows, isNew, name, desc);
 
       } catch (err) {
-        console.error("Excel import failed:", err);
-        setImportStatus('Hata: Excel dosyası okunamadı veya ayrıştırılamadı.');
-        setImportErrors([err.message]);
+        console.error("Excel parse error:", err);
+        alert("Excel dosyası okunamadı: " + err.message);
       }
     };
-
-    reader.onerror = () => {
-      setImportStatus('Hata: Dosya okunamadı.');
-      setImportErrors(['Dosya yükleme hatası.']);
-    };
-
     reader.readAsArrayBuffer(file);
   };
 
@@ -703,12 +885,36 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const mappedVocab = {};
 
       if (category === 'custom') {
+        const savedProjects = localStorage.getItem('yokdil_custom_projects');
+        let currentProjectsList = [];
+        if (savedProjects) {
+          try { currentProjectsList = JSON.parse(savedProjects); } catch (e) {}
+        }
+        
+        let activeProj = currentProjectsList.find(p => p.id === activeProjectId);
+        if (!activeProj && currentProjectsList.length > 0) {
+          activeProj = currentProjectsList[0];
+        }
+
         let customGenel = null;
-        try {
-          const savedGenel = localStorage.getItem('yokdil_custom_camp_genel');
-          if (savedGenel) customGenel = JSON.parse(savedGenel);
-        } catch (e) {
-          console.error("Failed to parse custom camp genel:", e);
+        let customWords = {};
+
+        if (activeProj) {
+          customGenel = {
+            camp_name: activeProj.name || "Özelleştirilmiş Kelime Kampı",
+            total_days: activeProj.total_days || 0,
+            total_words: activeProj.total_words || 0,
+            files_count: activeProj.total_days || 0,
+            description: activeProj.description || "Kendi yüklediğiniz excel listesiyle oluşturulan özelleştirilmiş kelime çalışma kampı."
+          };
+          customWords = activeProj.words || {};
+          
+          if (activeProj.progress) {
+            setProgress(activeProj.progress);
+          }
+          if (activeProj.vocabMeaningSelections) {
+            setVocabMeaningSelections(activeProj.vocabMeaningSelections);
+          }
         }
 
         if (!customGenel) {
@@ -723,14 +929,6 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
 
         const loadedInfo = { vocabulary: customGenel };
         setGeneralInfoMap(loadedInfo);
-
-        let customWords = {};
-        try {
-          const savedWords = localStorage.getItem('yokdil_custom_camp_words');
-          if (savedWords) customWords = JSON.parse(savedWords);
-        } catch (e) {
-          console.error("Failed to parse custom camp words:", e);
-        }
 
         Object.keys(customWords).forEach(day => {
           mappedVocab[day] = customWords[day].map((wObj, idx) => {
@@ -829,7 +1027,39 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       setVocabPlanData(mappedVocab);
     };
     loadPlans();
-  }, [selectedCategory, dictDb]);
+  }, [selectedCategory, dictDb, activeProjectId, projects]);
+
+  useEffect(() => {
+    if (selectedCategory === 'custom' && activeProjectId && progress) {
+      const activeProj = projects.find(p => p.id === activeProjectId);
+      if (activeProj && JSON.stringify(activeProj.progress) !== JSON.stringify(progress)) {
+        const updatedList = projects.map(p => {
+          if (p.id === activeProjectId) {
+            return { ...p, progress, updatedAt: Date.now() };
+          }
+          return p;
+        });
+        localStorage.setItem('yokdil_custom_projects', JSON.stringify(updatedList));
+        setProjects(updatedList);
+      }
+    }
+  }, [progress, selectedCategory, activeProjectId]);
+
+  useEffect(() => {
+    if (selectedCategory === 'custom' && activeProjectId && vocabMeaningSelections) {
+      const activeProj = projects.find(p => p.id === activeProjectId);
+      if (activeProj && JSON.stringify(activeProj.vocabMeaningSelections) !== JSON.stringify(vocabMeaningSelections)) {
+        const updatedList = projects.map(p => {
+          if (p.id === activeProjectId) {
+            return { ...p, vocabMeaningSelections, updatedAt: Date.now() };
+          }
+          return p;
+        });
+        localStorage.setItem('yokdil_custom_projects', JSON.stringify(updatedList));
+        setProjects(updatedList);
+      }
+    }
+  }, [vocabMeaningSelections, selectedCategory, activeProjectId]);
 
   // Load session state from localStorage/hash on category change or mount
   useEffect(() => {
@@ -2961,7 +3191,666 @@ const handleCikmisSwipeBack = () => {
     );
   }
 
-  const isCustomEmpty = selectedCategory === 'custom' && (!vocabPlanData || Object.keys(vocabPlanData).length === 0);
+  const handleProjectsMerge = (projAId, projBId, newName, newDesc, resolution) => {
+    const projA = projects.find(p => p.id === projAId);
+    const projB = projects.find(p => p.id === projBId);
+    
+    if (!projA || !projB) {
+      alert("Lütfen birleştirilecek iki geçerli proje seçin.");
+      return;
+    }
+
+    const mergedWords = JSON.parse(JSON.stringify(projA.words || {}));
+    
+    const projAWordsMap = {};
+    Object.keys(mergedWords).forEach(day => {
+      mergedWords[day].forEach(w => {
+        projAWordsMap[w.word.toLowerCase().trim()] = w;
+      });
+    });
+
+    Object.keys(projB.words || {}).forEach(day => {
+      projB.words[day].forEach(wB => {
+        const wordKey = wB.word.toLowerCase().trim();
+        const duplicate = projAWordsMap[wordKey];
+
+        if (duplicate) {
+          if (resolution === 'skip') {
+            return;
+          } else if (resolution === 'overwrite') {
+            const oldDay = Object.keys(mergedWords).find(d => mergedWords[d].some(w => w.word.toLowerCase().trim() === wordKey));
+            if (oldDay) {
+              mergedWords[oldDay] = mergedWords[oldDay].filter(w => w.word.toLowerCase().trim() !== wordKey);
+            }
+            if (!mergedWords[day]) mergedWords[day] = [];
+            mergedWords[day].push(JSON.parse(JSON.stringify(wB)));
+          } else if (resolution === 'merge') {
+            const oldMeanings = String(duplicate.tr || duplicate.turkish || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            const newMeanings = String(wB.tr || wB.turkish || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            duplicate.tr = Array.from(new Set([...oldMeanings, ...newMeanings])).join(', ');
+
+            const oldSyns = String(duplicate.synonyms || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            const newSyns = String(wB.synonyms || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            duplicate.synonyms = Array.from(new Set([...oldSyns, ...newSyns])).join(', ');
+
+            const oldAnts = String(duplicate.antonyms || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            const newAnts = String(wB.antonyms || '').split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            duplicate.antonyms = Array.from(new Set([...oldAnts, ...newAnts])).join(', ');
+
+            const oldSentences = duplicate.sentences || [];
+            const newSentences = wB.sentences || [];
+            const combinedSentences = [...oldSentences, ...newSentences];
+            const seenSentences = new Set();
+            duplicate.sentences = combinedSentences.filter(s => {
+              const k = s.en.toLowerCase().trim();
+              if (seenSentences.has(k)) return false;
+              seenSentences.add(k);
+              return true;
+            });
+          }
+        } else {
+          if (!mergedWords[day]) mergedWords[day] = [];
+          mergedWords[day].push(JSON.parse(JSON.stringify(wB)));
+        }
+      });
+    });
+
+    Object.keys(mergedWords).forEach(day => {
+      if (mergedWords[day].length === 0) {
+        delete mergedWords[day];
+      }
+    });
+
+    let maxDay = 0;
+    let totalWordsCount = 0;
+    Object.keys(mergedWords).forEach(day => {
+      totalWordsCount += mergedWords[day].length;
+      const dNum = parseInt(day, 10);
+      if (dNum > maxDay) maxDay = dNum;
+    });
+
+    const newMergedProj = {
+      id: 'custom_proj_' + Date.now(),
+      name: newName || `${projA.name} + ${projB.name} Birleşimi`,
+      description: newDesc || "İki projenin birleştirilmesiyle oluşturuldu.",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      total_days: maxDay,
+      total_words: totalWordsCount,
+      words: mergedWords,
+      progress: { currentDay: 1, completedDays: {} },
+      vocabMeaningSelections: {}
+    };
+
+    const newList = [...projects, newMergedProj];
+    localStorage.setItem('yokdil_custom_projects', JSON.stringify(newList));
+    localStorage.setItem('yokdil_current_project_id', newMergedProj.id);
+    setProjects(newList);
+    setActiveProjectId(newMergedProj.id);
+    setShowMergeModal(false);
+
+    alert(`"${newMergedProj.name}" başarıyla oluşturuldu ve aktif proje yapıldı!`);
+  };
+
+  const renderConflictModal = () => {
+    if (!showConflictModal || !pendingImportData) return null;
+    return createPortal(
+      <div style={{
+        position: 'fixed',
+        top: 0, left: 0, right: 0, bottom: 0,
+        background: 'rgba(15, 23, 42, 0.85)',
+        backdropFilter: 'blur(10px)',
+        zIndex: 10005,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}>
+        <div className="glass-card" style={{
+          width: '100%',
+          maxWidth: '520px',
+          borderRadius: '24px',
+          padding: '30px',
+          border: '1.5px solid rgba(255, 255, 255, 0.08)',
+          background: 'rgba(15, 23, 42, 0.98)',
+          color: 'white',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.6)'
+        }}>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 12px 0', color: '#fb923c', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <i className="fa-solid fa-triangle-exclamation"></i> Kelime Çakışması Algılandı!
+          </h3>
+          <p style={{ fontSize: '0.88rem', color: '#cbd5e1', lineHeight: 1.5, marginBottom: '20px' }}>
+            Yüklediğiniz dosyada mevcut projenizde zaten bulunan <strong>{duplicateWordsList.length}</strong> kelime tespit edildi. Lütfen bu kelimeler için bir eylem seçin:
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+            <button
+              onClick={() => {
+                executeExcelImport('merge', pendingImportData.rows, pendingImportData.isNew, pendingImportData.name, pendingImportData.desc);
+                setShowConflictModal(false);
+                setPendingImportData(null);
+              }}
+              className="btn-primary"
+              style={{
+                padding: '14px',
+                borderRadius: '12px',
+                fontSize: '0.85rem',
+                fontWeight: 'bold',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                background: 'rgba(16, 185, 129, 0.15)',
+                border: '1.5px solid #10b981',
+                color: '#34d399',
+                cursor: 'pointer'
+              }}
+            >
+              <i className="fa-solid fa-code-merge" style={{ fontSize: '1.2rem' }}></i>
+              <div>
+                <div style={{ fontWeight: '800' }}>Birleştir (Merge) [Önerilen]</div>
+                <div style={{ fontSize: '0.72rem', color: '#a7f3d0', marginTop: '2px', fontWeight: 'normal' }}>Türkçe anlamları, eş/zıt anlamlıları ve cümleleri birleştirir.</div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                executeExcelImport('overwrite', pendingImportData.rows, pendingImportData.isNew, pendingImportData.name, pendingImportData.desc);
+                setShowConflictModal(false);
+                setPendingImportData(null);
+              }}
+              className="btn-primary"
+              style={{
+                padding: '14px',
+                borderRadius: '12px',
+                fontSize: '0.85rem',
+                fontWeight: 'bold',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                background: 'rgba(249, 115, 22, 0.15)',
+                border: '1.5px solid #f97316',
+                color: '#fdba74',
+                cursor: 'pointer'
+              }}
+            >
+              <i className="fa-solid fa-arrows-rotate" style={{ fontSize: '1.2rem' }}></i>
+              <div>
+                <div style={{ fontWeight: '800' }}>Üzerine Yaz (Overwrite)</div>
+                <div style={{ fontSize: '0.72rem', color: '#fed7aa', marginTop: '2px', fontWeight: 'normal' }}>Eski verileri silerek yeni Excel satırlarını kaydeder.</div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                executeExcelImport('skip', pendingImportData.rows, pendingImportData.isNew, pendingImportData.name, pendingImportData.desc);
+                setShowConflictModal(false);
+                setPendingImportData(null);
+              }}
+              className="btn-primary"
+              style={{
+                padding: '14px',
+                borderRadius: '12px',
+                fontSize: '0.85rem',
+                fontWeight: 'bold',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                background: 'rgba(148, 163, 184, 0.15)',
+                border: '1.5px solid #94a3b8',
+                color: '#cbd5e1',
+                cursor: 'pointer'
+              }}
+            >
+              <i className="fa-solid fa-ban" style={{ fontSize: '1.2rem' }}></i>
+              <div>
+                <div style={{ fontWeight: '800' }}>Mevcut Olanı Koru (Skip)</div>
+                <div style={{ fontSize: '0.72rem', color: '#cbd5e1', marginTop: '2px', fontWeight: 'normal' }}>Zaten mevcut olan kelimeleri atlar, sadece yeni kelimeleri ekler.</div>
+              </div>
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Çakışan Kelimeler: {duplicateWordsList.slice(0, 5).join(', ')}{duplicateWordsList.length > 5 ? '...' : ''}</span>
+            <button
+              onClick={() => {
+                setShowConflictModal(false);
+                setPendingImportData(null);
+              }}
+              className="btn-secondary"
+              style={{ padding: '8px 16px', borderRadius: '10px', fontSize: '0.8rem', cursor: 'pointer' }}
+            >
+              İptal Et
+            </button>
+          </div>
+        </div>
+      </div>,
+      document.body
+    );
+  };
+
+  const renderMergeModal = () => {
+    if (!showMergeModal) return null;
+    const availableB = projects.filter(p => p.id !== mergeProjA);
+
+    return createPortal(
+      <div style={{
+        position: 'fixed',
+        top: 0, left: 0, right: 0, bottom: 0,
+        background: 'rgba(15, 23, 42, 0.85)',
+        backdropFilter: 'blur(10px)',
+        zIndex: 10005,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}>
+        <div className="glass-card" style={{
+          width: '100%',
+          maxWidth: '520px',
+          borderRadius: '24px',
+          padding: '30px',
+          border: '1.5px solid rgba(255, 255, 255, 0.08)',
+          background: 'rgba(15, 23, 42, 0.98)',
+          color: 'white',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.6)'
+        }}>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 16px 0', color: '#fb923c', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <i className="fa-solid fa-code-merge"></i> Projeleri Birleştir
+          </h3>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', color: '#94a3b8', fontWeight: 'bold', marginBottom: '6px' }}>Ana Proje (A)</label>
+              <select
+                value={mergeProjA}
+                onChange={(e) => setMergeProjA(e.target.value)}
+                style={{ width: '100%', padding: '10px', borderRadius: '10px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+              >
+                <option value="">Lütfen seçin...</option>
+                {projects.map(p => (
+                  <option key={p.id} value={p.id}>{p.name} ({p.total_words} kelime)</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', color: '#94a3b8', fontWeight: 'bold', marginBottom: '6px' }}>Birleştirilecek İkinci Proje (B)</label>
+              <select
+                value={mergeProjB}
+                onChange={(e) => setMergeProjB(e.target.value)}
+                style={{ width: '100%', padding: '10px', borderRadius: '10px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+              >
+                <option value="">Lütfen seçin...</option>
+                {availableB.map(p => (
+                  <option key={p.id} value={p.id}>{p.name} ({p.total_words} kelime)</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', color: '#94a3b8', fontWeight: 'bold', marginBottom: '6px' }}>Yeni Birleşik Proje Adı</label>
+              <input
+                type="text"
+                placeholder="Örn: Birleşik Kamp Listesi"
+                value={mergeName}
+                onChange={(e) => setMergeName(e.target.value)}
+                style={{ width: '100%', padding: '10px', borderRadius: '10px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', color: '#94a3b8', fontWeight: 'bold', marginBottom: '6px' }}>Yeni Birleşik Proje Açıklaması</label>
+              <textarea
+                placeholder="Açıklama (isteğe bağlı)..."
+                value={mergeDesc}
+                onChange={(e) => setMergeDesc(e.target.value)}
+                style={{ width: '100%', height: '60px', padding: '10px', borderRadius: '10px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'none' }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', color: '#94a3b8', fontWeight: 'bold', marginBottom: '6px' }}>Çakışma Çözüm Yöntemi</label>
+              <select
+                value={mergeResolution}
+                onChange={(e) => setMergeResolution(e.target.value)}
+                style={{ width: '100%', padding: '10px', borderRadius: '10px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+              >
+                <option value="merge">Birleştir (Tüm anlamları ve örnekleri kaynaştır)</option>
+                <option value="overwrite">Üzerine Yaz (Proje B'deki karşılığı geçerli olsun)</option>
+                <option value="skip">Mevcut Olanı Koru (Proje A'daki karşılığı kalsın)</option>
+              </select>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+            <button
+              onClick={() => setShowMergeModal(false)}
+              className="btn-secondary"
+              style={{ padding: '10px 20px', borderRadius: '10px', fontSize: '0.85rem', cursor: 'pointer' }}
+            >
+              İptal
+            </button>
+            <button
+              onClick={() => handleProjectsMerge(mergeProjA, mergeProjB, mergeName, mergeDesc, mergeResolution)}
+              className="btn-primary"
+              style={{ padding: '10px 20px', borderRadius: '10px', fontSize: '0.85rem', fontWeight: 'bold', background: '#fb923c', borderColor: '#fb923c', cursor: 'pointer' }}
+            >
+              Projeleri Birleştir
+            </button>
+          </div>
+        </div>
+      </div>,
+      document.body
+    );
+  };
+
+  const renderProjectManager = () => {
+    return (
+      <div className="space-y-6" style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <h2 style={{ color: 'white', fontWeight: '900', fontSize: '1.8rem', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <i className="fa-solid fa-folder-tree" style={{ color: '#fb923c' }}></i> Proje ve Sürüm Yönetimi
+            </h2>
+            <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '4px 0 0 0' }}>
+              Yüklediğiniz Excel kelime listelerini projeler halinde yönetebilir ve aralarında geçiş yapabilirsiniz.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', gap: '10px' }}>
+            {projects.length > 1 && (
+              <button
+                onClick={() => {
+                  setMergeProjA('');
+                  setMergeProjB('');
+                  setMergeName('');
+                  setMergeDesc('');
+                  setMergeResolution('merge');
+                  setShowMergeModal(true);
+                }}
+                className="btn-secondary"
+                style={{ padding: '10px 18px', borderRadius: '12px', fontSize: '0.82rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid rgba(251, 146, 60, 0.4)', color: '#fb923c', background: 'rgba(251, 146, 60, 0.05)', cursor: 'pointer' }}
+              >
+                <i className="fa-solid fa-code-merge"></i> Projeleri Birleştir
+              </button>
+            )}
+
+            {projects.length > 0 && (
+              <button
+                onClick={() => setIsProjectManagerView(false)}
+                className="btn-secondary"
+                style={{ padding: '10px 18px', borderRadius: '12px', fontSize: '0.82rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+              >
+                <i className="fa-solid fa-circle-chevron-left"></i> Kampa Geri Dön
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Existing Projects Grid */}
+        <div>
+          <h3 style={{ fontSize: '1rem', color: 'white', fontWeight: 'bold', marginBottom: '14px', textAlign: 'left' }}>
+            Aktif Projeleriniz ({projects.length})
+          </h3>
+          {projects.length === 0 ? (
+            <div className="glass-card text-center" style={{ padding: '40px', borderRadius: '20px', background: 'rgba(255,255,255,0.02)' }}>
+              <i className="fa-solid fa-folder-open" style={{ fontSize: '3rem', color: '#475569', marginBottom: '16px' }}></i>
+              <h4 style={{ color: 'white', fontWeight: 'bold', margin: '0 0 6px 0' }}>Hiç Projeniz Bulunmuyor</h4>
+              <p style={{ color: '#94a3b8', fontSize: '0.8rem', maxWidth: '320px', margin: '0 auto' }}>
+                Kampa başlamak için aşağıdaki formu kullanarak ilk kelime listenizi Excel olarak yükleyin.
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+              {projects.map(proj => {
+                const isActive = proj.id === activeProjectId;
+                const completedCount = Object.keys(proj.progress?.completedDays || {}).length;
+                const percent = proj.total_days > 0 ? Math.round((completedCount / proj.total_days) * 100) : 0;
+                
+                return (
+                  <div key={proj.id} className="glass-card" style={{
+                    padding: '20px',
+                    borderRadius: '20px',
+                    border: isActive ? '1.5px solid #fb923c' : '1px solid rgba(255,255,255,0.06)',
+                    background: isActive ? 'rgba(251, 146, 60, 0.05)' : 'rgba(15, 23, 42, 0.55)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: '16px',
+                    position: 'relative'
+                  }}>
+                    {isActive && (
+                      <span style={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        background: 'rgba(16, 185, 129, 0.15)',
+                        border: '1px solid #10b981',
+                        color: '#34d399',
+                        fontSize: '0.62rem',
+                        fontWeight: 'bold',
+                        padding: '3px 8px',
+                        borderRadius: '20px'
+                      }}>
+                        Çalışılıyor
+                      </span>
+                    )}
+
+                    <div>
+                      <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white', margin: '0 0 6px 0', paddingRight: isActive ? '60px' : '0' }}>{proj.name}</h4>
+                      <p style={{ fontSize: '0.75rem', color: '#94a3b8', lineHeight: 1.4, margin: '0 0 12px 0', minHeight: '34px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                        {proj.description || 'Açıklama belirtilmemiş.'}
+                      </p>
+                      
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.72rem', color: '#cbd5e1' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span>Kelime Sayısı:</span>
+                          <strong style={{ color: 'white' }}>{proj.total_words}</strong>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span>Gün Sayısı:</span>
+                          <strong style={{ color: 'white' }}>{proj.total_days} Gün</strong>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span>Son Güncelleme:</span>
+                          <strong>{new Date(proj.updatedAt).toLocaleDateString('tr-TR')}</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div style={{ marginBottom: '14px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', color: '#94a3b8', marginBottom: '4px' }}>
+                          <span>İlerleme ({completedCount}/{proj.total_days} Gün)</span>
+                          <strong style={{ color: 'white' }}>%{percent}</strong>
+                        </div>
+                        <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
+                          <div style={{ width: `${percent}%`, height: '100%', background: '#fb923c', borderRadius: '3px' }}></div>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        {!isActive ? (
+                          <button
+                            onClick={() => {
+                              localStorage.setItem('yokdil_current_project_id', proj.id);
+                              setActiveProjectId(proj.id);
+                              setIsProjectManagerView(false);
+                            }}
+                            className="btn-primary"
+                            style={{ flex: 1, padding: '8px 10px', borderRadius: '10px', fontSize: '0.78rem', fontWeight: 'bold', background: '#fb923c', borderColor: '#fb923c', cursor: 'pointer' }}
+                          >
+                            Çalışmaya Başla
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => setIsProjectManagerView(false)}
+                            className="btn-primary"
+                            style={{ flex: 1, padding: '8px 10px', borderRadius: '10px', fontSize: '0.78rem', fontWeight: 'bold', background: '#10b981', borderColor: '#10b981', cursor: 'pointer' }}
+                          >
+                            Çalışmaya Devam Et
+                          </button>
+                        )}
+
+                        <button
+                          onClick={() => {
+                            const newN = prompt("Proje adını düzenleyin:", proj.name);
+                            if (newN !== null && newN.trim() !== '') {
+                              const newD = prompt("Proje açıklamasını düzenleyin:", proj.description || '');
+                              const updated = projects.map(p => {
+                                if (p.id === proj.id) {
+                                  return { ...p, name: newN.trim(), description: (newD || '').trim(), updatedAt: Date.now() };
+                                }
+                                return p;
+                              });
+                              localStorage.setItem('yokdil_custom_projects', JSON.stringify(updated));
+                              setProjects(updated);
+                            }
+                          }}
+                          className="btn-secondary"
+                          style={{ padding: '8px 10px', borderRadius: '10px', fontSize: '0.75rem', cursor: 'pointer' }}
+                          title="Düzenle"
+                        >
+                          ✏️
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            if (confirm(`"${proj.name}" projesini ve projeye ait tüm ilerlemeleri silmek istediğinize emin misiniz?`)) {
+                              const updated = projects.filter(p => p.id !== proj.id);
+                              localStorage.setItem('yokdil_custom_projects', JSON.stringify(updated));
+                              setProjects(updated);
+                              if (isActive) {
+                                if (updated.length > 0) {
+                                  localStorage.setItem('yokdil_current_project_id', updated[0].id);
+                                  setActiveProjectId(updated[0].id);
+                                } else {
+                                  localStorage.removeItem('yokdil_current_project_id');
+                                  setActiveProjectId('');
+                                }
+                              }
+                            }
+                          }}
+                          className="btn-secondary"
+                          style={{ padding: '8px 10px', borderRadius: '10px', fontSize: '0.75rem', color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.2)', cursor: 'pointer' }}
+                          title="Sil"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Create New Project Section */}
+        <div className="glass-card" style={{ padding: '28px', borderRadius: '24px', border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(15, 23, 42, 0.45)', textAlign: 'left' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'white', margin: '0 0 18px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <i className="fa-solid fa-folder-plus" style={{ color: '#fb923c' }}></i> Yeni Proje Oluştur / Excel İçe Aktar
+          </h3>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.78rem', color: '#cbd5e1', fontWeight: 'bold', marginBottom: '6px' }}>Proje İsmi</label>
+                <input
+                  type="text"
+                  placeholder="Örn: YÖKDİL Sağlık Kelimelerim"
+                  value={newProjName}
+                  onChange={(e) => setNewProjName(e.target.value)}
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.08)', color: 'white' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.78rem', color: '#cbd5e1', fontWeight: 'bold', marginBottom: '6px' }}>Proje Açıklaması</label>
+                <textarea
+                  placeholder="Kelimelerin içeriği veya çalışma amacınız..."
+                  value={newProjDesc}
+                  onChange={(e) => setNewProjDesc(e.target.value)}
+                  style={{ width: '100%', height: '80px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.08)', color: 'white', resize: 'none' }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px dashed rgba(255,255,255,0.08)', borderRadius: '18px', padding: '20px', background: 'rgba(0,0,0,0.15)', textAlign: 'center', alignItems: 'center', gap: '14px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+                <i className="fa-solid fa-file-excel" style={{ fontSize: '2.4rem', color: '#fb923c' }}></i>
+                <span style={{ fontSize: '0.85rem', color: 'white', fontWeight: 'bold' }}>Excel Dosyası Seçin</span>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{newProjFile ? `Seçilen: ${newProjFile.name}` : 'Maksimum 5MB, .xlsx, .xls veya .csv'}</span>
+              </div>
+              
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <button
+                  onClick={downloadExcelTemplate}
+                  className="btn-secondary"
+                  style={{ padding: '8px 14px', borderRadius: '10px', fontSize: '0.75rem', fontWeight: 'bold', cursor: 'pointer' }}
+                >
+                  Şablon İndir
+                </button>
+
+                <label className="btn-primary" style={{ padding: '8px 14px', borderRadius: '10px', fontSize: '0.75rem', fontWeight: 'bold', background: '#fb923c', borderColor: '#fb923c', cursor: 'pointer' }}>
+                  Dosya Seç
+                  <input
+                    type="file"
+                    accept=".xlsx, .xls, .csv"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setNewProjFile(e.target.files[0]);
+                      }
+                    }}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '16px' }}>
+            <button
+              onClick={() => {
+                if (!newProjName.trim()) {
+                  alert("Lütfen proje ismi girin.");
+                  return;
+                }
+                if (!newProjFile) {
+                  alert("Lütfen bir Excel dosyası seçin.");
+                  return;
+                }
+                handleExcelImport(newProjFile, true, newProjName.trim(), newProjDesc.trim());
+                setNewProjName('');
+                setNewProjDesc('');
+                setNewProjFile(null);
+              }}
+              className="btn-primary"
+              style={{ padding: '12px 24px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px', background: '#fb923c', borderColor: '#fb923c', cursor: 'pointer' }}
+            >
+              <i className="fa-solid fa-folder-plus"></i> Proje Oluştur ve Kelimeleri Yükle
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const isCustomEmpty = selectedCategory === 'custom' && projects.length === 0;
+
+  if (selectedCategory === 'custom' && (isProjectManagerView || projects.length === 0)) {
+    return (
+      <>
+        {renderProjectManager()}
+        {renderImportModal()}
+        {renderConflictModal()}
+        {renderMergeModal()}
+      </>
+    );
+  }
 
   const renderExcelUploadDashboard = () => {
     return (
@@ -3485,6 +4374,7 @@ const handleCikmisSwipeBack = () => {
         hideSwitcher={hideSwitcher || initialCampType === 'cikmis_kelimeler'}
         showConfirm={showConfirm}
         handleExcelImport={handleExcelImport}
+        setIsProjectManagerView={setIsProjectManagerView}
       />
 
       {renderImportModal()}

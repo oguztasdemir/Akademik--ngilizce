@@ -42,7 +42,8 @@ const CampDashboard = ({
   generalInfo,
   hideSwitcher,
   showConfirm,
-  handleExcelImport
+  handleExcelImport,
+  setIsProjectManagerView
 }) => {
   const [showGeneralReport, setShowGeneralReport] = useState(false);
   const [expandedGrammarDay, setExpandedGrammarDay] = useState(null);
@@ -623,7 +624,7 @@ const CampDashboard = ({
             </p>
 
             {selectedCategory === 'custom' && (
-              <div style={{ marginBottom: '24px' }}>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '24px' }}>
                 <label
                   className="btn-secondary"
                   style={{
@@ -648,6 +649,25 @@ const CampDashboard = ({
                     style={{ display: 'none' }}
                   />
                 </label>
+
+                <button
+                  onClick={() => setIsProjectManagerView(true)}
+                  className="btn-secondary"
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '10px',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    background: 'rgba(251, 146, 60, 0.1)',
+                    borderColor: 'rgba(251, 146, 60, 0.3)',
+                    color: '#fb923c'
+                  }}
+                >
+                  <i className="fa-solid fa-folder-open"></i> Projelerimi Yönet
+                </button>
               </div>
             )}
 
