@@ -348,16 +348,20 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       } else {
         for (const d of days) {
           const track = vocabTrack || 'anlam';
-          const dailyKelimeKey = track === 'tumu'
-            ? `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${d}.json`
-            : `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${d}.json`;
+          const dailyKelimeKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${d}.json`;
           const loadDailyKelime = getCampModule(dailyKelimeKey);
           if (loadDailyKelime) {
             try {
               const kelimeMod = await loadDailyKelime();
               const dailyKelimeData = kelimeMod.default || kelimeMod;
               if (dailyKelimeData && dailyKelimeData.words) {
-                tempWords.push(...dailyKelimeData.words);
+                let filtered = dailyKelimeData.words || [];
+                if (track === 'es_anlam') {
+                  filtered = filtered.filter(w => w.synonyms && w.synonyms.trim().length > 0);
+                } else if (track === 'zit_anlam') {
+                  filtered = filtered.filter(w => w.antonyms && w.antonyms.trim().length > 0);
+                }
+                tempWords.push(...filtered);
               }
             } catch (e) {
               console.error(e);
@@ -738,9 +742,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     setIsStudying(true);
 
     const track = vocabTrack || 'anlam';
-    const dailyPlanKey = track === 'tumu'
-      ? `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${dayNum}.json`
-      : `@dataset/yokdil/${category}/gelismis_kelime_kampi/${track}/day_${dayNum}.json`;
+    const dailyPlanKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${dayNum}.json`;
     const loadDaily = getCampModule(dailyPlanKey);
     if (!loadDaily) {
       alert("Bu günün kelime listesi bulunamadı veya henüz hazır değil!");
@@ -752,7 +754,13 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const dailyMod = await loadDaily();
       const dailyData = dailyMod.default || dailyMod;
       if (dailyData && dailyData.words) {
-        let finalWords = deterministicShuffle(dailyData.words, dayNum);
+        let rawWords = dailyData.words || [];
+        if (track === 'es_anlam') {
+          rawWords = rawWords.filter(w => w.synonyms && w.synonyms.trim().length > 0);
+        } else if (track === 'zit_anlam') {
+          rawWords = rawWords.filter(w => w.antonyms && w.antonyms.trim().length > 0);
+        }
+        let finalWords = deterministicShuffle(rawWords, dayNum);
         setStudyWords(finalWords);
 
         // Load correct answers count based on completed state
@@ -1149,7 +1157,13 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
           const loader = campModules[foundKey];
           const module = await loader();
           const data = module.default || module;
-          dayWords = data.words || [];
+          let rawWords = data.words || [];
+          if (vocabTrack === 'es_anlam') {
+            rawWords = rawWords.filter(w => w.synonyms && w.synonyms.trim().length > 0);
+          } else if (vocabTrack === 'zit_anlam') {
+            rawWords = rawWords.filter(w => w.antonyms && w.antonyms.trim().length > 0);
+          }
+          dayWords = rawWords;
         }
 
         const dayRecord = vocabDoneMap[day];
