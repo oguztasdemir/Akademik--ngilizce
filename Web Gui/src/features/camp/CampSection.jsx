@@ -2692,6 +2692,7 @@ const handleCikmisSwipeBack = () => {
         totalCampDays={totalCampDays}
         setMeaningOptions={setMeaningOptions}
         vocabTrack={vocabTrack}
+        addMistake={addMistake}
       />
     );
   }
