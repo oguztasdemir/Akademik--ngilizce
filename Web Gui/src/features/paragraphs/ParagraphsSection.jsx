@@ -55,7 +55,7 @@ const ParagraphsSection = ({
       const loadPassages = async () => {
         const category = selectedCategory || 'fen';
         try {
-          const mod = await import(`../../../../Dataset/yokdil/${category}/paragraflar/reading_passages.json`);
+          const mod = await import(`../../../../Dataset/yokdil/${category}/paragraflar/passages_list.json`);
           const data = mod.default || mod;
           const sorted = [...data].sort((a, b) => (a.wordCount || 0) - (b.wordCount || 0));
           setPassages(sorted);
@@ -687,8 +687,17 @@ const ParagraphsSection = ({
               return (
                 <div 
                   key={p.id}
-                  onClick={() => {
-                    setSelectedPassage(p);
+                  onClick={async () => {
+                    setLoading(true);
+                    const category = selectedCategory || 'fen';
+                    try {
+                      const mod = await import(`../../../../Dataset/yokdil/${category}/paragraflar/passage_${p.id}.json`);
+                      setSelectedPassage(mod.default || mod);
+                    } catch (e) {
+                      console.error("Error loading passage detail:", e);
+                      alert("Paragraf detayı yüklenemedi.");
+                    }
+                    setLoading(false);
                     setTranslatedWord(null);
                     setTranslationText('');
                     setCurrentHighlight(null);
