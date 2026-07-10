@@ -616,7 +616,7 @@ const CampDashboard = ({
               Akademik Kelime Master Kampı 🚀
             </h2>
             <p style={{ fontSize: '0.94rem', color: '#cbd5e1', maxWidth: '520px', margin: '8px auto 24px auto', lineHeight: 1.6 }}>
-              Her gün 5 kelimeyi; anlam, eş anlam, boşluk doldurma ve soru stratejileriyle çalışarak hafızanıza sabitleyin. Akıllı spaced repetition algoritması öğrenemediğiniz kelimeleri sonraki günlerde tekrar karşınıza çıkaracaktır.
+              60 Günlük Gelişmiş Kelime Kampı ile akademik kelimeleri; anlam, eş anlam, zıt anlam ve örnek cümle alıştırmalarıyla çalışarak hafızanıza sabitleyin.
             </p>
 
             {(() => {
