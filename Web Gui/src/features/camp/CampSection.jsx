@@ -894,6 +894,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         let activeProj = currentProjectsList.find(p => p.id === activeProjectId);
         if (!activeProj && currentProjectsList.length > 0) {
           activeProj = currentProjectsList[0];
+          setActiveProjectId(activeProj.id);
+          localStorage.setItem('yokdil_current_project_id', activeProj.id);
         }
 
         let customGenel = null;
@@ -915,6 +917,9 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
           if (activeProj.vocabMeaningSelections) {
             setVocabMeaningSelections(activeProj.vocabMeaningSelections);
           }
+          setTotalCampDays(activeProj.total_days || 0);
+        } else {
+          setTotalCampDays(0);
         }
 
         if (!customGenel) {
@@ -3839,18 +3844,6 @@ const handleCikmisSwipeBack = () => {
     );
   };
 
-  const isCustomEmpty = selectedCategory === 'custom' && projects.length === 0;
-
-  if (selectedCategory === 'custom' && (isProjectManagerView || projects.length === 0)) {
-    return (
-      <>
-        {renderProjectManager()}
-        {renderImportModal()}
-        {renderConflictModal()}
-        {renderMergeModal()}
-      </>
-    );
-  }
 
   const renderExcelUploadDashboard = () => {
     return (
@@ -4086,11 +4079,15 @@ const handleCikmisSwipeBack = () => {
     );
   };
 
-  if (isCustomEmpty) {
+  const isCustomEmpty = selectedCategory === 'custom' && projects.length === 0;
+
+  if (selectedCategory === 'custom' && (isProjectManagerView || projects.length === 0)) {
     return (
       <>
-        {renderExcelUploadDashboard()}
+        {renderProjectManager()}
         {renderImportModal()}
+        {renderConflictModal()}
+        {renderMergeModal()}
       </>
     );
   }
