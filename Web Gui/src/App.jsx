@@ -31,11 +31,12 @@ import fallbackExamsFen from '@dataset/yokdil/fen/cikmis_sinavlar/sinav_listesi.
 import fallbackExamsSosyal from '@dataset/yokdil/sosyal/cikmis_sinavlar/sinav_listesi.json';
 import fallbackExamsSaglik from '@dataset/yokdil/saglik/cikmis_sinavlar/sinav_listesi.json';
 
-const lectureModules = import.meta.glob('@dataset/yokdil/*/konu_anlatimi/*.md', { query: '?raw', import: 'default' });
-const examDetailModules = import.meta.glob('@dataset/yokdil/*/cikmis_sinavlar/*.json');
+const lectureModules = import.meta.glob('../../Dataset/yokdil/*/konu_anlatimi/*.md', { query: '?raw', import: 'default' });
+const examDetailModules = import.meta.glob('../../Dataset/yokdil/*/cikmis_sinavlar/*.json');
 
 const getLectureContent = async (category, filename) => {
   const targetSubstr = `${category}/konu_anlatimi/${filename}`;
+  console.log("getLectureContent glob keys:", Object.keys(lectureModules), "looking for:", targetSubstr);
   const key = Object.keys(lectureModules).find(k => k.includes(targetSubstr));
   if (key) {
     const loader = lectureModules[key];
