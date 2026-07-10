@@ -1173,64 +1173,60 @@ const VocabularySection = ({
                   </div>
 
                   {/* PC & Mobile Buttons Row */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px', width: '100%' }}>
+                    {/* Row 1: Bilmiyorum & Biliyorum */}
+                    <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
                       <button
                         onClick={() => handleFlashcardAction(false)}
-                        className="btn-secondary"
+                        className="btn-primary"
                         style={{
                           flex: 1,
-                          padding: '12px',
-                          fontSize: '0.82rem',
+                          padding: '10px 20px',
+                          fontSize: '0.85rem',
+                          borderColor: '#ef4444',
+                          color: 'white',
+                          background: '#ef4444',
                           fontWeight: 'bold',
-                          borderRadius: '12px',
-                          cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '6px',
-                          borderColor: 'rgba(239, 68, 68, 0.2)',
-                          color: '#f87171',
-                          background: 'rgba(239, 68, 68, 0.02)'
+                          cursor: 'pointer'
                         }}
                       >
-                        ✕ Tekrar Çalış
-                      </button>
-                      <button
-                        onClick={() => setRevealMeaning(r => !r)}
-                        className="btn-secondary"
-                        style={{
-                          flex: 1,
-                          padding: '12px',
-                          fontSize: '0.82rem',
-                          fontWeight: 'bold',
-                          borderRadius: '12px',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '6px'
-                        }}
-                      >
-                        🔄 Çevir / Anlamı Göster
+                        ❌ Bilmiyorum
                       </button>
                       <button
                         onClick={() => handleFlashcardAction(true)}
                         className="btn-primary"
                         style={{
                           flex: 1,
-                          padding: '12px',
-                          fontSize: '0.82rem',
+                          padding: '10px 24px',
+                          fontSize: '0.85rem',
+                          background: 'rgba(16, 185, 129, 0.9)',
+                          borderColor: '#10b981',
+                          color: 'white',
                           fontWeight: 'bold',
-                          borderRadius: '12px',
-                          cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          gap: '6px'
+                          gap: '6px',
+                          cursor: 'pointer'
                         }}
                       >
-                        ✓ Biliyorum (Öğrendim)
+                        ✅ Biliyorum
+                      </button>
+                    </div>
+
+                    {/* Row 2: Önceki Kelime */}
+                    <div style={{ display: 'flex', width: '100%' }}>
+                      <button
+                        onClick={() => { setRevealMeaning(false); setFlashcardIndex(prev => Math.max(0, prev - 1)); }}
+                        disabled={flashcardIndex === 0}
+                        className="btn-secondary"
+                        style={{ flex: 1, padding: '10px 20px', fontSize: '0.8rem', opacity: flashcardIndex === 0 ? 0.5 : 1 }}
+                      >
+                        Önceki Kelime
                       </button>
                     </div>
 
@@ -1246,11 +1242,11 @@ const VocabularySection = ({
                       flexWrap: 'wrap',
                       marginTop: '4px'
                     }}>
-                      <span>⌨️ <strong style={{ color: '#818cf8' }}>[Sol Ok Tuşu]</strong> Tekrar</span>
+                      <span>⌨️ <strong style={{ color: '#818cf8' }}>[Sol Ok]</strong> Bilmiyorum</span>
                       <span>•</span>
-                      <span><strong style={{ color: '#818cf8' }}>[Space / Boşluk]</strong> Çevir</span>
+                      <span><strong style={{ color: '#818cf8' }}>[Space]</strong> Çevir</span>
                       <span>•</span>
-                      <span><strong style={{ color: '#818cf8' }}>[Enter / Sağ Ok]</strong> Biliyorum</span>
+                      <span><strong style={{ color: '#818cf8' }}>[Sağ Ok / Enter]</strong> Biliyorum</span>
                     </div>
                   </div>
 
