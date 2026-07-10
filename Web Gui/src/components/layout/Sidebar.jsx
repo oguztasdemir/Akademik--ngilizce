@@ -73,7 +73,7 @@ const Sidebar = ({
             <span>Kelime Kampı</span>
           </button>
           {(() => {
-            const isVocabActive = activeTab === 'camp-vocab';
+            const isVocabActive = activeTab === 'camp-vocab' && selectedCategory !== 'custom';
             let vocabStyle = {};
             if (isVocabActive) {
               const colors = {
@@ -95,11 +95,46 @@ const Sidebar = ({
             return (
               <button 
                 className={`sidebar-nav-item nav-camp-vocab ${isVocabActive ? 'active' : ''}`}
-                onClick={() => { setActiveTab('camp-vocab'); setQuizActive(false); }}
+                onClick={() => {
+                  if (selectedCategory === 'custom') {
+                    setSelectedCategory('fen'); // Return to default area
+                  }
+                  setActiveTab('camp-vocab');
+                  setQuizActive(false);
+                }}
                 style={vocabStyle}
               >
                 <i className="fa-solid fa-calendar-days"></i>
                 <span>Gelişmiş Kelime Kampı</span>
+              </button>
+            );
+          })()}
+
+          {/* Özelleştirilmiş Kelime Kampı (Custom Excel import vocabulary study) */}
+          {(() => {
+            const isCustomVocabActive = activeTab === 'camp-vocab' && selectedCategory === 'custom';
+            let customVocabStyle = {};
+            if (isCustomVocabActive) {
+              customVocabStyle = {
+                background: 'rgba(251, 146, 60, 0.18)',
+                border: '1.5px solid #fb923c',
+                color: 'white',
+                fontWeight: 'bold',
+                boxShadow: '0 4px 15px rgba(251, 146, 60, 0.35)'
+              };
+            }
+            return (
+              <button
+                className={`sidebar-nav-item nav-camp-custom-vocab ${isCustomVocabActive ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedCategory('custom');
+                  setActiveTab('camp-vocab');
+                  setQuizActive(false);
+                }}
+                style={customVocabStyle}
+              >
+                <i className="fa-solid fa-file-excel"></i>
+                <span>Özelleştirilmiş Kelime Kampı</span>
               </button>
             );
           })()}
@@ -284,10 +319,29 @@ const Sidebar = ({
               </button>
               <button 
                 className="mobile-more-item"
-                onClick={() => { setActiveTab('camp-vocab'); setQuizActive(false); setShowMoreMenu(false); }}
+                onClick={() => { 
+                  if (selectedCategory === 'custom') {
+                    setSelectedCategory('fen');
+                  }
+                  setActiveTab('camp-vocab'); 
+                  setQuizActive(false); 
+                  setShowMoreMenu(false); 
+                }}
               >
                 <i className="fa-solid fa-calendar-days" style={{ color: '#6366f1' }}></i>
                 <span>Gelişmiş Kelime Kampı</span>
+              </button>
+              <button 
+                className="mobile-more-item"
+                onClick={() => { 
+                  setSelectedCategory('custom');
+                  setActiveTab('camp-vocab'); 
+                  setQuizActive(false); 
+                  setShowMoreMenu(false); 
+                }}
+              >
+                <i className="fa-solid fa-file-excel" style={{ color: '#fb923c' }}></i>
+                <span>Özelleştirilmiş Kelime Kampı</span>
               </button>
               <button 
                 className="mobile-more-item"
