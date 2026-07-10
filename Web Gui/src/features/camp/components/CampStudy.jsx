@@ -60,7 +60,9 @@ const CampStudy = ({
   setMeaningOptions,
   vocabTrack,
   addMistake,
-  setWordResults
+  setWordResults,
+  vocabMeaningSelections,
+  setVocabMeaningSelections
 }) => {
   const getTrackTheme = () => {
     const themes = {
@@ -78,6 +80,60 @@ const CampStudy = ({
   const [localClozeOptions, setLocalClozeOptions] = useState([]);
   const [localClozeSelected, setLocalClozeSelected] = useState(null);
   const [localClozeChecked, setLocalClozeChecked] = useState(false);
+
+  const [selectedMeaningsForWord, setSelectedMeaningsForWord] = useState([]);
+
+  useEffect(() => {
+    if (studyWords.length > 0 && studyWords[currentIdx]) {
+      const currentWord = studyWords[currentIdx];
+      if (vocabMeaningSelections && vocabMeaningSelections[currentWord.word]) {
+        setSelectedMeaningsForWord(vocabMeaningSelections[currentWord.word].known || []);
+      } else {
+        setSelectedMeaningsForWord([]);
+      }
+    }
+  }, [currentIdx, vocabMeaningSelections, studyWords]);
+
+  const toggleMeaningSelection = (meaning) => {
+    setSelectedMeaningsForWord(prev => {
+      if (prev.includes(meaning)) {
+        return prev.filter(m => m !== meaning);
+      } else {
+        return [...prev, meaning];
+      }
+    });
+  };
+
+  const handleSaveMeaningSelection = (isAllUnknown = false) => {
+    const currentWord = studyWords[currentIdx];
+    const allMeanings = currentWord.tr.split(',').map(s => s.trim());
+    
+    let known = [];
+    let unknown = [];
+
+    if (isAllUnknown) {
+      unknown = [...allMeanings];
+    } else {
+      known = [...selectedMeaningsForWord];
+      unknown = allMeanings.filter(m => !known.includes(m));
+    }
+
+    if (setVocabMeaningSelections) {
+      setVocabMeaningSelections(prev => ({
+        ...prev,
+        [currentWord.word]: { known, unknown }
+      }));
+    }
+
+    const hasAnyKnown = known.length > 0;
+    setWordResults?.(prev => ({ ...prev, [currentWord.word]: hasAnyKnown }));
+    if (!hasAnyKnown) {
+      addMistake?.(currentWord.word, currentWord.tr, 'camp_card');
+    }
+
+    setLearnCardFlipped(false);
+    handleWordRead();
+  };
 
   useEffect(() => {
     if (studyWords.length > 0 && studyWords[currentIdx]) {
@@ -421,14 +477,59 @@ const CampStudy = ({
                 ) : (
                   // Back Side for anlam, es_anlam, zit_anlam, tumu
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: 'center', width: '100%', justifyContent: vocabTrack === 'anlam' ? 'center' : 'flex-start', flex: 1 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: vocabTrack === 'anlam' ? 1 : 'none', width: '100%', margin: vocabTrack === 'anlam' ? 'auto' : '10px 0' }}>
-                      <span style={{ fontSize: '0.65rem', color: theme.color, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px' }}>TÜRKÇE ANLAMI</span>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                        {studyWords[currentIdx].tr.split(',').map((meaning, mIdx) => (
-                          <h2 key={mIdx} style={{ fontSize: '1.8rem', fontWeight: '800', color: '#34d399', margin: 0, textAlign: 'center' }}>
-                            {meaning.trim()}
-                          </h2>
-                        ))}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: (vocabTrack === 'anlam' || vocabTrack === 'tumu') ? 1 : 'none', width: '100%', margin: (vocabTrack === 'anlam' || vocabTrack === 'tumu') ? 'auto' : '10px 0' }}>
+                      <span style={{ fontSize: '0.65rem', color: theme.color, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px' }}>
+                        TÜRKÇE ANLAMLARI (BİLDİKLERİNİZİ SEÇİN)
+                      </span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', justifyContent: 'center', width: '100%', maxWidth: '380px' }} onClick={(e) => e.stopPropagation()}>
+                        {studyWords[currentIdx].tr.split(',').map((meaning, mIdx) => {
+                          const cleanMeaning = meaning.trim();
+                          const isSelected = selectedMeaningsForWord.includes(cleanMeaning);
+                          return (
+                            <div 
+                              key={mIdx}
+                              onClick={() => toggleMeaningSelection(cleanMeaning)}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px',
+                                background: isSelected ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                                border: isSelected ? '1.5px solid #10b981' : '1px solid rgba(255,255,255,0.08)',
+                                padding: '10px 14px',
+                                borderRadius: '12px',
+                                width: '100%',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                boxSizing: 'border-box',
+                                textAlign: 'left'
+                              }}
+                            >
+                              <div style={{
+                                width: '18px',
+                                height: '18px',
+                                borderRadius: '6px',
+                                border: isSelected ? '1.5px solid #10b981' : '1.5px solid rgba(255,255,255,0.3)',
+                                background: isSelected ? '#10b981' : 'transparent',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'white',
+                                fontSize: '0.75rem',
+                                transition: 'all 0.2s'
+                              }}>
+                                {isSelected && '✓'}
+                              </div>
+                              <span style={{ 
+                                fontSize: '1.05rem', 
+                                fontWeight: '700', 
+                                color: isSelected ? '#34d399' : 'white',
+                                transition: 'color 0.2s'
+                              }}>
+                                {cleanMeaning}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
 
@@ -584,55 +685,96 @@ const CampStudy = ({
             ) : (
               // Meaning, Synonyms, Antonyms Camp Button Layout
               <>
-                {/* Row 1: Bilmiyorum & Biliyorum */}
+                {/* Row 1: Action Buttons based on flip state */}
                 <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-                  <button
-                    onClick={() => {
-                      addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_card');
-                      setWordResults?.(prev => ({ ...prev, [studyWords[currentIdx].word]: false }));
-                      setLearnCardFlipped(false);
-                      handleWordRead();
-                    }}
-                    className="btn-primary"
-                    style={{
-                      flex: 1,
-                      padding: '10px 20px',
-                      fontSize: '0.85rem',
-                      borderColor: '#ef4444',
-                      color: 'white',
-                      background: '#ef4444',
-                      fontWeight: 'bold',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px'
-                    }}
-                  >
-                    ❌ Bilmiyorum
-                  </button>
-                  <button
-                    onClick={() => {
-                      setWordResults?.(prev => ({ ...prev, [studyWords[currentIdx].word]: true }));
-                      setLearnCardFlipped(false);
-                      handleWordRead();
-                    }}
-                    className="btn-primary"
-                    style={{
-                      flex: 1,
-                      padding: '10px 24px',
-                      fontSize: '0.85rem',
-                      background: 'rgba(16, 185, 129, 0.9)',
-                      borderColor: '#10b981',
-                      color: 'white',
-                      fontWeight: 'bold',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px'
-                    }}
-                  >
-                    ✅ Biliyorum
-                  </button>
+                  {!learnCardFlipped ? (
+                    <>
+                      <button
+                        onClick={() => {
+                          handleSaveMeaningSelection(true);
+                        }}
+                        className="btn-primary"
+                        style={{
+                          flex: 1,
+                          padding: '10px 20px',
+                          fontSize: '0.85rem',
+                          borderColor: '#ef4444',
+                          color: 'white',
+                          background: '#ef4444',
+                          fontWeight: 'bold',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px'
+                        }}
+                      >
+                        ❌ Bilmiyorum
+                      </button>
+                      <button
+                        onClick={() => {
+                          setLearnCardFlipped(true);
+                        }}
+                        className="btn-primary"
+                        style={{
+                          flex: 1,
+                          padding: '10px 24px',
+                          fontSize: '0.85rem',
+                          background: 'rgba(99, 102, 241, 0.9)',
+                          borderColor: '#6366f1',
+                          color: 'white',
+                          fontWeight: 'bold',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px'
+                        }}
+                      >
+                        Döndür / Göster 🔄
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => {
+                          setLearnCardFlipped(false);
+                        }}
+                        className="btn-secondary"
+                        style={{
+                          flex: 1,
+                          padding: '10px 20px',
+                          fontSize: '0.85rem',
+                          fontWeight: 'bold',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px'
+                        }}
+                      >
+                        İptal / Çevir 🔄
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleSaveMeaningSelection(false);
+                        }}
+                        className="btn-primary"
+                        style={{
+                          flex: 1,
+                          padding: '10px 24px',
+                          fontSize: '0.85rem',
+                          background: 'rgba(16, 185, 129, 0.9)',
+                          borderColor: '#10b981',
+                          color: 'white',
+                          fontWeight: 'bold',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px'
+                        }}
+                      >
+                        Kaydet ve Devam Et ⏩
+                      </button>
+                    </>
+                  )}
                 </div>
 
                 {/* Row 2: Önceki Kelime & optional Skip button */}

@@ -224,6 +224,19 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [phase, setPhase] = useState(1); // 1: Learn, 2: Meaning, 3: Synonym, 4: Antonym, 5: Cloze, 6: Day Summary
   const [isStudying, setIsStudying] = useState(false);
+  const [vocabMeaningSelections, setVocabMeaningSelections] = useState(() => {
+    try {
+      const saved = localStorage.getItem('yokdil_camp_meaning_selections');
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      return {};
+    }
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem('yokdil_camp_meaning_selections', JSON.stringify(vocabMeaningSelections));
+  }, [vocabMeaningSelections]);
+
   const [examQuestionsMap, setExamQuestionsMap] = useState({});
   const [activeDayWords, setActiveDayWords] = useState({});
   const [allWordsDb, setAllWordsDb] = useState({});
@@ -2714,7 +2727,8 @@ const handleCikmisSwipeBack = () => {
         setMeaningOptions={setMeaningOptions}
         vocabTrack={vocabTrack}
         addMistake={addMistake}
-        setWordResults={setWordResults}
+        vocabMeaningSelections={vocabMeaningSelections}
+        setVocabMeaningSelections={setVocabMeaningSelections}
       />
     );
   }
@@ -2923,7 +2937,7 @@ const handleCikmisSwipeBack = () => {
                             ...latestAttempt,
                             swipeResults: latestAttempt.swipeResults || latestAttempt.resultsMap || completedObj.swipeResults || completedObj.resultsMap
                           };
-                          handlePrintPDF(reportCardDay, reportCardWords, exportStats, selectedCategory, totalCampDays);
+                          handlePrintPDF(reportCardDay, reportCardWords, exportStats, selectedCategory, totalCampDays, vocabMeaningSelections);
                         }}
                         className="btn-primary"
                         style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: '#3b82f6', borderColor: '#3b82f6', cursor: 'pointer' }}

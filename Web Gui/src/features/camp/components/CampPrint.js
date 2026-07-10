@@ -1,4 +1,4 @@
-export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, totalCampDays) => {
+export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, totalCampDays, vocabMeaningSelections) => {
   const printWindow = window.open('', '_blank', 'width=850,height=950');
   if (!printWindow) {
     alert("Popup engelleyiciyi devre dışı bırakın!");
@@ -73,14 +73,40 @@ export const handlePrintPDF = (dayNum, wordsList, stats, selectedCategory, total
       </div>
     `;
   } else {
-    let wordsRows = wordsList.map((w, idx) => `
-      <tr style="border-bottom: 1px solid #f1f5f9;">
-        <td style="padding: 10px; font-weight: bold; color: #1e293b;">${idx + 1}. ${w.word}</td>
-        <td style="padding: 10px; color: #475569; font-style: italic;">${w.type || ''}</td>
-        <td style="padding: 10px; color: #0f172a; font-weight: 500;">${w.tr || w.turkish || ''}</td>
-        <td style="padding: 10px; color: #475569; font-size: 0.85rem;">${w.sentence || w.sentence_en || ''}</td>
-      </tr>
-    `).join('');
+    let wordsRows = wordsList.map((w, idx) => {
+      const selections = vocabMeaningSelections && vocabMeaningSelections[w.word];
+      let trFormatted = '';
+      const fullTr = w.tr || w.turkish || '';
+      
+      if (selections && (selections.known || selections.unknown)) {
+        const knownList = selections.known || [];
+        const unknownList = selections.unknown || [];
+        const allMeanings = fullTr.split(',').map(s => s.trim());
+        
+        trFormatted = allMeanings.map(m => {
+          if (knownList.includes(m)) {
+            return `<div style="color: #16a34a; font-weight: bold; display: flex; align-items: center; gap: 4px; margin-bottom: 2px;"><span style="font-size: 1.1em;">✓</span> ${m}</div>`;
+          } else if (unknownList.includes(m)) {
+            return `<div style="color: #dc2626; font-weight: bold; display: flex; align-items: center; gap: 4px; margin-bottom: 2px;"><span style="font-size: 1.1em;">✗</span> ${m}</div>`;
+          } else {
+            return `<div style="color: #475569; display: flex; align-items: center; gap: 4px; margin-bottom: 2px;">• ${m}</div>`;
+          }
+        }).join('');
+      } else {
+        trFormatted = fullTr.split(',').map(s => {
+          return `<div style="color: #1e293b; margin-bottom: 2px;">• ${s.trim()}</div>`;
+        }).join('');
+      }
+
+      return `
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 10px; font-weight: bold; color: #1e293b; vertical-align: top;">${idx + 1}. ${w.word}</td>
+          <td style="padding: 10px; color: #475569; font-style: italic; vertical-align: top;">${w.type || ''}</td>
+          <td style="padding: 10px; vertical-align: top;">${trFormatted}</td>
+          <td style="padding: 10px; color: #475569; font-size: 0.85rem; vertical-align: top;">${w.sentence || w.sentence_en || ''}</td>
+        </tr>
+      `;
+    }).join('');
 
     bodyContent = `
       <h3>📚 Kelime Listesi (${wordsList.length} Sözcük)</h3>
