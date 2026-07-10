@@ -89,7 +89,8 @@ const CampStudy = ({
       if (vocabMeaningSelections && vocabMeaningSelections[currentWord.word]) {
         setSelectedMeaningsForWord(vocabMeaningSelections[currentWord.word].known || []);
       } else {
-        setSelectedMeaningsForWord([]);
+        const allMeanings = currentWord.tr ? currentWord.tr.split(',').map(s => s.trim()) : [];
+        setSelectedMeaningsForWord(allMeanings);
       }
     }
   }, [currentIdx, vocabMeaningSelections, studyWords]);
@@ -736,7 +737,7 @@ const CampStudy = ({
                     <>
                       <button
                         onClick={() => {
-                          setLearnCardFlipped(false);
+                          handleSaveMeaningSelection(true);
                         }}
                         className="btn-secondary"
                         style={{
@@ -747,10 +748,13 @@ const CampStudy = ({
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          gap: '6px'
+                          gap: '6px',
+                          background: 'rgba(239, 68, 68, 0.1)',
+                          borderColor: '#ef4444',
+                          color: '#f87171'
                         }}
                       >
-                        İptal / Çevir 🔄
+                        Bilmiyorum ❌
                       </button>
                       <button
                         onClick={() => {
