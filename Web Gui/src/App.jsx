@@ -369,7 +369,7 @@ function App() {
   useEffect(() => {
     const restoreExam = async () => {
       const savedExamId = localStorage.getItem('yokdil_selected_exam_id');
-      const category = selectedCategory || localStorage.getItem('yokdil_last_standard_category') || 'fen';
+      const category = initialHashState.category || localStorage.getItem('yokdil_last_standard_category') || 'fen';
       if (savedExamId && !selectedExam) {
         setLoading(true);
         const suffix = `yokdil/${category}/cikmis_sinavlar/${savedExamId}.json`;
@@ -406,7 +406,7 @@ function App() {
       }
     };
     restoreExam();
-  }, [selectedCategory, selectedExam]);
+  }, []);
 
   useEffect(() => {
     let interval = null;
