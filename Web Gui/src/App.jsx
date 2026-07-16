@@ -342,6 +342,72 @@ function App() {
     };
   }, []);
 
+  // Persist selectedExam ID
+  useEffect(() => {
+    if (selectedExam) {
+      localStorage.setItem('yokdil_selected_exam_id', selectedExam.id);
+    } else {
+      localStorage.removeItem('yokdil_selected_exam_id');
+    }
+  }, [selectedExam]);
+
+  // Persist current quiz index
+  useEffect(() => {
+    if (selectedExam && currentQuizIndex) {
+      localStorage.setItem(`yokdil_current_quiz_index_${selectedExam.id}`, String(currentQuizIndex));
+    }
+  }, [currentQuizIndex, selectedExam]);
+
+  // Persist quiz questions list
+  useEffect(() => {
+    if (selectedExam && quizQuestions && quizQuestions.length > 0) {
+      localStorage.setItem(`yokdil_quiz_questions_${selectedExam.id}`, JSON.stringify(quizQuestions));
+    }
+  }, [quizQuestions, selectedExam]);
+
+  // Restore selected exam and session on refresh
+  useEffect(() => {
+    const restoreExam = async () => {
+      const savedExamId = localStorage.getItem('yokdil_selected_exam_id');
+      const category = selectedCategory || localStorage.getItem('yokdil_last_standard_category') || 'fen';
+      if (savedExamId && !selectedExam) {
+        setLoading(true);
+        const suffix = `yokdil/${category}/cikmis_sinavlar/${savedExamId}.json`;
+        const foundKey = Object.keys(examDetailModules).find(k => k.endsWith(suffix));
+        if (foundKey) {
+          try {
+            const loader = examDetailModules[foundKey];
+            const module = await loader();
+            const fullExam = module.default || module;
+            setSelectedExam(fullExam);
+            
+            // Restore answers and flagged states
+            setAnswers(JSON.parse(localStorage.getItem(`answers_${fullExam.id}`)) || {});
+            setFlagged(JSON.parse(localStorage.getItem(`flags_${fullExam.id}`)) || {});
+            
+            // Restore quiz index
+            const savedIndex = localStorage.getItem(`yokdil_current_quiz_index_${fullExam.id}`);
+            if (savedIndex) {
+              setCurrentQuizIndex(parseInt(savedIndex, 10));
+            }
+            
+            // Restore quiz questions list
+            const savedQuestions = localStorage.getItem(`yokdil_quiz_questions_${fullExam.id}`);
+            if (savedQuestions) {
+              setQuizQuestions(JSON.parse(savedQuestions));
+            } else {
+              setQuizQuestions(fullExam.questions.map((_, i) => i + 1));
+            }
+          } catch (e) {
+            console.error("Sınav geri yüklenirken hata oluştu:", e);
+          }
+        }
+        setLoading(false);
+      }
+    };
+    restoreExam();
+  }, [selectedCategory, selectedExam]);
+
   useEffect(() => {
     let interval = null;
     if (quizActive && !examSubmitted) {
