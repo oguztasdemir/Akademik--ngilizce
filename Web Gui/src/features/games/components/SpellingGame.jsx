@@ -8,7 +8,9 @@ const SpellingGame = ({ vocab, awardPetXp }) => {
   const [status, setStatus] = useState('playing');
 
   const loadWord = () => {
+    if (!vocab || vocab.length === 0) return;
     const item = vocab[Math.floor(Math.random() * vocab.length)];
+    if (!item) return;
     setWord(item.english.toUpperCase());
     setHint(item.turkish);
     setAnswer([]);
@@ -16,7 +18,11 @@ const SpellingGame = ({ vocab, awardPetXp }) => {
     setLetters(item.english.toUpperCase().split('').sort(() => 0.5 - Math.random()).map((char, idx) => ({ id: idx, val: char })));
   };
 
-  useEffect(() => { loadWord(); }, [vocab]);
+  useEffect(() => {
+    if (vocab && vocab.length > 0) {
+      loadWord();
+    }
+  }, [vocab]);
 
   const selectLetter = (item) => {
     if (status !== 'playing') return;

@@ -256,6 +256,60 @@ const PerformanceSection = ({
   const dailyDoneDays = Object.keys(dailyProgress.completedDays || {}).length;
   const grammarDoneDays = Object.keys(grammarProgress.completedDays || {}).length;
 
+  const studyHistory = getProgress('yokdil_study_history', {});
+
+  const generateHeatmapGrid = () => {
+    const today = new Date();
+    const startDate = new Date();
+    startDate.setDate(today.getDate() - 364);
+
+    const totalDays = 365;
+    const daysArray = [];
+    const tempDate = new Date(startDate);
+    for (let i = 0; i < totalDays; i++) {
+      const dateStr = `${tempDate.getFullYear()}-${String(tempDate.getMonth() + 1).padStart(2, '0')}-${String(tempDate.getDate()).padStart(2, '0')}`;
+      const dayOfWeek = tempDate.getDay();
+      const activity = studyHistory[dateStr] || null;
+      let totalActions = 0;
+      if (activity) {
+        totalActions = (activity.questions || 0) + (activity.words || 0) + (activity.games || 0) + (activity.paragraphs || 0);
+      }
+      daysArray.push({
+        dateStr,
+        dayOfWeek,
+        totalActions,
+        activity,
+        month: tempDate.toLocaleString('tr-TR', { month: 'short' }),
+        dayOfMonth: tempDate.getDate()
+      });
+      tempDate.setDate(tempDate.getDate() + 1);
+    }
+    return daysArray;
+  };
+
+  const days = generateHeatmapGrid();
+  const weeks = [];
+  let currentWeek = [];
+  
+  const firstDayOfWeek = days[0].dayOfWeek;
+  for (let i = 0; i < firstDayOfWeek; i++) {
+    currentWeek.push(null);
+  }
+  
+  days.forEach(day => {
+    currentWeek.push(day);
+    if (currentWeek.length === 7) {
+      weeks.push(currentWeek);
+      currentWeek = [];
+    }
+  });
+  if (currentWeek.length > 0) {
+    while (currentWeek.length < 7) {
+      currentWeek.push(null);
+    }
+    weeks.push(currentWeek);
+  }
+
   return (
     <div className="space-y-6 text-left" style={{ maxWidth: '1000px', margin: '0 auto', color: 'white' }}>
       {/* Premium Header */}
@@ -375,6 +429,105 @@ const PerformanceSection = ({
                 <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 'bold' }}>Çözülen Deneme</div>
                 <div style={{ fontSize: '1.25rem', fontWeight: 800 }}>{stats.solved} Sınav</div>
               </div>
+            </div>
+          </div>
+
+          {/* Daily Activity Calendar Heatmap */}
+          <div className="glass-card" style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)', padding: '24px', borderRadius: '20px' }}>
+            <h3 style={{ fontSize: '0.92rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 0 16px 0' }}>
+              <Activity size={18} style={{ color: '#10b981' }} /> Günlük Çalışma Aktivite Takvimi
+            </h3>
+            <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '-8px', marginBottom: '20px' }}>
+              Son 1 yıl içerisindeki günlük kelime, soru, makale ve mini oyun aktivitelerinizin ısı haritası.
+            </p>
+            
+            <div style={{ overflowX: 'auto', paddingBottom: '10px' }} className="custom-scrollbar">
+              <div style={{ display: 'flex', gap: '4px', minWidth: '720px', padding: '4px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '0.65rem', color: '#64748b', paddingRight: '8px', paddingBlock: '12px' }}>
+                  <span>Pzr</span>
+                  <span>Sal</span>
+                  <span>Per</span>
+                  <span>Cmt</span>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '3px' }}>
+                  {weeks.map((week, wIdx) => {
+                    const firstDay = week.find(d => d !== null);
+                    const showMonth = firstDay && firstDay.dayOfMonth <= 7;
+                    
+                    return (
+                      <div key={wIdx} style={{ display: 'flex', flexDirection: 'column', gap: '3px', position: 'relative' }}>
+                        {showMonth && (
+                          <span style={{ position: 'absolute', top: '-14px', left: 0, fontSize: '0.62rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                            {firstDay.month}
+                          </span>
+                        )}
+                        {week.map((day, dIdx) => {
+                          if (!day) {
+                            return (
+                              <div 
+                                key={dIdx} 
+                                style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'transparent' }} 
+                              />
+                            );
+                          }
+                          
+                          let bg = 'rgba(255, 255, 255, 0.03)';
+                          let border = '1px solid rgba(255, 255, 255, 0.05)';
+                          if (day.totalActions > 0) {
+                            if (day.totalActions < 5) {
+                              bg = 'rgba(16, 185, 129, 0.25)';
+                              border = '1px solid rgba(16, 185, 129, 0.3)';
+                            } else if (day.totalActions < 15) {
+                              bg = 'rgba(16, 185, 129, 0.55)';
+                              border = '1px solid rgba(16, 185, 129, 0.6)';
+                            } else {
+                              bg = 'rgba(16, 185, 129, 0.85)';
+                              border = '1px solid rgba(16, 185, 129, 0.9)';
+                            }
+                          }
+                          
+                          const tooltipParts = [];
+                          if (day.activity) {
+                            if (day.activity.words) tooltipParts.push(`${day.activity.words} kelime`);
+                            if (day.activity.questions) tooltipParts.push(`${day.activity.questions} soru`);
+                            if (day.activity.paragraphs) tooltipParts.push(`${day.activity.paragraphs} makale`);
+                            if (day.activity.games) tooltipParts.push(`${day.activity.games} oyun`);
+                          }
+                          const tooltipText = `${day.dateStr}: ${day.totalActions} aktivite ${tooltipParts.length > 0 ? `(${tooltipParts.join(', ')})` : ''}`;
+                          
+                          return (
+                            <div 
+                              key={dIdx}
+                              title={tooltipText}
+                              style={{ 
+                                width: '10px', 
+                                height: '10px', 
+                                borderRadius: '2px', 
+                                background: bg,
+                                border: border,
+                                cursor: 'pointer',
+                                transition: 'transform 0.1s ease'
+                              }}
+                              onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.3)'; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; }}
+                            />
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '6px', fontSize: '0.65rem', color: '#64748b', marginTop: '8px' }}>
+              <span>Düşük</span>
+              <div style={{ width: '8px', height: '8px', borderRadius: '1.5px', background: 'rgba(255, 255, 255, 0.03)' }} />
+              <div style={{ width: '8px', height: '8px', borderRadius: '1.5px', background: 'rgba(16, 185, 129, 0.25)' }} />
+              <div style={{ width: '8px', height: '8px', borderRadius: '1.5px', background: 'rgba(16, 185, 129, 0.55)' }} />
+              <div style={{ width: '8px', height: '8px', borderRadius: '1.5px', background: 'rgba(16, 185, 129, 0.85)' }} />
+              <span>Yüksek</span>
             </div>
           </div>
 
@@ -564,33 +717,58 @@ const PerformanceSection = ({
       )}
 
       {/* Mini Games Tab */}
-      {perfTab === 'games' && (
-        <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)', padding: '24px', borderRadius: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: 800, margin: 0 }}>Mini Oyun Rekorları & Aktiviteleri</h3>
-          </div>
+      {perfTab === 'games' && (() => {
+        const stats = (() => {
+          try {
+            const raw = localStorage.getItem('yokdil_games_performance');
+            return raw ? JSON.parse(raw) : { totalCorrect: 0, totalWrong: 0, highScores: {} };
+          } catch (e) {
+            return { totalCorrect: 0, totalWrong: 0, highScores: {} };
+          }
+        })();
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '14px', padding: '16px' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#ec4899', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Gamepad2 size={16} /> Kart Eşleştirme Oyunu
-              </div>
-              <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>
-                Kelimeleri sol-sağ paneller halinde en az hamle ile eşleştirin. Evcil hayvanınızın XP gelişimine doğrudan etki eder.
+        const gameNames = {
+          match: 'Kart Eşleştirme (Memory)',
+          shooter: 'Kelime Avcısı (Shooter)',
+          hangman: 'Kelime Asmaca (Hangman)',
+          spelling: 'Harf Karıştırma (Spelling)',
+          synonym: 'Eş Anlam Eşleştirme',
+          antonym: 'Zıt Anlam Eşleştirme',
+          tf_run: 'Doğru / Yanlış Çeviri',
+          cloze: 'Cümle Tamamlama',
+          definition: 'Tanım Bulmaca'
+        };
+
+        return (
+          <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)', padding: '24px', borderRadius: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, margin: 0 }}>Mini Oyun Rekorları & Aktiviteleri</h3>
+              <div style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 'bold', background: 'rgba(16, 185, 129, 0.1)', padding: '4px 10px', borderRadius: '8px' }}>
+                Toplam Başarı: {stats.totalCorrect || 0} Doğru
               </div>
             </div>
 
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '14px', padding: '16px' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#818cf8', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Gamepad2 size={16} /> Eş Anlamlı Kelimeler
-              </div>
-              <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>
-                Kelimelerin akademik eş anlamlarını bularak doğru cevap sayısını ve puanınızı artırın.
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+              {Object.keys(gameNames).map(gameId => {
+                const highScore = (stats.highScores && stats.highScores[gameId]) || 0;
+                return (
+                  <div key={gameId} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#c084fc', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Gamepad2 size={14} style={{ color: '#a855f7' }} /> {gameNames[gameId]}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
+                      <span style={{ fontSize: '0.68rem', color: 'var(--text-secondary)' }}>En Yüksek Skor</span>
+                      <span style={{ fontSize: '0.85rem', fontWeight: '900', color: highScore > 0 ? '#34d399' : '#94a3b8' }}>
+                        {highScore > 0 ? `${highScore} Puan` : 'Henüz Oynanmadı'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 };

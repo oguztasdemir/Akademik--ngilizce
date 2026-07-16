@@ -17,17 +17,21 @@ export const downloadExcelTemplate = () => {
   // Create worksheet
   const ws = XLSX.utils.aoa_to_sheet(data);
 
-  // Set column widths for nice appearance
-  ws['!cols'] = [
-    { wch: 6 },  // Gün
-    { wch: 15 }, // Kelime
-    { wch: 15 }, // Kelime Türü
-    { wch: 25 }, // Türkçe Anlamı
-    { wch: 25 }, // Eş Anlamlılar
-    { wch: 25 }, // Zıt Anlamlılar
-    { wch: 45 }, // Örnek Cümle
-    { wch: 45 }  // Örnek Cümle Çevirisi
-  ];
+  // Set column widths dynamically for auto-fit
+  const colWidths = data[0].map((_, colIdx) => {
+    let maxLen = 10; // Default minimum width
+    data.forEach(row => {
+      const cellVal = row[colIdx];
+      if (cellVal !== undefined && cellVal !== null) {
+        const valStr = String(cellVal);
+        if (valStr.length > maxLen) {
+          maxLen = valStr.length;
+        }
+      }
+    });
+    return { wch: maxLen + 3 };
+  });
+  ws['!cols'] = colWidths;
 
   // Create workbook
   const wb = XLSX.utils.book_new();

@@ -8,15 +8,21 @@ const ClozeGame = ({ vocab, awardPetXp }) => {
   const [showFeedback, setShowFeedback] = useState(false);
 
   const loadQuestion = () => {
+    if (!vocab || vocab.length === 0) return;
     setSelectedOpt(null);
     setShowFeedback(false);
     const correct = vocab[Math.floor(Math.random() * vocab.length)];
-    const wrongs = vocab.filter(v => v.english !== correct.english).sort(() => 0.5 - Math.random()).slice(0, 3);
+    if (!correct) return;
+    const wrongs = vocab.filter(v => v && correct && v.english !== correct.english).sort(() => 0.5 - Math.random()).slice(0, 3);
     setOptions([correct, ...wrongs].sort(() => 0.5 - Math.random()));
     setCurrent(correct);
   };
 
-  useEffect(() => { loadQuestion(); }, [vocab]);
+  useEffect(() => {
+    if (vocab && vocab.length > 0) {
+      loadQuestion();
+    }
+  }, [vocab]);
 
   const handleSelect = (opt) => {
     if (showFeedback) return;

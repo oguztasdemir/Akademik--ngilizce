@@ -10,9 +10,11 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
   const [showFeedback, setShowFeedback] = useState(false);
 
   const loadQuestion = () => {
+    if (!vocab || vocab.length === 0) return;
     setSelectedAns(null);
     setShowFeedback(false);
     const item = vocab[Math.floor(Math.random() * vocab.length)];
+    if (!item) return;
     setEnglishWord(item.english);
     setCorrectTr(item.turkish);
     const isReal = Math.random() > 0.5;
@@ -20,12 +22,16 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
     if (isReal) {
       setDisplayedTr(item.turkish);
     } else {
-      const fake = vocab.filter(v => v.english !== item.english)[0] || item;
+      const fake = vocab.filter(v => v && item && v.english !== item.english)[0] || item;
       setDisplayedTr(fake.turkish);
     }
   };
 
-  useEffect(() => { loadQuestion(); }, [vocab]);
+  useEffect(() => {
+    if (vocab && vocab.length > 0) {
+      loadQuestion();
+    }
+  }, [vocab]);
 
   const handleAnswer = (val) => {
     if (showFeedback) return;

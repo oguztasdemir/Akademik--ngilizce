@@ -1037,8 +1037,8 @@ export const useAppState = () => {
       let newXp = prevXp + amount;
       let newLevel = petLevel;
 
-      while (newXp >= 100) {
-        newXp -= 100;
+      while (newXp >= 5000) {
+        newXp -= 5000;
         newLevel += 1;
       }
 

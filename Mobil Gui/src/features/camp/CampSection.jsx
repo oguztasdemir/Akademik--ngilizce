@@ -224,6 +224,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [grammarSelected, setGrammarSelected] = useState(null);
   const [grammarChecked, setGrammarChecked] = useState(false);
   const [grammarCorrect, setGrammarCorrect] = useState(null);
+  const [grammarResults, setGrammarResults] = useState({});
   const [studyWords, setStudyWords] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [phase, setPhase] = useState(1); // 1: Learn, 2: Meaning, 3: Synonym, 4: Antonym, 5: Cloze, 6: Day Summary
@@ -1062,7 +1063,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       setVocabPlanData(mappedVocab);
     };
     loadPlans();
-  }, [selectedCategory, dictDb, activeProjectId, JSON.stringify(projects.map(p => ({ id: p.id, total_days: p.total_days, total_words: p.total_words, updatedAt: p.updatedAt })))]);
+  }, [selectedCategory, dictDb, activeProjectId, JSON.stringify(projects.find(p => p.id === activeProjectId)?.words)]);
 
   useEffect(() => {
     if (selectedCategory === 'custom' && activeProjectId && progress) {
@@ -3069,13 +3070,27 @@ const handleCikmisSwipeBack = () => {
     }
 
     setActiveGrammarDay(dayData);
-    setGrammarQuestions(dayData.questions || []);
+
+    const mainQuestions = dayData.questions || [];
+    const otherQuestions = [];
+    Object.keys(grammarCampDb).forEach(key => {
+      if (key !== String(dayNum)) {
+        const qList = grammarCampDb[key].questions || [];
+        otherQuestions.push(...qList);
+      }
+    });
+
+    const shuffledOthers = [...otherQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
+    const combinedQuestions = [...mainQuestions, ...shuffledOthers].sort(() => 0.5 - Math.random());
+
+    setGrammarQuestions(combinedQuestions);
+    setGrammarResults({});
 
     const comp = grammarProgress.completedDays[dayNum];
     if (comp) {
-      const expectedCorr = Math.round((comp.score / 100) * (dayData.questions || []).length);
+      const expectedCorr = Math.round((comp.score / 100) * combinedQuestions.length);
       setCorrectAnswers(expectedCorr);
-      setTotalQuestions((dayData.questions || []).length);
+      setTotalQuestions(combinedQuestions.length);
     } else {
       setCorrectAnswers(0);
       setTotalQuestions(0);
@@ -3108,6 +3123,11 @@ const handleCikmisSwipeBack = () => {
     const correct = opt === q.answer;
     setGrammarCorrect(correct);
     setTotalQuestions(prev => prev + 1);
+
+    setGrammarResults(prev => ({
+      ...prev,
+      [grammarIdx]: correct
+    }));
 
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
@@ -3208,6 +3228,7 @@ const handleCikmisSwipeBack = () => {
           grammarCorrect={grammarCorrect}
           correctAnswers={correctAnswers}
           totalQuestions={totalQuestions}
+          grammarResults={grammarResults}
           handleGrammarNextLecture={handleGrammarNextLecture}
           handleGrammarCheck={handleGrammarCheck}
           handleGrammarNextQuestion={handleGrammarNextQuestion}

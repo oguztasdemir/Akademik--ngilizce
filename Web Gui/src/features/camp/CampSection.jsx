@@ -6,6 +6,7 @@ import CampStudy from './components/CampStudy';
 import CampGrammar from './components/CampGrammar';
 import * as XLSX from 'xlsx';
 import { downloadExcelTemplate } from '../../utils/excelHelper';
+import { playCorrectSound, playIncorrectSound } from '../../utils/audio';
 
 const campModules = import.meta.glob('../../../../Dataset/**/*.json');
 
@@ -142,7 +143,7 @@ const formatWordType = (type) => {
   return type;
 };
 
-const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, recordWordStat, setActiveStudyInfo, dictDb, addMistake, initialCampType = 'vocabulary', vocabTrack, setVocabTrack, hideSwitcher, setIsStudyingActive }) => {
+const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, recordWordStat, setActiveStudyInfo, dictDb, addMistake, initialCampType = 'vocabulary', vocabTrack, setVocabTrack, hideSwitcher, setIsStudyingActive, setMascotState }) => {
   // Helper to render Turkish meanings vertically if they contain multiple numbered items
   const renderTurkishMeanings = (text, color = '#34d399', sizeStyle = {}) => {
     if (!text) return null;
@@ -222,6 +223,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [grammarSelected, setGrammarSelected] = useState(null);
   const [grammarChecked, setGrammarChecked] = useState(false);
   const [grammarCorrect, setGrammarCorrect] = useState(null);
+  const [grammarResults, setGrammarResults] = useState({});
   const [studyWords, setStudyWords] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [phase, setPhase] = useState(1); // 1: Learn, 2: Meaning, 3: Synonym, 4: Antonym, 5: Cloze, 6: Day Summary
@@ -290,6 +292,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   const [newProjName, setNewProjName] = useState('');
   const [newProjDesc, setNewProjDesc] = useState('');
   const [newProjFile, setNewProjFile] = useState(null);
+  const [isDraggingNew, setIsDraggingNew] = useState(false);
+  const [isDraggingActiveProj, setIsDraggingActiveProj] = useState(false);
 
   useEffect(() => {
     // Migration: if old single-project keys exist, move them to the new yokdil_custom_projects array
@@ -1060,7 +1064,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       setVocabPlanData(mappedVocab);
     };
     loadPlans();
-  }, [selectedCategory, dictDb, activeProjectId, projects]);
+  }, [selectedCategory, dictDb, activeProjectId, JSON.stringify(projects.find(p => p.id === activeProjectId)?.words)]);
 
   useEffect(() => {
     if (selectedCategory === 'custom' && activeProjectId && progress) {
@@ -1094,8 +1098,13 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     }
   }, [vocabMeaningSelections, selectedCategory, activeProjectId]);
 
+  useEffect(() => {
+    isInitializedRef.current = false;
+  }, [selectedCategory]);
+
   // Load session state from localStorage/hash on category change or mount
   useEffect(() => {
+    if (isInitializedRef.current) return;
     if (!progress || !grammarProgress || !cikmisProgress) return;
     const category = selectedCategory || 'fen';
     
@@ -1620,7 +1629,10 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
 
     setCikmisQuizCorrect(correct);
 
-    if (!correct) {
+    if (correct) {
+      playCorrectSound();
+    } else {
+      playIncorrectSound();
       setCikmisQuizMistakes(prev => ({ ...prev, [currentWord.english]: true }));
       addMistake?.(currentWord.english, currentWord.turkish, `cikmis_${studyMode}`);
     }
@@ -2096,21 +2108,33 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
 
   const getSynonymOptions = (correctSynonym, currentWordObj) => {
     const pool = getGlobalEnglishWordsPool();
-    const filtered = pool.filter(s => {
-      if (!s) return false;
-      const cleanS = s.toLowerCase().trim();
-      if (cleanS === correctSynonym.toLowerCase().trim()) return false;
+    const correctClean = correctSynonym.toLowerCase().trim();
+    
+    // Build a unique set of lowercased words
+    const uniquePool = Array.from(new Set(pool.map(s => (s || '').toLowerCase().trim()))).filter(cleanS => {
+      if (!cleanS) return false;
+      if (cleanS === correctClean) return false;
       if (currentWordObj && currentWordObj.english && currentWordObj.english.toLowerCase().trim() === cleanS) return false;
       if (currentWordObj && currentWordObj.word && currentWordObj.word.toLowerCase().trim() === cleanS) return false;
       return true;
     });
 
-    const uniqueFiltered = Array.from(new Set(filtered)).sort(() => Math.random() - 0.5);
-    const options = [correctSynonym, ...uniqueFiltered.slice(0, 3)];
-    while (options.length < 4) {
-      options.push("alternative");
-    }
-    return options.sort(() => Math.random() - 0.5);
+    // Shuffle and pick 3 options
+    const shuffled = [...uniquePool].sort(() => Math.random() - 0.5);
+    const selectedEng = [correctClean, ...shuffled.slice(0, 3)];
+    
+    // Now look up Turkish meanings and format as "Word (tr)"
+    const formattedOptions = selectedEng.map(eng => {
+      const match = getWordFromDict(eng);
+      let trMeaning = '';
+      if (match && match.tr) {
+        trMeaning = match.tr.split(',')[0].split(';')[0].trim();
+      }
+      return trMeaning ? `${eng} (${trMeaning})` : eng;
+    });
+    
+    // Shuffle the final options
+    return formattedOptions.sort(() => Math.random() - 0.5);
   };
 
   const getWordFromDict = (wordStr) => {
@@ -2239,21 +2263,33 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
 
   const getAntonymOptions = (correctAntonym, currentWordObj) => {
     const pool = getGlobalEnglishWordsPool();
-    const filtered = pool.filter(s => {
-      if (!s) return false;
-      const cleanS = s.toLowerCase().trim();
-      if (cleanS === correctAntonym.toLowerCase().trim()) return false;
+    const correctClean = correctAntonym.toLowerCase().trim();
+    
+    // Build a unique set of lowercased words
+    const uniquePool = Array.from(new Set(pool.map(s => (s || '').toLowerCase().trim()))).filter(cleanS => {
+      if (!cleanS) return false;
+      if (cleanS === correctClean) return false;
       if (currentWordObj && currentWordObj.english && currentWordObj.english.toLowerCase().trim() === cleanS) return false;
       if (currentWordObj && currentWordObj.word && currentWordObj.word.toLowerCase().trim() === cleanS) return false;
       return true;
     });
 
-    const uniqueFiltered = Array.from(new Set(filtered)).sort(() => Math.random() - 0.5);
-    const options = [correctAntonym, ...uniqueFiltered.slice(0, 3)];
-    while (options.length < 4) {
-      options.push("alternative");
-    }
-    return options.sort(() => Math.random() - 0.5);
+    // Shuffle and pick 3 options
+    const shuffled = [...uniquePool].sort(() => Math.random() - 0.5);
+    const selectedEng = [correctClean, ...shuffled.slice(0, 3)];
+    
+    // Now look up Turkish meanings and format as "Word (tr)"
+    const formattedOptions = selectedEng.map(eng => {
+      const match = getWordFromDict(eng);
+      let trMeaning = '';
+      if (match && match.tr) {
+        trMeaning = match.tr.split(',')[0].split(';')[0].trim();
+      }
+      return trMeaning ? `${eng} (${trMeaning})` : eng;
+    });
+    
+    // Shuffle the final options
+    return formattedOptions.sort(() => Math.random() - 0.5);
   };
 
   const getBlankedSentence = (wordObj, idx) => {
@@ -2750,6 +2786,15 @@ const handleCikmisSwipeBack = () => {
     }
   };
 
+  const triggerMascotReaction = (isCorrect) => {
+    if (typeof setMascotState === 'function') {
+      setMascotState(isCorrect ? 'happy' : 'sad');
+      setTimeout(() => {
+        setMascotState('neutral');
+      }, 2000);
+    }
+  };
+
   const handleMeaningCheck = (opt) => {
     if (meaningChecked) return;
     setMeaningSelected(opt);
@@ -2759,9 +2804,13 @@ const handleCikmisSwipeBack = () => {
     setMeaningCorrect(correct);
     setTotalQuestions(prev => prev + 1);
 
+    triggerMascotReaction(correct);
+
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
+      playCorrectSound();
     } else {
+      playIncorrectSound();
       setWordResults(prev => ({ ...prev, [studyWords[currentIdx].word]: false }));
       addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_meaning');
       
@@ -2838,14 +2887,19 @@ const handleCikmisSwipeBack = () => {
     setSynonymSelected(opt);
     setSynonymChecked(true);
 
-    const cleanCorrect = studyWords[currentIdx].synonyms.split(',')[0].trim();
-    const correct = opt === cleanCorrect;
+    const cleanCorrect = studyWords[currentIdx].synonyms.split(',')[0].trim().toLowerCase();
+    const cleanOpt = (opt || '').split(' (')[0].trim().toLowerCase();
+    const correct = cleanOpt === cleanCorrect;
     setSynonymCorrect(correct);
     setTotalQuestions(prev => prev + 1);
 
+    triggerMascotReaction(correct);
+
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
+      playCorrectSound();
     } else {
+      playIncorrectSound();
       setWordResults(prev => ({ ...prev, [studyWords[currentIdx].word]: false }));
       addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_synonym');
     }
@@ -2892,14 +2946,19 @@ const handleCikmisSwipeBack = () => {
     setAntonymChecked(true);
 
     const antonymStr = getAntonym(studyWords[currentIdx]);
-    const cleanCorrect = antonymStr.split(',')[0].trim();
-    const correct = opt === cleanCorrect;
+    const cleanCorrect = antonymStr.split(',')[0].trim().toLowerCase();
+    const cleanOpt = (opt || '').split(' (')[0].trim().toLowerCase();
+    const correct = cleanOpt === cleanCorrect;
     setAntonymCorrect(correct);
     setTotalQuestions(prev => prev + 1);
 
+    triggerMascotReaction(correct);
+
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
+      playCorrectSound();
     } else {
+      playIncorrectSound();
       setWordResults(prev => ({ ...prev, [studyWords[currentIdx].word]: false }));
       addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_antonym');
     }
@@ -2943,9 +3002,13 @@ const handleCikmisSwipeBack = () => {
     setClozeCorrect(correct);
     setTotalQuestions(prev => prev + 1);
 
+    triggerMascotReaction(correct);
+
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
+      playCorrectSound();
     } else {
+      playIncorrectSound();
       setWordResults(prev => ({ ...prev, [studyWords[currentIdx].word]: false }));
       addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_cloze');
     }
@@ -3042,13 +3105,27 @@ const handleCikmisSwipeBack = () => {
     }
 
     setActiveGrammarDay(dayData);
-    setGrammarQuestions(dayData.questions || []);
+
+    const mainQuestions = dayData.questions || [];
+    const otherQuestions = [];
+    Object.keys(grammarCampDb).forEach(key => {
+      if (key !== String(dayNum)) {
+        const qList = grammarCampDb[key].questions || [];
+        otherQuestions.push(...qList);
+      }
+    });
+
+    const shuffledOthers = [...otherQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
+    const combinedQuestions = [...mainQuestions, ...shuffledOthers].sort(() => 0.5 - Math.random());
+
+    setGrammarQuestions(combinedQuestions);
+    setGrammarResults({});
 
     const comp = grammarProgress.completedDays[dayNum];
     if (comp) {
-      const expectedCorr = Math.round((comp.score / 100) * (dayData.questions || []).length);
+      const expectedCorr = Math.round((comp.score / 100) * combinedQuestions.length);
       setCorrectAnswers(expectedCorr);
-      setTotalQuestions((dayData.questions || []).length);
+      setTotalQuestions(combinedQuestions.length);
     } else {
       setCorrectAnswers(0);
       setTotalQuestions(0);
@@ -3082,8 +3159,18 @@ const handleCikmisSwipeBack = () => {
     setGrammarCorrect(correct);
     setTotalQuestions(prev => prev + 1);
 
+    setGrammarResults(prev => ({
+      ...prev,
+      [grammarIdx]: correct
+    }));
+
+    triggerMascotReaction(correct);
+
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
+      playCorrectSound();
+    } else {
+      playIncorrectSound();
     }
   };
 
@@ -3164,6 +3251,25 @@ const handleCikmisSwipeBack = () => {
 
   const totalSupermaster = Object.values(progress.wordMastery || {}).filter(v => v === 3).length;
 
+  const startNextCampDay = () => {
+    const nextDay = selectedDay + 1;
+    if (nextDay > 60) {
+      alert("Tebrikler! Kampın son gününe ulaştınız.");
+      exitCamp();
+      return;
+    }
+    
+    if (campType === 'daily') {
+      startDailyStudy(nextDay);
+    } else if (campType === 'cikmis_kelimeler') {
+      startCikmisStudy(nextDay, cikmisMode || 'selection');
+    } else if (campType === 'grammar') {
+      startGrammarStudy(nextDay);
+    } else {
+      exitCamp();
+    }
+  };
+
   if (isStudying) {
     if (campType === 'grammar') {
       return (
@@ -3178,11 +3284,14 @@ const handleCikmisSwipeBack = () => {
           grammarCorrect={grammarCorrect}
           correctAnswers={correctAnswers}
           totalQuestions={totalQuestions}
+          grammarResults={grammarResults}
           handleGrammarNextLecture={handleGrammarNextLecture}
           handleGrammarCheck={handleGrammarCheck}
           handleGrammarNextQuestion={handleGrammarNextQuestion}
           exitCamp={exitCamp}
           setActiveStudyInfo={setActiveStudyInfo}
+          startNextCampDay={startNextCampDay}
+          setMascotState={setMascotState}
         />
       );
     }
@@ -3194,6 +3303,7 @@ const handleCikmisSwipeBack = () => {
     return (
       <CampStudy
         selectedDay={selectedDay}
+        startNextCampDay={startNextCampDay}
         studyWords={studyWords}
         currentIdx={currentIdx}
         setCurrentIdx={setCurrentIdx}
@@ -3253,6 +3363,7 @@ const handleCikmisSwipeBack = () => {
         addMistake={addMistake}
         vocabMeaningSelections={vocabMeaningSelections}
         setVocabMeaningSelections={setVocabMeaningSelections}
+        setMascotState={setMascotState}
       />
     );
   }
@@ -3845,11 +3956,44 @@ const handleCikmisSwipeBack = () => {
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px dashed rgba(255,255,255,0.08)', borderRadius: '18px', padding: '20px', background: 'rgba(0,0,0,0.15)', textAlign: 'center', alignItems: 'center', gap: '14px' }}>
+            <div 
+              onDragOver={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsDraggingNew(true);
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsDraggingNew(false);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsDraggingNew(false);
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                  setNewProjFile(e.dataTransfer.files[0]);
+                }
+              }}
+              style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'space-between', 
+                border: isDraggingNew ? '1.5px dashed #fb923c' : '1.5px dashed rgba(255,255,255,0.08)', 
+                borderRadius: '18px', 
+                padding: '20px', 
+                background: isDraggingNew ? 'rgba(251, 146, 60, 0.05)' : 'rgba(0,0,0,0.15)', 
+                textAlign: 'center', 
+                alignItems: 'center', 
+                gap: '14px',
+                transition: 'all 0.2s ease',
+                width: '100%'
+              }}
+            >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                 <i className="fa-solid fa-file-excel" style={{ fontSize: '2.4rem', color: '#fb923c' }}></i>
                 <span style={{ fontSize: '0.85rem', color: 'white', fontWeight: 'bold' }}>Excel Dosyası Seçin</span>
-                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{newProjFile ? `Seçilen: ${newProjFile.name}` : '.xlsx, .xls veya .csv formatında dosya yükleyin'}</span>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{newProjFile ? `Seçilen: ${newProjFile.name}` : 'Sürükleyip bırakın veya dosya seçin'}</span>
               </div>
               
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -3923,18 +4067,40 @@ const handleCikmisSwipeBack = () => {
           </p>
         </div>
 
-        <div className="glass-card" style={{
-          padding: '30px',
-          borderRadius: '24px',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          background: 'rgba(15, 23, 42, 0.65)',
-          backdropFilter: 'blur(12px)',
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '24px'
-        }}>
+        <div 
+          className="glass-card" 
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDraggingActiveProj(true);
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDraggingActiveProj(false);
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDraggingActiveProj(false);
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+              handleExcelImport(e.dataTransfer.files[0]);
+            }
+          }}
+          style={{
+            padding: '30px',
+            borderRadius: '24px',
+            border: isDraggingActiveProj ? '2px dashed #fb923c' : '1px solid rgba(255, 255, 255, 0.08)',
+            background: isDraggingActiveProj ? 'rgba(251, 146, 60, 0.05)' : 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(12px)',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '24px',
+            transition: 'all 0.2s ease'
+          }}
+        >
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
             <div style={{
               width: '72px',

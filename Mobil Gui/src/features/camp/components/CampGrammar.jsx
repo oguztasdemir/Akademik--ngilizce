@@ -138,124 +138,146 @@ const CampGrammar = ({
                         border: '1.5px solid rgba(255, 255, 255, 0.04)',
                         borderLeft: `5px solid ${borderLeftColor}`,
                         textAlign: 'left'
-                      }}
-                    >
-                      <h4 style={{ fontSize: '1.08rem', fontWeight: 'bold', color: 'white', marginTop: 0, marginBottom: '12px', letterSpacing: '-0.01em' }}>
-                        {sectionTitle}
-                      </h4>
-                      <p style={{ fontSize: '0.95rem', color: '#e2e8f0', lineHeight: 1.65, margin: 0, whiteSpace: 'pre-wrap' }}>
-                        {sectionContent}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })()}
+          <div 
+            style={{ 
+              color: '#cbd5e1', 
+              fontSize: '0.9rem', 
+              lineHeight: 1.6, 
+              whiteSpace: 'pre-wrap', 
+              maxHeight: '400px', 
+              overflowY: 'auto', 
+              paddingRight: '8px',
+              marginBottom: '20px'
+            }}
+            className="custom-scrollbar"
+          >
+            {activeGrammarDay.lecture || "Konu anlatım metni bu gün için henüz eklenmemiş."}
+          </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '28px' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button
               onClick={handleGrammarNextLecture}
               className="btn-primary"
-              style={{ padding: '12px 32px', fontSize: '0.88rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px', background: '#10b981', borderColor: '#10b981', borderRadius: '12px' }}
+              style={{ padding: '10px 20px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
             >
-              Konu Testine Geç <ArrowRight className="h-4 w-4" />
+              Alıştırma Sorularına Geç <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
       )}
 
-      {/* GRAMMAR PHASE 2: QUIZ */}
+      {/* GRAMMAR PHASE 2: ACTIVE TESTING QUESTIONS */}
       {phase === 2 && grammarQuestions.length > 0 && grammarQuestions[grammarIdx] && (
-        <div className="space-y-6 animate-scale-in">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-              Adım 2: Konu Pekiştirme Testi <span style={{ color: '#10b981' }}>({grammarIdx + 1}/{grammarQuestions.length})</span>
-            </h4>
+        <div className="glass-card animate-fade-in" style={{ padding: '20px', borderRadius: '20px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', fontSize: '0.75rem', color: '#94a3b8' }}>
+            <span>Soru {grammarIdx + 1} / {grammarQuestions.length}</span>
+            <span>Doğru: {correctAnswers}</span>
           </div>
 
-          <div className="glass-card" style={{ padding: '28px', borderRadius: '24px', background: 'rgba(15, 23, 42, 0.45)', border: '1.5px solid rgba(16, 185, 129, 0.15)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left' }}>
-              <span style={{ fontSize: '0.62rem', color: '#10b981', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.12em' }}>SORU</span>
-              <p style={{ fontSize: '1.1rem', color: 'white', lineHeight: 1.6, fontWeight: '500', margin: 0 }}>
-                {grammarQuestions[grammarIdx].q}
-              </p>
+          <div style={{ marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '1.05rem', color: 'white', fontWeight: '700', lineHeight: 1.4, margin: 0 }}>
+              {grammarQuestions[grammarIdx].q}
+            </h3>
+          </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px', width: '100%', marginTop: '16px' }}>
-                {grammarQuestions[grammarIdx].options.map((opt, i) => {
-                  const isSelected = grammarSelected === opt;
-                  const isCorrectAnswer = opt === grammarQuestions[grammarIdx].answer;
-                  let bg = 'rgba(255, 255, 255, 0.03)';
-                  let border = '1px solid rgba(255, 255, 255, 0.08)';
-                  let color = 'white';
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
+            {grammarQuestions[grammarIdx].options.map((opt, oIdx) => {
+              const char = String.fromCharCode(65 + oIdx);
+              const isSelected = grammarSelected === opt;
+              const isCorrectOpt = opt === grammarQuestions[grammarIdx].answer;
+              
+              let bg = 'rgba(255, 255, 255, 0.02)';
+              let border = '1px solid rgba(255, 255, 255, 0.06)';
+              let color = '#cbd5e1';
 
-                  if (grammarChecked) {
-                    if (isCorrectAnswer) {
-                      bg = 'rgba(16, 185, 129, 0.15)';
-                      border = '1.5px solid #10b981';
-                      color = '#a7f3d0';
-                    } else if (isSelected) {
-                      bg = 'rgba(239, 68, 68, 0.15)';
-                      border = '1.5px solid #ef4444';
-                      color = '#fca5a5';
-                    }
-                  } else if (isSelected) {
-                    bg = 'rgba(99, 102, 241, 0.15)';
-                    border = '1.5px solid #6366f1';
-                    color = '#a5b4fc';
-                  }
+              if (grammarChecked) {
+                if (isCorrectOpt) {
+                  bg = 'rgba(16, 185, 129, 0.12)';
+                  border = '1px solid #10b981';
+                  color = '#34d399';
+                } else if (isSelected) {
+                  bg = 'rgba(239, 68, 68, 0.12)';
+                  border = '1px solid #ef4444';
+                  color = '#f87171';
+                } else {
+                  bg = 'rgba(255, 255, 255, 0.01)';
+                  border = '1px solid rgba(255, 255, 255, 0.03)';
+                  color = 'rgba(255, 255, 255, 0.3)';
+                }
+              } else if (isSelected) {
+                bg = 'rgba(59, 130, 246, 0.1)';
+                border = '1px solid #3b82f6';
+                color = '#60a5fa';
+              }
 
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => handleGrammarCheck(opt)}
-                      disabled={grammarChecked}
-                      style={{
-                        padding: '14px 20px',
-                        borderRadius: '12px',
-                        background: bg,
-                        border: border,
-                        color: color,
-                        fontSize: '0.94rem',
-                        fontWeight: 'bold',
-                        textAlign: 'left',
-                        cursor: grammarChecked ? 'default' : 'pointer',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      {opt}
-                    </button>
-                  );
-                })}
+              return (
+                <button
+                  key={oIdx}
+                  disabled={grammarChecked}
+                  onClick={() => handleGrammarCheck(opt)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '12px 16px',
+                    borderRadius: '10px',
+                    background: bg,
+                    border: border,
+                    color: color,
+                    textAlign: 'left',
+                    fontSize: '0.85rem',
+                    fontWeight: isSelected ? '700' : '500',
+                    cursor: grammarChecked ? 'default' : 'pointer',
+                    transition: 'all 0.15s ease',
+                    width: '100%'
+                  }}
+                >
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    background: isSelected ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255,255,255,0.05)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.75rem',
+                    fontWeight: 'bold',
+                    flexShrink: 0
+                  }}>
+                    {char}
+                  </span>
+                  <span>{opt}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div style={{ minHeight: '60px' }}>
+            {grammarChecked && (
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.01)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: '12px',
+                padding: '12px',
+                fontSize: '0.8rem',
+                color: '#94a3b8',
+                lineHeight: 1.4
+              }}>
+                <strong style={{ color: grammarCorrect ? '#34d399' : '#f87171', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
+                  {grammarCorrect ? <Check className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+                  {grammarCorrect ? 'Doğru Cevap!' : `Hatalı! Doğru cevap: "${grammarQuestions[grammarIdx].answer}"`}
+                </strong>
+                {grammarQuestions[grammarIdx].exp}
               </div>
-
-              {grammarChecked && (
-                <div className="glass-card animate-scale-in" style={{
-                  padding: '16px 20px',
-                  borderRadius: '14px',
-                  background: grammarCorrect ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)',
-                  border: grammarCorrect ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(239, 68, 68, 0.2)',
-                  color: '#f1f5f9',
-                  marginTop: '12px',
-                  fontSize: '0.88rem',
-                  lineHeight: 1.5
-                }}>
-                  <strong style={{ color: grammarCorrect ? '#34d399' : '#f87171', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                    {grammarCorrect ? <Check className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
-                    {grammarCorrect ? 'Doğru Cevap!' : `Hatalı! Doğru cevap: "${grammarQuestions[grammarIdx].answer}"`}
-                  </strong>
-                  {grammarQuestions[grammarIdx].exp}
-                </div>
-              )}
-            </div>
+            )}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
             {grammarChecked && (
               <button
                 onClick={handleGrammarNextQuestion}
                 className="btn-primary"
-                style={{ padding: '10px 24px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ padding: '10px 20px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
                 {grammarIdx === grammarQuestions.length - 1 ? 'Çalışmayı Bitir' : 'Sıradaki Soru'} <ArrowRight className="h-4 w-4" />
               </button>
@@ -266,42 +288,76 @@ const CampGrammar = ({
 
       {/* GRAMMAR PHASE 3: SUMMARY */}
       {phase === 3 && (
-        <div className="space-y-6 text-center py-8 animate-scale-in">
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+        <div className="space-y-6 text-center py-6 animate-scale-in">
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
             <div style={{
-              width: '80px',
-              height: '80px',
+              width: '70px',
+              height: '70px',
               borderRadius: '50%',
               background: 'rgba(16, 185, 129, 0.1)',
               border: '2px solid #10b981',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(16, 185, 129, 0.3)'
+              boxShadow: '0 0 15px rgba(16, 185, 129, 0.3)'
             }}>
-              <Trophy className="h-10 w-10 text-emerald-400" />
+              <Trophy className="h-8 w-8 text-emerald-400" />
             </div>
           </div>
 
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0 }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '950', color: 'white', margin: 0 }}>
             Tebrikler! Gün #{selectedDay} Dilbilgisi Çalışması Tamamlandı! 🎉
           </h2>
-          <p style={{ fontSize: '0.94rem', color: '#94a3b8', maxWidth: '480px', margin: '12px auto 0 auto', lineHeight: 1.6 }}>
+          <p style={{ fontSize: '0.85rem', color: '#94a3b8', maxWidth: '400px', margin: '8px auto 0 auto', lineHeight: 1.5 }}>
             Bugünün dilbilgisi konusunu ve testini başarıyla tamamladınız. Skorunuz: %{Math.round((correctAnswers / totalQuestions) * 100) || 100}
           </p>
 
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', margin: '28px 0', flexWrap: 'wrap' }}>
-            <div className="glass-card" style={{ padding: '16px 24px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <span style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', display: 'block' }}>Kazanılan Ödül</span>
-              <span style={{ fontSize: '1.5rem', fontWeight: '900', color: '#10b981', display: 'block', marginTop: '4px' }}>+45 Evcil Hayvan XP</span>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', margin: '20px 0', flexWrap: 'wrap' }}>
+            <div className="glass-card" style={{ padding: '12px 18px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <span style={{ fontSize: '0.6rem', color: '#94a3b8', textTransform: 'uppercase', display: 'block' }}>Kazanılan Ödül</span>
+              <span style={{ fontSize: '1.2rem', fontWeight: '900', color: '#10b981', display: 'block', marginTop: '2px' }}>+45 Evcil Hayvan XP</span>
             </div>
-            <div className="glass-card" style={{ padding: '16px 24px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <span style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', display: 'block' }}>Ekstra Kristal</span>
-              <span style={{ fontSize: '1.5rem', fontWeight: '900', color: '#fbbf24', display: 'block', marginTop: '4px' }}>+10 Kristal 💎</span>
+            <div className="glass-card" style={{ padding: '12px 18px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <span style={{ fontSize: '0.6rem', color: '#94a3b8', textTransform: 'uppercase', display: 'block' }}>Ekstra Kristal</span>
+              <span style={{ fontSize: '1.2rem', fontWeight: '900', color: '#fbbf24', display: 'block', marginTop: '2px' }}>+10 Kristal 💎</span>
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '24px', flexWrap: 'wrap', width: '100%' }}>
+          <div style={{ textAlign: 'left', maxWidth: '100%', margin: '16px auto', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'white', marginBottom: '10px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '6px' }}>
+              Dilbilgisi Soru İlerleme Raporu (Performans Karnesi)
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '240px', overflowY: 'auto', paddingRight: '4px' }} className="custom-scrollbar">
+              {grammarQuestions.map((q, idx) => {
+                const wasCorrect = grammarResults && grammarResults[idx] === true;
+                return (
+                  <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '3px', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '6px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
+                      <span style={{ fontSize: '0.8rem', color: '#e2e8f0', fontWeight: '500' }}>
+                        Soru {idx + 1}: {q.q}
+                      </span>
+                      <span className="word-badge" style={{
+                        background: wasCorrect ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                        color: wasCorrect ? '#34d399' : '#f87171',
+                        border: wasCorrect ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(239, 68, 68, 0.2)',
+                        fontSize: '0.65rem',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {wasCorrect ? 'Doğru' : 'Yanlış'}
+                      </span>
+                    </div>
+                    {!wasCorrect && (
+                      <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                        Doğru: <span style={{ color: '#34d399', fontWeight: 'bold' }}>{q.answer}</span>
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '20px', flexWrap: 'wrap', width: '100%' }}>
             <button
               onClick={exitCamp}
               className="btn-secondary"

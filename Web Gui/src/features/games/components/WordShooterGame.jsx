@@ -9,15 +9,19 @@ const WordShooterGame = ({ vocab, awardPetXp }) => {
   const [gameState, setGameState] = useState('playing');
 
   const loadNextWord = () => {
+    if (!vocab || vocab.length === 0) return;
     const correct = vocab[Math.floor(Math.random() * vocab.length)];
-    const wrongs = vocab.filter(v => v.english !== correct.english).sort(() => 0.5 - Math.random()).slice(0, 2);
+    if (!correct) return;
+    const wrongs = vocab.filter(v => v && correct && v.english !== correct.english).sort(() => 0.5 - Math.random()).slice(0, 2);
     setOptions([correct, ...wrongs].sort(() => 0.5 - Math.random()));
     setCurrentWord(correct);
     setFallProgress(0);
   };
 
   useEffect(() => {
-    loadNextWord();
+    if (vocab && vocab.length > 0) {
+      loadNextWord();
+    }
   }, [vocab]);
 
   useEffect(() => {

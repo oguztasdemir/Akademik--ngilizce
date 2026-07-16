@@ -21,9 +21,48 @@ const GAMES_CATALOG = [
   { id: 'definition', name: '9. Tanım Bulmaca', desc: 'İngilizce tanımı verilen akademik kelimeyi tahmin edin.', color: '#14b8a6', icon: 'fa-book-bookmark' }
 ];
 
-const GamesSection = ({ selectedCategory, awardPetXp, setIsStudyingActive }) => {
+const GamesSection = ({ selectedCategory, awardPetXP, awardPetXp, setIsStudyingActive, logStudyActivity }) => {
   const [activeGame, setActiveGame] = useState(null);
   const [vocabList, setVocabList] = useState([]);
+  const [sessionScore, setSessionScore] = useState(0);
+
+  const actualAwardPetXp = awardPetXP || awardPetXp;
+
+  useEffect(() => {
+    setSessionScore(0);
+  }, [activeGame]);
+
+  const handleGameAwardXp = (xpAmount) => {
+    if (actualAwardPetXp) {
+      actualAwardPetXp(xpAmount);
+    }
+    
+    setSessionScore(prev => {
+      const nextScore = prev + 1;
+      try {
+        const raw = localStorage.getItem('yokdil_games_performance') || '{}';
+        const stats = JSON.parse(raw);
+        if (!stats.highScores) stats.highScores = {};
+        
+        stats.totalCorrect = (stats.totalCorrect || 0) + 1;
+        
+        if (activeGame) {
+          const currentHigh = stats.highScores[activeGame] || 0;
+          if (nextScore > currentHigh) {
+            stats.highScores[activeGame] = nextScore;
+          }
+        }
+        
+        localStorage.setItem('yokdil_games_performance', JSON.stringify(stats));
+      } catch (e) {}
+      
+      return nextScore;
+    });
+
+    if (logStudyActivity) {
+      logStudyActivity('games', 1);
+    }
+  };
 
   useEffect(() => {
     if (setIsStudyingActive) {
@@ -100,15 +139,15 @@ const GamesSection = ({ selectedCategory, awardPetXp, setIsStudyingActive }) => 
         </div>
       ) : (
         <div>
-          {activeGame === 'match' && <CardMatchGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'shooter' && <WordShooterGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'hangman' && <HangmanGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'spelling' && <SpellingGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'synonym' && <SynonymGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'antonym' && <AntonymGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'tf_run' && <TrueFalseGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'cloze' && <ClozeGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'definition' && <DefinitionGame vocab={vocabList} awardPetXp={awardPetXp} />}
+          {activeGame === 'match' && <CardMatchGame vocab={vocabList} awardPetXp={handleGameAwardXp} />}
+          {activeGame === 'shooter' && <WordShooterGame vocab={vocabList} awardPetXp={handleGameAwardXp} />}
+          {activeGame === 'hangman' && <HangmanGame vocab={vocabList} awardPetXp={handleGameAwardXp} />}
+          {activeGame === 'spelling' && <SpellingGame vocab={vocabList} awardPetXp={handleGameAwardXp} />}
+          {activeGame === 'synonym' && <SynonymGame vocab={vocabList} awardPetXp={handleGameAwardXp} />}
+          {activeGame === 'antonym' && <AntonymGame vocab={vocabList} awardPetXp={handleGameAwardXp} />}
+          {activeGame === 'tf_run' && <TrueFalseGame vocab={vocabList} awardPetXp={handleGameAwardXp} />}
+          {activeGame === 'cloze' && <ClozeGame vocab={vocabList} awardPetXp={handleGameAwardXp} />}
+          {activeGame === 'definition' && <DefinitionGame vocab={vocabList} awardPetXp={handleGameAwardXp} />}
         </div>
       )}
 

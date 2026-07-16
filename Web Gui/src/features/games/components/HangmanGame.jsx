@@ -8,7 +8,9 @@ const HangmanGame = ({ vocab, awardPetXp }) => {
   const [status, setStatus] = useState('playing'); // 'playing', 'won', 'lost'
 
   const loadWord = () => {
+    if (!vocab || vocab.length === 0) return;
     const item = vocab[Math.floor(Math.random() * vocab.length)];
+    if (!item) return;
     setWord(item.english.toLowerCase());
     setTurkishHint(item.turkish);
     setGuessed([]);
@@ -16,7 +18,11 @@ const HangmanGame = ({ vocab, awardPetXp }) => {
     setStatus('playing');
   };
 
-  useEffect(() => { loadWord(); }, [vocab]);
+  useEffect(() => {
+    if (vocab && vocab.length > 0) {
+      loadWord();
+    }
+  }, [vocab]);
 
   const handleGuess = (letter) => {
     if (guessed.includes(letter) || status !== 'playing') return;

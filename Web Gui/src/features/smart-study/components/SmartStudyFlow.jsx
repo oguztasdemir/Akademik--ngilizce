@@ -713,6 +713,28 @@ const SmartStudyFlow = ({
           </div>
         </div>
       )}
+
+      {/* Exit Study Button at the very bottom for all active study phases (1-5) */}
+      {phase < 6 && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '20px' }}>
+          <button 
+            onClick={resetStudy} 
+            className="btn-secondary" 
+            style={{ 
+              padding: '8px 24px', 
+              fontSize: '0.8rem', 
+              background: 'rgba(239, 68, 68, 0.08)', 
+              border: '1px solid rgba(239, 68, 68, 0.25)', 
+              color: '#f87171',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+          >
+            Çalışmayı Kapat ve Çık
+          </button>
+        </div>
+      )}
     </div>
   );
 };

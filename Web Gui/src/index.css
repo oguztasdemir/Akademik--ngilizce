@@ -29,35 +29,35 @@
 
 .theme-light {
     --bg-main: #f8fafc;
-    --bg-header: rgba(241, 245, 249, 0.85);
-    --bg-card: rgba(255, 255, 255, 0.9);
-    --bg-card-hover: rgba(241, 245, 249, 0.95);
+    --bg-header: rgba(255, 255, 255, 0.85);
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
 
     --primary: #4f46e5;
-    --primary-light: #312e81;
-    --primary-gradient: linear-gradient(135deg, #4f46e5, #6366f1);
+    --primary-light: #6366f1;
+    --primary-gradient: linear-gradient(135deg, #4f46e5, #818cf8);
 
-    --success: #059669;
-    --success-light: #065f46;
-    --success-gradient: linear-gradient(135deg, #059669, #10b981);
+    --success: #10b981;
+    --success-light: #34d399;
+    --success-gradient: linear-gradient(135deg, #10b981, #34d399);
 
-    --wrong: #dc2626;
-    --wrong-light: #991b1b;
-    --wrong-gradient: linear-gradient(135deg, #dc2626, #ef4444);
+    --wrong: #ef4444;
+    --wrong-light: #f87171;
+    --wrong-gradient: linear-gradient(135deg, #ef4444, #f87171);
 
     --text-main: #0f172a;
-    --text-secondary: #475569;
-    --border-color: rgba(0, 0, 0, 0.08);
-    --shadow-color: rgba(0, 0, 0, 0.08);
-    --glow-color: rgba(99, 102, 241, 0.04);
+    --text-secondary: #64748b;
+    --border-color: rgba(148, 163, 184, 0.15);
+    --shadow-color: rgba(15, 23, 42, 0.06);
+    --glow-color: rgba(99, 102, 241, 0.05);
 }
 
 .theme-wrapper.theme-light {
-    background-color: #f1f5f9 !important;
+    background-color: #f8fafc !important;
     background-image:
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.06) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(129, 140, 248, 0.03) 0px, transparent 40%),
-        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.03) 0px, transparent 50%) !important;
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.02) 0px, transparent 40%),
+        radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.02) 0px, transparent 50%) !important;
 }
 
 .font-size-sm {
@@ -2648,23 +2648,30 @@ body.light-theme .setting-item {
 }
 
 /* Floating Bottom Check/Feedback Sheet */
+/* Floating Bottom Check/Feedback Sheet */
 .duo-bottom-bar {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #181E2E;
-    border-top: 2px solid var(--border-color);
-    padding: 24px 40px;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 640px;
+    background-color: rgba(18, 24, 38, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 16px 24px;
     z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .duo-bottom-bar-content {
-    max-width: 720px;
+    max-width: 100%;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -2679,47 +2686,43 @@ body.light-theme .setting-item {
 }
 
 .duo-bottom-icon {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
+    font-size: 1.25rem;
 }
 
 .duo-bottom-text-title {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 800;
 }
 
 .duo-bottom-text-sub {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-secondary);
     margin-top: 2px;
 }
 
 .duo-check-btn {
     border: none;
-    border-radius: 16px;
-    padding: 16px 36px;
-    font-size: 0.95rem;
+    border-radius: 12px;
+    padding: 12px 28px;
+    font-size: 0.88rem;
     font-weight: 800;
     cursor: pointer;
     transition: all 0.15s ease;
-    border-bottom-width: 4px;
-    border-bottom-style: solid;
 }
 
 .duo-check-btn:active {
-    transform: translateY(2px);
-    border-bottom-width: 1px;
+    transform: scale(0.98);
 }
 
 /* Disabled State */
 .duo-check-btn:disabled {
     background-color: rgba(255, 255, 255, 0.08) !important;
-    border-bottom-color: rgba(255, 255, 255, 0.04) !important;
     color: rgba(255, 255, 255, 0.25) !important;
     cursor: not-allowed !important;
     transform: none !important;
@@ -2727,12 +2730,12 @@ body.light-theme .setting-item {
 
 /* Dynamic Bottom Sheet States */
 .duo-bottom-bar.normal {
-    background-color: #0E1424;
+    background-color: rgba(14, 20, 36, 0.95);
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 .duo-bottom-bar.normal .duo-check-btn {
     background-color: var(--primary);
-    border-bottom-color: #3b32c4;
     color: white;
 }
 
@@ -2742,12 +2745,13 @@ body.light-theme .setting-item {
 
 /* Correct State */
 .duo-bottom-bar.state-correct {
-    background-color: #062F1F;
-    border-top-color: #059669;
+    background-color: rgba(11, 37, 26, 0.96);
+    border: 1.5px solid #10b981;
+    box-shadow: 0 12px 40px rgba(16, 185, 129, 0.25);
 }
 
 .duo-bottom-bar.state-correct .duo-bottom-icon {
-    background-color: #059669;
+    background-color: #10b981;
     color: white;
 }
 
@@ -2756,23 +2760,23 @@ body.light-theme .setting-item {
 }
 
 .duo-bottom-bar.state-correct .duo-check-btn {
-    background-color: #059669;
-    border-bottom-color: #046A4A;
+    background-color: #10b981;
     color: white;
 }
 
 .duo-bottom-bar.state-correct .duo-check-btn:hover {
-    background-color: #34D399;
+    background-color: #059669;
 }
 
 /* Incorrect State */
 .duo-bottom-bar.state-incorrect {
-    background-color: #450E17;
-    border-top-color: #DC2626;
+    background-color: rgba(58, 16, 23, 0.96);
+    border: 1.5px solid #ef4444;
+    box-shadow: 0 12px 40px rgba(239, 68, 68, 0.25);
 }
 
 .duo-bottom-bar.state-incorrect .duo-bottom-icon {
-    background-color: #DC2626;
+    background-color: #ef4444;
     color: white;
 }
 
@@ -2781,13 +2785,12 @@ body.light-theme .setting-item {
 }
 
 .duo-bottom-bar.state-incorrect .duo-check-btn {
-    background-color: #DC2626;
-    border-bottom-color: #9C1B1B;
+    background-color: #ef4444;
     color: white;
 }
 
 .duo-bottom-bar.state-incorrect .duo-check-btn:hover {
-    background-color: #F87171;
+    background-color: #dc2626;
 }
 
 .duo-explanation-sheet {
@@ -4667,5 +4670,295 @@ body.light-theme .setting-item {
 .sidebar-nav::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.08);
     border-radius: 4px;
+}
+
+/* --- Settings Themes Styling Declarations --- */
+
+/* Cosmic Mor */
+.theme-cosmic {
+    --bg-main: #0b071e;
+    --bg-header: rgba(11, 7, 30, 0.75);
+    --bg-card: rgba(22, 15, 61, 0.45);
+    --bg-card-hover: rgba(35, 25, 98, 0.65);
+    --primary: #8b5cf6;
+    --primary-light: #a78bfa;
+    --primary-gradient: linear-gradient(135deg, #8b5cf6, #c084fc);
+    --glow-color: rgba(139, 92, 246, 0.15);
+}
+.theme-wrapper.theme-cosmic {
+    background-color: #0b071e !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.08), transparent 80%) !important;
+}
+
+/* Zümrüt Yeşil */
+.theme-emerald {
+    --bg-main: #040d0b;
+    --bg-header: rgba(4, 13, 11, 0.75);
+    --bg-card: rgba(10, 31, 26, 0.45);
+    --bg-card-hover: rgba(16, 50, 42, 0.65);
+    --primary: #10b981;
+    --primary-light: #34d399;
+    --primary-gradient: linear-gradient(135deg, #10b981, #059669);
+    --glow-color: rgba(16, 185, 129, 0.15);
+}
+.theme-wrapper.theme-emerald {
+    background-color: #040d0b !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08), transparent 80%) !important;
+}
+
+/* Okyanus Mavisi */
+.theme-ocean {
+    --bg-main: #050e1a;
+    --bg-header: rgba(5, 14, 26, 0.75);
+    --bg-card: rgba(10, 27, 51, 0.45);
+    --bg-card-hover: rgba(16, 43, 82, 0.65);
+    --primary: #0ea5e9;
+    --primary-light: #38bdf8;
+    --primary-gradient: linear-gradient(135deg, #0ea5e9, #0284c7);
+    --glow-color: rgba(14, 165, 233, 0.15);
+}
+.theme-wrapper.theme-ocean {
+    background-color: #050e1a !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.08), transparent 80%) !important;
+}
+
+/* Kızıl Gök */
+.theme-sunset {
+    --bg-main: #14080b;
+    --bg-header: rgba(20, 8, 11, 0.75);
+    --bg-card: rgba(41, 15, 22, 0.45);
+    --bg-card-hover: rgba(61, 23, 33, 0.65);
+    --primary: #f43f5e;
+    --primary-light: #fb7185;
+    --primary-gradient: linear-gradient(135deg, #f43f5e, #e11d48);
+    --glow-color: rgba(244, 63, 94, 0.15);
+}
+.theme-wrapper.theme-sunset {
+    background-color: #14080b !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.08), transparent 80%) !important;
+}
+
+/* Altın Kum */
+.theme-amber {
+    --bg-main: #0f0b05;
+    --bg-header: rgba(15, 11, 5, 0.75);
+    --bg-card: rgba(31, 22, 10, 0.45);
+    --bg-card-hover: rgba(51, 36, 16, 0.65);
+    --primary: #f59e0b;
+    --primary-light: #fbbf24;
+    --primary-gradient: linear-gradient(135deg, #f59e0b, #d97706);
+    --glow-color: rgba(245, 158, 11, 0.15);
+}
+.theme-wrapper.theme-amber {
+    background-color: #0f0b05 !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.08), transparent 80%) !important;
+}
+
+/* Siberpunk */
+.theme-cyberpunk {
+    --bg-main: #030008;
+    --bg-header: rgba(3, 0, 8, 0.75);
+    --bg-card: rgba(26, 0, 51, 0.45);
+    --bg-card-hover: rgba(43, 0, 84, 0.65);
+    --primary: #ff007f;
+    --primary-light: #ff66b2;
+    --primary-gradient: linear-gradient(135deg, #ff007f, #00ffff);
+    --glow-color: rgba(255, 0, 127, 0.2);
+}
+.theme-wrapper.theme-cyberpunk {
+    background-color: #030008 !important;
+    background-image: radial-gradient(circle at 30% 20%, rgba(255, 0, 127, 0.1), transparent 60%), radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.1), transparent 60%) !important;
+}
+
+/* Nordik Buz */
+.theme-nordic {
+    --bg-main: #0f171f;
+    --bg-header: rgba(15, 23, 31, 0.75);
+    --bg-card: rgba(24, 37, 51, 0.45);
+    --bg-card-hover: rgba(36, 56, 77, 0.65);
+    --primary: #38bdf8;
+    --primary-light: #7dd3fc;
+    --primary-gradient: linear-gradient(135deg, #38bdf8, #0284c7);
+    --glow-color: rgba(56, 189, 248, 0.15);
+}
+.theme-wrapper.theme-nordic {
+    background-color: #0f171f !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08), transparent 80%) !important;
+}
+
+/* Volkanik Lav */
+.theme-volcano {
+    --bg-main: #0d0c0c;
+    --bg-header: rgba(13, 12, 12, 0.75);
+    --bg-card: rgba(31, 16, 16, 0.45);
+    --bg-card-hover: rgba(51, 26, 26, 0.65);
+    --primary: #ef4444;
+    --primary-light: #f87171;
+    --primary-gradient: linear-gradient(135deg, #ef4444, #b91c1c);
+    --glow-color: rgba(239, 68, 68, 0.15);
+}
+.theme-wrapper.theme-volcano {
+    background-color: #0d0c0c !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.08), transparent 80%) !important;
+}
+
+/* Gül Kurusu */
+.theme-rosegold {
+    --bg-main: #141012;
+    --bg-header: rgba(20, 16, 18, 0.75);
+    --bg-card: rgba(41, 27, 33, 0.45);
+    --bg-card-hover: rgba(61, 41, 49, 0.65);
+    --primary: #fda4af;
+    --primary-light: #fecdd3;
+    --primary-gradient: linear-gradient(135deg, #fda4af, #f43f5e);
+    --glow-color: rgba(253, 164, 175, 0.15);
+}
+.theme-wrapper.theme-rosegold {
+    background-color: #141012 !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(253, 164, 175, 0.08), transparent 80%) !important;
+}
+
+/* Sakura Pembe */
+.theme-sakura {
+    --bg-main: #1d1518;
+    --bg-header: rgba(29, 21, 24, 0.75);
+    --bg-card: rgba(51, 33, 39, 0.45);
+    --bg-card-hover: rgba(77, 50, 59, 0.65);
+    --primary: #f472b6;
+    --primary-light: #fbcfe8;
+    --primary-gradient: linear-gradient(135deg, #f472b6, #db2777);
+    --glow-color: rgba(244, 114, 182, 0.15);
+}
+.theme-wrapper.theme-sakura {
+    background-color: #1d1518 !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(244, 114, 182, 0.08), transparent 80%) !important;
+}
+
+/* Mat Kömür */
+.theme-carbon {
+    --bg-main: #121212;
+    --bg-header: rgba(18, 18, 18, 0.75);
+    --bg-card: rgba(28, 28, 28, 0.45);
+    --bg-card-hover: rgba(44, 44, 44, 0.65);
+    --primary: #78716c;
+    --primary-light: #a8a29e;
+    --primary-gradient: linear-gradient(135deg, #78716c, #44403c);
+    --glow-color: rgba(120, 113, 108, 0.15);
+}
+.theme-wrapper.theme-carbon {
+    background-color: #121212 !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(120, 113, 108, 0.08), transparent 80%) !important;
+}
+
+/* Çikolata Kahve */
+.theme-mocha {
+    --bg-main: #14100d;
+    --bg-header: rgba(20, 16, 13, 0.75);
+    --bg-card: rgba(41, 31, 24, 0.45);
+    --bg-card-hover: rgba(61, 46, 36, 0.65);
+    --primary: #d97706;
+    --primary-light: #f59e0b;
+    --primary-gradient: linear-gradient(135deg, #d97706, #b45309);
+    --glow-color: rgba(217, 119, 6, 0.15);
+}
+.theme-wrapper.theme-mocha {
+    background-color: #14100d !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(217, 119, 6, 0.08), transparent 80%) !important;
+}
+
+/* Kraliyet Laciverti */
+.theme-sapphire {
+    --bg-main: #060b18;
+    --bg-header: rgba(6, 11, 24, 0.75);
+    --bg-card: rgba(13, 23, 51, 0.45);
+    --bg-card-hover: rgba(20, 36, 80, 0.65);
+    --primary: #2563eb;
+    --primary-light: #60a5fa;
+    --primary-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
+    --glow-color: rgba(37, 99, 235, 0.15);
+}
+.theme-wrapper.theme-sapphire {
+    background-color: #060b18 !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.08), transparent 80%) !important;
+}
+
+/* Nane Ferahlığı */
+.theme-mint {
+    --bg-main: #081410;
+    --bg-header: rgba(8, 20, 16, 0.75);
+    --bg-card: rgba(16, 41, 33, 0.45);
+    --bg-card-hover: rgba(26, 66, 53, 0.65);
+    --primary: #34d399;
+    --primary-light: #6ee7b7;
+    --primary-gradient: linear-gradient(135deg, #34d399, #059669);
+    --glow-color: rgba(52, 211, 153, 0.15);
+}
+.theme-wrapper.theme-mint {
+    background-color: #081410 !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.08), transparent 80%) !important;
+}
+
+/* Neon Limon */
+.theme-lime {
+    --bg-main: #0c0f0a;
+    --bg-header: rgba(12, 15, 10, 0.75);
+    --bg-card: rgba(24, 31, 20, 0.45);
+    --bg-card-hover: rgba(38, 50, 32, 0.65);
+    --primary: #84cc16;
+    --primary-light: #a3e635;
+    --primary-gradient: linear-gradient(135deg, #84cc16, #65a30d);
+    --glow-color: rgba(132, 204, 22, 0.15);
+}
+.theme-wrapper.theme-lime {
+    background-color: #0c0f0a !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(132, 204, 22, 0.08), transparent 80%) !important;
+}
+
+/* Bordo Asalet */
+.theme-burgundy {
+    --bg-main: #12050a;
+    --bg-header: rgba(18, 5, 10, 0.75);
+    --bg-card: rgba(36, 10, 20, 0.45);
+    --bg-card-hover: rgba(54, 15, 30, 0.65);
+    --primary: #9d174d;
+    --primary-light: #db2777;
+    --primary-gradient: linear-gradient(135deg, #9d174d, #be185d);
+    --glow-color: rgba(157, 23, 77, 0.15);
+}
+.theme-wrapper.theme-burgundy {
+    background-color: #12050a !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(157, 23, 77, 0.08), transparent 80%) !important;
+}
+
+/* Retro Dalga */
+.theme-synthwave {
+    --bg-main: #0b091a;
+    --bg-header: rgba(11, 9, 26, 0.75);
+    --bg-card: rgba(22, 18, 51, 0.45);
+    --bg-card-hover: rgba(35, 29, 82, 0.65);
+    --primary: #ec4899;
+    --primary-light: #f472b6;
+    --primary-gradient: linear-gradient(135deg, #ec4899, #a855f7);
+    --glow-color: rgba(236, 72, 153, 0.15);
+}
+.theme-wrapper.theme-synthwave {
+    background-color: #0b091a !important;
+    background-image: radial-gradient(circle at 30% 20%, rgba(236, 72, 153, 0.1), transparent 60%), radial-gradient(circle at 80% 80%, rgba(168, 55, 247, 0.1), transparent 60%) !important;
+}
+
+/* Eko Doğa */
+.theme-sage {
+    --bg-main: #0f120e;
+    --bg-header: rgba(15, 18, 14, 0.75);
+    --bg-card: rgba(30, 36, 28, 0.45);
+    --bg-card-hover: rgba(45, 54, 42, 0.65);
+    --primary: #84a98c;
+    --primary-light: #cad2c5;
+    --primary-gradient: linear-gradient(135deg, #84a98c, #52796f);
+    --glow-color: rgba(132, 169, 140, 0.15);
+}
+.theme-wrapper.theme-sage {
+    background-color: #0f120e !important;
+    background-image: radial-gradient(circle at 50% 50%, rgba(132, 169, 140, 0.08), transparent 80%) !important;
 }
 

@@ -276,12 +276,12 @@ function App() {
   const awardPetXp = (amount) => {
     let nextXp = petXp + amount;
     let nextLevel = petLevel;
-    let reqXp = nextLevel * 200;
+    let reqXp = nextLevel * 10000;
     while (nextXp >= reqXp) {
       nextXp -= reqXp;
       nextLevel += 1;
       setPendingLevelUp({ oldLevel: petLevel, newLevel: nextLevel });
-      reqXp = nextLevel * 200;
+      reqXp = nextLevel * 10000;
     }
     setPetXp(nextXp);
     setPetLevel(nextLevel);
@@ -351,61 +351,121 @@ function App() {
     }
   }, [selectedExam]);
 
-  // Persist current quiz index
+  // Persist active quiz state
   useEffect(() => {
-    if (selectedExam && currentQuizIndex) {
-      localStorage.setItem(`yokdil_current_quiz_index_${selectedExam.id}`, String(currentQuizIndex));
+    localStorage.setItem('yokdil_quiz_active', String(quizActive));
+  }, [quizActive]);
+
+  // Persist quiz mode
+  useEffect(() => {
+    if (quizMode) {
+      localStorage.setItem('yokdil_quiz_mode', quizMode);
     }
-  }, [currentQuizIndex, selectedExam]);
+  }, [quizMode]);
 
   // Persist quiz questions list
   useEffect(() => {
-    if (selectedExam && quizQuestions && quizQuestions.length > 0) {
-      localStorage.setItem(`yokdil_quiz_questions_${selectedExam.id}`, JSON.stringify(quizQuestions));
+    if (quizQuestions && quizQuestions.length > 0) {
+      localStorage.setItem('yokdil_quiz_questions_list', JSON.stringify(quizQuestions));
     }
-  }, [quizQuestions, selectedExam]);
+  }, [quizQuestions]);
+
+  // Persist current quiz index
+  useEffect(() => {
+    if (currentQuizIndex) {
+      localStorage.setItem('yokdil_quiz_current_index', String(currentQuizIndex));
+    }
+  }, [currentQuizIndex]);
+
+  // Persist answers
+  useEffect(() => {
+    if (selectedExam) {
+      localStorage.setItem(`answers_${selectedExam.id}`, JSON.stringify(answers));
+    } else {
+      localStorage.setItem('yokdil_quiz_answers_temp', JSON.stringify(answers));
+    }
+  }, [answers, selectedExam]);
+
+  // Persist flagged
+  useEffect(() => {
+    if (selectedExam) {
+      localStorage.setItem(`flags_${selectedExam.id}`, JSON.stringify(flagged));
+    } else {
+      localStorage.setItem('yokdil_quiz_flags_temp', JSON.stringify(flagged));
+    }
+  }, [flagged, selectedExam]);
+
+  // Persist exam seconds left
+  useEffect(() => {
+    if (examSecondsLeft && examRunning) {
+      localStorage.setItem('yokdil_exam_seconds_left', String(examSecondsLeft));
+    }
+  }, [examSecondsLeft, examRunning]);
+
+  // Persist sub-camp track
+  useEffect(() => {
+    if (vocabTrack) {
+      localStorage.setItem('yokdil_vocab_track', vocabTrack);
+    }
+  }, [vocabTrack]);
 
   // Restore selected exam and session on refresh
   useEffect(() => {
-    const restoreExam = async () => {
-      const savedExamId = localStorage.getItem('yokdil_selected_exam_id');
+    const restoreSession = async () => {
+      const isQuizActive = localStorage.getItem('yokdil_quiz_active') === 'true';
+      if (!isQuizActive) return;
+
+      const savedMode = localStorage.getItem('yokdil_quiz_mode') || 'quick';
+      const savedQuestions = localStorage.getItem('yokdil_quiz_questions_list');
+      const savedIndex = localStorage.getItem('yokdil_quiz_current_index');
+      const savedSeconds = localStorage.getItem('yokdil_exam_seconds_left');
+      
       const category = initialHashState.category || localStorage.getItem('yokdil_last_standard_category') || 'fen';
-      if (savedExamId && !selectedExam) {
-        setLoading(true);
-        const suffix = `yokdil/${category}/cikmis_sinavlar/${savedExamId}.json`;
-        const foundKey = Object.keys(examDetailModules).find(k => k.endsWith(suffix));
-        if (foundKey) {
-          try {
+      const savedExamId = localStorage.getItem('yokdil_selected_exam_id');
+
+      setLoading(true);
+      try {
+        if (savedExamId) {
+          const suffix = `yokdil/${category}/cikmis_sinavlar/${savedExamId}.json`;
+          const foundKey = Object.keys(examDetailModules).find(k => k.endsWith(suffix));
+          if (foundKey) {
             const loader = examDetailModules[foundKey];
             const module = await loader();
             const fullExam = module.default || module;
             setSelectedExam(fullExam);
             
-            // Restore answers and flagged states
             setAnswers(JSON.parse(localStorage.getItem(`answers_${fullExam.id}`)) || {});
             setFlagged(JSON.parse(localStorage.getItem(`flags_${fullExam.id}`)) || {});
-            
-            // Restore quiz index
-            const savedIndex = localStorage.getItem(`yokdil_current_quiz_index_${fullExam.id}`);
-            if (savedIndex) {
-              setCurrentQuizIndex(parseInt(savedIndex, 10));
-            }
-            
-            // Restore quiz questions list
-            const savedQuestions = localStorage.getItem(`yokdil_quiz_questions_${fullExam.id}`);
-            if (savedQuestions) {
-              setQuizQuestions(JSON.parse(savedQuestions));
-            } else {
-              setQuizQuestions(fullExam.questions.map((_, i) => i + 1));
-            }
-          } catch (e) {
-            console.error("Sınav geri yüklenirken hata oluştu:", e);
           }
+        } else {
+          setAnswers(JSON.parse(localStorage.getItem('yokdil_quiz_answers_temp')) || {});
+          setFlagged(JSON.parse(localStorage.getItem('yokdil_quiz_flags_temp')) || {});
         }
+
+        if (savedQuestions) {
+          setQuizQuestions(JSON.parse(savedQuestions));
+        }
+        if (savedIndex) {
+          setCurrentQuizIndex(parseInt(savedIndex, 10));
+        }
+        if (savedSeconds) {
+          setExamSecondsLeft(parseInt(savedSeconds, 10));
+        }
+        setQuizMode(savedMode);
+        setQuizActive(true);
+        if (savedMode === 'half' || savedMode === 'full') {
+          setExamMode(true);
+          setExamRunning(true);
+          setExamSubmitted(false);
+        }
+        setActiveTab('exams');
+      } catch (e) {
+        console.error("Session restoration error:", e);
+      } finally {
         setLoading(false);
       }
     };
-    restoreExam();
+    restoreSession();
   }, []);
 
   useEffect(() => {
@@ -1034,8 +1094,8 @@ function App() {
       let newXp = prevXp + amount;
       let newLevel = petLevel;
 
-      while (newXp >= 100) {
-        newXp -= 100;
+      while (newXp >= 5000) {
+        newXp -= 5000;
         newLevel += 1;
       }
 
@@ -2691,18 +2751,21 @@ function App() {
                 <button className="header-control-btn" onClick={() => { setActiveTab('settings'); setQuizActive(false); }} title="Ayarlar" style={{ marginLeft: '2px' }}>
                   <i className="fa-solid fa-gear" style={{ fontSize: '0.85rem' }}></i>
                 </button>
-                {showAiFloatBtn && (
-                  <button
-                    className="header-control-btn"
-                    onClick={() => {
+                <button
+                  className="header-control-btn"
+                  onClick={() => {
+                    if (!showAiFloatBtn) {
+                      setShowAiFloatBtn(true);
+                      localStorage.setItem('yokdil_ai_float_btn_enabled', 'true');
+                    } else {
                       setShowAiChat(prev => !prev);
-                    }}
-                    title="AI Asistanı Aç/Kapat 🦉"
-                    style={{ marginLeft: '2px', background: 'rgba(99, 102, 241, 0.08)', color: '#818cf8', borderColor: 'rgba(99, 102, 241, 0.2)' }}
-                  >
-                    🦉
-                  </button>
-                )}
+                    }
+                  }}
+                  title="AI Asistanı Aç/Kapat 🦉"
+                  style={{ marginLeft: '2px', background: 'rgba(99, 102, 241, 0.08)', color: '#818cf8', borderColor: 'rgba(99, 102, 241, 0.2)' }}
+                >
+                  🦉
+                </button>
               </div>
             </header>
           ) : (
@@ -3620,6 +3683,7 @@ function App() {
                   recordWordStat={recordWordStat}
                   addMistake={addMistake}
                   setIsStudyingActive={setIsStudyingActive}
+                  setMascotState={setMascotState}
                 />
               </section>
             )}
@@ -3745,6 +3809,7 @@ function App() {
                   setIsStudyingActive={setIsStudyingActive}
                   vocabTrack={vocabTrack}
                   setVocabTrack={setVocabTrack}
+                  setMascotState={setMascotState}
                 />
               </section>
             )}
@@ -3766,6 +3831,7 @@ function App() {
                   setIsStudyingActive={setIsStudyingActive}
                   vocabTrack={vocabTrack}
                   setVocabTrack={setVocabTrack}
+                  setMascotState={setMascotState}
                 />
               </section>
             )}

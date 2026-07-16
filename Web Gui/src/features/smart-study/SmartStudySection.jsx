@@ -222,7 +222,14 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
 
   const handleWordRead = () => {
     setReadWords(prev => ({ ...prev, [studyWords[currentIdx].word]: true }));
-    setPhase(2);
+    if (currentIdx < studyWords.length - 1) {
+      const next = currentIdx + 1;
+      setCurrentIdx(next);
+    } else {
+      setCurrentIdx(0);
+      setPhase(2);
+      setupQuestionFlow(studyWords[0]);
+    }
   };
 
   const handleMeaningCheck = (opt) => {
@@ -241,7 +248,15 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
   };
 
   const handleMeaningNext = () => {
-    setPhase(3);
+    if (currentIdx < studyWords.length - 1) {
+      const next = currentIdx + 1;
+      setCurrentIdx(next);
+      setupQuestionFlow(studyWords[next]);
+    } else {
+      setCurrentIdx(0);
+      setPhase(3);
+      setupQuestionFlow(studyWords[0]);
+    }
   };
 
   const handleSynonymCheck = (opt) => {
@@ -262,7 +277,15 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
   };
 
   const handleSynonymNext = () => {
-    setPhase(4);
+    if (currentIdx < studyWords.length - 1) {
+      const next = currentIdx + 1;
+      setCurrentIdx(next);
+      setupQuestionFlow(studyWords[next]);
+    } else {
+      setCurrentIdx(0);
+      setPhase(4);
+      setupQuestionFlow(studyWords[0]);
+    }
   };
 
   const handleClozeCheck = (opt) => {
@@ -281,7 +304,15 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
   };
 
   const handleClozeNext = () => {
-    setPhase(5);
+    if (currentIdx < studyWords.length - 1) {
+      const next = currentIdx + 1;
+      setCurrentIdx(next);
+      setupQuestionFlow(studyWords[next]);
+    } else {
+      setCurrentIdx(0);
+      setPhase(5);
+      setupQuestionFlow(studyWords[0]);
+    }
   };
 
   const handleStrategyCheck = (opt) => {
@@ -303,7 +334,6 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
     if (currentIdx < studyWords.length - 1) {
       const next = currentIdx + 1;
       setCurrentIdx(next);
-      setPhase(1);
       setupQuestionFlow(studyWords[next]);
     } else {
       // Completed current day!

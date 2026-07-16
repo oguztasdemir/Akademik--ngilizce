@@ -79,7 +79,11 @@ const ParagraphsSection = ({
     localStorage.setItem('completed_passages', JSON.stringify(completedPassages));
   }, [completedPassages]);
 
-  if (activeTab !== 'paragraphs') return null;
+  const [clickedWords, setClickedWords] = useState(new Set());
+
+  useEffect(() => {
+    setClickedWords(new Set());
+  }, [selectedPassage]);
 
   const handleWordClick = async (targetRectOrEvent, rawWord, dragRange = null, origin = 'en', sIdx = 0) => {
     if (targetRectOrEvent && typeof targetRectOrEvent.stopPropagation === 'function') {
@@ -88,7 +92,11 @@ const ParagraphsSection = ({
     const cleanWord = rawWord.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
     if (!cleanWord) return;
 
-    if (incrementDailyWords) incrementDailyWords();
+    if (!clickedWords.has(cleanWord)) {
+      clickedWords.add(cleanWord);
+      setClickedWords(new Set(clickedWords));
+      if (incrementDailyWords) incrementDailyWords();
+    }
 
     let rect;
     if (targetRectOrEvent && typeof targetRectOrEvent.getBoundingClientRect === 'function') {
@@ -390,192 +398,176 @@ const ParagraphsSection = ({
   };
 
   // Helper to tokenize passage sentences into clickable word tags (English)
-  const renderInteractivePassage = (text, startWordOffset) => {
-    const sentences = text.split(/(?<=[.?!])\s+/);
-    let wordIdxCounter = startWordOffset;
-
-    return sentences.flatMap((sentence, sIdx) => {
-      const sentenceWords = sentence.split(/\s+/).filter(Boolean);
-      const sentenceStartIdx = wordIdxCounter;
-      wordIdxCounter += sentenceWords.length;
-
-      return sentenceWords.map((word, wIdx) => {
-        const globalIdx = sentenceStartIdx + wIdx;
-        
-        // 1. Check if currently dragging
-        let isHighlighted = false;
-        if (dragStartIdx !== null && dragEndIdx !== null && dragOrigin === 'en') {
-          const min = Math.min(dragStartIdx, dragEndIdx);
-          const max = Math.max(dragStartIdx, dragEndIdx);
-          isHighlighted = globalIdx >= min && globalIdx <= max;
+  const renderInteractivePassage = (sentence, startWordOffset, globalSIdx) => {
+    const sentenceWords = sentence.split(/\s+/).filter(Boolean);
+    
+    return sentenceWords.map((word, wIdx) => {
+      const globalIdx = startWordOffset + wIdx;
+      
+      // 1. Check if currently dragging
+      let isHighlighted = false;
+      if (dragStartIdx !== null && dragEndIdx !== null && dragOrigin === 'en') {
+        const min = Math.min(dragStartIdx, dragEndIdx);
+        const max = Math.max(dragStartIdx, dragEndIdx);
+        isHighlighted = globalIdx >= min && globalIdx <= max;
+      }
+      
+      // 2. Check if part of the current highlight
+      let isSavedHighlight = false;
+      if (currentHighlight) {
+        if (currentHighlight.origin === 'en') {
+          isSavedHighlight = globalIdx >= currentHighlight.start && globalIdx <= currentHighlight.end;
+        } else if (currentHighlight.origin === 'tr') {
+          isSavedHighlight = globalSIdx === currentHighlight.sentenceIdx && checkEnglishWordMatch(word, currentHighlight.english);
         }
-        
-        // 2. Check if part of the current highlight
-        let isSavedHighlight = false;
-        if (currentHighlight) {
-          if (currentHighlight.origin === 'en') {
-            isSavedHighlight = globalIdx >= currentHighlight.start && globalIdx <= currentHighlight.end;
-          } else if (currentHighlight.origin === 'tr') {
-            isSavedHighlight = sIdx === currentHighlight.sentenceIdx && checkEnglishWordMatch(word, currentHighlight.english);
-          }
-        }
-        
-        let style = {
-          cursor: 'pointer',
-          transition: 'all 0.15s ease',
-          padding: '2px 3px',
-          borderRadius: '4px',
-          display: 'inline',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none'
-        };
+      }
+      
+      let style = {
+        cursor: 'pointer',
+        transition: 'all 0.15s ease',
+        padding: '2px 3px',
+        borderRadius: '4px',
+        display: 'inline',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
+        MozUserSelect: 'none',
+        msUserSelect: 'none'
+      };
 
-        if (isHighlighted) {
-          style.background = 'rgba(99, 102, 241, 0.4)';
-          style.color = '#a5b4fc';
-          style.border = '1px dashed #818cf8';
-        } else if (isSavedHighlight) {
-          style.background = 'rgba(99, 102, 241, 0.45)';
-          style.border = '2px solid #818cf8';
-          style.color = '#ffffff';
-          style.fontWeight = '800';
-          style.boxShadow = '0 0 12px rgba(99, 102, 241, 0.8)';
-          style.borderRadius = '6px';
-          style.transform = 'scale(1.08)';
-        } else if (sIdx === hoveredSentenceIdx) {
-          style.background = 'rgba(99, 102, 241, 0.12)';
-          style.borderBottom = '1.5px dashed rgba(99, 102, 241, 0.5)';
-        }
+      if (isHighlighted) {
+        style.background = 'rgba(99, 102, 241, 0.4)';
+        style.color = '#a5b4fc';
+        style.border = '1px dashed #818cf8';
+      } else if (isSavedHighlight) {
+        style.background = 'rgba(99, 102, 241, 0.45)';
+        style.border = '2px solid #818cf8';
+        style.color = '#ffffff';
+        style.fontWeight = '800';
+        style.boxShadow = '0 0 12px rgba(99, 102, 241, 0.8)';
+        style.borderRadius = '6px';
+        style.transform = 'scale(1.08)';
+      } else if (globalSIdx === hoveredSentenceIdx) {
+        style.background = 'rgba(99, 102, 241, 0.12)';
+        style.borderBottom = '1.5px dashed rgba(99, 102, 241, 0.5)';
+      }
 
-        return (
-          <React.Fragment key={`${sIdx}-${wIdx}`}>
-            <span
-              id={`word-span-${globalIdx}`}
-              onMouseDown={(e) => {
-                e.preventDefault();
-                setIsDragging(true);
-                setDragStartIdx(globalIdx);
+      return (
+        <React.Fragment key={wIdx}>
+          <span
+            id={`word-span-${globalIdx}`}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+              setDragStartIdx(globalIdx);
+              setDragEndIdx(globalIdx);
+              setDragOrigin('en');
+              setDragSentenceIdx(globalSIdx);
+            }}
+            onMouseEnter={() => {
+              if (isDragging && dragOrigin === 'en') {
                 setDragEndIdx(globalIdx);
-                setDragOrigin('en');
-                setDragSentenceIdx(sIdx);
-              }}
-              onMouseEnter={() => {
-                if (isDragging && dragOrigin === 'en') {
-                  setDragEndIdx(globalIdx);
-                } else {
-                  setHoveredSentenceIdx(sIdx);
-                }
-              }}
-              onMouseLeave={() => {
-                if (!isDragging) {
-                  setHoveredSentenceIdx(null);
-                }
-              }}
-              style={style}
-            >
-              {word}
-            </span>
-            {' '}
-          </React.Fragment>
-        );
-      });
+              } else {
+                setHoveredSentenceIdx(globalSIdx);
+              }
+            }}
+            onMouseLeave={() => {
+              if (!isDragging) {
+                setHoveredSentenceIdx(null);
+              }
+            }}
+            style={style}
+          >
+            {word}
+          </span>
+          {' '}
+        </React.Fragment>
+      );
     });
   };
 
   // Helper to tokenize comparison sentences into clickable word tags (Turkish)
-  const renderInteractiveTurkishPassage = (text, startWordOffset) => {
-    const sentences = text.split(/(?<=[.?!])\s+/);
-    let wordIdxCounter = startWordOffset;
-
-    return sentences.flatMap((sentence, sIdx) => {
-      const sentenceWords = sentence.split(/\s+/).filter(Boolean);
-      const sentenceStartIdx = wordIdxCounter;
-      wordIdxCounter += sentenceWords.length;
-
-      return sentenceWords.map((word, wIdx) => {
-        const globalIdx = sentenceStartIdx + wIdx;
-        
-        // 1. Check if currently dragging
-        let isHighlighted = false;
-        if (dragStartIdx !== null && dragEndIdx !== null && dragOrigin === 'tr') {
-          const min = Math.min(dragStartIdx, dragEndIdx);
-          const max = Math.max(dragStartIdx, dragEndIdx);
-          isHighlighted = globalIdx >= min && globalIdx <= max;
+  const renderInteractiveTurkishPassage = (sentence, startWordOffset, globalSIdx) => {
+    const sentenceWords = sentence.split(/\s+/).filter(Boolean);
+    
+    return sentenceWords.map((word, wIdx) => {
+      const globalIdx = startWordOffset + wIdx;
+      
+      let isHighlighted = false;
+      if (dragStartIdx !== null && dragEndIdx !== null && dragOrigin === 'tr') {
+        const min = Math.min(dragStartIdx, dragEndIdx);
+        const max = Math.max(dragStartIdx, dragEndIdx);
+        isHighlighted = globalIdx >= min && globalIdx <= max;
+      }
+      
+      let isSavedHighlight = false;
+      if (currentHighlight) {
+        if (currentHighlight.origin === 'tr') {
+          isSavedHighlight = globalIdx >= currentHighlight.start && globalIdx <= currentHighlight.end;
+        } else if (currentHighlight.origin === 'en') {
+          isSavedHighlight = globalSIdx === currentHighlight.sentenceIdx && checkTurkishWordMatch(word, currentHighlight.turkish);
         }
-        
-        // 2. Check if part of the current highlight
-        let isSavedHighlight = false;
-        if (currentHighlight) {
-          if (currentHighlight.origin === 'tr') {
-            isSavedHighlight = globalIdx >= currentHighlight.start && globalIdx <= currentHighlight.end;
-          } else if (currentHighlight.origin === 'en') {
-            isSavedHighlight = sIdx === currentHighlight.sentenceIdx && checkTurkishWordMatch(word, currentHighlight.turkish);
-          }
-        }
-        
-        let style = {
-          cursor: 'pointer',
-          transition: 'all 0.15s ease',
-          padding: '2px 3px',
-          borderRadius: '4px',
-          display: 'inline',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none'
-        };
+      }
+      
+      let style = {
+        cursor: 'pointer',
+        transition: 'all 0.15s ease',
+        padding: '2px 3px',
+        borderRadius: '4px',
+        display: 'inline',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
+        MozUserSelect: 'none',
+        msUserSelect: 'none'
+      };
 
-        if (isHighlighted) {
-          style.background = 'rgba(16, 185, 129, 0.4)';
-          style.color = '#a7f3d0';
-          style.border = '1px dashed #10b981';
-        } else if (isSavedHighlight) {
-          style.background = 'rgba(16, 185, 129, 0.45)';
-          style.border = '2px solid #10b981';
-          style.color = '#ffffff';
-          style.fontWeight = '800';
-          style.boxShadow = '0 0 12px rgba(16, 185, 129, 0.8)';
-          style.borderRadius = '6px';
-          style.transform = 'scale(1.08)';
-        } else if (sIdx === hoveredSentenceIdx) {
-          style.background = 'rgba(16, 185, 129, 0.12)';
-          style.borderBottom = '1.5px dashed rgba(16, 185, 129, 0.5)';
-        }
+      if (isHighlighted) {
+        style.background = 'rgba(16, 185, 129, 0.4)';
+        style.color = '#a7f3d0';
+        style.border = '1px dashed #10b981';
+      } else if (isSavedHighlight) {
+        style.background = 'rgba(16, 185, 129, 0.45)';
+        style.border = '2px solid #10b981';
+        style.color = '#ffffff';
+        style.fontWeight = '800';
+        style.boxShadow = '0 0 12px rgba(16, 185, 129, 0.8)';
+        style.borderRadius = '6px';
+        style.transform = 'scale(1.08)';
+      } else if (globalSIdx === hoveredSentenceIdx) {
+        style.background = 'rgba(16, 185, 129, 0.12)';
+        style.borderBottom = '1.5px dashed rgba(16, 185, 129, 0.5)';
+      }
 
-        return (
-          <React.Fragment key={`${sIdx}-${wIdx}`}>
-            <span
-              id={`tr-word-span-${globalIdx}`}
-              onMouseDown={(e) => {
-                e.preventDefault();
-                setIsDragging(true);
-                setDragStartIdx(globalIdx);
+      return (
+        <React.Fragment key={wIdx}>
+          <span
+            id={`tr-word-span-${globalIdx}`}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+              setDragStartIdx(globalIdx);
+              setDragEndIdx(globalIdx);
+              setDragOrigin('tr');
+              setDragSentenceIdx(globalSIdx);
+            }}
+            onMouseEnter={() => {
+              if (isDragging && dragOrigin === 'tr') {
                 setDragEndIdx(globalIdx);
-                setDragOrigin('tr');
-                setDragSentenceIdx(sIdx);
-              }}
-              onMouseEnter={() => {
-                if (isDragging && dragOrigin === 'tr') {
-                  setDragEndIdx(globalIdx);
-                } else {
-                  setHoveredSentenceIdx(sIdx);
-                }
-              }}
-              onMouseLeave={() => {
-                if (!isDragging) {
-                  setHoveredSentenceIdx(null);
-                }
-              }}
-              style={style}
-            >
-              {word}
-            </span>
-            {' '}
-          </React.Fragment>
-        );
-      });
+              } else {
+                setHoveredSentenceIdx(globalSIdx);
+              }
+            }}
+            onMouseLeave={() => {
+              if (!isDragging) {
+                setHoveredSentenceIdx(null);
+              }
+            }}
+            style={style}
+          >
+            {word}
+          </span>
+          {' '}
+        </React.Fragment>
+      );
     });
   };
 
@@ -665,6 +657,8 @@ const ParagraphsSection = ({
       );
     });
   };
+
+  if (activeTab !== 'paragraphs') return null;
 
   return (
     <div style={{ position: 'relative' }} onClick={(e) => {
@@ -842,37 +836,36 @@ const ParagraphsSection = ({
                 }}
               >
                 {(() => {
-                  const enParas = selectedPassage.passage.split('\n').filter(Boolean);
-                  const trParas = (selectedPassage.translation || "").split('\n').filter(Boolean);
+                  const enSentences = selectedPassage.passage.split(/(?<=[.?!])\s+/).filter(Boolean);
+                  const trSentences = (selectedPassage.translation || "").split(/(?<=[.?!])\s+/).filter(Boolean);
                   let wordOffset = 0;
                   let trWordOffset = 0;
 
-                  return enParas.map((para, idx) => {
+                  return enSentences.map((enSentence, sIdx) => {
                     const currentOffset = wordOffset;
-                    const wordCount = para.split(/\s+/).length;
+                    const wordCount = enSentence.split(/\s+/).filter(Boolean).length;
                     wordOffset += wordCount;
 
-                    const trPara = trParas[idx] || "";
+                    const trSentence = trSentences[sIdx] || "";
                     const trOffset = trWordOffset;
-                    const trWordCount = trPara.split(/\s+/).length;
+                    const trWordCount = trSentence.split(/\s+/).filter(Boolean).length;
                     trWordOffset += trWordCount;
 
                     return (
-                      <div key={idx} className="comparative-grid-row">
+                      <div key={sIdx} className="comparative-grid-row" style={{ paddingBottom: '12px', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
                         
                         {/* Left Page (English) */}
                         <div className="comparative-column" style={{ fontSize: `${readFontSize}rem`, lineHeight: readLineHeight, color: '#e2e8f0', textAlign: 'justify' }}>
-                          <span style={{ display: 'block', fontSize: '0.62rem', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase', marginBottom: '6px', opacity: 0.8 }}>[Paragraf {idx + 1}]</span>
-                          {renderInteractivePassage(para, currentOffset)}
+                          <span style={{ display: 'inline-block', fontSize: '0.62rem', fontWeight: 'bold', color: '#818cf8', marginRight: '6px', opacity: 0.6 }}>[{sIdx + 1}]</span>
+                          {renderInteractivePassage(enSentence, currentOffset, sIdx)}
                         </div>
 
                         {/* Middle Visual Spine line */}
-                        <div className="hidden md:block" style={{ width: '1px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.03), rgba(255,255,255,0.08), rgba(255,255,255,0.03))' }} />
+                        <div className="hidden md:block" style={{ width: '1px', background: 'rgba(255,255,255,0.03)' }} />
 
                         {/* Right Page (Turkish) */}
                         <div className="comparative-column" style={{ fontSize: `${readFontSize}rem`, lineHeight: readLineHeight, color: '#94a3b8', textAlign: 'justify', fontStyle: 'italic' }}>
-                          <span style={{ display: 'block', fontSize: '0.62rem', fontWeight: 'bold', color: '#10b981', textTransform: 'uppercase', marginBottom: '6px', opacity: 0.8 }}>[Türkçe Karşılaştırma]</span>
-                          {renderInteractiveTurkishPassage(trPara, trOffset)}
+                          {renderInteractiveTurkishPassage(trSentence, trOffset, sIdx)}
                         </div>
 
                       </div>
