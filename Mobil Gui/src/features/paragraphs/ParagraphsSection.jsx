@@ -88,7 +88,18 @@ const ParagraphsSection = ({
     const cleanWord = rawWord.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
     if (!cleanWord) return;
 
-    if (incrementDailyWords) incrementDailyWords();
+    // Track unique clicked words per passage to prevent XP/study goal spamming
+    const sessionClickedKey = `paragraphs_clicked_${selectedPassage?.id || 'genel'}`;
+    let clickedSet = [];
+    try {
+      clickedSet = JSON.parse(sessionStorage.getItem(sessionClickedKey) || '[]');
+    } catch(e) {}
+    
+    if (!clickedSet.includes(cleanWord)) {
+      clickedSet.push(cleanWord);
+      sessionStorage.setItem(sessionClickedKey, JSON.stringify(clickedSet));
+      if (incrementDailyWords) incrementDailyWords();
+    }
 
     let rect;
     if (targetRectOrEvent && typeof targetRectOrEvent.getBoundingClientRect === 'function') {
@@ -486,6 +497,7 @@ const ParagraphsSection = ({
 
   // Helper to tokenize comparison sentences into clickable word tags (Turkish)
   const renderInteractiveTurkishPassage = (text, startWordOffset) => {
+    // Regex splits sentences by looking for period, question mark, or exclamation mark followed by spaces.
     const sentences = text.split(/(?<=[.?!])\s+/);
     let wordIdxCounter = startWordOffset;
 

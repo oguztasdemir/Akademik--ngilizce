@@ -44,6 +44,16 @@ const SmartStudyFlow = ({
   return (
     <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', background: 'rgba(11, 15, 26, 0.7)', border: '1px solid rgba(255,255,255,0.06)', minHeight: '520px' }}>
       
+      {/* Exit Study Section Button */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '14px' }}>
+        <button
+          onClick={resetStudy}
+          className="rounded-lg px-3 py-1.5 text-xs font-bold border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/25 cursor-pointer transition-all"
+        >
+          ❌ Çalışmadan Çık
+        </button>
+      </div>
+
       {/* Sleek Dynamic Progress Bar at the very top */}
       <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', marginBottom: '24px', overflow: 'hidden' }}>
         <div style={{

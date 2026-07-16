@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const CardMatchGame = ({ vocab, awardPetXp }) => {
+const CardMatchGame = ({ vocab, awardPetXp, logStudyActivity }) => {
   const [engCards, setEngCards] = useState([]);
   const [trCards, setTrCards] = useState([]);
   const [selectedEng, setSelectedEng] = useState(null);
@@ -67,10 +67,12 @@ const CardMatchGame = ({ vocab, awardPetXp }) => {
       setSelectedEng(null);
       setSelectedTr(null);
       if (awardPetXp) awardPetXp(5);
+      if (logStudyActivity) logStudyActivity('games', 1);
       
       if (matched.length + 1 === engCards.length) {
         setCompleted(true);
         if (awardPetXp) awardPetXp(15);
+        if (logStudyActivity) logStudyActivity('games', 5);
       }
     } else {
       setWrongMatch({ engId: engCard.id, trId: trCard.id });

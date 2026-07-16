@@ -62,7 +62,8 @@ const CampStudy = ({
   addMistake,
   setWordResults,
   vocabMeaningSelections,
-  setVocabMeaningSelections
+  setVocabMeaningSelections,
+  startNextCampDay
 }) => {
   const getTrackTheme = () => {
     const themes = {
@@ -502,85 +503,85 @@ const CampStudy = ({
 
                     {/* Sub-camp conditional details */}
                     {(vocabTrack === 'es_anlam' || vocabTrack === 'tumu') && (
-                      <div style={{ width: '100%', marginTop: '10px' }}>
-                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '14px 0' }} />
-                        <span style={{ fontSize: '0.65rem', color: '#a855f7', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '8px', letterSpacing: '0.08em' }}>
+                      <div style={{ width: '100%', marginTop: '5px' }}>
+                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '10px 0' }} />
+                        <span style={{ fontSize: '0.65rem', color: '#a855f7', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.08em' }}>
                           🔄 EŞ ANLAMLILAR VE TÜRKÇELERİ
                         </span>
                         {getSynonymsList(studyWords[currentIdx]).length > 0 ? (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
                             {getSynonymsList(studyWords[currentIdx]).map((item, idx) => (
-                              <div key={idx} style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700' }}>
-                                {item.eng} {item.tr && <span style={{ color: '#a5b4fc', fontWeight: '500', fontSize: '0.8rem' }}>({item.tr})</span>}
+                              <div key={idx} style={{ fontSize: '0.85rem', color: 'white', fontWeight: '700', padding: '4px 10px', background: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.25)', borderRadius: '8px' }}>
+                                {item.eng} {item.tr && <span style={{ color: '#c084fc', fontWeight: '500', fontSize: '0.78rem' }}>({item.tr})</span>}
                               </div>
                             ))}
                           </div>
                         ) : (
-                          <p style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
+                          <p style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
                         )}
                       </div>
                     )}
 
                     {(vocabTrack === 'zit_anlam' || vocabTrack === 'tumu') && (
-                      <div style={{ width: '100%', marginTop: '10px' }}>
-                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '14px 0' }} />
-                        <span style={{ fontSize: '0.65rem', color: '#f43f5e', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '8px', letterSpacing: '0.08em' }}>
+                      <div style={{ width: '100%', marginTop: '5px' }}>
+                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '10px 0' }} />
+                        <span style={{ fontSize: '0.65rem', color: '#f43f5e', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.08em' }}>
                           🔀 ZIT ANLAMLILAR VE TÜRKÇELERİ
                         </span>
                         {getAntonymsList(studyWords[currentIdx]).length > 0 ? (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
                             {getAntonymsList(studyWords[currentIdx]).map((item, idx) => (
-                              <div key={idx} style={{ fontSize: '0.9rem', color: 'white', fontWeight: '700' }}>
-                                {item.eng} {item.tr && <span style={{ color: '#fca5a5', fontWeight: '500', fontSize: '0.8rem' }}>({item.tr})</span>}
+                              <div key={idx} style={{ fontSize: '0.85rem', color: 'white', fontWeight: '700', padding: '4px 10px', background: 'rgba(244, 63, 94, 0.1)', border: '1px solid rgba(244, 63, 94, 0.25)', borderRadius: '8px' }}>
+                                {item.eng} {item.tr && <span style={{ color: '#fda4af', fontWeight: '500', fontSize: '0.78rem' }}>({item.tr})</span>}
                               </div>
                             ))}
                           </div>
                         ) : (
-                          <p style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
+                          <p style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
                         )}
                       </div>
                     )}
 
                     {vocabTrack === 'tumu' && (
-                      <>
-                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '14px 0' }} />
+                      <div style={{ width: '100%', marginTop: '5px' }}>
+                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '10px 0' }} />
                         
-                        <span style={{ fontSize: '0.65rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '8px', letterSpacing: '0.08em' }}>
+                        <span style={{ fontSize: '0.65rem', color: '#34d399', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.08em' }}>
                           🔗 BİRLİKTE KULLANIMLAR (COLLOCATIONS)
                         </span>
                         {getCollocationsList(studyWords[currentIdx]).length > 0 ? (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
                             {getCollocationsList(studyWords[currentIdx]).map((item, idx) => (
-                              <div key={idx} style={{ fontSize: '0.82rem', color: 'white', fontWeight: '700', fontStyle: 'italic' }}>
-                                {item.eng} {item.tr && <span style={{ color: '#a7f3d0', fontWeight: '500', fontSize: '0.76rem', fontStyle: 'normal' }}>({item.tr})</span>}
+                              <div key={idx} style={{ fontSize: '0.8rem', color: 'white', fontWeight: '700', fontStyle: 'italic', padding: '4px 10px', background: 'rgba(52, 211, 153, 0.1)', border: '1px dashed rgba(52, 211, 153, 0.25)', borderRadius: '8px' }}>
+                                {item.eng} {item.tr && <span style={{ color: '#a7f3d0', fontWeight: '500', fontSize: '0.74rem', fontStyle: 'normal' }}>({item.tr})</span>}
                               </div>
                             ))}
                           </div>
                         ) : (
-                          <p style={{ fontSize: '0.82rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
+                          <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600', margin: 0 }}>Yok</p>
                         )}
 
-                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '14px 0' }} />
+                        <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '10px 0' }} />
 
-                        <span style={{ fontSize: '0.65rem', color: '#fbbf24', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '8px', letterSpacing: '0.08em' }}>
+                        <span style={{ fontSize: '0.65rem', color: '#fbbf24', fontWeight: '900', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.08em' }}>
                           ÖRNEK AKADEMİK CÜMLE (YÖKDİL)
                         </span>
-                        <div style={{ textAlign: 'left', background: 'rgba(251, 191, 36, 0.03)', padding: '12px 14px', borderRadius: '12px', border: '1px dashed rgba(251, 191, 36, 0.2)' }}>
-                          <p style={{ fontSize: '0.84rem', color: 'white', margin: '0 0 6px 0', lineHeight: 1.5, fontWeight: '500' }}>
+                        <div style={{ textAlign: 'left', background: 'rgba(251, 191, 36, 0.03)', padding: '10px 12px', borderRadius: '12px', border: '1px dashed rgba(251, 191, 36, 0.2)' }}>
+                          <p style={{ fontSize: '0.8rem', color: 'white', margin: '0 0 4px 0', lineHeight: 1.4, fontWeight: '500' }}>
                             "{getSentenceEn(studyWords[currentIdx])}"
                           </p>
                           {getSentenceTr(studyWords[currentIdx]) && (
-                            <p style={{ fontSize: '0.78rem', color: '#94a3b8', fontStyle: 'italic', margin: 0 }}>
+                            <p style={{ fontSize: '0.74rem', color: '#cbd5e1', fontStyle: 'italic', margin: 0 }}>
                               {getSentenceTr(studyWords[currentIdx])}
                             </p>
                           )}
                         </div>
-                      </>
+                      </div>
                     )}
                   </div>
                 )}
 
-                <span style={{ fontSize: '0.7rem', color: '#64748b', display: 'block', marginTop: '12px' }}>
+                <span style={{ fontSize: '0.7rem', color: '#64748b', display: 'block', marginTop: '8px' }}>
                   Ön yüzü görmek için tıklayın (Kartı Döndür)
                 </span>
               </div>
@@ -868,11 +869,11 @@ const CampStudy = ({
                 }}>
                   {meaningCorrect ? (
                     <>
-                      <Check className="h-4 w-4" /> Tebrikler! Doğru Eşleşme.
+                      <span style={{ fontSize: '1.25rem' }}>🦉🎉</span> <Check className="h-4 w-4" /> Tebrikler! Doğru Eşleşme.
                     </>
                   ) : (
                     <>
-                      <AlertCircle className="h-4 w-4" /> Hatalı! Doğru cevap: "{studyWords[currentIdx].tr}" olmalıydı.
+                      <span style={{ fontSize: '1.25rem' }}>🦉😢</span> <AlertCircle className="h-4 w-4" /> Hatalı! Doğru cevap: "{studyWords[currentIdx].tr}" olmalıydı.
                     </>
                   )}
                 </div>
@@ -885,9 +886,9 @@ const CampStudy = ({
               <button
                 onClick={handleMeaningNext}
                 className="btn-primary"
-                style={{ padding: '8px 20px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ padding: '10px 24px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
               >
-                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
+                İlerle ⏩
               </button>
             )}
           </div>
@@ -913,7 +914,7 @@ const CampStudy = ({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '400px', marginTop: '10px' }}>
                 {synonymOptions.map((opt, i) => {
                   const isSelected = synonymSelected === opt;
-                  const cleanCorrect = studyWords[currentIdx].synonyms.split(',')[0].trim();
+                  const cleanCorrect = (studyWords[currentIdx].synonyms || '').split(',')[0].trim();
                   const isCorrectAnswer = opt === cleanCorrect;
                   let bg = 'rgba(255, 255, 255, 0.03)';
                   let border = '1px solid rgba(255, 255, 255, 0.08)';
@@ -974,11 +975,11 @@ const CampStudy = ({
                 }}>
                   {synonymCorrect ? (
                     <>
-                      <Check className="h-4 w-4" /> Tebrikler! Eş Anlam Doğru.
+                      <span style={{ fontSize: '1.25rem' }}>🦉🎉</span> <Check className="h-4 w-4" /> Tebrikler! Eş Anlam Doğru.
                     </>
                   ) : (
                     <>
-                      <AlertCircle className="h-4 w-4" /> Hatalı! Doğru cevap: "{studyWords[currentIdx].synonyms.split(',')[0].trim()}" olmalıydı.
+                      <span style={{ fontSize: '1.25rem' }}>🦉😢</span> <AlertCircle className="h-4 w-4" /> Hatalı! Doğru cevap: "{studyWords[currentIdx].synonyms.split(',')[0].trim()}" olmalıydı.
                     </>
                   )}
                 </div>
@@ -991,9 +992,9 @@ const CampStudy = ({
               <button
                 onClick={handleSynonymNext}
                 className="btn-primary"
-                style={{ padding: '8px 20px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ padding: '10px 24px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
               >
-                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
+                İlerle ⏩
               </button>
             )}
           </div>
@@ -1020,7 +1021,7 @@ const CampStudy = ({
                 {antonymOptions.map((opt, i) => {
                   const isSelected = antonymSelected === opt;
                   const antonymStr = getAntonym(studyWords[currentIdx]);
-                  const cleanCorrect = antonymStr.split(',')[0].trim();
+                  const cleanCorrect = (antonymStr || '').split(',')[0].trim();
                   const isCorrectAnswer = opt === cleanCorrect;
                   let bg = 'rgba(255, 255, 255, 0.03)';
                   let border = '1px solid rgba(255, 255, 255, 0.08)';
@@ -1081,11 +1082,11 @@ const CampStudy = ({
                 }}>
                   {antonymCorrect ? (
                     <>
-                      <Check className="h-4 w-4" /> Tebrikler! Zıt Anlam Doğru.
+                      <span style={{ fontSize: '1.25rem' }}>🦉🎉</span> <Check className="h-4 w-4" /> Tebrikler! Zıt Anlam Doğru.
                     </>
                   ) : (
                     <>
-                      <AlertCircle className="h-4 w-4" /> Hatalı! Doğru cevap: "{getAntonym(studyWords[currentIdx]).split(',')[0].trim()}" olmalıydı.
+                      <span style={{ fontSize: '1.25rem' }}>🦉😢</span> <AlertCircle className="h-4 w-4" /> Hatalı! Doğru cevap: "{getAntonym(studyWords[currentIdx]).split(',')[0].trim()}" olmalıydı.
                     </>
                   )}
                 </div>
@@ -1098,9 +1099,9 @@ const CampStudy = ({
               <button
                 onClick={handleAntonymNext}
                 className="btn-primary"
-                style={{ padding: '8px 20px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ padding: '10px 24px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
               >
-                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
+                İlerle ⏩
               </button>
             )}
           </div>
@@ -1288,7 +1289,15 @@ const CampStudy = ({
                   maxWidth: '550px'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    {clozeCorrect ? <Check className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+                    {clozeCorrect ? (
+                      <>
+                        <span style={{ fontSize: '1.25rem' }}>🦉🎉</span> <Check className="h-4 w-4" />
+                      </>
+                    ) : (
+                      <>
+                        <span style={{ fontSize: '1.25rem' }}>🦉😢</span> <AlertCircle className="h-4 w-4" />
+                      </>
+                    )}
                     <span>{clozeCorrect ? 'Tebrikler! Doğru Seçim.' : `Hatalı! Doğru cevap: "${studyWords[currentIdx].word}" olmalıydı.`}</span>
                   </div>
                   <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '6px', fontSize: '0.78rem', color: '#94a3b8', fontStyle: 'italic' }}>
@@ -1304,9 +1313,9 @@ const CampStudy = ({
               <button
                 onClick={handleClozeNext}
                 className="btn-primary"
-                style={{ padding: '10px 24px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ padding: '10px 24px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}
               >
-                Sıradaki Aşamaya Geç <ArrowRight className="h-4 w-4" />
+                İlerle ⏩
               </button>
             )}
           </div>
@@ -1378,14 +1387,40 @@ const CampStudy = ({
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '24px', flexWrap: 'wrap', width: '100%' }}>
             <button
               onClick={exitCamp}
-              className="btn-primary"
-              style={{ padding: '12px 28px', fontSize: '0.85rem', cursor: 'pointer' }}
+              className="btn-secondary"
+              style={{ padding: '12px 24px', fontSize: '0.85rem', cursor: 'pointer', borderRadius: '12px', flex: '1 1 auto', minWidth: '150px' }}
             >
               Kamp Takvimine Dön
             </button>
+            {selectedDay < totalCampDays && (
+              <button
+                onClick={() => {
+                  if (startNextCampDay) startNextCampDay();
+                }}
+                className="btn-primary"
+                style={{
+                  padding: '12px 24px',
+                  fontSize: '0.85rem',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)',
+                  borderColor: '#10b981',
+                  color: 'white',
+                  flex: '1 1 auto',
+                  minWidth: '180px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px'
+                }}
+              >
+                Sonraki Günü Başlat (Gün {selectedDay + 1}) ⏩
+              </button>
+            )}
           </div>
         </div>
       )}

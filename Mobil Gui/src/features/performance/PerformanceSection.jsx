@@ -161,6 +161,8 @@ const PerformanceSection = ({
  </Styles>
  <Worksheet ss:Name="Genel İlerleme">
   <Table>
+   <Column ss:Width="160"/>
+   <Column ss:Width="120"/>
    <Row ss:StyleID="Header"><Cell><Data ss:Type="String">Metrik</Data></Cell><Cell><Data ss:Type="String">Değer</Data></Cell></Row>
    <Row><Cell><Data ss:Type="String">Kelime Kampı (Çıkmış)</Data></Cell><Cell><Data ss:Type="String">${cikmisDoneDays} / 60 Gün</Data></Cell></Row>
    <Row><Cell><Data ss:Type="String">Günlük SR Kampı</Data></Cell><Cell><Data ss:Type="String">${dailyDoneDays} / 60 Gün</Data></Cell></Row>
@@ -171,6 +173,10 @@ const PerformanceSection = ({
  </Worksheet>
  <Worksheet ss:Name="Kelime Defterim">
   <Table>
+   <Column ss:Width="60"/>
+   <Column ss:Width="150"/>
+   <Column ss:Width="250"/>
+   <Column ss:Width="140"/>
    <Row ss:StyleID="Header">
     <Cell><Data ss:Type="String">Sıra No</Data></Cell>
     <Cell><Data ss:Type="String">Kelime (İngilizce)</Data></Cell>
@@ -437,6 +443,90 @@ const PerformanceSection = ({
                 Sınavlarda toplam <strong>{stats.correct}</strong> doğru ve <strong>{stats.wrong}</strong> yanlış yapıldı.
               </div>
             </div>
+          </div>
+          {/* Daily Activity Calendar Heat-map (Last 30 Days) */}
+          <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)', padding: '24px', borderRadius: '20px' }}>
+            <h3 style={{ fontSize: '0.92rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px', margin: '0 0 16px 0' }}>
+              <Activity size={18} style={{ color: '#10b981' }} /> Günlük Çalışma Aktivite Takvimi
+            </h3>
+            <p style={{ fontSize: '0.74rem', color: '#94a3b8', margin: '-10px 0 16px 0' }}>
+              Son 30 gün içinde tamamladığınız kelime, soru, paragraf ve mini oyun aktivitelerinin yoğunluk grafiği.
+            </p>
+            {(() => {
+              const history = getProgress('yokdil_study_history', {});
+              const today = new Date();
+              const dates = [];
+              for (let i = 29; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                dates.push({ date: d, key: dateStr });
+              }
+
+              return (
+                <div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '10px' }}>
+                    {dates.map(({ date, key }) => {
+                      const dayData = history[key] || { questions: 0, words: 0, games: 0, paragraphs: 0 };
+                      const totalActivity = (dayData.questions || 0) + (dayData.words || 0) + (dayData.games || 0) + (dayData.paragraphs || 0);
+                      
+                      let bg = 'rgba(255, 255, 255, 0.03)';
+                      let border = '1px solid rgba(255, 255, 255, 0.08)';
+                      let tooltipTitle = `${date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}: Aktivite yok`;
+                      
+                      if (totalActivity > 0) {
+                        tooltipTitle = `${date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}: ${totalActivity} aktivite (${dayData.questions || 0} soru, ${dayData.words || 0} kelime, ${dayData.games || 0} oyun, ${dayData.paragraphs || 0} paragraf)`;
+                        if (totalActivity <= 5) {
+                          bg = 'rgba(16, 185, 129, 0.2)';
+                          border = '1px solid rgba(16, 185, 129, 0.4)';
+                        } else if (totalActivity <= 15) {
+                          bg = 'rgba(16, 185, 129, 0.45)';
+                          border = '1px solid rgba(16, 185, 129, 0.6)';
+                        } else {
+                          bg = 'rgba(16, 185, 129, 0.8)';
+                          border = '1px solid rgba(16, 185, 129, 1)';
+                        }
+                      }
+
+                      return (
+                        <div 
+                          key={key} 
+                          title={tooltipTitle}
+                          style={{
+                            aspectRatio: '1',
+                            background: bg,
+                            border: border,
+                            borderRadius: '8px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            position: 'relative',
+                            transition: 'all 0.2s ease',
+                            cursor: 'pointer'
+                          }}
+                          className="activity-day-cell"
+                        >
+                          <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: totalActivity > 15 ? 'white' : '#cbd5e1' }}>
+                            {date.getDate()}
+                          </span>
+                          <span style={{ fontSize: '0.45rem', color: totalActivity > 15 ? 'rgba(255,255,255,0.8)' : '#94a3b8', transform: 'scale(0.95)' }}>
+                            {date.toLocaleDateString('tr-TR', { month: 'short' })}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '14px', fontSize: '0.68rem', color: '#94a3b8', alignItems: 'center' }}>
+                    <span>Az Aktivite</span>
+                    <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid rgba(16, 185, 129, 0.4)' }} />
+                    <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'rgba(16, 185, 129, 0.45)', border: '1px solid rgba(16, 185, 129, 0.6)' }} />
+                    <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'rgba(16, 185, 129, 0.8)', border: '1px solid rgba(16, 185, 129, 1)' }} />
+                    <span>Çok Aktivite</span>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </div>
       )}

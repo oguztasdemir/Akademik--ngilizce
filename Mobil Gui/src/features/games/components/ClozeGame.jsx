@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const ClozeGame = ({ vocab, awardPetXp }) => {
+const ClozeGame = ({ vocab, awardPetXp, logStudyActivity }) => {
   const [current, setCurrent] = useState(null);
   const [options, setOptions] = useState([]);
   const [score, setScore] = useState(0);
@@ -27,6 +27,7 @@ const ClozeGame = ({ vocab, awardPetXp }) => {
     if (isCorrect) {
       setScore(s => s + 1);
       awardPetXp(15);
+      if (logStudyActivity) logStudyActivity('games', 3);
     }
     
     setTimeout(() => {

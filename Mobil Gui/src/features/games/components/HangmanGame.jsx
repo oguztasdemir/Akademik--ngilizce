@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const HangmanGame = ({ vocab, awardPetXp }) => {
+const HangmanGame = ({ vocab, awardPetXp, logStudyActivity }) => {
   const [word, setWord] = useState('');
   const [turkishHint, setTurkishHint] = useState('');
   const [guessed, setGuessed] = useState([]);
@@ -34,6 +34,7 @@ const HangmanGame = ({ vocab, awardPetXp }) => {
       if (won) {
         setStatus('won');
         awardPetXp(25);
+        if (logStudyActivity) logStudyActivity('games', 5);
       }
     }
   };

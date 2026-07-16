@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const SynonymGame = ({ vocab, awardPetXp }) => {
+const SynonymGame = ({ vocab, awardPetXp, logStudyActivity }) => {
   const [current, setCurrent] = useState(null);
   const [options, setOptions] = useState([]);
   const [score, setScore] = useState(0);
@@ -27,6 +27,7 @@ const SynonymGame = ({ vocab, awardPetXp }) => {
     if (isCorrect) {
       setScore(s => s + 1);
       awardPetXp(10);
+      if (logStudyActivity) logStudyActivity('games', 2);
     }
     
     setTimeout(() => {

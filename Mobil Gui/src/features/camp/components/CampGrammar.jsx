@@ -16,7 +16,8 @@ const CampGrammar = ({
   handleGrammarCheck,
   handleGrammarNextQuestion,
   exitCamp,
-  setActiveStudyInfo
+  setActiveStudyInfo,
+  startNextCampDay
 }) => {
   if (!activeGrammarDay) {
     return <div style={{ color: 'white', padding: '20px' }}>Dilbilgisi verileri yükleniyor...</div>;
@@ -300,14 +301,40 @@ const CampGrammar = ({
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '24px', flexWrap: 'wrap', width: '100%' }}>
             <button
               onClick={exitCamp}
-              className="btn-primary"
-              style={{ padding: '12px 28px', fontSize: '0.85rem', cursor: 'pointer' }}
+              className="btn-secondary"
+              style={{ padding: '12px 24px', fontSize: '0.85rem', cursor: 'pointer', borderRadius: '12px', flex: '1 1 auto', minWidth: '150px' }}
             >
               Gramer Takvimine Dön
             </button>
+            {selectedDay < 60 && (
+              <button
+                onClick={() => {
+                  if (startNextCampDay) startNextCampDay();
+                }}
+                className="btn-primary"
+                style={{
+                  padding: '12px 24px',
+                  fontSize: '0.85rem',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)',
+                  borderColor: '#10b981',
+                  color: 'white',
+                  flex: '1 1 auto',
+                  minWidth: '180px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px'
+                }}
+              >
+                Sonraki Günü Başlat (Gün {selectedDay + 1}) ⏩
+              </button>
+            )}
           </div>
         </div>
       )}

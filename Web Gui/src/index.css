@@ -3405,7 +3405,7 @@ body.light-theme .setting-item {
         left: 12px;
         right: 12px;
         height: 64px;
-        background: rgba(13, 17, 28, 0.75) !important;
+        background: rgba(13, 17, 28, 0.85) !important;
         backdrop-filter: blur(20px) !important;
         -webkit-backdrop-filter: blur(20px) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -3417,22 +3417,27 @@ body.light-theme .setting-item {
         padding: 0 8px;
         z-index: 1000;
         box-sizing: border-box;
+        overflow: hidden !important;
+        touch-action: none;
     }
 
     .nav-more-mobile {
         display: flex !important;
     }
 
+    .sidebar-section-header,
+    .nav-camp-vocab,
+    .nav-camp-custom-vocab,
+    .nav-camp-grammar,
+    .nav-book-exercises,
+    .nav-paragraphs,
+    .nav-smart-study,
     .nav-mistakes,
-    .nav-lectures,
     .nav-performance,
+    .nav-achievements,
     .nav-pet,
     .nav-games,
     .nav-settings,
-    .nav-paragraphs,
-    .nav-smart-study,
-    .nav-book-exercises,
-    .nav-achievements,
     .nav-camp {
         display: none !important;
     }
@@ -3455,6 +3460,8 @@ body.light-theme .setting-item {
         justify-content: space-around;
         align-items: center;
         gap: 0 !important;
+        overflow: hidden !important;
+        touch-action: none;
     }
 
     .sidebar-nav-item {
@@ -4262,8 +4269,8 @@ body.light-theme .setting-item {
 
 .mobile-more-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
     margin-bottom: 20px;
 }
 
@@ -4272,31 +4279,33 @@ body.light-theme .setting-item {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 12px 6px;
     color: #cbd5e1;
     cursor: pointer;
     transition: all 0.2s ease;
-    gap: 8px;
+    gap: 6px;
     text-align: center;
     box-sizing: border-box;
+    min-height: 84px;
 }
 
 .mobile-more-item:hover,
 .mobile-more-item:active {
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(99, 102, 241, 0.15);
     border-color: var(--primary-light);
     color: white;
+    transform: scale(0.96);
 }
 
 .mobile-more-item i {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
 }
 
 .mobile-more-item span {
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     font-weight: 700;
 }
 

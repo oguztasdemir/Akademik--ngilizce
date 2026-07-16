@@ -130,6 +130,8 @@ const ACADEMIC_ANTONYMS = {
   "fertile": "sterile, barren"
 };
 
+import { playCorrectSound, playIncorrectSound } from '../../utils/audio';
+
 const formatWordType = (type) => {
   if (!type) return '';
   const t = type.toLowerCase().trim();
@@ -1060,7 +1062,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       setVocabPlanData(mappedVocab);
     };
     loadPlans();
-  }, [selectedCategory, dictDb, activeProjectId, projects]);
+  }, [selectedCategory, dictDb, activeProjectId, JSON.stringify(projects.map(p => ({ id: p.id, total_days: p.total_days, total_words: p.total_words, updatedAt: p.updatedAt })))]);
 
   useEffect(() => {
     if (selectedCategory === 'custom' && activeProjectId && progress) {
@@ -1153,6 +1155,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
             if (typeof parsed.phase === 'number') setPhase(parsed.phase);
             if (parsed.campType) setCampType(parsed.campType);
             if (typeof parsed.grammarIdx === 'number') setGrammarIdx(parsed.grammarIdx);
+            if (parsed.vocabTrack && setVocabTrack) setVocabTrack(parsed.vocabTrack);
 
             if (parsed.isStudying) {
               if (parsed.campType === 'vocabulary') {
@@ -1199,7 +1202,8 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       phase,
       isStudying,
       campType,
-      grammarIdx
+      grammarIdx,
+      vocabTrack: vocabTrack || 'anlam'
     };
     localStorage.setItem(`yokdil_camp_session_${category}`, JSON.stringify(sessionObj));
 
@@ -2114,19 +2118,36 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
   };
 
   const getWordFromDict = (wordStr) => {
-    if (!wordStr || !allWordsDb) return null;
+    if (!wordStr) return null;
     const cleanStr = wordStr.toLowerCase().trim();
-    const entry = allWordsDb[cleanStr] || dictDb?.[cleanStr];
-    if (!entry) return null;
-    if (typeof entry === 'string') {
-      return {
-        tr: entry.split('|')[0].trim(),
-        turkish: entry.split('|')[0].trim(),
-        synonyms: '',
-        type: 'noun'
-      };
+    
+    // 1. Try currently loaded study words (words from the active day/session)
+    if (studyWords && studyWords.length > 0) {
+      const match = studyWords.find(w => w.word && w.word.toLowerCase().trim() === cleanStr);
+      if (match) return match;
     }
-    return entry;
+    
+    // 2. Try allWordsDb
+    if (allWordsDb && allWordsDb[cleanStr]) {
+      return allWordsDb[cleanStr];
+    }
+    
+    // 3. Try dictDb using selected category
+    const category = selectedCategory || 'fen';
+    const categoryDict = (dictDb && dictDb[category]) || {};
+    const entry = categoryDict[cleanStr];
+    if (entry) {
+      if (typeof entry === 'string') {
+        return {
+          tr: entry.split('|')[0].trim(),
+          turkish: entry.split('|')[0].trim(),
+          synonyms: '',
+          type: 'noun'
+        };
+      }
+      return entry;
+    }
+    return null;
   };
 
   const getAntonym = (wordObj) => {
@@ -2845,15 +2866,17 @@ const handleCikmisSwipeBack = () => {
 
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
+      playCorrectSound();
     } else {
       setWordResults(prev => ({ ...prev, [studyWords[currentIdx].word]: false }));
       addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_synonym');
+      playIncorrectSound();
     }
   };
 
   const handleSynonymNext = () => {
     const nextIdx = studyWords.findIndex((w, idx) => idx > currentIdx && w.synonyms && w.synonyms.trim() !== "" && w.synonyms.trim().toLowerCase() !== "yok");
-    if (nextIdx !== -1) {
+    if (nextIdx !== -1 && nextIdx > currentIdx) {
       setCurrentIdx(nextIdx);
       setSynonymOptions(getSynonymOptions(studyWords[nextIdx].synonyms.split(',')[0].trim(), studyWords[nextIdx]));
       setSynonymSelected(null);
@@ -2899,15 +2922,17 @@ const handleCikmisSwipeBack = () => {
 
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
+      playCorrectSound();
     } else {
       setWordResults(prev => ({ ...prev, [studyWords[currentIdx].word]: false }));
       addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_antonym');
+      playIncorrectSound();
     }
   };
 
   const handleAntonymNext = () => {
     const nextIdx = studyWords.findIndex((w, idx) => idx > currentIdx && hasAntonym(w));
-    if (nextIdx !== -1) {
+    if (nextIdx !== -1 && nextIdx > currentIdx) {
       setCurrentIdx(nextIdx);
       const antStr = getAntonym(studyWords[nextIdx]);
       setAntonymOptions(getAntonymOptions(antStr.split(',')[0].trim(), studyWords[nextIdx]));
@@ -2945,9 +2970,11 @@ const handleCikmisSwipeBack = () => {
 
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
+      playCorrectSound();
     } else {
       setWordResults(prev => ({ ...prev, [studyWords[currentIdx].word]: false }));
       addMistake?.(studyWords[currentIdx].word, studyWords[currentIdx].tr, 'camp_cloze');
+      playIncorrectSound();
     }
   };
 
@@ -3084,6 +3111,9 @@ const handleCikmisSwipeBack = () => {
 
     if (correct) {
       setCorrectAnswers(prev => prev + 1);
+      playCorrectSound();
+    } else {
+      playIncorrectSound();
     }
   };
 
@@ -3845,11 +3875,50 @@ const handleCikmisSwipeBack = () => {
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px dashed rgba(255,255,255,0.08)', borderRadius: '18px', padding: '20px', background: 'rgba(0,0,0,0.15)', textAlign: 'center', alignItems: 'center', gap: '14px' }}>
+            <div 
+              style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'space-between', 
+                border: '1.5px dashed rgba(251, 146, 60, 0.4)', 
+                borderRadius: '18px', 
+                padding: '20px', 
+                background: 'rgba(0,0,0,0.15)', 
+                textAlign: 'center', 
+                alignItems: 'center', 
+                gap: '14px',
+                width: '100%',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onDragOver={(e) => {
+                e.preventDefault();
+                e.currentTarget.style.background = 'rgba(251, 146, 60, 0.1)';
+                e.currentTarget.style.borderColor = '#fb923c';
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault();
+                e.currentTarget.style.background = 'rgba(0,0,0,0.15)';
+                e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.4)';
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                e.currentTarget.style.background = 'rgba(0,0,0,0.15)';
+                e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.4)';
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                  const file = e.dataTransfer.files[0];
+                  if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls') || file.name.endsWith('.csv')) {
+                    setNewProjFile(file);
+                  } else {
+                    alert('Lütfen geçerli bir Excel (.xlsx, .xls) veya CSV dosyası sürükleyin.');
+                  }
+                }
+              }}
+            >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                 <i className="fa-solid fa-file-excel" style={{ fontSize: '2.4rem', color: '#fb923c' }}></i>
                 <span style={{ fontSize: '0.85rem', color: 'white', fontWeight: 'bold' }}>Excel Dosyası Seçin</span>
-                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{newProjFile ? `Seçilen: ${newProjFile.name}` : '.xlsx, .xls veya .csv formatında dosya yükleyin'}</span>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{newProjFile ? `Seçilen: ${newProjFile.name}` : '.xlsx, .xls veya .csv formatında sürükleyin ya da seçin'}</span>
               </div>
               
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -3923,18 +3992,47 @@ const handleCikmisSwipeBack = () => {
           </p>
         </div>
 
-        <div className="glass-card" style={{
-          padding: '30px',
-          borderRadius: '24px',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          background: 'rgba(15, 23, 42, 0.65)',
-          backdropFilter: 'blur(12px)',
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '24px'
-        }}>
+        <div 
+          className="glass-card" 
+          style={{
+            padding: '30px',
+            borderRadius: '24px',
+            border: '1.5px dashed rgba(251, 146, 60, 0.4)',
+            background: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(12px)',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '24px',
+            width: '100%',
+            transition: 'all 0.2s',
+            cursor: 'pointer'
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.background = 'rgba(251, 146, 60, 0.12)';
+            e.currentTarget.style.borderColor = '#fb923c';
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.background = 'rgba(15, 23, 42, 0.65)';
+            e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.4)';
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.background = 'rgba(15, 23, 42, 0.65)';
+            e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.4)';
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+              const file = e.dataTransfer.files[0];
+              if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls') || file.name.endsWith('.csv')) {
+                handleExcelImport(file);
+              } else {
+                alert('Lütfen geçerli bir Excel (.xlsx, .xls) veya CSV dosyası sürükleyin.');
+              }
+            }
+          }}
+        >
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
             <div style={{
               width: '72px',
@@ -4391,6 +4489,25 @@ const handleCikmisSwipeBack = () => {
                     >
                       🚪 Çalışmadan Çık
                     </button>
+                    {reportCardDay < totalCampDays && (
+                      <button 
+                        onClick={() => {
+                          const nextDay = reportCardDay + 1;
+                          setReportCardDay(null);
+                          if (isGrammar) {
+                            startGrammarStudy(nextDay);
+                          } else if (isCikmis) {
+                            startCikmisStudy(nextDay);
+                          } else {
+                            startDailyStudy(nextDay);
+                          }
+                        }}
+                        className="btn-primary"
+                        style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer', background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)', borderColor: '#10b981', color: 'white' }}
+                      >
+                        ⏩ Sonraki Kampa Geç (Gün {reportCardDay + 1})
+                      </button>
+                    )}
                   </div>
                 </div>
               );

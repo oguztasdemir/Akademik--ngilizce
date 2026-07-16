@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const TrueFalseGame = ({ vocab, awardPetXp }) => {
+const TrueFalseGame = ({ vocab, awardPetXp, logStudyActivity }) => {
   const [englishWord, setEnglishWord] = useState('');
   const [displayedTr, setDisplayedTr] = useState('');
   const [correctTr, setCorrectTr] = useState('');
@@ -36,6 +36,7 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
     if (isCorrect) {
       setScore(s => s + 1);
       awardPetXp(5);
+      if (logStudyActivity) logStudyActivity('games', 1);
     }
   };
 

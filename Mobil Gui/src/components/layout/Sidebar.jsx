@@ -9,7 +9,7 @@ const Sidebar = ({
   setQuizActive,
   onLogout,
   vocabTrack,
-  mobileTabsConfig = ['dashboard', 'camp-vocab', 'lectures', 'smart-study']
+  mobileTabsConfig = ['dashboard', 'camp-vocab', 'lectures', 'smart-study', 'more-mobile']
 }) => {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
@@ -265,6 +265,22 @@ const Sidebar = ({
             </div>
             
             <div className="mobile-more-grid">
+              <button 
+                className="mobile-more-item"
+                onClick={() => { setActiveTab('vocabulary'); setQuizActive(false); setShowMoreMenu(false); }}
+              >
+                <i className="fa-solid fa-book" style={{ color: '#fb7185' }}></i>
+                <span>Kelime Kampı</span>
+              </button>
+
+              <button 
+                className="mobile-more-item"
+                onClick={() => { setActiveTab('tests'); setQuizActive(false); setShowMoreMenu(false); }}
+              >
+                <i className="fa-solid fa-pen-to-square" style={{ color: '#38bdf8' }}></i>
+                <span>Testler</span>
+              </button>
+
               <button 
                 className="mobile-more-item"
                 onClick={() => { setActiveTab('lectures'); setQuizActive(false); setShowMoreMenu(false); }}

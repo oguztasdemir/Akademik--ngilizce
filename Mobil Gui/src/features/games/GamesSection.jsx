@@ -21,7 +21,9 @@ const GAMES_CATALOG = [
   { id: 'definition', name: '9. Tanım Bulmaca', desc: 'İngilizce tanımı verilen akademik kelimeyi tahmin edin.', color: '#14b8a6', icon: 'fa-book-bookmark' }
 ];
 
-const GamesSection = ({ selectedCategory, awardPetXp, setIsStudyingActive }) => {
+const gameModules = import.meta.glob('../../../../Dataset/yokdil/*/minioyunlar/*.json');
+
+const GamesSection = ({ selectedCategory, awardPetXp, setIsStudyingActive, logStudyActivity }) => {
   const [activeGame, setActiveGame] = useState(null);
   const [vocabList, setVocabList] = useState([]);
 
@@ -39,8 +41,22 @@ const GamesSection = ({ selectedCategory, awardPetXp, setIsStudyingActive }) => 
     const cat = selectedCategory || 'fen';
     const loadVocab = async () => {
       try {
-        const mod = await import(`../../../../Dataset/yokdil/${cat}/minioyunlar/${activeGame}.json`);
-        setVocabList(mod.default || mod);
+        const targetPath = `/yokdil/${cat}/minioyunlar/${activeGame}.json`;
+        const matchingKey = Object.keys(gameModules).find(k => k.includes(targetPath));
+        if (matchingKey) {
+          const loader = gameModules[matchingKey];
+          const mod = await loader();
+          setVocabList(mod.default || mod);
+        } else {
+          // fallback to fen if category file is missing
+          const fallbackPath = `/yokdil/fen/minioyunlar/${activeGame}.json`;
+          const fallbackKey = Object.keys(gameModules).find(k => k.includes(fallbackPath));
+          if (fallbackKey) {
+            const loader = gameModules[fallbackKey];
+            const mod = await loader();
+            setVocabList(mod.default || mod);
+          }
+        }
       } catch (e) {
         console.error(`Error loading games vocab for ${activeGame}:`, e);
       }
@@ -100,15 +116,15 @@ const GamesSection = ({ selectedCategory, awardPetXp, setIsStudyingActive }) => 
         </div>
       ) : (
         <div>
-          {activeGame === 'match' && <CardMatchGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'shooter' && <WordShooterGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'hangman' && <HangmanGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'spelling' && <SpellingGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'synonym' && <SynonymGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'antonym' && <AntonymGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'tf_run' && <TrueFalseGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'cloze' && <ClozeGame vocab={vocabList} awardPetXp={awardPetXp} />}
-          {activeGame === 'definition' && <DefinitionGame vocab={vocabList} awardPetXp={awardPetXp} />}
+          {activeGame === 'match' && <CardMatchGame vocab={vocabList} awardPetXp={awardPetXp} logStudyActivity={logStudyActivity} />}
+          {activeGame === 'shooter' && <WordShooterGame vocab={vocabList} awardPetXp={awardPetXp} logStudyActivity={logStudyActivity} />}
+          {activeGame === 'hangman' && <HangmanGame vocab={vocabList} awardPetXp={awardPetXp} logStudyActivity={logStudyActivity} />}
+          {activeGame === 'spelling' && <SpellingGame vocab={vocabList} awardPetXp={awardPetXp} logStudyActivity={logStudyActivity} />}
+          {activeGame === 'synonym' && <SynonymGame vocab={vocabList} awardPetXp={awardPetXp} logStudyActivity={logStudyActivity} />}
+          {activeGame === 'antonym' && <AntonymGame vocab={vocabList} awardPetXp={awardPetXp} logStudyActivity={logStudyActivity} />}
+          {activeGame === 'tf_run' && <TrueFalseGame vocab={vocabList} awardPetXp={awardPetXp} logStudyActivity={logStudyActivity} />}
+          {activeGame === 'cloze' && <ClozeGame vocab={vocabList} awardPetXp={awardPetXp} logStudyActivity={logStudyActivity} />}
+          {activeGame === 'definition' && <DefinitionGame vocab={vocabList} awardPetXp={awardPetXp} logStudyActivity={logStudyActivity} />}
         </div>
       )}
 

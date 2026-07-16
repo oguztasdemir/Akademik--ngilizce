@@ -64,7 +64,7 @@ const Sidebar = ({
             <span>Ana Sayfa</span>
           </button>
           
-          <div style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Kelime Gelişimi</div>
+          <div className="sidebar-section-header" style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Kelime Gelişimi</div>
           <button 
             className={`sidebar-nav-item nav-vocabulary ${activeTab === 'vocabulary' ? 'active' : ''}`}
             onClick={() => { setActiveTab('vocabulary'); setQuizActive(false); }}
@@ -160,7 +160,7 @@ const Sidebar = ({
             <span>YDS Kitap</span>
           </button>
 
-          <div style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Sınav & Okuma</div>
+          <div className="sidebar-section-header" style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Sınav & Okuma</div>
           <button 
             className={`sidebar-nav-item nav-tests ${activeTab === 'tests' ? 'active' : ''}`}
             onClick={() => { setActiveTab('tests'); setQuizActive(false); }}
@@ -183,7 +183,7 @@ const Sidebar = ({
             <span>Paragraflar</span>
           </button>
 
-          <div style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Kişisel & Destek</div>
+          <div className="sidebar-section-header" style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Kişisel & Destek</div>
           <button 
             className={`sidebar-nav-item nav-smart-study ${activeTab === 'smart-study' ? 'active' : ''}`}
             onClick={() => { setActiveTab('smart-study'); setQuizActive(false); }}
@@ -199,7 +199,7 @@ const Sidebar = ({
             <span>Hata Kutusu</span>
           </button>
 
-          <div style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Gelişim & Eğlence</div>
+          <div className="sidebar-section-header" style={{ padding: '4px 14px', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', fontWeight: 'bold', marginTop: '10px' }}>Gelişim & Eğlence</div>
           <button 
             className={`sidebar-nav-item nav-performance ${activeTab === 'performance' ? 'active' : ''}`}
             onClick={() => { setActiveTab('performance'); setQuizActive(false); }}
@@ -262,6 +262,14 @@ const Sidebar = ({
             </div>
             
             <div className="mobile-more-grid">
+              <button 
+                className="mobile-more-item"
+                onClick={() => { setActiveTab('tests'); setQuizActive(false); setShowMoreMenu(false); }}
+              >
+                <i className="fa-solid fa-pen-to-square" style={{ color: '#38bdf8' }}></i>
+                <span>Testler</span>
+              </button>
+
               <button 
                 className="mobile-more-item"
                 onClick={() => { setActiveTab('lectures'); setQuizActive(false); setShowMoreMenu(false); }}

@@ -295,13 +295,10 @@ const BookExerciseSection = ({ activeTab, playSpeechAudio, BACKEND_URL, selected
           try {
             for (let d = startDay; d <= endDay; d++) {
               if (d <= 0) continue;
-              const cat = selectedCategory || 'fen';
-              let res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/${cat}/yds_kitap/day_${d}.json`);
-              if (!res.ok && cat !== 'fen') {
-                res = await fetch(`${BACKEND_URL || ''}/dataset/yokdil/fen/yds_kitap/day_${d}.json`);
-              }
-              if (res.ok) {
-                const data = await res.json();
+              const loadModule = getBookModule(selectedCategory, d);
+              if (loadModule) {
+                const mod = await loadModule();
+                const data = mod.default || mod;
                 if (data.words) allWords.push(...data.words);
                 
                 const sm = data.exercises?.synonym_matching;

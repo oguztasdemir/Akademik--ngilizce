@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const SpellingGame = ({ vocab, awardPetXp }) => {
+const SpellingGame = ({ vocab, awardPetXp, logStudyActivity }) => {
   const [word, setWord] = useState('');
   const [hint, setHint] = useState('');
   const [letters, setLetters] = useState([]);
@@ -35,6 +35,7 @@ const SpellingGame = ({ vocab, awardPetXp }) => {
     if (entered === word) {
       setStatus('correct');
       awardPetXp(15);
+      if (logStudyActivity) logStudyActivity('games', 3);
     } else {
       setStatus('wrong');
     }

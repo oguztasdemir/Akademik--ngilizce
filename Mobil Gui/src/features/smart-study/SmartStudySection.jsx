@@ -221,8 +221,15 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
   };
 
   const handleWordRead = () => {
-    setReadWords(prev => ({ ...prev, [studyWords[currentIdx].word]: true }));
-    setPhase(2);
+    if (currentIdx < studyWords.length - 1) {
+      const next = currentIdx + 1;
+      setCurrentIdx(next);
+    } else {
+      // Finished reading all words! Move to Phase 2 (meaning matching) for the first word
+      setCurrentIdx(0);
+      setPhase(2);
+      setupQuestionFlow(studyWords[0]);
+    }
   };
 
   const handleMeaningCheck = (opt) => {
@@ -241,7 +248,16 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
   };
 
   const handleMeaningNext = () => {
-    setPhase(3);
+    if (currentIdx < studyWords.length - 1) {
+      const next = currentIdx + 1;
+      setCurrentIdx(next);
+      setupQuestionFlow(studyWords[next]);
+    } else {
+      // Completed meaning check for all words! Move to Phase 3 (synonyms) for first word
+      setCurrentIdx(0);
+      setPhase(3);
+      setupQuestionFlow(studyWords[0]);
+    }
   };
 
   const handleSynonymCheck = (opt) => {
@@ -262,7 +278,16 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
   };
 
   const handleSynonymNext = () => {
-    setPhase(4);
+    if (currentIdx < studyWords.length - 1) {
+      const next = currentIdx + 1;
+      setCurrentIdx(next);
+      setupQuestionFlow(studyWords[next]);
+    } else {
+      // Completed synonym check for all words! Move to Phase 4 (cloze) for first word
+      setCurrentIdx(0);
+      setPhase(4);
+      setupQuestionFlow(studyWords[0]);
+    }
   };
 
   const handleClozeCheck = (opt) => {
@@ -281,7 +306,16 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
   };
 
   const handleClozeNext = () => {
-    setPhase(5);
+    if (currentIdx < studyWords.length - 1) {
+      const next = currentIdx + 1;
+      setCurrentIdx(next);
+      setupQuestionFlow(studyWords[next]);
+    } else {
+      // Completed cloze check for all words! Move to Phase 5 (strategy) for first word
+      setCurrentIdx(0);
+      setPhase(5);
+      setupQuestionFlow(studyWords[0]);
+    }
   };
 
   const handleStrategyCheck = (opt) => {
@@ -303,10 +337,9 @@ const SmartStudySection = ({ selectedCategory, awardPetXP, triggerConfetti, acti
     if (currentIdx < studyWords.length - 1) {
       const next = currentIdx + 1;
       setCurrentIdx(next);
-      setPhase(1);
       setupQuestionFlow(studyWords[next]);
     } else {
-      // Completed current day!
+      // Completed all stages for all words!
       awardPetXP?.(50);
       triggerConfetti?.();
       setPhase(6); // Summary phase

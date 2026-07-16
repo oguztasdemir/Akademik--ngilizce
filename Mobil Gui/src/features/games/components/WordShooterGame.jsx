@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const WordShooterGame = ({ vocab, awardPetXp }) => {
+const WordShooterGame = ({ vocab, awardPetXp, logStudyActivity }) => {
   const [currentWord, setCurrentWord] = useState(null);
   const [options, setOptions] = useState([]);
   const [score, setScore] = useState(0);
@@ -42,6 +42,7 @@ const WordShooterGame = ({ vocab, awardPetXp }) => {
     if (opt.english === currentWord.english) {
       setScore(s => s + 1);
       awardPetXp(5);
+      if (logStudyActivity) logStudyActivity('games', 1);
     } else {
       setWrongCount(w => {
         if (w + 1 >= 3) setGameState('gameover');

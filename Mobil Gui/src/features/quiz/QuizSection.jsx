@@ -317,68 +317,51 @@ const QuizSection = ({
         <MascotOwl state={mascotState} speech={mascotSpeech} />
       </div>
 
-      {/* Floating Bottom Drawer check sheet */}
+      {/* Simple Continuation Next Button once answered */}
       {(() => {
         const hasChosenCurrent = answers[currentQuizIndex] !== undefined;
         if (!hasChosenCurrent) return null;
 
         const isCorrect = selectedOption === selectedExam?.questions?.[currentQuizIndex - 1]?.correct_option;
-        const barStateClass = isCorrect ? 'state-correct' : 'state-incorrect';
 
         return (
-          <div className={`duo-bottom-bar ${barStateClass}`} style={{ padding: '16px 20px', minHeight: 'auto' }}>
-            <div className="duo-bottom-bar-content" style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '640px', margin: '0 auto', padding: 0 }}>
-              {/* TOP: Status and correct answer */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '16px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', marginTop: '20px', width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: '12px' }}>
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '1.25rem', fontWeight: '900', color: isCorrect ? '#34d399' : '#f87171', marginBottom: '2px' }}>
-                  {isCorrect ? "Mükemmel! Doğru Cevap" : "Hatalı Seçim!"}
-                </div>
-                <div style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 'bold' }}>
-                  Doğru Şık: {selectedExam?.questions?.[currentQuizIndex - 1]?.correct_option} | Cevap: {selectedExam?.questions?.[currentQuizIndex - 1]?.correct_answer}
-                </div>
+                <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: isCorrect ? '#34d399' : '#f87171' }}>
+                  {isCorrect ? "🟢 Doğru!" : `🔴 Yanlış! Doğru Şık: ${selectedExam?.questions?.[currentQuizIndex - 1]?.correct_option}`}
+                </span>
               </div>
-
-              {/* Automatic Grammatical Explanation Panel */}
-              {!isCorrect && activeExplanation && (
-                <div style={{
-                  background: 'rgba(0, 0, 0, 0.25)',
-                  border: '1px solid rgba(239, 68, 68, 0.25)',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  marginTop: '4px',
-                  fontSize: '0.8rem',
-                  maxHeight: '200px',
-                  overflowY: 'auto',
-                  textAlign: 'left',
-                  lineHeight: '1.5',
-                  boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.2)'
-                }} className="prose prose-invert text-slate-300 scrollable-explanation-box">
-                  {renderMarkdown(activeExplanation.explanation)}
-                </div>
-              )}
-
-              {/* BOTTOM ROW: Action buttons */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: '12px' }}>
-                <div />
-
-                <div>
-                  <button
-                    onClick={() => {
-                      const idxInSess = quizQuestions.indexOf(currentQuizIndex);
-                      if (idxInSess < quizQuestions.length - 1) {
-                        setCurrentQuizIndex(quizQuestions[idxInSess + 1]);
-                      } else {
-                        handleSubmitExam();
-                      }
-                    }}
-                    className="duo-check-btn"
-                    style={{ cursor: 'pointer', padding: '10px 24px', fontSize: '0.82rem', fontWeight: 'bold', borderRadius: '8px' }}
-                  >
-                    DEVAM ET
-                  </button>
-                </div>
-              </div>
+              <button
+                onClick={() => {
+                  const idxInSess = quizQuestions.indexOf(currentQuizIndex);
+                  if (idxInSess < quizQuestions.length - 1) {
+                    setCurrentQuizIndex(quizQuestions[idxInSess + 1]);
+                  } else {
+                    handleSubmitExam();
+                  }
+                }}
+                className="btn-primary"
+                style={{ cursor: 'pointer', padding: '10px 24px', fontSize: '0.82rem', fontWeight: 'bold', borderRadius: '8px' }}
+              >
+                DEVAM ET
+              </button>
             </div>
+            {!isCorrect && activeExplanation && (
+              <div style={{
+                background: 'rgba(0, 0, 0, 0.15)',
+                border: '1px solid rgba(239, 68, 68, 0.15)',
+                borderRadius: '10px',
+                padding: '12px',
+                fontSize: '0.78rem',
+                maxHeight: '120px',
+                overflowY: 'auto',
+                textAlign: 'left',
+                lineHeight: '1.4'
+              }} className="text-slate-300">
+                {renderMarkdown(activeExplanation.explanation)}
+              </div>
+            )}
           </div>
         );
       })()}
