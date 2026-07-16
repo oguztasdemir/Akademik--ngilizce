@@ -8,7 +8,7 @@ const SpellingGame = ({ vocab, awardPetXp }) => {
   const [status, setStatus] = useState('playing');
 
   const loadWord = () => {
-    if (!vocab || vocab.length === 0) return;
+    if (!Array.isArray(vocab) || vocab.length === 0) return;
     const item = vocab[Math.floor(Math.random() * vocab.length)];
     if (!item) return;
     setWord(item.english.toUpperCase());
@@ -19,7 +19,7 @@ const SpellingGame = ({ vocab, awardPetXp }) => {
   };
 
   useEffect(() => {
-    if (vocab && vocab.length > 0) {
+    if (Array.isArray(vocab) && vocab.length > 0) {
       loadWord();
     }
   }, [vocab]);

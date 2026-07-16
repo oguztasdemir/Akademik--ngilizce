@@ -10,7 +10,7 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
   const [showFeedback, setShowFeedback] = useState(false);
 
   const loadQuestion = () => {
-    if (!vocab || vocab.length === 0) return;
+    if (!Array.isArray(vocab) || vocab.length === 0) return;
     setSelectedAns(null);
     setShowFeedback(false);
     const item = vocab[Math.floor(Math.random() * vocab.length)];
@@ -28,7 +28,7 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
   };
 
   useEffect(() => {
-    if (vocab && vocab.length > 0) {
+    if (Array.isArray(vocab) && vocab.length > 0) {
       loadQuestion();
     }
   }, [vocab]);

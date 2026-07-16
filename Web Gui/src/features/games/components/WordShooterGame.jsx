@@ -9,7 +9,7 @@ const WordShooterGame = ({ vocab, awardPetXp }) => {
   const [gameState, setGameState] = useState('playing');
 
   const loadNextWord = () => {
-    if (!vocab || vocab.length === 0) return;
+    if (!Array.isArray(vocab) || vocab.length === 0) return;
     const correct = vocab[Math.floor(Math.random() * vocab.length)];
     if (!correct) return;
     const wrongs = vocab.filter(v => v && correct && v.english !== correct.english).sort(() => 0.5 - Math.random()).slice(0, 2);
@@ -19,7 +19,7 @@ const WordShooterGame = ({ vocab, awardPetXp }) => {
   };
 
   useEffect(() => {
-    if (vocab && vocab.length > 0) {
+    if (Array.isArray(vocab) && vocab.length > 0) {
       loadNextWord();
     }
   }, [vocab]);

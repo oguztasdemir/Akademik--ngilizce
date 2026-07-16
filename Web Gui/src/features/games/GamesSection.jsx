@@ -79,9 +79,17 @@ const GamesSection = ({ selectedCategory, awardPetXP, awardPetXp, setIsStudyingA
     const loadVocab = async () => {
       try {
         const mod = await import(`../../../../Dataset/yokdil/${cat}/minioyunlar/${activeGame}.json`);
-        setVocabList(mod.default || mod);
+        const data = mod.default || mod;
+        if (Array.isArray(data)) {
+          setVocabList(data);
+        } else if (data && Array.isArray(data.default)) {
+          setVocabList(data.default);
+        } else {
+          setVocabList([]);
+        }
       } catch (e) {
         console.error(`Error loading games vocab for ${activeGame}:`, e);
+        setVocabList([]);
       }
     };
     loadVocab();

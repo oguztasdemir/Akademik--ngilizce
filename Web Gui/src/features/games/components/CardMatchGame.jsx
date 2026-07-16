@@ -11,7 +11,7 @@ const CardMatchGame = ({ vocab, awardPetXp }) => {
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
-    if (!vocab || vocab.length === 0) return;
+    if (!Array.isArray(vocab) || vocab.length === 0) return;
     const shuffled = [...vocab].sort(() => 0.5 - Math.random()).slice(0, 6);
     
     const engPool = shuffled.map(item => ({
