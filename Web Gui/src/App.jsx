@@ -812,9 +812,10 @@ function App() {
       setSelectedOption(answers[currentQuizIndex]);
       setIsChecked(true);
       loadQuestionExplanation(currentQuizIndex);
-      const isCorrect = answers[currentQuizIndex] === selectedExam.answers[currentQuizIndex - 1];
+      const correctAns = selectedExam.questions?.[currentQuizIndex - 1]?.correct_option || selectedExam.answers?.[currentQuizIndex - 1];
+      const isCorrect = answers[currentQuizIndex] === correctAns;
       setMascotState(isCorrect ? 'happy' : 'sad');
-      setMascotSpeech(isCorrect ? "Bu soruyu doğru çözmüştün!" : `Bu soruyu yanlış çözmüştün. Doğru cevap: ${selectedExam.answers[currentQuizIndex - 1]}`);
+      setMascotSpeech(isCorrect ? "Bu soruyu doğru çözmüştün!" : `Bu soruyu yanlış çözmüştün. Doğru cevap: ${correctAns}`);
     } else {
       setSelectedOption(null);
       setIsChecked(false);
@@ -1469,7 +1470,8 @@ function App() {
     } else {
       playIncorrectSound();
       setMascotState('sad');
-      setMascotSpeech(`Hata yapmak öğrenmenin parçasıdır! Doğru şık: ${selectedExam.answers[qIndex - 1]}`);
+      const correctAns = selectedExam.questions?.[qIndex - 1]?.correct_option || selectedExam.answers?.[qIndex - 1];
+      setMascotSpeech(`Hata yapmak öğrenmenin parçasıdır! Doğru şık: ${correctAns}`);
 
       const alreadyExists = mistakes.some(m => m.examId === selectedExam.id && m.qNumber === qIndex);
       if (!alreadyExists) {
@@ -2300,7 +2302,7 @@ function App() {
 
     if (Array.isArray(exams)) {
       exams.forEach(ex => {
-        if (!ex || !ex.id || !ex.answers) return;
+        if (!ex || !ex.id) return;
         const exAns = JSON.parse(localStorage.getItem(`answers_${ex.id}`)) || {};
         for (let i = 1; i <= 80; i++) {
           const userAns = exAns[i];
@@ -2313,7 +2315,8 @@ function App() {
           if (userAns) {
             solved++;
             topicStats[tKey].solved++;
-            if (userAns === ex.answers[i - 1]) {
+            const correctOption = ex.questions?.[i - 1]?.correct_option || ex.answers?.[i - 1];
+            if (userAns === correctOption) {
               correct++;
               topicStats[tKey].correct++;
             } else {
@@ -3489,7 +3492,8 @@ function App() {
                           const userAns = examAnswers[q.number];
                           if (userAns !== undefined) {
                             solvedCount++;
-                            const isCorrect = userAns === selectedExam.answers[q.number - 1];
+                            const correctAns = q.correct_option || selectedExam.answers?.[q.number - 1];
+                            const isCorrect = userAns === correctAns;
                             if (isCorrect) correctCount++;
                             else wrongCount++;
                           }
@@ -3499,7 +3503,8 @@ function App() {
 
                         const incorrectQuestions = selectedExam.questions.filter(q => {
                           const userAns = examAnswers[q.number];
-                          return userAns !== undefined && userAns !== selectedExam.answers[q.number - 1];
+                          const correctAns = q.correct_option || selectedExam.answers?.[q.number - 1];
+                          return userAns !== undefined && userAns !== correctAns;
                         });
 
                         return (
