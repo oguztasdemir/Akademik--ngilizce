@@ -2137,10 +2137,17 @@ function App() {
 
     if (BACKEND_URL) {
       fetch(`${BACKEND_URL}/api/lectures/${id}`)
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error("HTTP error " + res.status);
+          return res.json();
+        })
         .then(data => {
-          setActiveLecture(data);
-          setLectureLoading(false);
+          if (data && data.content) {
+            setActiveLecture(data);
+            setLectureLoading(false);
+          } else {
+            throw new Error("Invalid or empty lecture content returned from API");
+          }
         })
         .catch(err => {
           console.warn("API load failed, falling back to local prebuilt lectures:", err);
