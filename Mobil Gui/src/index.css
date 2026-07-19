@@ -3401,6 +3401,11 @@ body.light-theme .setting-item {
     display: none !important;
 }
 
+/* Hide mobile bottom navigation on desktop by default */
+.mobile-bottom-nav {
+    display: none !important;
+}
+
 @media (max-width: 767px) {
     .desktop-sidebar-toggle-btn {
         display: none !important;
