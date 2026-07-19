@@ -404,11 +404,11 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
   const knowledgePercent = studiedWordsCount > 0 ? ((knownWords.length / studiedWordsCount) * 100).toFixed(0) : 0;
   const reportDateTime = new Date().toLocaleString('tr-TR');
 
-  const renderStudiedRows = () => {
-    if (studiedWords.length === 0) {
-      return '<tr><td colspan="4" style="padding: 16px; text-align: center; color: #94a3b8; font-style: italic;">Henüz bu modda çalışılmış kelime bulunmamaktadır.</td></tr>';
+  const renderStudiedRows = (wordsList) => {
+    if (wordsList.length === 0) {
+      return '<tr><td colspan="4" style="padding: 16px; text-align: center; color: #94a3b8; font-style: italic;">Kelime bulunmamaktadır.</td></tr>';
     }
-    return studiedWords.map((w, idx) => {
+    return wordsList.map((w, idx) => {
       let statusHtml = '';
       if (mode === 'swipe') {
         statusHtml = w.status 
@@ -570,7 +570,7 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
         </div>
 
         <div id="content-to-print">
-          <h3>🟢 Çalışılmış ve Değerlendirilmiş Kelimeler</h3>
+          <h3 style="color: #ef4444; font-size: 1.1rem; border-bottom: 2.5px solid #fee2e2; padding-bottom: 6px;">🔴 Çalışılmış ve Yanlış Yapılan Kelimeler (${unknownWords.length} Adet)</h3>
           <table>
             <thead>
               <tr>
@@ -581,11 +581,26 @@ export const handlePrintCikmisExportPDF = (studiedWords, unstudiedWords, mode, s
               </tr>
             </thead>
             <tbody>
-              ${renderStudiedRows()}
+              ${renderStudiedRows(unknownWords)}
             </tbody>
           </table>
 
-          <h3>⚪ Henüz Çalışılmamış / Bilinmeyen Kelimeler (${unstudiedWords.length} Adet)</h3>
+          <h3 style="color: #10b981; font-size: 1.1rem; border-bottom: 2.5px solid #d1fae5; padding-bottom: 6px;">🟢 Çalışılmış ve Doğru Yapılan Kelimeler (${knownWords.length} Adet)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Kelime (İngilizce)</th>
+                <th>Türkçe Anlamı</th>
+                <th style="text-align: center;">Durum / Statü</th>
+                <th style="border-left: 1px dashed #cbd5e1;">Çalışma Notu</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${renderStudiedRows(knownWords)}
+            </tbody>
+          </table>
+
+          <h3 style="color: #64748b; font-size: 1.1rem; border-bottom: 2.5px solid #e2e8f0; padding-bottom: 6px;">⚪ Henüz Çalışılmamış / Gösterilmeyen Kelimeler (${unstudiedWords.length} Adet)</h3>
           <table>
             <thead>
               <tr>
@@ -721,11 +736,11 @@ export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, 
   const knowledgePercent = studiedWordsCount > 0 ? ((knownWords.length / studiedWordsCount) * 100).toFixed(0) : 0;
   const reportDateTime = new Date().toLocaleString('tr-TR');
 
-  const renderStudiedRows = () => {
-    if (studiedWords.length === 0) {
-      return `<tr><td colspan="4" style="border: 1px solid #cbd5e1; padding: 10px; text-align: center; color: #94a3b8; font-style: italic;">Henüz bu modda çalışılmış kelime bulunmamaktadır.</td></tr>`;
+  const renderStudiedRows = (wordsList) => {
+    if (wordsList.length === 0) {
+      return `<tr><td colspan="4" style="border: 1px solid #cbd5e1; padding: 10px; text-align: center; color: #94a3b8; font-style: italic;">Kelime bulunmamaktadır.</td></tr>`;
     }
-    return studiedWords.map((w, idx) => {
+    return wordsList.map((w, idx) => {
       const statusText = mode === 'swipe' ? (w.status ? 'Bildiğim' : 'Bilmediğim') : (w.status ? 'Doğru' : 'Yanlış');
       return `
         <tr>
@@ -777,7 +792,7 @@ export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, 
           <p><strong>📈 Başarı / Bilme Oranı:</strong> <strong>%${knowledgePercent}</strong></p>
         </div>
 
-        <h3>🟢 Çalışılmış ve Değerlendirilmiş Kelimeler</h3>
+        <h3 style="color: #ef4444;">🔴 Çalışılmış ve Yanlış Yapılan Kelimeler (${unknownWords.length} Adet)</h3>
         <table>
           <thead>
             <tr>
@@ -788,7 +803,22 @@ export const handlePrintCikmisExportDocx = (studiedWords, unstudiedWords, mode, 
             </tr>
           </thead>
           <tbody>
-            ${renderStudiedRows()}
+            ${renderStudiedRows(unknownWords)}
+          </tbody>
+        </table>
+
+        <h3 style="color: #10b981;">🟢 Çalışılmış ve Doğru Yapılan Kelimeler (${knownWords.length} Adet)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Kelime (İngilizce)</th>
+              <th>Türkçe Anlamı</th>
+              <th>Durum / Statü</th>
+              <th>Çalışma Notu</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${renderStudiedRows(knownWords)}
           </tbody>
         </table>
 
