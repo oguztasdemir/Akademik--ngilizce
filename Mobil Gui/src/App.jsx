@@ -1377,7 +1377,7 @@ function App() {
         </div>
       )}
       {/* Dedicated Dynamic Mobil Bottom Nav Bar */}
-      {selectedCategory && (
+      {selectedCategory && !isStudyingActive && !quizActive && (
         <div className="mobile-bottom-nav">
           {mobileNavEditMode && (
             <>

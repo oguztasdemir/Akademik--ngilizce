@@ -320,17 +320,7 @@ const CampDashboard = ({
         key={dayNum}
         onClick={() => {
           if (isCompleted) {
-            if (showConfirm) {
-              showConfirm(
-                "Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)",
-                () => startDailyStudy(dayNum),
-                () => setReportCardDay(dayNum)
-              );
-            } else {
-              const restart = window.confirm("Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)");
-              if (restart) startDailyStudy(dayNum);
-              else setReportCardDay(dayNum);
-            }
+            setReportCardDay(dayNum);
           } else {
             startDailyStudy(dayNum);
           }
@@ -1547,23 +1537,8 @@ const CampDashboard = ({
                     <div
                       onClick={() => {
                         if (isCompleted) {
-                          if (showConfirm) {
-                            showConfirm(
-                              "Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)",
-                              () => startCikmisStudy(dayNum, cikmisMode),
-                              () => {
-                                setReportCardType('cikmis_kelimeler');
-                                setReportCardDay(dayNum);
-                              }
-                            );
-                          } else {
-                            const restart = window.confirm("Bu günü daha önce tamamladınız. Yeniden çözmek ister misiniz?\n(Yeni çalışmanız geçmişte v2/v3... olarak saklanacaktır. Rapor kartını görmek için İptal seçiniz.)");
-                            if (restart) startCikmisStudy(dayNum, cikmisMode);
-                            else {
-                              setReportCardType('cikmis_kelimeler');
-                              setReportCardDay(dayNum);
-                            }
-                          }
+                          setReportCardType('cikmis_kelimeler');
+                          setReportCardDay(dayNum);
                         } else {
                           startCikmisStudy(dayNum, cikmisMode);
                         }

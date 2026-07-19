@@ -40,6 +40,39 @@ const AntonymGame = ({ vocab, awardPetXp }) => {
     }, 1500);
   };
 
+  const getTurkishOfAntonym = (opt) => {
+    if (!opt || !opt.antonym) return '';
+    const found = vocab.find(v => v && v.english && v.english.toLowerCase() === opt.antonym.toLowerCase());
+    if (found && found.turkish) {
+      return found.turkish;
+    }
+    if (opt.antonym_turkish) return opt.antonym_turkish;
+    
+    const fallbacks = {
+      'center': 'merkez',
+      'loss': 'kayıp',
+      'repulsion': 'itme gücü, geri tepme',
+      'element': 'element, unsur',
+      'absorption': 'emilim, soğurma',
+      'release': 'salmak, serbest bırakmak',
+      'insulate': 'yalıtmak',
+      'variable': 'değişken',
+      'scarce': 'kıt, nadir',
+      'vaguely': 'belirsizce, hayal meyal',
+      'harm': 'zarar vermek',
+      'health': 'sağlık',
+      'cause': 'neden olmak, sebep',
+      'pathogen': 'patojen, hastalık yapıcı',
+      'purity': 'saflık, temizlik',
+      'misinterpret': 'yanlış yorumlamak',
+      'ban': 'yasaklamak',
+      'susceptible': 'duyarlı, savunmasız',
+      'mild': 'hafif, yumuşak',
+      'suddenly': 'aniden, birdenbire'
+    };
+    return fallbacks[opt.antonym.toLowerCase()] || '';
+  };
+
   const getBtnStyle = (opt) => {
     if (!showFeedback) {
       return { padding: '14px 10px', fontSize: '0.8rem', fontWeight: 'bold', transition: 'all 0.2s', cursor: 'pointer' };
@@ -48,7 +81,7 @@ const AntonymGame = ({ vocab, awardPetXp }) => {
     const isSelected = selectedOpt && selectedOpt.antonym === opt.antonym;
     if (isCorrect) {
       return {
-        padding: '14px 10px',
+        padding: '10px 10px',
         fontSize: '0.8rem',
         fontWeight: 'bold',
         background: 'rgba(16, 185, 129, 0.2)',
@@ -61,7 +94,7 @@ const AntonymGame = ({ vocab, awardPetXp }) => {
     }
     if (isSelected) {
       return {
-        padding: '14px 10px',
+        padding: '10px 10px',
         fontSize: '0.8rem',
         fontWeight: 'bold',
         background: 'rgba(239, 68, 68, 0.2)',
@@ -73,7 +106,7 @@ const AntonymGame = ({ vocab, awardPetXp }) => {
       };
     }
     return {
-      padding: '14px 10px',
+      padding: '10px 10px',
       fontSize: '0.8rem',
       fontWeight: 'bold',
       opacity: 0.4,
@@ -97,7 +130,12 @@ const AntonymGame = ({ vocab, awardPetXp }) => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
         {options.map((opt, idx) => (
           <button key={idx} onClick={() => handleSelect(opt)} className="btn-secondary" style={getBtnStyle(opt)} disabled={showFeedback}>
-            {opt.antonym}
+            <div>{opt.antonym}</div>
+            {showFeedback && (
+              <div style={{ fontSize: '0.72rem', marginTop: '4px', opacity: 0.85, fontWeight: 'normal' }}>
+                ({getTurkishOfAntonym(opt)})
+              </div>
+            )}
           </button>
         ))}
       </div>

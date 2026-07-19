@@ -724,7 +724,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       } else {
         for (const d of days) {
           const track = vocabTrack || 'anlam';
-          const dailyKelimeKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${d}.json`;
+          const dailyKelimeKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/day_${d}.json`;
           const loadDailyKelime = getCampModule(dailyKelimeKey);
           if (loadDailyKelime) {
             try {
@@ -1033,7 +1033,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       // Load Gelişmiş Kelime Kampı (1500+ academic words) plan in parallel
       const vocabPromises = [];
       for (let day = 1; day <= 60; day++) {
-        const planKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${day}.json`;
+        const planKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/day_${day}.json`;
         const loadPlan = getCampModule(planKey);
         if (loadPlan) {
           vocabPromises.push(
@@ -1306,7 +1306,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
         }
         rawWords = customDayWords;
       } else {
-        const dailyPlanKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/kelime/day_${dayNum}.json`;
+        const dailyPlanKey = `@dataset/yokdil/${category}/gelismis_kelime_kampi/day_${dayNum}.json`;
         const loadDaily = getCampModule(dailyPlanKey);
         if (!loadDaily) {
           alert("Bu günün kelime listesi bulunamadı veya henüz hazır değil!");
@@ -1409,7 +1409,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
     }
   };
 
-  const startCikmisStudy = async (dayNum, mode = 'selection', skipConfirmCheck = false) => {
+  const startCikmisStudy = async (dayNum, mode = 'swipe', skipConfirmCheck = false) => {
     const category = selectedCategory || 'fen';
     
     // Check if there is an active session for this day to resume
@@ -1737,7 +1737,7 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       const unstudiedWords = [];
 
       for (let day = 1; day <= 60; day++) {
-        const suffix = `yokdil/${category}/gelismis_kelime_kampi/kelime/day_${day}.json`;
+        const suffix = `yokdil/${category}/gelismis_kelime_kampi/day_${day}.json`;
         const foundKey = Object.keys(campModules).find(k => k.endsWith(suffix));
         let dayWords = [];
         if (foundKey) {
@@ -1855,8 +1855,9 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
       });
     }
 
-    const newCompleted = { ...cikmisProgress.completedDays };
-    const currentDayRecord = cikmisProgress.completedDays[dayNum] || {};
+    const completedDays = cikmisProgress && cikmisProgress.completedDays ? cikmisProgress.completedDays : {};
+    const newCompleted = { ...completedDays };
+    const currentDayRecord = completedDays[dayNum] || {};
     
     const updatedRecord = {
       ...currentDayRecord,
@@ -1904,9 +1905,9 @@ const [cikmisCardFlipped, setCikmisCardFlipped] = useState(false);
 
     newCompleted[dayNum] = updatedRecord;
 
-    let nextDay = cikmisProgress.currentDay;
-    if (isPassed && dayNum === cikmisProgress.currentDay) {
-      nextDay = cikmisProgress.currentDay + 1;
+    let nextDay = cikmisProgress && cikmisProgress.currentDay ? cikmisProgress.currentDay : 1;
+    if (isPassed && dayNum === nextDay) {
+      nextDay = nextDay + 1;
     }
 
     const newProg = {
@@ -3121,7 +3122,7 @@ const handleCikmisSwipeBack = () => {
     setGrammarQuestions(combinedQuestions);
     setGrammarResults({});
 
-    const comp = grammarProgress.completedDays[dayNum];
+    const comp = grammarProgress && grammarProgress.completedDays ? grammarProgress.completedDays[dayNum] : null;
     if (comp) {
       const expectedCorr = Math.round((comp.score / 100) * combinedQuestions.length);
       setCorrectAnswers(expectedCorr);
@@ -3189,16 +3190,17 @@ const handleCikmisSwipeBack = () => {
     const successRate = Math.round((correctAnswers / totalQuestions) * 100) || 100;
     const isPassed = successRate >= 60;
 
-    const newCompleted = { ...grammarProgress.completedDays };
+    const completedDays = grammarProgress && grammarProgress.completedDays ? grammarProgress.completedDays : {};
+    const newCompleted = { ...completedDays };
     newCompleted[selectedDay] = {
       score: successRate,
       isPassed: isPassed,
       date: new Date().toLocaleDateString()
     };
 
-    let nextDay = grammarProgress.currentDay;
-    if (isPassed && selectedDay === grammarProgress.currentDay) {
-      nextDay = grammarProgress.currentDay + 1;
+    let nextDay = grammarProgress && grammarProgress.currentDay ? grammarProgress.currentDay : 1;
+    if (isPassed && selectedDay === nextDay) {
+      nextDay = nextDay + 1;
     }
 
     const newProgress = {
@@ -3259,7 +3261,7 @@ const handleCikmisSwipeBack = () => {
       return;
     }
     
-    if (campType === 'daily') {
+    if (campType === 'vocabulary' || campType === 'daily') {
       startDailyStudy(nextDay);
     } else if (campType === 'cikmis_kelimeler') {
       startCikmisStudy(nextDay, cikmisMode || 'selection');
@@ -4557,6 +4559,25 @@ const handleCikmisSwipeBack = () => {
                     >
                       🚪 Çalışmadan Çık
                     </button>
+                    {reportCardDay < totalCampDays && (
+                      <button 
+                        onClick={() => {
+                          const nextDay = reportCardDay + 1;
+                          setReportCardDay(null);
+                          if (isGrammar) {
+                            startGrammarStudy(nextDay);
+                          } else if (isCikmis) {
+                            startCikmisStudy(nextDay);
+                          } else {
+                            startDailyStudy(nextDay);
+                          }
+                        }}
+                        className="btn-primary"
+                        style={{ flex: 1, padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer', background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)', borderColor: '#10b981', color: 'white' }}
+                      >
+                        ⏩ Sonraki Kampa Geç (Gün {reportCardDay + 1})
+                      </button>
+                    )}
                   </div>
                 </div>
               );

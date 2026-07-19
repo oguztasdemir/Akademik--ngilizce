@@ -67,7 +67,7 @@ const SpellingGame = ({ vocab, awardPetXp }) => {
         ))}
       </div>
       {status === 'correct' && <div style={{ color: '#34d399', textAlign: 'center', fontWeight: 'bold' }}>🎉 Tebrikler! Doğru Eşleşti! +15 XP</div>}
-      {status === 'wrong' && <div style={{ color: '#f87171', textAlign: 'center', fontWeight: 'bold' }}>❌ Hatalı Sıralama! Yeniden deneyin.</div>}
+      {status === 'wrong' && <div style={{ color: '#f87171', textAlign: 'center', fontWeight: 'bold' }}>❌ Cevap yanlış, doğrusu: {word}</div>}
       {status === 'correct' ? (
         <button onClick={loadWord} className="btn-primary" style={{ padding: '10px' }}>Sıradaki Kelime</button>
       ) : (
