@@ -4717,7 +4717,7 @@ body.light-theme .setting-item {
 
 /* 1. Midnight Dark (Varsayılan Koyu) */
 .theme-dark {
-    /* Uses root default variables */
+    color-scheme: dark;
 }
 
 /* 2. Cosmic Purple (Kozmik Mor) */
