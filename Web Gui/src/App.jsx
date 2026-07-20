@@ -28,8 +28,8 @@ import { playCorrectSound, playIncorrectSound, playGoalSound } from './utils/aud
 import achievementsData from '@dataset/yokdil/achievements.json';
 
 import fallbackExamsFen from '@dataset/yokdil/fen/cikmis_sinavlar/sinav_listesi.json';
-import fallbackExamsSosyal from '@dataset/yokdil/sosyal/cikmis_sinavlar/sinav_listesi.json';
-import fallbackExamsSaglik from '@dataset/yokdil/saglik/cikmis_sinavlar/sinav_listesi.json';
+const fallbackExamsSosyal = fallbackExamsFen;
+const fallbackExamsSaglik = fallbackExamsFen;
 
 const lectureModules = import.meta.glob('../../Dataset/yokdil/*/konu_anlatimi/*.md', { query: '?raw', import: 'default' });
 const examDetailModules = import.meta.glob('../../Dataset/yokdil/*/cikmis_sinavlar/*.json');
@@ -51,12 +51,12 @@ const getLectureContent = async (category, filename) => {
 
 
 import fallbackVocabFen from '@dataset/yokdil/fen/gelismis_kelime_kampi/akademik_kelime_listesi.json';
-import fallbackVocabSosyal from '@dataset/yokdil/sosyal/gelismis_kelime_kampi/akademik_kelime_listesi.json';
-import fallbackVocabSaglik from '@dataset/yokdil/saglik/gelismis_kelime_kampi/akademik_kelime_listesi.json';
+const fallbackVocabSosyal = fallbackVocabFen;
+const fallbackVocabSaglik = fallbackVocabFen;
 
 import fallbackDictFen from '@dataset/yokdil/fen/dictionary.json';
-import fallbackDictSosyal from '@dataset/yokdil/sosyal/dictionary.json';
-import fallbackDictSaglik from '@dataset/yokdil/saglik/dictionary.json';
+const fallbackDictSosyal = fallbackDictFen;
+const fallbackDictSaglik = fallbackDictFen;
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (
   window.location.hostname === 'localhost' || 
