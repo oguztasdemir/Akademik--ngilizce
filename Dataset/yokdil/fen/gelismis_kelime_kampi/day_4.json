@@ -17,7 +17,7 @@
     },
     {
       "word": "away",
-      "tr": "uzak",
+      "tr": "uzak\nuzakta",
       "pronunciation": "",
       "synonyms": "Aside, By, Forth, Off, Out",
       "antonyms": "Home",
@@ -153,7 +153,7 @@
     },
     {
       "word": "because of",
-      "tr": "yüzünden",
+      "tr": "-den dolayı\nyüzünden\nnedeniyle",
       "pronunciation": "",
       "synonyms": "",
       "antonyms": "",
@@ -355,44 +355,10 @@
       ]
     },
     {
-      "word": "best",
-      "tr": "en iyi",
-      "pronunciation": "",
-      "synonyms": "Adept, Advantageously, Beneficial, Better, Comfortably",
-      "antonyms": "Bad, Badly, Disadvantageously, Evil, Ill",
-      "sentences": [
-        {
-          "en": "We need to analyze the best in this scientific context.",
-          "tr": "Bu bilimsel bağlamda en iyi analiz etmeliyiz.",
-          "blanked": "We need to analyze the ________ in this scientific context."
-        },
-        {
-          "en": "The scientist studied the best during the laboratory experiment.",
-          "tr": "Bilim insanı laboratuvar deneyi sırasında en iyi inceledi.",
-          "blanked": "The scientist studied the ________ during the laboratory experiment."
-        },
-        {
-          "en": "Recent research provides new data about the best of this species.",
-          "tr": "Son araştırmalar bu türün en iyi hakkında yeni veriler sunuyor.",
-          "blanked": "Recent research provides new data about the ________ of this species."
-        },
-        {
-          "en": "They decided to focus on this best for sustainable development.",
-          "tr": "Sürdürülebilir kalkınma için bu en iyi üzerine odaklanmaya karar verdiler.",
-          "blanked": "They decided to focus on this ________ for sustainable development."
-        },
-        {
-          "en": "Understanding the role of best is very important in modern biology.",
-          "tr": "Modern biyolojide en iyi rolünü anlamak çok önemlidir.",
-          "blanked": "Understanding the role of ________ is very important in modern biology."
-        }
-      ]
-    },
-    {
-      "word": "better",
+      "word": "good",
       "tr": "daha iyi",
       "pronunciation": "",
-      "synonyms": "Adept, Advantageously, Ameliorate, Amend, Beneficial",
+      "synonyms": "Adept, Advantageously, Ameliorate, Amend, Beneficial, Better, Comfortably",
       "antonyms": "Bad, Badly, Disadvantageously, Evil, Ill",
       "sentences": [
         {
@@ -418,6 +384,31 @@
         {
           "en": "Understanding the role of better is very important in modern biology.",
           "tr": "Modern biyolojide iyi. rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________ is very important in modern biology."
+        },
+        {
+          "en": "We need to analyze the best in this scientific context.",
+          "tr": "Bu bilimsel bağlamda en iyi analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________ in this scientific context."
+        },
+        {
+          "en": "The scientist studied the best during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında en iyi inceledi.",
+          "blanked": "The scientist studied the ________ during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the best of this species.",
+          "tr": "Son araştırmalar bu türün en iyi hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________ of this species."
+        },
+        {
+          "en": "They decided to focus on this best for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu en iyi üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________ for sustainable development."
+        },
+        {
+          "en": "Understanding the role of best is very important in modern biology.",
+          "tr": "Modern biyolojide en iyi rolünü anlamak çok önemlidir.",
           "blanked": "Understanding the role of ________ is very important in modern biology."
         }
       ]
@@ -710,7 +701,7 @@
     },
     {
       "word": "breakoff",
-      "tr": "kopma",
+      "tr": "koparmak\nilişkiyi kesmek\nkopma",
       "pronunciation": "",
       "synonyms": "",
       "antonyms": "",
