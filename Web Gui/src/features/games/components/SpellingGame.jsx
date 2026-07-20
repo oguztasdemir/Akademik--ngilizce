@@ -50,7 +50,7 @@ const SpellingGame = ({ vocab, awardPetXp }) => {
     <div className="glass-card" style={{ padding: '24px', borderRadius: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div style={{ fontSize: '0.78rem', color: '#fb923c', fontWeight: 'bold' }}>✍️ HARF KARIŞTIRMA</div>
       <div style={{ textAlign: 'center', fontSize: '1.1rem', color: 'white' }}>
-        Karşılığı: <strong style={{ color: '#fb923c' }}>{hint}</strong>
+        Karşılığı: <strong style={{ color: '#fb923c', whiteSpace: 'pre-line' }}>{hint}</strong>
       </div>
       <div style={{ display: 'flex', gap: '8px', minHeight: '40px', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '8px', padding: '8px', justifyContent: 'center' }}>
         {answer.map(item => (

@@ -101,7 +101,7 @@ const TrueFalseGame = ({ vocab, awardPetXp }) => {
       <div style={{ margin: '10px 0' }}>
         <div style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white' }}>{englishWord}</div>
         <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', margin: '8px 0' }}>anlamı eşleşiyor mu:</div>
-        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#22d3ee' }}>"{displayedTr}"</div>
+        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#22d3ee', whiteSpace: 'pre-line' }}>"{displayedTr}"</div>
       </div>
       <div style={{ display: 'flex', gap: '12px' }}>
         <button onClick={() => handleAnswer(true)} disabled={showFeedback} style={getBtnStyle(true)}>DOĞRU (True) ✔️</button>

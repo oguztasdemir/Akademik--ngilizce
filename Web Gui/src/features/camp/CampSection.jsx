@@ -147,11 +147,11 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
   // Helper to render Turkish meanings vertically if they contain multiple numbered items
   const renderTurkishMeanings = (text, color = '#34d399', sizeStyle = {}) => {
     if (!text) return null;
-    if (/\b\d+\)\s*/.test(text)) {
-      const parts = text.split(/(?=\b\d+\))/).map(s => s.trim()).filter(Boolean);
-      const gap = sizeStyle.gap || '6px';
-      const itemsAlign = sizeStyle.alignItems || 'center';
-      const textAlignment = sizeStyle.textAlign || 'center';
+    const gap = sizeStyle.gap || '6px';
+    const itemsAlign = sizeStyle.alignItems || 'center';
+    const textAlignment = sizeStyle.textAlign || 'center';
+    if (text.includes('\n')) {
+      const parts = text.split('\n').map(s => s.trim()).filter(Boolean);
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap, alignItems: itemsAlign, textAlign: textAlignment }}>
           {parts.map((p, idx) => (
@@ -160,7 +160,17 @@ const CampSection = ({ selectedCategory, awardPetXP, triggerConfetti, examsDb, r
         </div>
       );
     }
-    const { gap, alignItems, textAlign, ...restStyles } = sizeStyle;
+    if (/\b\d+\)\s*/.test(text)) {
+      const parts = text.split(/(?=\b\d+\))/).map(s => s.trim()).filter(Boolean);
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap, alignItems: itemsAlign, textAlign: textAlignment }}>
+          {parts.map((p, idx) => (
+            <div key={idx} style={{ fontSize: sizeStyle.fontSize || '1.1rem', fontWeight: 'bold', color }}>{p}</div>
+          ))}
+        </div>
+      );
+    }
+    const { gap: g, alignItems: a, textAlign: t, ...restStyles } = sizeStyle;
     return <h2 style={{ fontSize: sizeStyle.fontSize || '1.45rem', fontWeight: 'bold', margin: 0, color, ...restStyles }}>{text}</h2>;
   };
 

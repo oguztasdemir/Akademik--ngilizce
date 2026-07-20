@@ -81,6 +81,16 @@ const CampDashboard = ({
   // Helper to render Turkish meanings in dashboard lists vertically
   const renderTurkishMeaningsList = (text) => {
     if (!text) return '';
+    if (text.includes('\n')) {
+      const parts = text.split('\n').map(s => s.trim()).filter(Boolean);
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'flex-end', textAlign: 'right' }}>
+          {parts.map((p, idx) => (
+            <span key={idx} style={{ fontSize: '0.74rem', color: '#a7f3d0', fontWeight: 'bold' }}>{p}</span>
+          ))}
+        </div>
+      );
+    }
     if (/\b\d+\)\s*/.test(text)) {
       const parts = text.split(/(?=\b\d+\))/).map(s => s.trim()).filter(Boolean);
       return (

@@ -52,7 +52,7 @@ const HangmanGame = ({ vocab, awardPetXp }) => {
       </div>
       <div style={{ textAlign: 'center', padding: '10px 0' }}>
         <div style={{ fontSize: '0.76rem', color: 'var(--text-secondary)' }}>Anlamı:</div>
-        <div style={{ fontSize: '1.25rem', color: '#34d399', fontWeight: 'bold' }}>{turkishHint}</div>
+        <div style={{ fontSize: '1.25rem', color: '#34d399', fontWeight: 'bold', whiteSpace: 'pre-line' }}>{turkishHint}</div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', fontSize: '1.5rem', fontWeight: 'bold', letterSpacing: '4px', margin: '14px 0' }}>
         {word.split('').map((char, idx) => (
