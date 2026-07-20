@@ -3,7 +3,7 @@
   "words": [
     {
       "word": "indicate",
-      "tr": "belirtmek",
+      "tr": "göstermek\nbelirtmek\nişaret etmek",
       "pronunciation": "",
       "synonyms": "Argue, Bespeak, Betoken, Designate, Point",
       "antonyms": "Contraindicate",
@@ -221,7 +221,7 @@
     },
     {
       "word": "individual",
-      "tr": "birey",
+      "tr": "birey\nfert\nşahıs",
       "pronunciation": "",
       "synonyms": "Individual, Mortal, Person, Somebody, Someone",
       "antonyms": "",
@@ -507,7 +507,7 @@
     },
     {
       "word": "inexorable",
-      "tr": "amansız, durdurulamaz",
+      "tr": "amansız\ndurdurulamaz",
       "pronunciation": "",
       "synonyms": "Adamant, Adamantine, Grim, Intransigent, Relentless",
       "antonyms": "",
@@ -711,15 +711,40 @@
     },
     {
       "word": "infer",
-      "tr": "çıkarım yapmak",
+      "tr": "çıkarım yapmak\nanlam çıkarmak\nulaşmak",
       "pronunciation": "",
-      "synonyms": "Conclude, Deduce",
+      "synonyms": "Conclude, Deduce, Deduct, Derive, Extrapolate, Generalise",
       "antonyms": "",
       "sentences": [
         {
           "en": "I inferred from her face expression that she wanted to leave.",
           "tr": "Yüz ifadesinden gitmek istediği sonucuna vardım.",
           "blanked": "I ________red from her face expression that she wanted to leave."
+        },
+        {
+          "en": "We need to analyze the inferred in this scientific context.",
+          "tr": "Bu bilimsel bağlamda anlaşılan analiz etmeliyiz.",
+          "blanked": "We need to analyze the ________red in this scientific context."
+        },
+        {
+          "en": "The scientist studied the inferred during the laboratory experiment.",
+          "tr": "Bilim insanı laboratuvar deneyi sırasında anlaşılan inceledi.",
+          "blanked": "The scientist studied the ________red during the laboratory experiment."
+        },
+        {
+          "en": "Recent research provides new data about the inferred of this species.",
+          "tr": "Son araştırmalar bu türün anlaşılan hakkında yeni veriler sunuyor.",
+          "blanked": "Recent research provides new data about the ________red of this species."
+        },
+        {
+          "en": "They decided to focus on this inferred for sustainable development.",
+          "tr": "Sürdürülebilir kalkınma için bu anlaşılan üzerine odaklanmaya karar verdiler.",
+          "blanked": "They decided to focus on this ________red for sustainable development."
+        },
+        {
+          "en": "Understanding the role of inferred is very important in modern biology.",
+          "tr": "Modern biyolojide anlaşılan rolünü anlamak çok önemlidir.",
+          "blanked": "Understanding the role of ________red is very important in modern biology."
         }
       ]
     },
@@ -768,40 +793,6 @@
           "en": "These products are inferior to those we bought last year.",
           "tr": "Bu ürünler geçen yıl aldıklarımıza göre daha kötü.",
           "blanked": "These products are ________ to those we bought last year."
-        }
-      ]
-    },
-    {
-      "word": "infer",
-      "tr": "çıkarım yapmak",
-      "pronunciation": "",
-      "synonyms": "Deduce, Deduct, Derive, Extrapolate, Generalise",
-      "antonyms": "",
-      "sentences": [
-        {
-          "en": "We need to analyze the inferred in this scientific context.",
-          "tr": "Bu bilimsel bağlamda anlaşılan analiz etmeliyiz.",
-          "blanked": "We need to analyze the ________red in this scientific context."
-        },
-        {
-          "en": "The scientist studied the inferred during the laboratory experiment.",
-          "tr": "Bilim insanı laboratuvar deneyi sırasında anlaşılan inceledi.",
-          "blanked": "The scientist studied the ________red during the laboratory experiment."
-        },
-        {
-          "en": "Recent research provides new data about the inferred of this species.",
-          "tr": "Son araştırmalar bu türün anlaşılan hakkında yeni veriler sunuyor.",
-          "blanked": "Recent research provides new data about the ________red of this species."
-        },
-        {
-          "en": "They decided to focus on this inferred for sustainable development.",
-          "tr": "Sürdürülebilir kalkınma için bu anlaşılan üzerine odaklanmaya karar verdiler.",
-          "blanked": "They decided to focus on this ________red for sustainable development."
-        },
-        {
-          "en": "Understanding the role of inferred is very important in modern biology.",
-          "tr": "Modern biyolojide anlaşılan rolünü anlamak çok önemlidir.",
-          "blanked": "Understanding the role of ________red is very important in modern biology."
         }
       ]
     }

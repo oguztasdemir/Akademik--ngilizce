@@ -71,7 +71,7 @@
     },
     {
       "word": "building",
-      "tr": "bina",
+      "tr": "bina\nyapı\ninşaat",
       "pronunciation": "",
       "synonyms": "Building, Construction, Edifice",
       "antonyms": "",
@@ -207,7 +207,7 @@
     },
     {
       "word": "call",
-      "tr": "adlandırmak, çağırmak",
+      "tr": "çağırmak\nadlandırmak\naramak",
       "pronunciation": "",
       "synonyms": "Address, Anticipate, Bid, Call, Cry",
       "antonyms": "",
@@ -275,7 +275,7 @@
     },
     {
       "word": "capable",
-      "tr": "yetenekli, yapabilir",
+      "tr": "yetenekli\nyapabilir",
       "pronunciation": "",
       "synonyms": "Able, Open, Subject",
       "antonyms": "Incapable",
@@ -479,9 +479,9 @@
     },
     {
       "word": "cause",
-      "tr": "sebep olmak, neden olmak",
+      "tr": "neden olmak\nsebep olmak\nyol açmak",
       "pronunciation": "",
-      "synonyms": "Campaign, Case, Causa, Crusade, Do",
+      "synonyms": "Campaign, Case, Causa, Crusade, Do, Cause, Get, Have, Induce",
       "antonyms": "",
       "sentences": [
         {
@@ -508,16 +508,7 @@
           "en": "Understanding the role of cause is very important in modern biology.",
           "tr": "Modern biyolojide neden rolünü anlamak çok önemlidir.",
           "blanked": "Understanding the role of ________ is very important in modern biology."
-        }
-      ]
-    },
-    {
-      "word": "cause",
-      "tr": "sebep olmak, neden olmak",
-      "pronunciation": "",
-      "synonyms": "Cause, Do, Get, Have, Induce",
-      "antonyms": "",
-      "sentences": [
+        },
         {
           "en": "We need to analyze the caused in this scientific context.",
           "tr": "Bu bilimsel bağlamda neden olunan, yol açılan analiz etmeliyiz.",
@@ -779,10 +770,10 @@
     },
     {
       "word": "change",
-      "tr": "değiştirmek, değişmek",
+      "tr": "değiştirmek\ndeğişmek\ntakas etmek",
       "pronunciation": "",
-      "synonyms": "Alter, Alteration, Commute, Convert, Deepen",
-      "antonyms": "Stay",
+      "synonyms": "Alter, Alteration, Commute, Convert, Deepen, Change",
+      "antonyms": "Stay, Unchanged",
       "sentences": [
         {
           "en": "We need to analyze the change in this scientific context.",
@@ -808,16 +799,7 @@
           "en": "Understanding the role of change is very important in modern biology.",
           "tr": "Modern biyolojide değiştirin rolünü anlamak çok önemlidir.",
           "blanked": "Understanding the role of ________ is very important in modern biology."
-        }
-      ]
-    },
-    {
-      "word": "change",
-      "tr": "değiştirmek, değişmek",
-      "pronunciation": "",
-      "synonyms": "Alter, Change, Commute, Convert, Deepen",
-      "antonyms": "Stay, Unchanged",
-      "sentences": [
+        },
         {
           "en": "We need to analyze the changed in this scientific context.",
           "tr": "Bu bilimsel bağlamda değiştirildi analiz etmeliyiz.",

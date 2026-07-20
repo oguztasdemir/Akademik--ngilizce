@@ -36,8 +36,8 @@
       ]
     },
     {
-      "word": "growing",
-      "tr": "büyüyor",
+      "word": "grow",
+      "tr": "büyümek\nyetişmek\ngelişmek",
       "pronunciation": "",
       "synonyms": "Acquire, Arise, Develop, Development, Farm",
       "antonyms": "Nondevelopment",
@@ -274,8 +274,8 @@
       ]
     },
     {
-      "word": "having",
-      "tr": "sahip olmak",
+      "word": "have",
+      "tr": "sahip olmak\nelde etmek\nyapmak",
       "pronunciation": "",
       "synonyms": "Accept, Bear, Birth, Cause, Consume",
       "antonyms": "Abstain, Lack, Refuse",
@@ -765,25 +765,16 @@
     },
     {
       "word": "hinder",
-      "tr": "engellemek",
+      "tr": "engellemek\naksatmak\nmani olmak",
       "pronunciation": "",
-      "synonyms": "Hamper, Prevent, Impede, Obstruct",
+      "synonyms": "Hamper, Prevent, Impede, Obstruct, Block, Blockade, Embarrass, Handicap",
       "antonyms": "Facilitate",
       "sentences": [
         {
           "en": "Strong winds have hindered firefighters in their efforts to put out the fire.",
           "tr": "Şiddetli rüzgarlar itfaiyecilerin yangını söndürme çabalarını engelledi.",
           "blanked": "Strong winds have ________ed firefighters in their efforts to put out the fire."
-        }
-      ]
-    },
-    {
-      "word": "hinder",
-      "tr": "engellemek",
-      "pronunciation": "",
-      "synonyms": "Block, Blockade, Embarrass, Hamper, Handicap",
-      "antonyms": "",
-      "sentences": [
+        },
         {
           "en": "We need to analyze the hindered in this scientific context.",
           "tr": "Bu bilimsel bağlamda engellendi analiz etmeliyiz.",
