@@ -39,10 +39,10 @@
     "id": 5,
     "english": "abundant",
     "pronunciation": "",
-    "turkish": "bolluk",
+    "turkish": "bol\nbereketli",
     "status": "learning",
     "priority": "Düşük Sıklık",
-    "tr": "bolluk"
+    "tr": "bol\nbereketli"
   },
   {
     "id": 6,
@@ -201,10 +201,10 @@
     "id": 23,
     "english": "adopt",
     "pronunciation": "",
-    "turkish": "evlat edinmek",
+    "turkish": "benimsemek\nkabul etmek\nuygulamak",
     "status": "learning",
     "priority": "Düşük Sıklık",
-    "tr": "evlat edinmek"
+    "tr": "benimsemek\nkabul etmek\nuygulamak"
   },
   {
     "id": 24,
@@ -298,7 +298,7 @@
   },
   {
     "id": 34,
-    "english": "alongwith",
+    "english": "along with",
     "pronunciation": "",
     "turkish": "ile birlikte",
     "status": "learning",
@@ -496,7 +496,7 @@
   },
   {
     "id": 56,
-    "english": "aslongas",
+    "english": "as long as",
     "pronunciation": "",
     "turkish": "takdirde",
     "status": "learning",
@@ -729,31 +729,13 @@
     "tr": "pil\nbatarya\nakü"
   },
   {
-    "id": 82,
-    "english": "became",
-    "pronunciation": "",
-    "turkish": "oldu",
-    "status": "learning",
-    "priority": "Düşük Sıklık",
-    "tr": "oldu"
-  },
-  {
     "id": 83,
-    "english": "becauseof",
+    "english": "because of",
     "pronunciation": "",
     "turkish": "yüzünden",
     "status": "learning",
     "priority": "Düşük Sıklık",
     "tr": "yüzünden"
-  },
-  {
-    "id": 84,
-    "english": "become",
-    "pronunciation": "",
-    "turkish": "olmak\nhale gelmek\nyaraşmak",
-    "status": "learning",
-    "priority": "Orta Sıklık",
-    "tr": "olmak\nhale gelmek\nyaraşmak"
   },
   {
     "id": 85,
@@ -912,10 +894,10 @@
     "id": 102,
     "english": "brief",
     "pronunciation": "",
-    "turkish": "kısa bilgi",
+    "turkish": "kısa\nözet\nözetlemek",
     "status": "learning",
     "priority": "Düşük Sıklık",
-    "tr": "kısa bilgi"
+    "tr": "kısa\nözet\nözetlemek"
   },
   {
     "id": 103,
@@ -928,12 +910,12 @@
   },
   {
     "id": 104,
-    "english": "brought",
+    "english": "bring",
     "pronunciation": "",
-    "turkish": "getirilmiş",
+    "turkish": "getirmek",
     "status": "learning",
     "priority": "Düşük Sıklık",
-    "tr": "getirilmiş"
+    "tr": "getirmek"
   },
   {
     "id": 105,
@@ -993,10 +975,10 @@
     "id": 111,
     "english": "capable",
     "pronunciation": "",
-    "turkish": "yetenekli\nyapabilir",
+    "turkish": "muktedir\nyapabilen\nkabiliyetli",
     "status": "learning",
     "priority": "Düşük Sıklık",
-    "tr": "yetenekli\nyapabilir"
+    "tr": "muktedir\nyapabilen\nkabiliyetli"
   },
   {
     "id": 112,
@@ -6409,7 +6391,7 @@
   },
   {
     "id": 713,
-    "english": "insteadof",
+    "english": "instead of",
     "pronunciation": "",
     "turkish": "yerine",
     "status": "learning",
@@ -7614,15 +7596,6 @@
     "tr": "makak"
   },
   {
-    "id": 847,
-    "english": "made",
-    "pronunciation": "",
-    "turkish": "yapılmış",
-    "status": "learning",
-    "priority": "Yüksek Sıklık",
-    "tr": "yapılmış"
-  },
-  {
     "id": 848,
     "english": "magnitude",
     "pronunciation": "",
@@ -7675,15 +7648,6 @@
     "status": "learning",
     "priority": "Düşük Sıklık",
     "tr": "çoğunluk"
-  },
-  {
-    "id": 854,
-    "english": "make",
-    "pronunciation": "",
-    "turkish": "yapmak\netmek\noluşturmak",
-    "status": "learning",
-    "priority": "Yüksek Sıklık",
-    "tr": "yapmak\netmek\noluşturmak"
   },
   {
     "id": 855,
@@ -13615,5 +13579,23 @@
     "status": "learning",
     "priority": "Düşük Sıklık",
     "tr": "zooloji"
+  },
+  {
+    "id": 854,
+    "english": "make",
+    "pronunciation": "",
+    "turkish": "yapmak\netmek\noluşturmak",
+    "status": "learning",
+    "priority": "Yüksek Sıklık",
+    "tr": "yapmak\netmek\noluşturmak"
+  },
+  {
+    "id": 84,
+    "english": "become",
+    "pronunciation": "",
+    "turkish": "olmak\nhale gelmek\nyaraşmak",
+    "status": "learning",
+    "priority": "Orta Sıklık",
+    "tr": "olmak\nhale gelmek\nyaraşmak"
   }
 ]
